@@ -1,7 +1,10 @@
 import type { Layer } from "@deck.gl/core";
 import { GeoFeatureCategory } from "../../constants";
 import type { GeoFeature } from "../types";
+import { getBasinTileLayer } from "./layers/basin";
 import {
+	BASIN_TILE_LAYER_ID,
+	BASIN_TILE_SOURCE_URL,
 	DESERT_TILE_LAYER_ID,
 	DESERT_TILE_SOURCE_URL,
 	ISLAND_GROUP_TILE_LAYER_ID,
@@ -63,6 +66,7 @@ export const useViewerState = (): ViewerState => {
 				[GeoFeatureCategory.ISLAND_GROUP]: true,
 				[GeoFeatureCategory.ISLAND]: true,
 				[GeoFeatureCategory.PENINSULA]: true,
+				[GeoFeatureCategory.BASIN]: true,
 				[GeoFeatureCategory.DESERT]: true,
 				[GeoFeatureCategory.PLATEAU]: true,
 				[GeoFeatureCategory.MOUNTAIN]: true,
@@ -102,6 +106,12 @@ export const useViewerState = (): ViewerState => {
 			PENINSULA_TILE_LAYER_ID,
 			PENINSULA_TILE_SOURCE_URL,
 			flattenedFilter[GeoFeatureCategory.PENINSULA],
+			updateGeoFeature,
+		),
+		getBasinTileLayer(
+			BASIN_TILE_LAYER_ID,
+			BASIN_TILE_SOURCE_URL,
+			flattenedFilter[GeoFeatureCategory.BASIN],
 			updateGeoFeature,
 		),
 		getDesertTileLayer(
