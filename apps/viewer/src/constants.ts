@@ -7,6 +7,7 @@ export enum GeoFeatureCategory {
 	ISLAND_GROUP = "island-group",
 	ISLAND = "island",
 	PENINSULA = "peninsula",
+	RIVER = "river",
 }
 
 export const GEO_FEATURE_CATEGORY_NAMES: Record<GeoFeatureCategory, string> = {
@@ -16,6 +17,7 @@ export const GEO_FEATURE_CATEGORY_NAMES: Record<GeoFeatureCategory, string> = {
 	[GeoFeatureCategory.ISLAND_GROUP]: "諸島",
 	[GeoFeatureCategory.ISLAND]: "島",
 	[GeoFeatureCategory.PENINSULA]: "半島",
+	[GeoFeatureCategory.RIVER]: "川",
 };
 
 export enum CursorState {

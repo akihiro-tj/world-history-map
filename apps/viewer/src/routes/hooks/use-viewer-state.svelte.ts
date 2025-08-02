@@ -25,7 +25,10 @@ import {
 	PLATEAU_TILE_LAYER_ID,
 	ISLAND_GROUP_TILE_LAYER_ID,
 	ISLAND_GROUP_TILE_SOURCE_URL,
+	RIVER_TILE_SOURCE_URL,
+	RIVER_TILE_LAYER_ID,
 } from "./layers/constants";
+import { getRiverTileLayer } from "./layers/river-tile";
 
 interface ViewerState {
 	isFilterPanelVisible: boolean;
@@ -63,6 +66,7 @@ export const useViewerState = (): ViewerState => {
 				[GeoFeatureCategory.ISLAND_GROUP]: true,
 				[GeoFeatureCategory.ISLAND]: true,
 				[GeoFeatureCategory.PENINSULA]: true,
+				[GeoFeatureCategory.RIVER]: true,
 			},
 		},
 	]);
@@ -116,6 +120,12 @@ export const useViewerState = (): ViewerState => {
 			PLATEAU_TILE_LAYER_ID,
 			PLATEAU_TILE_SOURCE_URL,
 			flattenedFilter[GeoFeatureCategory.PLATEAU],
+			updateGeoFeature,
+		),
+		getRiverTileLayer(
+			RIVER_TILE_LAYER_ID,
+			RIVER_TILE_SOURCE_URL,
+			flattenedFilter[GeoFeatureCategory.RIVER],
 			updateGeoFeature,
 		),
 	]);
