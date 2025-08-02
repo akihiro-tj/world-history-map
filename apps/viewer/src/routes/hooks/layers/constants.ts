@@ -18,17 +18,20 @@ export const FILL_OPACITY = 0.8;
 export const MOUNTAIN_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/mountain.pmtiles`;
 export const PLATEAU_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/plateau.pmtiles`;
 export const DESERT_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/desert.pmtiles`;
+export const ISLAND_GROUP_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/island-group.pmtiles`;
 export const ISLAND_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/island.pmtiles`;
 export const PENINSULA_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/peninsula.pmtiles`;
 
 export const MOUNTAIN_TILE_LAYER_ID = "mountain-tile-layer";
 export const PLATEAU_TILE_LAYER_ID = "plateau-tile-layer";
 export const DESERT_TILE_LAYER_ID = "desert-tile-layer";
+export const ISLAND_GROUP_TILE_LAYER_ID = "island-group-tile-layer";
 export const ISLAND_TILE_LAYER_ID = "island-tile-layer";
 export const PENINSULA_TILE_LAYER_ID = "peninsula-tile-layer";
 
 export const COLOR_MOUNTAIN: Color = hexToRgb("#10b981");
 export const COLOR_PLATEAU: Color = hexToRgb("#84cc16");
 export const COLOR_DESERT: Color = hexToRgb("#f59e0b");
+export const COLOR_ISLAND_GROUP: Color = hexToRgb("#3b82f6");
 export const COLOR_ISLAND: Color = hexToRgb("#3b82f6");
 export const COLOR_PENINSULA: Color = hexToRgb("#6366f1");

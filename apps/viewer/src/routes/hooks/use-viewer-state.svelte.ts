@@ -23,6 +23,8 @@ import {
 	MOUNTAIN_TILE_LAYER_ID,
 	PLATEAU_TILE_SOURCE_URL,
 	PLATEAU_TILE_LAYER_ID,
+	ISLAND_GROUP_TILE_LAYER_ID,
+	ISLAND_GROUP_TILE_SOURCE_URL,
 } from "./layers/constants";
 
 interface ViewerState {
@@ -58,6 +60,7 @@ export const useViewerState = (): ViewerState => {
 				[GeoFeatureCategory.MOUNTAIN]: true,
 				[GeoFeatureCategory.PLATEAU]: true,
 				[GeoFeatureCategory.DESERT]: true,
+				[GeoFeatureCategory.ISLAND_GROUP]: true,
 				[GeoFeatureCategory.ISLAND]: true,
 				[GeoFeatureCategory.PENINSULA]: true,
 			},
@@ -79,6 +82,12 @@ export const useViewerState = (): ViewerState => {
 	const layers = $derived<Layer[]>([
 		getLandTileLayer(LAND_TILE_LAYER_ID, LAND_TILE_SOURCE_URL),
 		getLakeTileLayer(LAKE_TILE_LAYER_ID, LAKE_TILE_SOURCE_URL),
+		getIslandTileLayer(
+			ISLAND_GROUP_TILE_LAYER_ID,
+			ISLAND_GROUP_TILE_SOURCE_URL,
+			flattenedFilter[GeoFeatureCategory.ISLAND_GROUP],
+			updateGeoFeature,
+		),
 		getIslandTileLayer(
 			ISLAND_TILE_LAYER_ID,
 			ISLAND_TILE_SOURCE_URL,
