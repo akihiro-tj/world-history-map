@@ -60,12 +60,12 @@ export const useViewerState = (): ViewerState => {
 			id: "terrain",
 			label: "地形",
 			filter: {
-				[GeoFeatureCategory.MOUNTAIN]: true,
-				[GeoFeatureCategory.PLATEAU]: true,
-				[GeoFeatureCategory.DESERT]: true,
 				[GeoFeatureCategory.ISLAND_GROUP]: true,
 				[GeoFeatureCategory.ISLAND]: true,
 				[GeoFeatureCategory.PENINSULA]: true,
+				[GeoFeatureCategory.DESERT]: true,
+				[GeoFeatureCategory.PLATEAU]: true,
+				[GeoFeatureCategory.MOUNTAIN]: true,
 				[GeoFeatureCategory.LAKE]: true,
 				[GeoFeatureCategory.RIVER]: true,
 			},
@@ -110,16 +110,16 @@ export const useViewerState = (): ViewerState => {
 			flattenedFilter[GeoFeatureCategory.DESERT],
 			updateGeoFeature,
 		),
-		getMountainTileLayer(
-			MOUNTAIN_TILE_LAYER_ID,
-			MOUNTAIN_TILE_SOURCE_URL,
-			flattenedFilter[GeoFeatureCategory.MOUNTAIN],
-			updateGeoFeature,
-		),
 		getPlateauTileLayer(
 			PLATEAU_TILE_LAYER_ID,
 			PLATEAU_TILE_SOURCE_URL,
 			flattenedFilter[GeoFeatureCategory.PLATEAU],
+			updateGeoFeature,
+		),
+		getMountainTileLayer(
+			MOUNTAIN_TILE_LAYER_ID,
+			MOUNTAIN_TILE_SOURCE_URL,
+			flattenedFilter[GeoFeatureCategory.MOUNTAIN],
 			updateGeoFeature,
 		),
 		getLakeTileLayer(
