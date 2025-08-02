@@ -8,6 +8,22 @@ import { getLandTileLayer } from "./layers/land-tile";
 import { getMountainTileLayer } from "./layers/mountain-tile";
 import { getPeninsulaTileLayer } from "./layers/peninsula-tile";
 import { getPlateauTileLayer } from "./layers/plateau-tile";
+import {
+	ISLAND_TILE_LAYER_ID,
+	ISLAND_TILE_SOURCE_URL,
+	LAND_TILE_LAYER_ID,
+	LAND_TILE_SOURCE_URL,
+	LAKE_TILE_LAYER_ID,
+	LAKE_TILE_SOURCE_URL,
+	PENINSULA_TILE_LAYER_ID,
+	PENINSULA_TILE_SOURCE_URL,
+	DESERT_TILE_SOURCE_URL,
+	DESERT_TILE_LAYER_ID,
+	MOUNTAIN_TILE_SOURCE_URL,
+	MOUNTAIN_TILE_LAYER_ID,
+	PLATEAU_TILE_SOURCE_URL,
+	PLATEAU_TILE_LAYER_ID,
+} from "./layers/constants";
 
 interface ViewerState {
 	isFilterPanelVisible: boolean;
@@ -61,25 +77,35 @@ export const useViewerState = (): ViewerState => {
 	};
 
 	const layers = $derived<Layer[]>([
-		getLandTileLayer(),
-		getLakeTileLayer(),
+		getLandTileLayer(LAND_TILE_LAYER_ID, LAND_TILE_SOURCE_URL),
+		getLakeTileLayer(LAKE_TILE_LAYER_ID, LAKE_TILE_SOURCE_URL),
 		getIslandTileLayer(
+			ISLAND_TILE_LAYER_ID,
+			ISLAND_TILE_SOURCE_URL,
 			flattenedFilter[GeoFeatureCategory.ISLAND],
 			updateGeoFeature,
 		),
 		getPeninsulaTileLayer(
+			PENINSULA_TILE_LAYER_ID,
+			PENINSULA_TILE_SOURCE_URL,
 			flattenedFilter[GeoFeatureCategory.PENINSULA],
 			updateGeoFeature,
 		),
 		getDesertTileLayer(
+			DESERT_TILE_LAYER_ID,
+			DESERT_TILE_SOURCE_URL,
 			flattenedFilter[GeoFeatureCategory.DESERT],
 			updateGeoFeature,
 		),
 		getMountainTileLayer(
+			MOUNTAIN_TILE_LAYER_ID,
+			MOUNTAIN_TILE_SOURCE_URL,
 			flattenedFilter[GeoFeatureCategory.MOUNTAIN],
 			updateGeoFeature,
 		),
 		getPlateauTileLayer(
+			PLATEAU_TILE_LAYER_ID,
+			PLATEAU_TILE_SOURCE_URL,
 			flattenedFilter[GeoFeatureCategory.PLATEAU],
 			updateGeoFeature,
 		),

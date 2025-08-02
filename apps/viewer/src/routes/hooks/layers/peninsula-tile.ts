@@ -7,24 +7,18 @@ import {
 } from "@deck.gl/geo-layers";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import { PMTilesTileSource } from "@loaders.gl/pmtiles";
-import {
-	COLOR_PENINSULA,
-	FILL_OPACITY,
-	PENINSULA_TILE_LAYER_ID,
-	PENINSULA_TILE_SOURCE_URL,
-} from "./constants";
+import { COLOR_PENINSULA, FILL_OPACITY } from "./constants";
 
 export const getPeninsulaTileLayer = (
+	layerId: string,
+	tileSourceUrl: string,
 	isVisible: boolean,
 	onClick: (geoFeature: GeoFeature) => void,
 ): TileLayerType => {
-	const peninsulaTileSource = new PMTilesTileSource(
-		PENINSULA_TILE_SOURCE_URL,
-		{},
-	);
+	const peninsulaTileSource = new PMTilesTileSource(tileSourceUrl, {});
 
 	return new TileLayer({
-		id: PENINSULA_TILE_LAYER_ID,
+		id: layerId,
 		getTileData: peninsulaTileSource.getTileData,
 		visible: isVisible,
 		onClick: (info) => {
@@ -34,7 +28,7 @@ export const getPeninsulaTileLayer = (
 		renderSubLayers: (props) => {
 			const bbox = props.tile.boundingBox;
 			return new GeoJsonLayer({
-				id: `${PENINSULA_TILE_LAYER_ID}-${props.tile.id}`,
+				id: `${layerId}-${props.tile.id}`,
 				data: props.data,
 				extensions: [new ClipExtension()],
 				clipBounds: [bbox[0][0], bbox[0][1], bbox[1][0], bbox[1][1]],
