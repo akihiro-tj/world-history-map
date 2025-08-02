@@ -18,13 +18,14 @@ export const getMountainTileLayer = (
 	isVisible: boolean,
 	onClick: (geoFeature: GeoFeature) => void,
 ): TileLayerType => {
+	const layerId = MOUNTAIN_TILE_LAYER_ID;
 	const mountainTileSource = new PMTilesTileSource(
 		MOUNTAIN_TILE_SOURCE_URL,
 		{},
 	);
 
 	return new TileLayer({
-		id: MOUNTAIN_TILE_LAYER_ID,
+		id: layerId,
 		getTileData: mountainTileSource.getTileData,
 		visible: isVisible,
 		onClick: (info) => {
@@ -34,7 +35,7 @@ export const getMountainTileLayer = (
 		renderSubLayers: (props) => {
 			const bbox = props.tile.boundingBox;
 			return new GeoJsonLayer({
-				id: `${MOUNTAIN_TILE_LAYER_ID}-${props.tile.id}`,
+				id: `${layerId}-${props.tile.id}`,
 				data: props.data,
 				extensions: [new ClipExtension()],
 				clipBounds: [bbox[0][0], bbox[0][1], bbox[1][0], bbox[1][1]],

@@ -18,13 +18,14 @@ export const getPeninsulaTileLayer = (
 	isVisible: boolean,
 	onClick: (geoFeature: GeoFeature) => void,
 ): TileLayerType => {
+	const layerId = PENINSULA_TILE_LAYER_ID;
 	const peninsulaTileSource = new PMTilesTileSource(
 		PENINSULA_TILE_SOURCE_URL,
 		{},
 	);
 
 	return new TileLayer({
-		id: PENINSULA_TILE_LAYER_ID,
+		id: layerId,
 		getTileData: peninsulaTileSource.getTileData,
 		visible: isVisible,
 		onClick: (info) => {
@@ -34,7 +35,7 @@ export const getPeninsulaTileLayer = (
 		renderSubLayers: (props) => {
 			const bbox = props.tile.boundingBox;
 			return new GeoJsonLayer({
-				id: `${PENINSULA_TILE_LAYER_ID}-${props.tile.id}`,
+				id: `${layerId}-${props.tile.id}`,
 				data: props.data,
 				extensions: [new ClipExtension()],
 				clipBounds: [bbox[0][0], bbox[0][1], bbox[1][0], bbox[1][1]],
