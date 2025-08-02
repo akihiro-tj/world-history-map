@@ -2,10 +2,12 @@ import type { Color } from "@deck.gl/core";
 import { hexToRgb } from "../../utils/hex-to-rgb";
 
 const ASSET_BASE_URL = "https://d1qn6pwkdv9f28.cloudfront.net";
-const REVISION = "ce4f2c66-9dd5-466d-a525-bed50d7f6f55";
+const REVISION = "26f1901b-cec5-48fe-94d1-3abdd4c80dd0";
 
 export const LAND_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/land.pmtiles`;
+export const LAKE_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/lake.pmtiles`;
 export const LAND_TILE_LAYER_ID = "land-tile-layer";
+export const LAKE_TILE_LAYER_ID = "lake-tile-layer";
 
 export const COLOR_TRANSPARENT: Color = [0, 0, 0, 0];
 export const COLOR_FOREGROUND: Color = hexToRgb("#f1f5f9");

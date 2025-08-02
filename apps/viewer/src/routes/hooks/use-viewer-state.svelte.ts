@@ -2,6 +2,7 @@ import type { Layer } from "@deck.gl/core";
 import { GeoFeatureCategory } from "../../constants";
 import type { GeoFeature } from "../types";
 import { getDesertTileLayer } from "./layers/desert-tile";
+import { getLakeTileLayer } from "./layers/lake-tile";
 import { getIslandTileLayer } from "./layers/island-tile";
 import { getLandTileLayer } from "./layers/land-tile";
 import { getMountainTileLayer } from "./layers/mountain-tile";
@@ -61,6 +62,7 @@ export const useViewerState = (): ViewerState => {
 
 	const layers = $derived<Layer[]>([
 		getLandTileLayer(),
+		getLakeTileLayer(),
 		getIslandTileLayer(
 			flattenedFilter[GeoFeatureCategory.ISLAND],
 			updateGeoFeature,
