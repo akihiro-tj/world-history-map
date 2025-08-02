@@ -33,7 +33,7 @@ export const MOUNTAIN_TILE_LAYER_ID = "mountain-tile-layer";
 export const LAKE_TILE_LAYER_ID = "lake-tile-layer";
 export const RIVER_TILE_LAYER_ID = "river-tile-layer";
 
-export const COLOR_ISLAND_GROUP: Color = hexToRgb("#0ea5e9");
+export const COLOR_ISLAND_GROUP: Color = hexToRgb("#06b6d4");
 export const COLOR_ISLAND: Color = hexToRgb("#0ea5e9");
 export const COLOR_PENINSULA: Color = hexToRgb("#6366f1");
 export const COLOR_BASIN: Color = hexToRgb("#eab308");

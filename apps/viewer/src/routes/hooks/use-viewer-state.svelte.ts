@@ -25,6 +25,7 @@ import {
 	RIVER_TILE_SOURCE_URL,
 } from "./layers/constants";
 import { getDesertTileLayer } from "./layers/desert-tile";
+import { getIslandGroupTileLayer } from "./layers/island-group";
 import { getIslandTileLayer } from "./layers/island-tile";
 import { getLakeTileLayer } from "./layers/lake-tile";
 import { getLandTileLayer } from "./layers/land-tile";
@@ -90,7 +91,7 @@ export const useViewerState = (): ViewerState => {
 
 	const layers = $derived<Layer[]>([
 		getLandTileLayer(LAND_TILE_LAYER_ID, LAND_TILE_SOURCE_URL),
-		getIslandTileLayer(
+		getIslandGroupTileLayer(
 			ISLAND_GROUP_TILE_LAYER_ID,
 			ISLAND_GROUP_TILE_SOURCE_URL,
 			flattenedFilter[GeoFeatureCategory.ISLAND_GROUP],
