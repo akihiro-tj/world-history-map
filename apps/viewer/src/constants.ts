@@ -1,19 +1,27 @@
 import type { MapViewState } from "@deck.gl/core";
 
 export enum GeoFeatureCategory {
-	MOUNTAIN = "mountain",
-	PLATEAU = "plateau",
-	DESERT = "desert",
+	ISLAND_GROUP = "island-group",
 	ISLAND = "island",
 	PENINSULA = "peninsula",
+	BASIN = "basin",
+	DESERT = "desert",
+	PLATEAU = "plateau",
+	MOUNTAIN = "mountain",
+	LAKE = "lake",
+	RIVER = "river",
 }
 
 export const GEO_FEATURE_CATEGORY_NAMES: Record<GeoFeatureCategory, string> = {
-	[GeoFeatureCategory.MOUNTAIN]: "山脈",
-	[GeoFeatureCategory.PLATEAU]: "高原",
-	[GeoFeatureCategory.DESERT]: "砂漠",
+	[GeoFeatureCategory.ISLAND_GROUP]: "諸島",
 	[GeoFeatureCategory.ISLAND]: "島",
 	[GeoFeatureCategory.PENINSULA]: "半島",
+	[GeoFeatureCategory.BASIN]: "盆地",
+	[GeoFeatureCategory.DESERT]: "砂漠",
+	[GeoFeatureCategory.PLATEAU]: "高原",
+	[GeoFeatureCategory.MOUNTAIN]: "山",
+	[GeoFeatureCategory.LAKE]: "湖",
+	[GeoFeatureCategory.RIVER]: "川",
 };
 
 export enum CursorState {

@@ -2,7 +2,7 @@ import type { Color } from "@deck.gl/core";
 import { hexToRgb } from "../../utils/hex-to-rgb";
 
 const ASSET_BASE_URL = "https://d1qn6pwkdv9f28.cloudfront.net";
-const REVISION = "ce4f2c66-9dd5-466d-a525-bed50d7f6f55";
+const REVISION = "202508022022";
 
 export const LAND_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/land.pmtiles`;
 export const LAND_TILE_LAYER_ID = "land-tile-layer";
@@ -13,20 +13,32 @@ export const COLOR_BACKGROUND: Color = hexToRgb("#94a3b8");
 
 export const FILL_OPACITY = 0.8;
 
-export const MOUNTAIN_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/mountain.pmtiles`;
-export const PLATEAU_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/plateau.pmtiles`;
-export const DESERT_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/desert.pmtiles`;
+export const ISLAND_GROUP_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/island-group.pmtiles`;
 export const ISLAND_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/island.pmtiles`;
 export const PENINSULA_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/peninsula.pmtiles`;
+export const BASIN_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/basin.pmtiles`;
+export const DESERT_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/desert.pmtiles`;
+export const PLATEAU_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/plateau.pmtiles`;
+export const MOUNTAIN_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/mountain.pmtiles`;
+export const LAKE_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/lake.pmtiles`;
+export const RIVER_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/river.pmtiles`;
 
-export const MOUNTAIN_TILE_LAYER_ID = "mountain-tile-layer";
-export const PLATEAU_TILE_LAYER_ID = "plateau-tile-layer";
-export const DESERT_TILE_LAYER_ID = "desert-tile-layer";
+export const ISLAND_GROUP_TILE_LAYER_ID = "island-group-tile-layer";
 export const ISLAND_TILE_LAYER_ID = "island-tile-layer";
 export const PENINSULA_TILE_LAYER_ID = "peninsula-tile-layer";
+export const BASIN_TILE_LAYER_ID = "basin-tile-layer";
+export const DESERT_TILE_LAYER_ID = "desert-tile-layer";
+export const PLATEAU_TILE_LAYER_ID = "plateau-tile-layer";
+export const MOUNTAIN_TILE_LAYER_ID = "mountain-tile-layer";
+export const LAKE_TILE_LAYER_ID = "lake-tile-layer";
+export const RIVER_TILE_LAYER_ID = "river-tile-layer";
 
-export const COLOR_MOUNTAIN: Color = hexToRgb("#10b981");
-export const COLOR_PLATEAU: Color = hexToRgb("#84cc16");
-export const COLOR_DESERT: Color = hexToRgb("#f59e0b");
-export const COLOR_ISLAND: Color = hexToRgb("#3b82f6");
+export const COLOR_ISLAND_GROUP: Color = hexToRgb("#06b6d4");
+export const COLOR_ISLAND: Color = hexToRgb("#0ea5e9");
 export const COLOR_PENINSULA: Color = hexToRgb("#6366f1");
+export const COLOR_BASIN: Color = hexToRgb("#eab308");
+export const COLOR_DESERT: Color = hexToRgb("#f59e0b");
+export const COLOR_PLATEAU: Color = hexToRgb("#84cc16");
+export const COLOR_MOUNTAIN: Color = hexToRgb("#10b981");
+export const COLOR_LAKE: Color = hexToRgb("#3b82f6");
+export const COLOR_RIVER: Color = hexToRgb("#3b82f6");
