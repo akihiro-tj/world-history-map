@@ -3,13 +3,15 @@ import { TileLayer } from "@deck.gl/geo-layers";
 import type { TileLayer as TileLayerType } from "@deck.gl/geo-layers";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import { PMTilesTileSource } from "@loaders.gl/pmtiles";
-import { COLOR_FOREGROUND } from "./constants";
+import {
+	COLOR_FOREGROUND,
+	LAND_TILE_LAYER_ID,
+	LAND_TILE_SOURCE_URL,
+} from "./constants";
 
-export const getLandTileLayer = (
-	layerId: string,
-	tileSourceUrl: string,
-): TileLayerType => {
-	const landTileSource = new PMTilesTileSource(tileSourceUrl, {});
+export const getLandTileLayer = (): TileLayerType => {
+	const layerId = LAND_TILE_LAYER_ID;
+	const landTileSource = new PMTilesTileSource(LAND_TILE_SOURCE_URL, {});
 
 	return new TileLayer({
 		id: layerId,

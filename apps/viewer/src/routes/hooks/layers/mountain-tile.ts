@@ -7,15 +7,22 @@ import {
 } from "@deck.gl/geo-layers";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import { PMTilesTileSource } from "@loaders.gl/pmtiles";
-import { COLOR_MOUNTAIN, FILL_OPACITY } from "./constants";
+import {
+	COLOR_MOUNTAIN,
+	FILL_OPACITY,
+	MOUNTAIN_TILE_LAYER_ID,
+	MOUNTAIN_TILE_SOURCE_URL,
+} from "./constants";
 
 export const getMountainTileLayer = (
-	layerId: string,
-	tileSourceUrl: string,
 	isVisible: boolean,
 	onClick: (geoFeature: GeoFeature) => void,
 ): TileLayerType => {
-	const mountainTileSource = new PMTilesTileSource(tileSourceUrl, {});
+	const layerId = MOUNTAIN_TILE_LAYER_ID;
+	const mountainTileSource = new PMTilesTileSource(
+		MOUNTAIN_TILE_SOURCE_URL,
+		{},
+	);
 
 	return new TileLayer({
 		id: layerId,

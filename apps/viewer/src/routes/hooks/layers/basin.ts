@@ -7,15 +7,19 @@ import {
 } from "@deck.gl/geo-layers";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import { PMTilesTileSource } from "@loaders.gl/pmtiles";
-import { COLOR_BASIN, FILL_OPACITY } from "./constants";
+import {
+	BASIN_TILE_LAYER_ID,
+	BASIN_TILE_SOURCE_URL,
+	COLOR_BASIN,
+	FILL_OPACITY,
+} from "./constants";
 
 export const getBasinTileLayer = (
-	layerId: string,
-	tileSourceUrl: string,
 	isVisible: boolean,
 	onClick: (geoFeature: GeoFeature) => void,
 ): TileLayerType => {
-	const basinTileSource = new PMTilesTileSource(tileSourceUrl, {});
+	const layerId = BASIN_TILE_LAYER_ID;
+	const basinTileSource = new PMTilesTileSource(BASIN_TILE_SOURCE_URL, {});
 
 	return new TileLayer({
 		id: layerId,

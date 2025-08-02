@@ -2,28 +2,6 @@ import type { Layer } from "@deck.gl/core";
 import { GeoFeatureCategory } from "../../constants";
 import type { GeoFeature } from "../types";
 import { getBasinTileLayer } from "./layers/basin";
-import {
-	BASIN_TILE_LAYER_ID,
-	BASIN_TILE_SOURCE_URL,
-	DESERT_TILE_LAYER_ID,
-	DESERT_TILE_SOURCE_URL,
-	ISLAND_GROUP_TILE_LAYER_ID,
-	ISLAND_GROUP_TILE_SOURCE_URL,
-	ISLAND_TILE_LAYER_ID,
-	ISLAND_TILE_SOURCE_URL,
-	LAKE_TILE_LAYER_ID,
-	LAKE_TILE_SOURCE_URL,
-	LAND_TILE_LAYER_ID,
-	LAND_TILE_SOURCE_URL,
-	MOUNTAIN_TILE_LAYER_ID,
-	MOUNTAIN_TILE_SOURCE_URL,
-	PENINSULA_TILE_LAYER_ID,
-	PENINSULA_TILE_SOURCE_URL,
-	PLATEAU_TILE_LAYER_ID,
-	PLATEAU_TILE_SOURCE_URL,
-	RIVER_TILE_LAYER_ID,
-	RIVER_TILE_SOURCE_URL,
-} from "./layers/constants";
 import { getDesertTileLayer } from "./layers/desert-tile";
 import { getIslandGroupTileLayer } from "./layers/island-group";
 import { getIslandTileLayer } from "./layers/island-tile";
@@ -90,58 +68,40 @@ export const useViewerState = (): ViewerState => {
 	};
 
 	const layers = $derived<Layer[]>([
-		getLandTileLayer(LAND_TILE_LAYER_ID, LAND_TILE_SOURCE_URL),
+		getLandTileLayer(),
 		getIslandGroupTileLayer(
-			ISLAND_GROUP_TILE_LAYER_ID,
-			ISLAND_GROUP_TILE_SOURCE_URL,
 			flattenedFilter[GeoFeatureCategory.ISLAND_GROUP],
 			updateGeoFeature,
 		),
 		getIslandTileLayer(
-			ISLAND_TILE_LAYER_ID,
-			ISLAND_TILE_SOURCE_URL,
 			flattenedFilter[GeoFeatureCategory.ISLAND],
 			updateGeoFeature,
 		),
 		getPeninsulaTileLayer(
-			PENINSULA_TILE_LAYER_ID,
-			PENINSULA_TILE_SOURCE_URL,
 			flattenedFilter[GeoFeatureCategory.PENINSULA],
 			updateGeoFeature,
 		),
 		getBasinTileLayer(
-			BASIN_TILE_LAYER_ID,
-			BASIN_TILE_SOURCE_URL,
 			flattenedFilter[GeoFeatureCategory.BASIN],
 			updateGeoFeature,
 		),
 		getDesertTileLayer(
-			DESERT_TILE_LAYER_ID,
-			DESERT_TILE_SOURCE_URL,
 			flattenedFilter[GeoFeatureCategory.DESERT],
 			updateGeoFeature,
 		),
 		getPlateauTileLayer(
-			PLATEAU_TILE_LAYER_ID,
-			PLATEAU_TILE_SOURCE_URL,
 			flattenedFilter[GeoFeatureCategory.PLATEAU],
 			updateGeoFeature,
 		),
 		getMountainTileLayer(
-			MOUNTAIN_TILE_LAYER_ID,
-			MOUNTAIN_TILE_SOURCE_URL,
 			flattenedFilter[GeoFeatureCategory.MOUNTAIN],
 			updateGeoFeature,
 		),
 		getLakeTileLayer(
-			LAKE_TILE_LAYER_ID,
-			LAKE_TILE_SOURCE_URL,
 			flattenedFilter[GeoFeatureCategory.LAKE],
 			updateGeoFeature,
 		),
 		getRiverTileLayer(
-			RIVER_TILE_LAYER_ID,
-			RIVER_TILE_SOURCE_URL,
 			flattenedFilter[GeoFeatureCategory.RIVER],
 			updateGeoFeature,
 		),

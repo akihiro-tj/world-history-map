@@ -7,15 +7,22 @@ import {
 } from "@deck.gl/geo-layers";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import { PMTilesTileSource } from "@loaders.gl/pmtiles";
-import { COLOR_PENINSULA, FILL_OPACITY } from "./constants";
+import {
+	COLOR_PENINSULA,
+	FILL_OPACITY,
+	PENINSULA_TILE_LAYER_ID,
+	PENINSULA_TILE_SOURCE_URL,
+} from "./constants";
 
 export const getPeninsulaTileLayer = (
-	layerId: string,
-	tileSourceUrl: string,
 	isVisible: boolean,
 	onClick: (geoFeature: GeoFeature) => void,
 ): TileLayerType => {
-	const peninsulaTileSource = new PMTilesTileSource(tileSourceUrl, {});
+	const layerId = PENINSULA_TILE_LAYER_ID;
+	const peninsulaTileSource = new PMTilesTileSource(
+		PENINSULA_TILE_SOURCE_URL,
+		{},
+	);
 
 	return new TileLayer({
 		id: layerId,

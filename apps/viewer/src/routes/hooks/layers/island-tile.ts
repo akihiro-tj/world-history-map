@@ -7,15 +7,19 @@ import {
 } from "@deck.gl/geo-layers";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import { PMTilesTileSource } from "@loaders.gl/pmtiles";
-import { COLOR_ISLAND, FILL_OPACITY } from "./constants";
+import {
+	COLOR_ISLAND,
+	FILL_OPACITY,
+	ISLAND_TILE_LAYER_ID,
+	ISLAND_TILE_SOURCE_URL,
+} from "./constants";
 
 export const getIslandTileLayer = (
-	layerId: string,
-	tileSourceUrl: string,
 	isVisible: boolean,
 	onClick: (geoFeature: GeoFeature) => void,
 ): TileLayerType => {
-	const islandTileSource = new PMTilesTileSource(tileSourceUrl, {});
+	const layerId = ISLAND_TILE_LAYER_ID;
+	const islandTileSource = new PMTilesTileSource(ISLAND_TILE_SOURCE_URL, {});
 
 	return new TileLayer({
 		id: layerId,

@@ -7,15 +7,19 @@ import {
 } from "@deck.gl/geo-layers";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import { PMTilesTileSource } from "@loaders.gl/pmtiles";
-import { COLOR_PLATEAU, FILL_OPACITY } from "./constants";
+import {
+	COLOR_PLATEAU,
+	FILL_OPACITY,
+	PLATEAU_TILE_LAYER_ID,
+	PLATEAU_TILE_SOURCE_URL,
+} from "./constants";
 
 export const getPlateauTileLayer = (
-	layerId: string,
-	tileSourceUrl: string,
 	isVisible: boolean,
 	onClick: (geoFeature: GeoFeature) => void,
 ): TileLayerType => {
-	const plateauTileSource = new PMTilesTileSource(tileSourceUrl, {});
+	const layerId = PLATEAU_TILE_LAYER_ID;
+	const plateauTileSource = new PMTilesTileSource(PLATEAU_TILE_SOURCE_URL, {});
 
 	return new TileLayer({
 		id: layerId,

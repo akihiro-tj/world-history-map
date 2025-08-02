@@ -7,15 +7,22 @@ import {
 } from "@deck.gl/geo-layers";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import { PMTilesTileSource } from "@loaders.gl/pmtiles";
-import { COLOR_ISLAND_GROUP, FILL_OPACITY } from "./constants";
+import {
+	COLOR_ISLAND_GROUP,
+	FILL_OPACITY,
+	ISLAND_GROUP_TILE_LAYER_ID,
+	ISLAND_GROUP_TILE_SOURCE_URL,
+} from "./constants";
 
 export const getIslandGroupTileLayer = (
-	layerId: string,
-	tileSourceUrl: string,
 	isVisible: boolean,
 	onClick: (geoFeature: GeoFeature) => void,
 ): TileLayerType => {
-	const islandGroupTileSource = new PMTilesTileSource(tileSourceUrl, {});
+	const layerId = ISLAND_GROUP_TILE_LAYER_ID;
+	const islandGroupTileSource = new PMTilesTileSource(
+		ISLAND_GROUP_TILE_SOURCE_URL,
+		{},
+	);
 
 	return new TileLayer({
 		id: layerId,

@@ -5,15 +5,19 @@ import { TileLayer } from "@deck.gl/geo-layers";
 import type { TileLayer as TileLayerType } from "@deck.gl/geo-layers";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import { PMTilesTileSource } from "@loaders.gl/pmtiles";
-import { COLOR_LAKE, FILL_OPACITY } from "./constants";
+import {
+	COLOR_LAKE,
+	FILL_OPACITY,
+	LAKE_TILE_LAYER_ID,
+	LAKE_TILE_SOURCE_URL,
+} from "./constants";
 
 export const getLakeTileLayer = (
-	layerId: string,
-	tileSourceUrl: string,
 	isVisible: boolean,
 	onClick: (geoFeature: GeoFeature) => void,
 ): TileLayerType => {
-	const lakeTileSource = new PMTilesTileSource(tileSourceUrl, {});
+	const layerId = LAKE_TILE_LAYER_ID;
+	const lakeTileSource = new PMTilesTileSource(LAKE_TILE_SOURCE_URL, {});
 
 	return new TileLayer({
 		id: layerId,

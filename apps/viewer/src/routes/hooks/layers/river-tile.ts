@@ -4,15 +4,18 @@ import { TileLayer } from "@deck.gl/geo-layers";
 import type { TileLayer as TileLayerType } from "@deck.gl/geo-layers";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import { PMTilesTileSource } from "@loaders.gl/pmtiles";
-import { COLOR_RIVER } from "./constants";
+import {
+	COLOR_RIVER,
+	RIVER_TILE_LAYER_ID,
+	RIVER_TILE_SOURCE_URL,
+} from "./constants";
 
 export const getRiverTileLayer = (
-	layerId: string,
-	tileSourceUrl: string,
 	isVisible: boolean,
 	onClick: (geoFeature: GeoFeature) => void,
 ): TileLayerType => {
-	const riverTileSource = new PMTilesTileSource(tileSourceUrl, {});
+	const layerId = RIVER_TILE_LAYER_ID;
+	const riverTileSource = new PMTilesTileSource(RIVER_TILE_SOURCE_URL, {});
 
 	return new TileLayer({
 		id: layerId,
