@@ -1,10 +1,10 @@
+import type { GeoFeature } from "@/routes/types";
+import { ClipExtension } from "@deck.gl/extensions";
 import { TileLayer } from "@deck.gl/geo-layers";
 import type { TileLayer as TileLayerType } from "@deck.gl/geo-layers";
 import { GeoJsonLayer } from "@deck.gl/layers";
 import { PMTilesTileSource } from "@loaders.gl/pmtiles";
 import { COLOR_RIVER } from "./constants";
-import { ClipExtension } from "@deck.gl/extensions";
-import type { GeoFeature } from "@/routes/types";
 
 export const getRiverTileLayer = (
 	layerId: string,

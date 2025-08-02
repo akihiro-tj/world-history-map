@@ -5,9 +5,7 @@ const ASSET_BASE_URL = "https://d1qn6pwkdv9f28.cloudfront.net";
 const REVISION = "202508022022";
 
 export const LAND_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/land.pmtiles`;
-export const LAKE_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/lake.pmtiles`;
 export const LAND_TILE_LAYER_ID = "land-tile-layer";
-export const LAKE_TILE_LAYER_ID = "lake-tile-layer";
 
 export const COLOR_TRANSPARENT: Color = [0, 0, 0, 0];
 export const COLOR_FOREGROUND: Color = hexToRgb("#f1f5f9");
@@ -21,6 +19,7 @@ export const DESERT_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/deser
 export const ISLAND_GROUP_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/island-group.pmtiles`;
 export const ISLAND_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/island.pmtiles`;
 export const PENINSULA_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/peninsula.pmtiles`;
+export const LAKE_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/lake.pmtiles`;
 export const RIVER_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/river.pmtiles`;
 
 export const MOUNTAIN_TILE_LAYER_ID = "mountain-tile-layer";
@@ -29,6 +28,7 @@ export const DESERT_TILE_LAYER_ID = "desert-tile-layer";
 export const ISLAND_GROUP_TILE_LAYER_ID = "island-group-tile-layer";
 export const ISLAND_TILE_LAYER_ID = "island-tile-layer";
 export const PENINSULA_TILE_LAYER_ID = "peninsula-tile-layer";
+export const LAKE_TILE_LAYER_ID = "lake-tile-layer";
 export const RIVER_TILE_LAYER_ID = "river-tile-layer";
 
 export const COLOR_MOUNTAIN: Color = hexToRgb("#10b981");
@@ -37,4 +37,5 @@ export const COLOR_DESERT: Color = hexToRgb("#f59e0b");
 export const COLOR_ISLAND_GROUP: Color = hexToRgb("#0ea5e9");
 export const COLOR_ISLAND: Color = hexToRgb("#0ea5e9");
 export const COLOR_PENINSULA: Color = hexToRgb("#6366f1");
+export const COLOR_LAKE: Color = hexToRgb("#3b82f6");
 export const COLOR_RIVER: Color = hexToRgb("#3b82f6");
