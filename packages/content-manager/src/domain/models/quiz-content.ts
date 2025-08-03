@@ -8,7 +8,7 @@ export interface QuizContentProps {
 
 interface QuestionData {
 	statement: string;
-	choices: string[];
+	choiceLength: number;
 	correctChoice: number;
 	explanation: string;
 }
@@ -39,7 +39,7 @@ export class QuizContent {
 			return Question.create({
 				id: `${props.id}-${index}`,
 				statement: question.statement,
-				choices: question.choices,
+				choiceLength: question.choiceLength,
 				correctChoice: question.correctChoice,
 				explanation: question.explanation,
 			});
