@@ -2,7 +2,7 @@ import type { Color } from "@deck.gl/core";
 import { hexToRgb } from "../../utils/hex-to-rgb";
 
 const ASSET_BASE_URL = "https://d1qn6pwkdv9f28.cloudfront.net";
-const REVISION = "202508031500";
+const REVISION = "202508031659";
 
 export const LAND_TILE_SOURCE_URL = `${ASSET_BASE_URL}/tiles/${REVISION}/land.pmtiles`;
 export const LAND_TILE_LAYER_ID = "land-tile-layer";
