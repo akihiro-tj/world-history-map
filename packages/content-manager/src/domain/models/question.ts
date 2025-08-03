@@ -3,7 +3,7 @@ import { Choice } from "./choice";
 export interface QuestionProps {
 	id: string;
 	statement: string;
-	choices: string[];
+	choiceLength: number;
 	correctChoice: number;
 	explanation: string;
 }
@@ -40,10 +40,10 @@ export class Question {
 	}
 
 	static create(props: QuestionProps): Question {
-		const choices = props.choices.map((choice, index) =>
+		const choices = Array.from({ length: props.choiceLength }, (_, index) =>
 			Choice.create({
 				id: `${props.id}-${index}`,
-				text: choice,
+				text: String.fromCharCode(65 + index), // A, B, C, ...
 			}),
 		);
 		const correctChoice = choices[props.correctChoice];

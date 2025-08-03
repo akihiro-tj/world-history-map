@@ -14,10 +14,10 @@ describe("Question", () => {
 			const question = Question.create(validQuestion);
 			expect(question.getId()).toBe(validQuestion.id);
 			expect(question.getStatement()).toBe(validQuestion.statement);
-			expect(question.getChoices()).toHaveLength(validQuestion.choices.length);
+			expect(question.getChoices()).toHaveLength(validQuestion.choiceLength);
 			expect(question.getCorrectChoice()).toEqual({
 				id: `${validQuestion.id}-${validQuestion.correctChoice}`,
-				text: validQuestion.choices[validQuestion.correctChoice],
+				text: String.fromCharCode(65 + validQuestion.correctChoice),
 			});
 			expect(question.getExplanation()).toBe(validQuestion.explanation);
 		});

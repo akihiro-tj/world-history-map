@@ -1,36 +1,20 @@
 - statement: ピレネー山脈はどれでしょうか
-  choices:
-    - A
-    - B
-    - C
+  choiceLength: 3
   correctChoice: 0
   explanation: "A: ピレネー山脈。B: アルプス山脈。C: カルパティア山脈。"
 - statement: コーカサス山脈はどれでしょうか
-  choices:
-    - A
-    - B
-    - C
+  choiceLength: 3
   correctChoice: 1
   explanation: "A: ウラル山脈。B: コーカサス山脈。C: ザグロス山脈。"
 - statement: スタノヴォイ山脈（外興安嶺）はどれでしょうか
-  choices:
-    - A
-    - B
-    - C
-    - D
+  choiceLength: 4
   correctChoice: 0
   explanation: "A: スタノヴォイ山脈（外興安嶺）。B: アルタイ山脈。C: 天山山脈。D: ヒマラヤ山脈。"
 - statement: パミール高原はどれでしょうか
-  choices:
-    - A
-    - B
-    - C
+  choiceLength: 3
   correctChoice: 1
   explanation: "A: モンゴル高原。B: パミール高原。C: デカン高原。"
 - statement: タクラマカン砂漠はどれでしょうか
-  choices:
-    - A
-    - B
-    - C
+  choiceLength: 3
   correctChoice: 1
   explanation: "A: サハラ砂漠。B: タクラマカン砂漠。C: ゴビ砂漠。"
