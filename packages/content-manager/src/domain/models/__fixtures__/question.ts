@@ -3,7 +3,7 @@ import type { QuestionProps } from "../question";
 export const validQuestion: QuestionProps = {
 	id: "question-1",
 	statement: "Test Question",
-	choices: ["A", "B", "C"],
+	choiceLength: 3,
 	correctChoice: 0,
 	explanation: "Test Explanation",
 };
