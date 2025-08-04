@@ -47,3 +47,8 @@
   choiceLength: 3
   correctChoice: 1
   explanation: "A: ナイル川。B: ニジェール川。C: ザンベジ川。"
+
+- statement: アラル海はどれでしょうか
+  choiceLength: 3
+  correctChoice: 1
+  explanation: "A: チャド湖。B: アラル海。C: バイカル湖。"
