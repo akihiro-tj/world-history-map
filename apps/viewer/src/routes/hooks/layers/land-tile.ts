@@ -5,26 +5,24 @@ import { GeoJsonLayer } from "@deck.gl/layers";
 import { PMTilesTileSource } from "@loaders.gl/pmtiles";
 import {
 	COLOR_FOREGROUND,
-	COLOR_TRANSPARENT,
 	LAND_TILE_LAYER_ID,
+	LAND_TILE_SOURCE_URL,
 } from "./constants";
-import { LAND_TILE_SOURCE_URL } from "./constants";
 
 export const getLandTileLayer = (): TileLayerType => {
+	const layerId = LAND_TILE_LAYER_ID;
 	const landTileSource = new PMTilesTileSource(LAND_TILE_SOURCE_URL, {});
 
 	return new TileLayer({
-		id: LAND_TILE_LAYER_ID,
+		id: layerId,
 		getTileData: landTileSource.getTileData,
 		renderSubLayers: (props) => {
 			const bbox = props.tile.boundingBox;
 			return new GeoJsonLayer({
-				id: `${LAND_TILE_LAYER_ID}-${props.tile.id}`,
+				id: `${layerId}-${props.tile.id}`,
 				data: props.data,
 				extensions: [new ClipExtension()],
 				clipBounds: [bbox[0][0], bbox[0][1], bbox[1][0], bbox[1][1]],
-				getLineColor: COLOR_TRANSPARENT,
-				lineWidthMinPixels: 1,
 				getFillColor: COLOR_FOREGROUND,
 			});
 		},

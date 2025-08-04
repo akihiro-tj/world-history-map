@@ -6,7 +6,7 @@ export const validQuizContent: QuizContentProps = {
 	questions: [
 		{
 			statement: "Question 1",
-			choices: ["A", "B", "C"],
+			choiceLength: 3,
 			correctChoice: 0,
 			explanation: "Explanation 1",
 		},

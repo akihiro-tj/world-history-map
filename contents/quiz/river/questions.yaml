@@ -1,39 +1,54 @@
+- statement: ライン川はどれでしょうか
+  choiceLength: 3
+  correctChoice: 0
+  explanation: "A: ライン川。B: セーヌ川。C: ロワール川。"
+
+- statement: ドナウ川はどれでしょうか
+  choiceLength: 3
+  correctChoice: 1
+  explanation: "A: エルベ川。B: ドナウ川。C: ドニエプル川。"
+
+- statement: ティグリス川はどれでしょうか
+  choiceLength: 2
+  correctChoice: 0
+  explanation: "A: ティグリス川。B: ユーフラテス川。"
+
+- statement: アム川はどれでしょうか
+  choiceLength: 2
+  correctChoice: 1
+  explanation: "A: シル川。B: アム川。"
+
+- statement: インダス川はどれでしょうか
+  choiceLength: 2
+  correctChoice: 0
+  explanation: "A: インダス川。B: ガンジス川。"
+
 - statement: 黄河はどれでしょうか
-  choices:
-    - A
-    - B
-    - C
-    - D
+  choiceLength: 2
+  correctChoice: 0
+  explanation: "A: 黄河。B: 長江。"
+
+- statement: 淮河はどれでしょうか
+  choiceLength: 3
   correctChoice: 2
-  explanation: "A: アムール川。B: 遼河。C: 黄河。D: 長江。"
-- statement: ガンジス川はどれでしょうか
-  choices:
-    - A
-    - B
-    - C
-    - D
-  correctChoice: 3
-  explanation: "A: ユーフラテス川。B: チグリス川。C: インダス川。D: ガンジス川。"
-- statement: エルベ川はどれでしょうか
-  choices:
-    - A
-    - B
-    - C
-    - D
+  explanation: "A: 遼河。B: 渭水。C: 淮河。"
+
+- statement: アルグン川はどれでしょうか
+  choiceLength: 3
   correctChoice: 1
-  explanation: "A: ライン川。B: エルベ川。C: ドナウ川。D: ドニエプル川。"
+  explanation: "A: アムール川。B: アルグン川。C: ウスリー川。"
+
 - statement: チャオプラヤ川はどれでしょうか
-  choices:
-    - A
-    - B
-    - C
-    - D
+  choiceLength: 4
   correctChoice: 1
-  explanation: "A: エーヤワディー川。B: チャオプラヤ川。C: メコン川。D: 紅河。"
+  explanation: "A: エーヤワディー（イラワディ）川。B: チャオプラヤ川。C: メコン川。D: 紅河。"
+
 - statement: ニジェール川はどれでしょうか
-  choices:
-    - A
-    - B
-    - C
+  choiceLength: 3
   correctChoice: 1
   explanation: "A: ナイル川。B: ニジェール川。C: ザンベジ川。"
+
+- statement: アラル海はどれでしょうか
+  choiceLength: 3
+  correctChoice: 1
+  explanation: "A: チャド湖。B: アラル海。C: バイカル湖。"

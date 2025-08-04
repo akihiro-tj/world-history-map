@@ -1,12 +1,16 @@
 import type { Layer } from "@deck.gl/core";
 import { GeoFeatureCategory } from "../../constants";
 import type { GeoFeature } from "../types";
+import { getBasinTileLayer } from "./layers/basin";
 import { getDesertTileLayer } from "./layers/desert-tile";
+import { getIslandGroupTileLayer } from "./layers/island-group";
 import { getIslandTileLayer } from "./layers/island-tile";
+import { getLakeTileLayer } from "./layers/lake-tile";
 import { getLandTileLayer } from "./layers/land-tile";
 import { getMountainTileLayer } from "./layers/mountain-tile";
 import { getPeninsulaTileLayer } from "./layers/peninsula-tile";
 import { getPlateauTileLayer } from "./layers/plateau-tile";
+import { getRiverTileLayer } from "./layers/river-tile";
 
 interface ViewerState {
 	isFilterPanelVisible: boolean;
@@ -38,11 +42,15 @@ export const useViewerState = (): ViewerState => {
 			id: "terrain",
 			label: "地形",
 			filter: {
-				[GeoFeatureCategory.MOUNTAIN]: true,
-				[GeoFeatureCategory.PLATEAU]: true,
-				[GeoFeatureCategory.DESERT]: true,
+				[GeoFeatureCategory.ISLAND_GROUP]: true,
 				[GeoFeatureCategory.ISLAND]: true,
 				[GeoFeatureCategory.PENINSULA]: true,
+				[GeoFeatureCategory.BASIN]: true,
+				[GeoFeatureCategory.DESERT]: true,
+				[GeoFeatureCategory.PLATEAU]: true,
+				[GeoFeatureCategory.MOUNTAIN]: true,
+				[GeoFeatureCategory.LAKE]: true,
+				[GeoFeatureCategory.RIVER]: true,
 			},
 		},
 	]);
@@ -61,6 +69,10 @@ export const useViewerState = (): ViewerState => {
 
 	const layers = $derived<Layer[]>([
 		getLandTileLayer(),
+		getIslandGroupTileLayer(
+			flattenedFilter[GeoFeatureCategory.ISLAND_GROUP],
+			updateGeoFeature,
+		),
 		getIslandTileLayer(
 			flattenedFilter[GeoFeatureCategory.ISLAND],
 			updateGeoFeature,
@@ -69,16 +81,28 @@ export const useViewerState = (): ViewerState => {
 			flattenedFilter[GeoFeatureCategory.PENINSULA],
 			updateGeoFeature,
 		),
+		getBasinTileLayer(
+			flattenedFilter[GeoFeatureCategory.BASIN],
+			updateGeoFeature,
+		),
 		getDesertTileLayer(
 			flattenedFilter[GeoFeatureCategory.DESERT],
+			updateGeoFeature,
+		),
+		getPlateauTileLayer(
+			flattenedFilter[GeoFeatureCategory.PLATEAU],
 			updateGeoFeature,
 		),
 		getMountainTileLayer(
 			flattenedFilter[GeoFeatureCategory.MOUNTAIN],
 			updateGeoFeature,
 		),
-		getPlateauTileLayer(
-			flattenedFilter[GeoFeatureCategory.PLATEAU],
+		getLakeTileLayer(
+			flattenedFilter[GeoFeatureCategory.LAKE],
+			updateGeoFeature,
+		),
+		getRiverTileLayer(
+			flattenedFilter[GeoFeatureCategory.RIVER],
 			updateGeoFeature,
 		),
 	]);

@@ -5,13 +5,6 @@
 	"assets": {
 		"directory": "build"
 	},
-	"routes": [
-		{
-			"pattern": "viewer.world-history-map.com",
-			"zone_name": "world-history-map.com",
-			"custom_domain": true
-		}
-	],
 	"observability": {
 		"enabled": false
 	}

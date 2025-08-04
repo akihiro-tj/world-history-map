@@ -1,44 +1,54 @@
 - statement: シチリア島はどれでしょうか
-  choices:
-    - A
-    - B
-    - C
-    - D
+  choiceLength: 5
   correctChoice: 2
-  explanation: "A: コルシカ島。B: サルデーニャ島。C: シチリア島。D: キプロス島。"
-- statement: ジャワ島はどれでしょうか
-  choices:
-    - A
-    - B
-    - C
-  correctChoice: 1
-  explanation: "A: スマトラ島。B: ジャワ島。C: スラウェシ島。"
-- statement: マルク（モルッカ）諸島はどれでしょうか
-  choices:
-    - A
-    - B
-    - C
-    - D
-  correctChoice: 2
-  explanation: "A: 千島列島。B: マーシャル諸島。C: マルク（モルッカ）諸島。D: ビスマルク諸島。"
-- statement: アナトリア半島はどれでしょうか
-  choices:
-    - A
-    - B
-    - C
-  correctChoice: 1
-  explanation: "A: バルカン半島。B: アナトリア半島。C: アラビア半島。"
-- statement: ユトランド半島はどれでしょうか
-  choices:
-    - A
-    - B
-    - C
+  explanation: "A: コルシカ島。B: サルデーニャ島。C: シチリア島。D: クレタ島。E: キプロス島。"
+
+- statement: アイルランド島はどれでしょうか
+  choiceLength: 2
   correctChoice: 0
-  explanation: "A: ユトランド半島。B: クリミア半島。C: イベリア半島。"
-- statement: 遼東半島はどれでしょうか
-  choices:
-    - A
-    - B
-    - C
+  explanation: "A: アイルランド島。B: 大ブリテン島。"
+
+- statement: イベリア半島はどれでしょうか
+  choiceLength: 4
+  correctChoice: 3
+  explanation: "A: スカンディナヴィア半島。B: ユトランド半島。C: ブルターニュ半島。D: イベリア半島。"
+
+- statement: バルカン半島はどれでしょうか
+  choiceLength: 4
+  correctChoice: 0
+  explanation: "A: バルカン半島。B: クリミア半島。C: アナトリア半島。D: アラビア半島。"
+
+- statement: ジャワ島はどれでしょうか
+  choiceLength: 4
   correctChoice: 1
-  explanation: "A: 山東半島。B: 遼東半島。C: 朝鮮半島。"
+  explanation: "A: スマトラ島。B: ジャワ島。C: ボルネオ島。D: スラウェシ島。"
+
+- statement: セイロン島はどれでしょうか
+  choiceLength: 3
+  correctChoice: 1
+  explanation: "A: マダガスカル島。B: セイロン島。C: ニューギニア島。"
+
+- statement: グアムはどれでしょうか
+  choiceLength: 4
+  correctChoice: 1
+  explanation: "A: サイパン島。B: グアム。C: パラオ島。D: ガダルカナル島。"
+
+- statement: マルク（モルッカ）諸島はどれでしょうか
+  choiceLength: 5
+  correctChoice: 3
+  explanation: "A: マリアナ諸島。B: マーシャル諸島。C: カロリン諸島。D: マルク（モルッカ）諸島。E: ビスマルク諸島。"
+
+- statement: 遼東半島はどれでしょうか
+  choiceLength: 4
+  correctChoice: 1
+  explanation: "A: 朝鮮半島。B: 遼東半島。C: 山東半島。D: マレー半島。"
+
+- statement: フォークランド諸島はどれでしょうか
+  choiceLength: 3
+  correctChoice: 2
+  explanation: "A: ハワイ諸島。B: タヒチ島。C: フォークランド諸島。"
+
+- statement: ユカタン半島はどれでしょうか
+  choiceLength: 2
+  correctChoice: 1
+  explanation: "A: フロリダ半島。B: ユカタン半島。"
