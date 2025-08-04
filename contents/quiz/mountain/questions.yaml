@@ -2,19 +2,28 @@
   choiceLength: 3
   correctChoice: 0
   explanation: "A: ピレネー山脈。B: アルプス山脈。C: カルパティア山脈。"
-- statement: コーカサス山脈はどれでしょうか
+
+- statement: ウラル山脈はどれでしょうか
   choiceLength: 3
-  correctChoice: 1
-  explanation: "A: ウラル山脈。B: コーカサス山脈。C: ザグロス山脈。"
-- statement: スタノヴォイ山脈（外興安嶺）はどれでしょうか
-  choiceLength: 4
   correctChoice: 0
-  explanation: "A: スタノヴォイ山脈（外興安嶺）。B: アルタイ山脈。C: 天山山脈。D: ヒマラヤ山脈。"
+  explanation: "A: ウラル山脈。B: コーカサス山脈。C: ザグロス山脈。"
+
+- statement: スタノヴォイ山脈（外興安嶺）はどれでしょうか
+  choiceLength: 5
+  correctChoice: 0
+  explanation: "A: スタノヴォイ山脈（外興安嶺）。B: アルタイ山脈。C: 天山山脈。D: クンルン山脈。E: ヒマラヤ山脈。"
+
 - statement: パミール高原はどれでしょうか
-  choiceLength: 3
+  choiceLength: 4
   correctChoice: 1
-  explanation: "A: モンゴル高原。B: パミール高原。C: デカン高原。"
+  explanation: "A: モンゴル高原。B: パミール高原。C: チベット高原。D: デカン高原。"
+
 - statement: タクラマカン砂漠はどれでしょうか
   choiceLength: 3
   correctChoice: 1
   explanation: "A: サハラ砂漠。B: タクラマカン砂漠。C: ゴビ砂漠。"
+
+- statement: アンデス山脈はどれでしょうか
+  choiceLength: 3
+  correctChoice: 2
+  explanation: "A: ロッキー山脈。B: アパラチア山脈。C: アンデス山脈。"
