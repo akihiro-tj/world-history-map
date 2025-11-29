@@ -96,6 +96,33 @@ YAGNI原則を遵守し、TypeScriptの厳密な型付けを徹底する。
 - Biomeエラー: 0
 - アクセシビリティ自動チェック: パス必須
 
+### 並列タスク実行
+
+tasks.mdで `[P]` マークが付いたタスクは、他の `[P]` タスクと並列実行可能である。
+
+並列実行には [git-worktree-runner (gtr)](https://github.com/coderabbitai/git-worktree-runner) を使用する:
+
+```bash
+# 各[P]タスクごとに独立したワークツリーを作成
+git gtr new task/T003-biome-setup
+git gtr new task/T004-tailwind-setup
+git gtr new task/T005-shadcn-init
+
+# 各ワークツリーでAIエージェントを起動（並列実行）
+git gtr ai task/T003-biome-setup
+git gtr ai task/T004-tailwind-setup
+git gtr ai task/T005-shadcn-init
+
+# 完了後、PRを作成してワークツリーを削除
+git gtr rm task/T003-biome-setup
+```
+
+**並列実行の制約**:
+- 同一フェーズ内の `[P]` タスクのみ並列実行可能
+- 依存関係のあるタスクは順次実行すること
+- 各ワークツリーは独立したブランチで作業すること
+- マージ時のコンフリクトに注意すること
+
 ## Governance
 
 ### 本コンスティチューションの適用
@@ -122,4 +149,4 @@ YAGNI原則を遵守し、TypeScriptの厳密な型付けを徹底する。
 - 原則違反が発見された場合は、修正を優先すること
 - 複雑さの追加は正当化を必要とし、`plan.md` のComplexity Trackingに記録すること
 
-**Version**: 1.0.0 | **Ratified**: 2025-11-29 | **Last Amended**: 2025-11-29
+**Version**: 1.1.0 | **Ratified**: 2025-11-29 | **Last Amended**: 2025-11-29
