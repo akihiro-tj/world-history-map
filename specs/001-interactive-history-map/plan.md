@@ -72,6 +72,8 @@ src/
 │   │   └── TerritoryInfoPanel.tsx # 領土情報パネル
 │   └── Legal/
 │       └── LicenseDisclaimer.tsx  # ライセンス・免責事項
+├── contexts/
+│   └── AppStateContext.tsx       # アプリ状態管理（年代、選択領土）
 ├── hooks/
 │   ├── useMapData.ts             # 地図データ取得
 │   └── useYearNavigation.ts      # 年代ナビゲーション
@@ -79,8 +81,11 @@ src/
 │   └── index.ts                  # 型定義
 ├── data/
 │   └── descriptions/             # AI生成の領土説明JSON
+├── styles/
+│   └── mapStyle.ts               # MapLibreスタイル定義
 ├── utils/
-│   └── mapUtils.ts               # 地図ユーティリティ
+│   ├── mapUtils.ts               # 地図ユーティリティ
+│   └── colorScheme.ts            # 領土色分けスキーム
 ├── App.tsx
 └── main.tsx
 

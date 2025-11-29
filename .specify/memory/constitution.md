@@ -93,7 +93,7 @@ YAGNI原則を遵守し、TypeScriptの厳密な型付けを徹底する。
 
 - テストカバレッジ目標: 80%以上
 - TypeScriptコンパイルエラー: 0
-- ESLintエラー: 0
+- Biomeエラー: 0
 - アクセシビリティ自動チェック: パス必須
 
 ## Governance
