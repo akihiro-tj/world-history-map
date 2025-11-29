@@ -45,6 +45,7 @@ TypeScript 5.9.x (strict mode): Follow standard conventions
 
 #### 実装
 
+- 作業着手時にリポジトリのissue一覧から該当するissueを確認し、PR作成時の `Closes #<issue番号>` に使用する
 - テストファースト（TDD）を遵守する
 - コミットは適切な粒度で分割する
 
