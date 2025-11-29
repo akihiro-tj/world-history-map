@@ -1,0 +1,48 @@
+> /speckit.tasks is running…
+
+⏺ tasks.mdを生成しました。
+
+  生成サマリー
+
+  出力ファイル: /specs/001-interactive-history-map/tasks.md
+
+  タスク統計
+
+  | Phase                          | タスク数                  |
+  |--------------------------------|-----------------------|
+  | Phase 1: Setup                 | 10                    |
+  | Phase 2: Foundational          | 8                     |
+  | Phase 3: User Story 1 (P1) MVP | 12 (4 tests + 8 impl) |
+  | Phase 4: User Story 2 (P2)     | 11 (4 tests + 7 impl) |
+  | Phase 5: User Story 3 (P3)     | 12 (4 tests + 8 impl) |
+  | Phase 6: User Story 4 (P4)     | 6 (2 tests + 4 impl)  |
+  | Phase 7: Polish                | 8                     |
+  | 合計                             | 67タスク                 |
+
+  User Story別タスク数
+
+  - US1: 12タスク（地図の閲覧と操作）
+  - US2: 11タスク（年代の選択と変更）
+  - US3: 12タスク（領土情報の表示）
+  - US4: 6タスク（ライセンス・免責事項）
+
+  並列実行可能タスク
+
+  - Setup: 5タスク [P]
+  - Foundational: 4タスク [P]
+  - 各User Story内のテスト・コンポーネント作成
+
+  独立テスト基準
+
+  - US1: 地図表示、ズーム・パン操作、領土境界とラベル表示
+  - US2: 年代セレクター表示、年代変更で地図更新
+  - US3: 領土クリックで説明パネル、年代リンクで遷移
+  - US4: ライセンスモーダル表示、GPL-3.0と免責事項記載
+
+  MVP範囲
+
+  User Story 1のみ - 1650年の地図表示とズーム・パン操作
+
+  フォーマット検証
+
+  全67タスクがチェックリスト形式（- [ ] [TaskID] [P?] [Story?] Description with file path）に準拠
