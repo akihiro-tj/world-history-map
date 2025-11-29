@@ -39,7 +39,8 @@ TypeScript 5.9.x (strict mode): Follow standard conventions
 
 ### 1. ブランチ作成
 
-- タスク開始前に適切なブランチを作成する
+- main ブランチで `git pull origin main` を実行し、最新の状態を取り込む
+- 適切なブランチを作成する
 - ブランチ名は `task/TXXX-task-name` 形式（例: `task/T002-setup-biome`）
 - constitution のブランチ戦略に従うこと
 
