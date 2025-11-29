@@ -26,7 +26,7 @@
 **目的**: プロジェクト初期化と基本構造の構築
 
 - [x] T001 Vite + React + TypeScriptプロジェクトを初期化: `pnpm create vite@latest . --template react-ts`
-- [ ] T002 `tsconfig.json` でTypeScript strictモードを設定
+- [x] T002 `tsconfig.json` でTypeScript strictモードを設定
 - [ ] T003 [P] `biome.json` でBiomeをインストール・設定
 - [ ] T004 [P] `tailwind.config.ts` でTailwind v4をインストール・設定
 - [ ] T005 [P] shadcn/uiを初期化: `pnpm dlx shadcn@latest init`
