@@ -37,20 +37,18 @@ TypeScript 5.9.x (strict mode): Follow standard conventions
 
 `/speckit.implement` コマンドでタスクを実行する際は、以下のワークフローに従うこと:
 
-### 1. ブランチ作成
+### 共通ルール
 
-- main ブランチで `git pull origin main` を実行し、最新の状態を取り込む
-- 適切なブランチを作成する
-- ブランチ名は `task/TXXX-task-name` 形式（例: `task/T002-setup-biome`）
-- constitution のブランチ戦略に従うこと
+#### ブランチ名
 
-### 2. 実装
+`task/TXXX-task-name` 形式（例: `task/T002-setup-biome`）
 
-- タスクの実装を完了させる
+#### 実装
+
 - テストファースト（TDD）を遵守する
 - コミットは適切な粒度で分割する
 
-### 3. PR 作成
+#### PR 作成
 
 タスク完了後、以下の設定で PR を作成する:
 
@@ -72,5 +70,47 @@ gh pr create \
   --assignee akihiro-tj \
   --label <適切なラベル>
 ```
+
+### 単一タスクの実行
+
+```bash
+git checkout main && git pull origin main
+git checkout -b task/T003-biome-setup
+# 実装 → PR作成
+```
+
+### 並列タスク実行
+
+tasks.md で `[P]` マークが付いたタスクは、他の `[P]` タスクと並列実行可能。
+
+#### gtr を使用する場合
+
+[git-worktree-runner (gtr)](https://github.com/coderabbitai/git-worktree-runner) がインストールされている場合:
+
+```bash
+git fetch origin main
+git gtr new task/T003-biome-setup
+git gtr ai task/T003-biome-setup
+# 実装 → PR作成
+git gtr rm task/T003-biome-setup
+```
+
+#### git worktree を使用する場合
+
+gtr が使えない場合は標準の git worktree を使用:
+
+```bash
+git fetch origin main
+git worktree add ../world-history-atlas-T003 -b task/T003-biome-setup origin/main
+cd ../world-history-atlas-T003
+# 実装 → PR作成
+git worktree remove ../world-history-atlas-T003
+```
+
+**制約**:
+
+- 同一フェーズ内の `[P]` タスクのみ並列実行可能
+- 依存関係のあるタスクは順次実行
+- マージ時のコンフリクトに注意
 
 <!-- MANUAL ADDITIONS END -->
