@@ -38,14 +38,13 @@ export function TerritoryLabel({ sourceId, sourceLayer }: TerritoryLabelProps) {
       layout={{
         'text-field': ['get', 'NAME'],
         'text-font': ['Noto Sans Regular'],
-        'text-size': ['interpolate', ['linear'], ['zoom'], 2, 8, 5, 12, 10, 16],
+        'text-size': ['interpolate', ['linear'], ['zoom'], 0, 7, 3, 10, 6, 13, 10, 16],
         'text-max-width': 8,
-        'text-anchor': 'center',
-        'text-allow-overlap': false,
-        'text-ignore-placement': false,
-        'text-padding': 10,
+        'text-variable-anchor': ['center', 'top', 'bottom', 'left', 'right'],
+        'text-radial-offset': 0.5,
+        'text-justify': 'auto',
+        'text-padding': 2,
         'text-optional': true,
-        'symbol-sort-key': ['get', 'NAME'],
       }}
       paint={{
         'text-color': '#1a1a1a',

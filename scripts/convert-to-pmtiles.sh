@@ -102,13 +102,18 @@ Examples:
 EOF
 }
 
-# Check for tippecanoe
+# Check for dependencies
 check_dependencies() {
   if ! command -v tippecanoe &> /dev/null; then
     echo "Error: tippecanoe is not installed"
     echo "Installation:"
     echo "  macOS:  brew install tippecanoe"
     echo "  Ubuntu: apt install tippecanoe"
+    exit 1
+  fi
+
+  if ! command -v node &> /dev/null; then
+    echo "Error: Node.js is not installed"
     exit 1
   fi
 }
@@ -137,34 +142,83 @@ download_geojson() {
   echo "Saved: $output_path"
 }
 
+# Merge same-name polygons into MultiPolygons
+merge_polygons() {
+  local year=$1
+  local input_path="${TEMP_DIR}/world_${year}.geojson"
+  local output_path="${TEMP_DIR}/world_${year}_merged.geojson"
+
+  if [[ ! -f "$input_path" ]]; then
+    echo "Error: Input GeoJSON not found: $input_path"
+    return 1
+  fi
+
+  echo "Merging same-name polygons..."
+  node scripts/merge-same-name-polygons.mjs "$input_path" "$output_path"
+
+  if [[ ! -f "$output_path" ]]; then
+    echo "Error: Merge failed, output not created"
+    return 1
+  fi
+}
+
 # Convert GeoJSON to PMTiles
 convert_to_pmtiles() {
   local year=$1
-  local geojson_path="${TEMP_DIR}/world_${year}.geojson"
+  local polygons_path="${TEMP_DIR}/world_${year}_merged.geojson"
+  local labels_path="${TEMP_DIR}/world_${year}_merged_labels.geojson"
+  local polygons_pmtiles="${TEMP_DIR}/world_${year}_polygons.pmtiles"
+  local labels_pmtiles="${TEMP_DIR}/world_${year}_labels.pmtiles"
   local pmtiles_path="${OUTPUT_DIR}/world_${year}.pmtiles"
 
   mkdir -p "$OUTPUT_DIR"
 
-  if [[ ! -f "$geojson_path" ]]; then
-    echo "Error: GeoJSON file not found: $geojson_path"
+  if [[ ! -f "$polygons_path" ]]; then
+    echo "Error: Polygons GeoJSON not found: $polygons_path"
     return 1
   fi
 
-  echo "Converting: $geojson_path -> $pmtiles_path"
+  if [[ ! -f "$labels_path" ]]; then
+    echo "Error: Labels GeoJSON not found: $labels_path"
+    return 1
+  fi
 
+  echo "Converting polygons to PMTiles..."
   tippecanoe \
-    --output="$pmtiles_path" \
+    --output="$polygons_pmtiles" \
     --force \
     --layer="territories" \
-    --name="World ${year}" \
-    --description="Historical territories in ${year}" \
-    --attribution="© historical-basemaps (GPL-3.0)" \
     --minimum-zoom=0 \
     --maximum-zoom=10 \
     --coalesce-densest-as-needed \
     --extend-zooms-if-still-dropping \
     --simplification=10 \
-    "$geojson_path"
+    "$polygons_path"
+
+  echo "Converting labels to PMTiles..."
+  tippecanoe \
+    --output="$labels_pmtiles" \
+    --force \
+    --layer="labels" \
+    --minimum-zoom=0 \
+    --maximum-zoom=10 \
+    --no-tile-size-limit \
+    --no-feature-limit \
+    -r1 \
+    "$labels_path"
+
+  echo "Merging layers..."
+  tile-join \
+    --output="$pmtiles_path" \
+    --force \
+    --name="World ${year}" \
+    --description="Historical territories in ${year}" \
+    --attribution="© historical-basemaps (GPL-3.0)" \
+    "$polygons_pmtiles" \
+    "$labels_pmtiles"
+
+  # Cleanup temporary files
+  rm -f "$polygons_pmtiles" "$labels_pmtiles"
 
   echo "Conversion complete: $pmtiles_path"
 }
@@ -176,6 +230,10 @@ process_year() {
   echo "===== Processing year ${year} ====="
 
   if ! download_geojson "$year"; then
+    return 1
+  fi
+
+  if ! merge_polygons "$year"; then
     return 1
   fi
 

@@ -14,7 +14,8 @@ import { TerritoryLayer } from './territory-layer';
  * Source and layer constants
  */
 const SOURCE_ID = 'territories';
-const SOURCE_LAYER = 'territories';
+const SOURCE_LAYER_TERRITORIES = 'territories';
+const SOURCE_LAYER_LABELS = 'labels';
 
 /**
  * Pan amount in pixels for keyboard navigation
@@ -186,8 +187,8 @@ export function MapView() {
           attributionControl={false}
         >
           <Source id={SOURCE_ID} type="vector" url={pmtilesUrl}>
-            <TerritoryLayer sourceId={SOURCE_ID} sourceLayer={SOURCE_LAYER} />
-            <TerritoryLabel sourceId={SOURCE_ID} sourceLayer={SOURCE_LAYER} />
+            <TerritoryLayer sourceId={SOURCE_ID} sourceLayer={SOURCE_LAYER_TERRITORIES} />
+            <TerritoryLabel sourceId={SOURCE_ID} sourceLayer={SOURCE_LAYER_LABELS} />
           </Source>
         </MapGL>
       )}
