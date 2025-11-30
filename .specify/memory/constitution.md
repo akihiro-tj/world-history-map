@@ -17,7 +17,7 @@
   Follow-up TODOs: None
 -->
 
-# World History Atlas Constitution
+# World History Map Constitution
 
 ## Core Principles
 

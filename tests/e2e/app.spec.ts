@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test.describe('App', () => {
   test('should load the application', async ({ page }) => {
     await page.goto('/');
-    await expect(page).toHaveTitle(/World History Atlas/i);
+    await expect(page).toHaveTitle(/World History Map/i);
   });
 
   test('should display the main content', async ({ page }) => {

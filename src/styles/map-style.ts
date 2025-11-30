@@ -51,7 +51,7 @@ export const SOURCE_ID = 'territories';
 export function createMapStyle(pmtilesUrl: string): StyleSpecification {
   return {
     version: 8,
-    name: 'World History Atlas',
+    name: 'World History Map',
     sources: {
       [SOURCE_ID]: {
         type: 'vector',

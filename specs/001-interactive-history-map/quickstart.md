@@ -15,7 +15,7 @@
 
 ```bash
 git clone <repository-url>
-cd world-history-atlas
+cd world-history-map
 ```
 
 ### 2. 依存関係のインストール
@@ -60,7 +60,7 @@ pnpm dev
 ## Project Structure
 
 ```
-world-history-atlas/
+world-history-map/
 ├── public/
 │   └── pmtiles/           # PMTiles形式の地図データ
 ├── src/

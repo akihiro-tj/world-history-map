@@ -107,7 +107,7 @@ export function MapView() {
   const mapStyle = useMemo(
     () => ({
       version: 8 as const,
-      name: 'World History Atlas',
+      name: 'World History Map',
       sources: {},
       layers: [
         {
