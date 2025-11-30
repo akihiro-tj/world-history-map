@@ -35,7 +35,7 @@ export const TERRITORY_LAYER_IDS = {
 export function TerritoryLayer({ sourceId, sourceLayer }: TerritoryLayerProps) {
   return (
     <>
-      {/* Territory fill layer */}
+      {/* Territory fill layer - interactive for click events */}
       <Layer
         id={TERRITORY_LAYER_IDS.fill}
         type="fill"
