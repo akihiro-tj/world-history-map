@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { MapView } from './components/map/map-view';
+import { TerritoryInfoPanel } from './components/territory-info/territory-info-panel';
 import { YearSelector } from './components/year-selector/year-selector';
 import { AppStateProvider } from './contexts/app-state-context';
 import type { YearEntry } from './types';
@@ -45,6 +46,7 @@ function AppContent() {
   return (
     <main className="relative h-screen w-screen overflow-hidden">
       <MapView />
+      <TerritoryInfoPanel />
       {!isLoading && years.length > 0 && (
         <div className="absolute bottom-4 left-1/2 z-20 w-full max-w-2xl -translate-x-1/2 rounded-lg bg-white/95 shadow-lg backdrop-blur-sm dark:bg-gray-900/95">
           <YearSelector years={years} onYearSelect={handleYearSelect} />
