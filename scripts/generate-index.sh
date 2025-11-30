@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 #
 # generate-index.sh
-# public/pmtiles/index.json を生成するスクリプト
+# Generate public/pmtiles/index.json
 #
-# 使用方法:
+# Usage:
 #   ./scripts/generate-index.sh
 #
-# 前提条件:
-#   - jq がインストールされていること
-#   - .cache/geojson/ に GeoJSON ファイルが存在すること
+# Prerequisites:
+#   - jq must be installed
+#   - GeoJSON files must exist in .cache/geojson/
 
 set -euo pipefail
 
@@ -16,19 +16,19 @@ OUTPUT_DIR="public/pmtiles"
 CACHE_DIR=".cache/geojson"
 OUTPUT_FILE="${OUTPUT_DIR}/index.json"
 
-# jq の存在確認
+# Check for jq
 if ! command -v jq &> /dev/null; then
-  echo "エラー: jq がインストールされていません"
+  echo "Error: jq is not installed"
   exit 1
 fi
 
-# 年代エントリを生成
+# Generate year entry
 generate_year_entry() {
   local year=$1
   local geojson_path="${CACHE_DIR}/world_${year}.geojson"
 
   if [[ ! -f "$geojson_path" ]]; then
-    echo "警告: GeoJSONが見つかりません: $geojson_path" >&2
+    echo "Warning: GeoJSON not found: $geojson_path" >&2
     return 1
   fi
 
@@ -38,11 +38,11 @@ generate_year_entry() {
   echo "{\"year\":${year},\"filename\":\"world_${year}.pmtiles\",\"countries\":${countries}}"
 }
 
-# メイン処理
+# Main
 main() {
   local entries=()
 
-  # キャッシュディレクトリ内のGeoJSONファイルから年代を取得
+  # Get years from GeoJSON files in cache directory
   for geojson in "${CACHE_DIR}"/world_*.geojson; do
     if [[ -f "$geojson" ]]; then
       local filename
@@ -58,19 +58,19 @@ main() {
   done
 
   if [[ ${#entries[@]} -eq 0 ]]; then
-    echo "エラー: 処理可能なGeoJSONファイルがありません"
+    echo "Error: No GeoJSON files available to process"
     exit 1
   fi
 
-  # JSON配列として結合
+  # Join as JSON array
   local json_array
   json_array=$(printf '%s\n' "${entries[@]}" | jq -s 'sort_by(.year)')
 
-  # 最終的なindex.jsonを生成
+  # Generate final index.json
   echo "{\"years\":${json_array}}" | jq '.' > "$OUTPUT_FILE"
 
-  echo "生成完了: $OUTPUT_FILE"
-  echo "年代数: ${#entries[@]}"
+  echo "Generated: $OUTPUT_FILE"
+  echo "Year count: ${#entries[@]}"
 }
 
 main

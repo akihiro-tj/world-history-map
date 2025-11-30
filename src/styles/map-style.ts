@@ -1,46 +1,46 @@
 import type { StyleSpecification } from 'maplibre-gl';
 
 /**
- * 地図のデフォルト設定
+ * Default map configuration
  */
 export const MAP_CONFIG = {
-  /** 初期経度 */
+  /** Initial longitude */
   initialLongitude: 0,
-  /** 初期緯度 */
+  /** Initial latitude */
   initialLatitude: 30,
-  /** 初期ズームレベル */
+  /** Initial zoom level */
   initialZoom: 2,
-  /** 最小ズームレベル */
+  /** Minimum zoom level */
   minZoom: 1,
-  /** 最大ズームレベル */
+  /** Maximum zoom level */
   maxZoom: 10,
 } as const;
 
 /**
- * 領土レイヤーのID
+ * Territory layer IDs
  */
 export const LAYER_IDS = {
-  /** 領土塗りつぶしレイヤー */
+  /** Territory fill layer */
   territoryFill: 'territory-fill',
-  /** 領土境界線レイヤー */
+  /** Territory border layer */
   territoryBorder: 'territory-border',
-  /** 領土ラベルレイヤー */
+  /** Territory label layer */
   territoryLabel: 'territory-label',
 } as const;
 
 /**
- * PMTilesのソースID
+ * PMTiles source ID
  */
 export const SOURCE_ID = 'territories';
 
 /**
- * ベース地図スタイルを生成
+ * Generate base map style
  *
- * historical-basemapsのPMTilesを表示するためのMapLibreスタイル。
- * 領土の塗りつぶしと境界線を含む。
+ * MapLibre style for displaying historical-basemaps PMTiles.
+ * Includes territory fill and borders.
  *
- * @param pmtilesUrl PMTilesファイルのURL（pmtiles://スキームを使用）
- * @returns MapLibreスタイル仕様
+ * @param pmtilesUrl PMTiles file URL (using pmtiles:// scheme)
+ * @returns MapLibre style specification
  *
  * @example
  * ```ts
@@ -59,7 +59,7 @@ export function createMapStyle(pmtilesUrl: string): StyleSpecification {
       },
     },
     layers: [
-      // 背景色（海洋）
+      // Background color (ocean)
       {
         id: 'background',
         type: 'background',
@@ -67,19 +67,19 @@ export function createMapStyle(pmtilesUrl: string): StyleSpecification {
           'background-color': '#b3d1ff',
         },
       },
-      // 領土塗りつぶし
+      // Territory fill
       {
         id: LAYER_IDS.territoryFill,
         type: 'fill',
         source: SOURCE_ID,
         'source-layer': 'territories',
         paint: {
-          // 暫定的な塗りつぶし色（color-scheme.tsで上書き予定）
+          // Temporary fill color (to be overridden by color-scheme.ts)
           'fill-color': '#d4e6d4',
           'fill-opacity': 0.8,
         },
       },
-      // 領土境界線
+      // Territory border
       {
         id: LAYER_IDS.territoryBorder,
         type: 'line',
@@ -91,7 +91,7 @@ export function createMapStyle(pmtilesUrl: string): StyleSpecification {
           'line-opacity': 0.7,
         },
       },
-      // 領土ラベル
+      // Territory label
       {
         id: LAYER_IDS.territoryLabel,
         type: 'symbol',
@@ -119,7 +119,7 @@ export function createMapStyle(pmtilesUrl: string): StyleSpecification {
 }
 
 /**
- * 地図の初期ビュー状態
+ * Initial map view state
  */
 export const initialViewState = {
   longitude: MAP_CONFIG.initialLongitude,

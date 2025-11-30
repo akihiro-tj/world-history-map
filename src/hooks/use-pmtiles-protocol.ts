@@ -3,10 +3,10 @@ import { Protocol } from 'pmtiles';
 import { useEffect, useRef } from 'react';
 
 /**
- * PMTilesプロトコルをMapLibre GL JSに登録するフック
+ * Hook to register PMTiles protocol with MapLibre GL JS
  *
- * MapLibreがpmtiles://スキームのURLを読み込めるようにするプロトコルを登録。
- * コンポーネントのライフサイクルに合わせて登録・解除を管理する。
+ * Registers protocol to enable MapLibre to load pmtiles:// scheme URLs.
+ * Manages registration and cleanup with component lifecycle.
  *
  * @example
  * ```tsx

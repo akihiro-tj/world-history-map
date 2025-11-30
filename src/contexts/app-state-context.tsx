@@ -2,7 +2,7 @@ import { createContext, type ReactNode, useCallback, useContext, useMemo, useSta
 import { type AppState, type AppStateActions, initialAppState, type MapViewState } from '../types';
 
 /**
- * AppStateコンテキストの型
+ * AppState context type
  */
 interface AppStateContextValue {
   state: AppState;
@@ -12,16 +12,16 @@ interface AppStateContextValue {
 const AppStateContext = createContext<AppStateContextValue | null>(null);
 
 /**
- * AppStateプロバイダーのProps
+ * AppStateProvider props
  */
 interface AppStateProviderProps {
   children: ReactNode;
-  /** テスト用の初期状態（省略時はデフォルト値） */
+  /** Initial state for testing (uses default when omitted) */
   initialState?: AppState;
 }
 
 /**
- * アプリケーション状態を提供するプロバイダー
+ * Provider that supplies application state
  *
  * @example
  * ```tsx
@@ -96,10 +96,10 @@ export function AppStateProvider({
 }
 
 /**
- * アプリケーション状態を取得するフック
+ * Hook to get application state
  *
- * @returns 現在の状態と更新アクション
- * @throws AppStateProvider外で使用された場合
+ * @returns Current state and update actions
+ * @throws When used outside of AppStateProvider
  *
  * @example
  * ```tsx

@@ -1,31 +1,31 @@
 #!/usr/bin/env bash
 #
 # convert-to-pmtiles.sh
-# historical-basemaps GeoJSONをPMTiles形式に変換するスクリプト
+# Convert historical-basemaps GeoJSON to PMTiles format
 #
-# 使用方法:
+# Usage:
 #   ./scripts/convert-to-pmtiles.sh [year]
 #   ./scripts/convert-to-pmtiles.sh 1650
-#   ./scripts/convert-to-pmtiles.sh all    # すべての年代を変換
+#   ./scripts/convert-to-pmtiles.sh all    # Convert all available years
 #
-# 前提条件:
-#   - tippecanoe がインストールされていること
+# Prerequisites:
+#   - tippecanoe must be installed
 #     brew install tippecanoe (macOS)
 #     apt install tippecanoe (Ubuntu/Debian)
 #
-# ライセンス:
-#   このスクリプトで変換されるデータはGPL-3.0ライセンスで提供される
-#   historical-basemaps (https://github.com/aourednik/historical-basemaps) からのもの
+# License:
+#   Data converted by this script is provided under GPL-3.0 license
+#   from historical-basemaps (https://github.com/aourednik/historical-basemaps)
 
 set -euo pipefail
 
-# 設定
+# Configuration
 HISTORICAL_BASEMAPS_BASE_URL="https://raw.githubusercontent.com/aourednik/historical-basemaps/master/geojson"
 OUTPUT_DIR="public/pmtiles"
 TEMP_DIR=".cache/geojson"
 
-# 利用可能な年代の一覧（historical-basemapsで利用可能な年代）
-# 注: 実際に利用可能な年代はリポジトリを確認して更新が必要
+# List of available years (available in historical-basemaps)
+# Note: Check the repository to update available years
 AVAILABLE_YEARS=(
   1650
   1700
@@ -41,35 +41,35 @@ AVAILABLE_YEARS=(
   2020
 )
 
-# ヘルプ表示
+# Show help
 show_help() {
   cat << EOF
-使用方法: $0 [year|all|list]
+Usage: $0 [year|all|list]
 
-引数:
-  year    変換する年代（例: 1650）
-  all     すべての利用可能な年代を変換
-  list    利用可能な年代の一覧を表示
+Arguments:
+  year    Year to convert (e.g., 1650)
+  all     Convert all available years
+  list    Show list of available years
 
-例:
-  $0 1650        # 1650年のデータを変換
-  $0 all         # すべての年代を変換
-  $0 list        # 利用可能な年代を表示
+Examples:
+  $0 1650        # Convert data for year 1650
+  $0 all         # Convert all years
+  $0 list        # Show available years
 EOF
 }
 
-# tippecanoeの存在確認
+# Check for tippecanoe
 check_dependencies() {
   if ! command -v tippecanoe &> /dev/null; then
-    echo "エラー: tippecanoe がインストールされていません"
-    echo "インストール方法:"
+    echo "Error: tippecanoe is not installed"
+    echo "Installation:"
     echo "  macOS:  brew install tippecanoe"
     echo "  Ubuntu: apt install tippecanoe"
     exit 1
   fi
 }
 
-# GeoJSONをダウンロード
+# Download GeoJSON
 download_geojson() {
   local year=$1
   local output_path="${TEMP_DIR}/world_${year}.geojson"
@@ -77,23 +77,23 @@ download_geojson() {
   mkdir -p "$TEMP_DIR"
 
   if [[ -f "$output_path" ]]; then
-    echo "キャッシュを使用: $output_path"
+    echo "Using cache: $output_path"
     return 0
   fi
 
   local url="${HISTORICAL_BASEMAPS_BASE_URL}/world_${year}.geojson"
-  echo "ダウンロード中: $url"
+  echo "Downloading: $url"
 
   if ! curl -fsSL "$url" -o "$output_path"; then
-    echo "エラー: ${year}年のGeoJSONのダウンロードに失敗しました"
+    echo "Error: Failed to download GeoJSON for year ${year}"
     rm -f "$output_path"
     return 1
   fi
 
-  echo "保存完了: $output_path"
+  echo "Saved: $output_path"
 }
 
-# GeoJSONをPMTilesに変換
+# Convert GeoJSON to PMTiles
 convert_to_pmtiles() {
   local year=$1
   local geojson_path="${TEMP_DIR}/world_${year}.geojson"
@@ -102,11 +102,11 @@ convert_to_pmtiles() {
   mkdir -p "$OUTPUT_DIR"
 
   if [[ ! -f "$geojson_path" ]]; then
-    echo "エラー: GeoJSONファイルが見つかりません: $geojson_path"
+    echo "Error: GeoJSON file not found: $geojson_path"
     return 1
   fi
 
-  echo "変換中: $geojson_path -> $pmtiles_path"
+  echo "Converting: $geojson_path -> $pmtiles_path"
 
   tippecanoe \
     --output="$pmtiles_path" \
@@ -122,14 +122,14 @@ convert_to_pmtiles() {
     --simplification=10 \
     "$geojson_path"
 
-  echo "変換完了: $pmtiles_path"
+  echo "Conversion complete: $pmtiles_path"
 }
 
-# 単一年代の処理
+# Process single year
 process_year() {
   local year=$1
 
-  echo "===== ${year}年の処理を開始 ====="
+  echo "===== Processing year ${year} ====="
 
   if ! download_geojson "$year"; then
     return 1
@@ -139,18 +139,18 @@ process_year() {
     return 1
   fi
 
-  echo "===== ${year}年の処理が完了 ====="
+  echo "===== Completed year ${year} ====="
 }
 
-# 利用可能な年代を表示
+# List available years
 list_years() {
-  echo "利用可能な年代:"
+  echo "Available years:"
   for year in "${AVAILABLE_YEARS[@]}"; do
     echo "  - $year"
   done
 }
 
-# メイン処理
+# Main
 main() {
   if [[ $# -lt 1 ]]; then
     show_help
@@ -167,19 +167,19 @@ main() {
       list_years
       ;;
     all)
-      echo "すべての年代を変換します..."
+      echo "Converting all years..."
       for year in "${AVAILABLE_YEARS[@]}"; do
         if ! process_year "$year"; then
-          echo "警告: ${year}年の処理に失敗しました。続行します..."
+          echo "Warning: Failed to process year ${year}. Continuing..."
         fi
       done
-      echo "すべての変換が完了しました"
+      echo "All conversions complete"
       ;;
     *)
       if [[ "$1" =~ ^-?[0-9]+$ ]]; then
         process_year "$1"
       else
-        echo "エラー: 無効な引数: $1"
+        echo "Error: Invalid argument: $1"
         show_help
         exit 1
       fi

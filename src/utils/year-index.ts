@@ -1,13 +1,13 @@
 import type { YearEntry, YearIndex } from '../types';
 
-/** PMTilesインデックスファイルのパス */
+/** Path to PMTiles index file */
 const INDEX_PATH = '/pmtiles/index.json';
 
-/** ファイル名のバリデーション用正規表現 */
+/** Regular expression for filename validation */
 const FILENAME_PATTERN = /^world_-?\d+\.pmtiles$/;
 
 /**
- * YearEntryのバリデーション
+ * Validate YearEntry
  */
 function validateYearEntry(entry: unknown): entry is YearEntry {
   if (typeof entry !== 'object' || entry === null) {
@@ -36,7 +36,7 @@ function validateYearEntry(entry: unknown): entry is YearEntry {
 }
 
 /**
- * YearIndexのバリデーション
+ * Validate YearIndex
  */
 function validateYearIndex(data: unknown): data is YearIndex {
   if (typeof data !== 'object' || data === null) {
@@ -53,10 +53,10 @@ function validateYearIndex(data: unknown): data is YearIndex {
 }
 
 /**
- * 年代インデックスを読み込む
+ * Load year index
  *
- * @returns 年代インデックスデータ
- * @throws インデックスの読み込みまたはバリデーションに失敗した場合
+ * @returns Year index data
+ * @throws When loading or validation fails
  *
  * @example
  * ```ts
@@ -81,11 +81,11 @@ export async function loadYearIndex(): Promise<YearIndex> {
 }
 
 /**
- * 指定した年代のPMTilesファイルパスを取得
+ * Get PMTiles file path for a specified year
  *
- * @param yearIndex 年代インデックス
- * @param year 対象年代
- * @returns PMTilesファイルのURL、見つからない場合はnull
+ * @param yearIndex Year index
+ * @param year Target year
+ * @returns PMTiles file URL, or null if not found
  *
  * @example
  * ```ts
@@ -102,16 +102,16 @@ export function getYearFilePath(yearIndex: YearIndex, year: number): string | nu
 }
 
 /**
- * 最も近い利用可能な年代を探す
+ * Find the nearest available year
  *
- * @param yearIndex 年代インデックス
- * @param targetYear 検索対象の年代
- * @returns 最も近い年代、インデックスが空の場合はnull
+ * @param yearIndex Year index
+ * @param targetYear Year to search for
+ * @returns Nearest year, or null if index is empty
  *
  * @example
  * ```ts
  * const nearest = findNearestYear(yearIndex, 1655);
- * // => 1650 (1650年と1700年がある場合)
+ * // => 1650 (when 1650 and 1700 are available)
  * ```
  */
 export function findNearestYear(yearIndex: YearIndex, targetYear: number): number | null {
@@ -134,10 +134,10 @@ export function findNearestYear(yearIndex: YearIndex, targetYear: number): numbe
 }
 
 /**
- * 年代リストを昇順でソートして取得
+ * Get sorted year list in ascending order
  *
- * @param yearIndex 年代インデックス
- * @returns ソートされた年代の配列
+ * @param yearIndex Year index
+ * @returns Sorted array of years
  */
 export function getSortedYears(yearIndex: YearIndex): number[] {
   return yearIndex.years.map((e) => e.year).sort((a, b) => a - b);

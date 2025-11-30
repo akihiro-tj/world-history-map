@@ -1,79 +1,79 @@
 /**
- * 年代エントリ
- * 各年代のPMTilesファイル情報を保持
+ * Year entry
+ * Holds PMTiles file information for each year
  */
 export interface YearEntry {
-  /** 年代（負の値は紀元前を表す） */
+  /** Year (negative values represent BCE) */
   year: number;
 
-  /** PMTilesファイル名（例: "world_1650.pmtiles"） */
+  /** PMTiles filename (e.g., "world_1650.pmtiles") */
   filename: string;
 
-  /** その時代に存在した国・地域名の配列 */
+  /** Array of country/territory names that existed in this era */
   countries: string[];
 }
 
 /**
- * 年代インデックス
- * 利用可能な全年代の一覧
+ * Year index
+ * List of all available years
  */
 export interface YearIndex {
   years: YearEntry[];
 }
 
 /**
- * 領土プロパティ
- * PMTiles内のベクタータイルに含まれる属性
+ * Territory properties
+ * Attributes contained in PMTiles vector tiles
  */
 export interface TerritoryProperties {
-  /** 国・地域名（ラベル表示用） */
+  /** Country/territory name (for label display) */
   NAME: string;
 
-  /** 植民地権力や地域名（色分けのグルーピング用） */
+  /** Colonial power or region name (for color grouping) */
   SUBJECTO: string;
 
-  /** より大きな文化圏への帰属 */
+  /** Larger cultural sphere affiliation */
   PARTOF: string;
 
-  /** 境界精度: 1=概略、2=中程度、3=国際法準拠 */
+  /** Border precision: 1=approximate, 2=moderate, 3=international law compliant */
   BORDERPRECISION: 1 | 2 | 3;
 }
 
 /**
- * 領土説明
- * AI生成の歴史的コンテンツ
+ * Territory description
+ * AI-generated historical content
  */
 export interface TerritoryDescription {
-  /** 一意識別子（`{NAME}_{year}`形式） */
+  /** Unique identifier (`{NAME}_{year}` format) */
   id: string;
 
-  /** 領土名（日本語） */
+  /** Territory name (Japanese) */
   name: string;
 
-  /** 対象年代 */
+  /** Target year */
   year: number;
 
-  /** 概要（1-2文、100文字以内推奨） */
+  /** Summary (1-2 sentences, recommended under 100 characters) */
   summary: string;
 
-  /** 時代背景（200-500文字） */
+  /** Historical background (200-500 characters) */
   background: string;
 
-  /** 主要な出来事（3-5項目推奨） */
+  /** Key events (recommended 3-5 items) */
   keyEvents: string[];
 
-  /** 関連する年代（年代リンク用） */
+  /** Related years (for year link navigation) */
   relatedYears: number[];
 
-  /** 生成日時（ISO 8601形式） */
+  /** Generation timestamp (ISO 8601 format) */
   generatedAt: string;
 
-  /** AI生成フラグ（常にtrue） */
+  /** AI-generated flag (always true) */
   aiGenerated: true;
 }
 
 /**
- * 地図ビュー状態
+ * Map view state
  */
 export interface MapViewState {
   longitude: number;
@@ -82,34 +82,34 @@ export interface MapViewState {
 }
 
 /**
- * アプリケーション状態
- * UI全体の状態管理用
+ * Application state
+ * For UI-wide state management
  */
 export interface AppState {
-  /** 現在選択中の年代 */
+  /** Currently selected year */
   selectedYear: number;
 
-  /** 現在選択中の領土（null = 未選択） */
+  /** Currently selected territory (null = not selected) */
   selectedTerritory: string | null;
 
-  /** 領土情報パネルの表示状態 */
+  /** Territory info panel visibility */
   isInfoPanelOpen: boolean;
 
-  /** ライセンス・免責事項モーダルの表示状態 */
+  /** License/disclaimer modal visibility */
   isDisclaimerOpen: boolean;
 
-  /** 地図のビュー状態 */
+  /** Map view state */
   mapView: MapViewState;
 
-  /** ローディング状態 */
+  /** Loading state */
   isLoading: boolean;
 
-  /** エラー状態 */
+  /** Error state */
   error: string | null;
 }
 
 /**
- * アプリケーション状態の初期値
+ * Initial application state
  */
 export const initialAppState: AppState = {
   selectedYear: 1650,
@@ -126,7 +126,7 @@ export const initialAppState: AppState = {
 };
 
 /**
- * アプリ状態コンテキストで利用可能なアクション
+ * Actions available in app state context
  */
 export interface AppStateActions {
   setSelectedYear: (year: number) => void;
