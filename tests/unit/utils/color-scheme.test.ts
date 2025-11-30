@@ -33,7 +33,13 @@ describe('color-scheme', () => {
 
       expect(Array.isArray(expr)).toBe(true);
       expect(expr[0]).toBe('match');
-      expect(expr[1]).toEqual(['get', 'SUBJECTO']);
+      // Falls back to NAME when SUBJECTO is empty
+      expect(expr[1]).toEqual([
+        'case',
+        ['==', ['get', 'SUBJECTO'], ''],
+        ['get', 'NAME'],
+        ['get', 'SUBJECTO'],
+      ]);
     });
 
     it('should include major powers in the expression', () => {

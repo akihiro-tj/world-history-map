@@ -2909,6 +2909,15 @@ const SUBJECTO_COLORS: Record<string, string> = {
   '𐓏𐒰𐓓𐒰𐓓𐒷  𐒼𐓂𐓊𐒻  𐓆𐒻𐒿𐒷  𐓀𐒰^𐓓𐒰^(Osage)': 'hsl(16, 50%, 66%)',
   "ᒋᑦ ᐊᔅᒋᓄᐤ St'aschinuw (Naskapi)": 'hsl(128, 58%, 62%)',
   'ᓀᐦᐃᔭᐤ ᐊᐢᑭᕀ Nêhiyaw-Askiy (Plains Cree)': 'hsl(306, 68%, 68%)',
+  'Alluvial Lowland Mesolithic Hunter-Foragers': 'hsl(354, 49%, 53%)',
+  'Batavian Republic': 'hsl(288, 58%, 69%)',
+  'Cuman-Kipchak confederation': 'hsl(9, 64%, 68%)',
+  Danzig: 'hsl(335, 68%, 54%)',
+  'Highland Mesolithic Hunter-Foragers': 'hsl(266, 55%, 57%)',
+  Kalinago: 'hsl(350, 49%, 69%)',
+  'Levantine Corridor (Neolithic Farmers)': 'hsl(330, 61%, 60%)',
+  'Neolithic Farmers': 'hsl(171, 55%, 65%)',
+  Ostrogoths: 'hsl(290, 57%, 66%)',
 };
 
 /**
@@ -2925,13 +2934,15 @@ export function getColorForSubjecto(subjecto: string): string {
 
 /**
  * Create MapLibre match expression for territory colors
+ * Falls back to NAME attribute when SUBJECTO is empty
  */
 export function createMatchColorExpression(): ExpressionSpecification {
   const entries = Object.entries(SUBJECTO_COLORS);
 
   return [
     'match',
-    ['get', 'SUBJECTO'],
+    // Use NAME as fallback when SUBJECTO is empty string
+    ['case', ['==', ['get', 'SUBJECTO'], ''], ['get', 'NAME'], ['get', 'SUBJECTO']],
     ...entries.flat(),
     DEFAULT_COLOR,
   ] as unknown as ExpressionSpecification;
