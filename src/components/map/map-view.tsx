@@ -159,13 +159,14 @@ export function MapView() {
       {/* Loading overlay */}
       {(isLoading || !mapLoaded) && (
         <output
-          className="absolute inset-0 z-20 flex items-center justify-center bg-white/80"
+          className="absolute inset-0 z-20 flex items-center justify-center"
+          style={{ backgroundColor: '#b3d1ff' }}
           data-testid="loading-overlay"
           aria-label="Loading map data"
         >
           <div className="flex flex-col items-center">
             <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
-            <span className="mt-4 text-gray-600">Loading map...</span>
+            <span className="mt-4 text-gray-700">Loading map...</span>
           </div>
         </output>
       )}
