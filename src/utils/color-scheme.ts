@@ -9,7 +9,7 @@ const SUBJECTO_COLORS: Record<string, string> = {
   'England and Ireland': '#e41a1c',
   England: '#e41a1c',
   France: '#377eb8',
-  Spain: '#ffff33',
+  'Spanish Habsburg': '#ffff33',
   Portugal: '#4daf4a',
   'Dutch Republic': '#ff7f00',
   'Austrian Empire': '#984ea3',
@@ -19,7 +19,8 @@ const SUBJECTO_COLORS: Record<string, string> = {
   'Denmark-Norway': '#dc143c',
   'Polish–Lithuanian Commonwealth': '#ff69b4',
   'Tsardom of Muscovy': '#228b22',
-  'Swiss Confederation': '#f0e68c',
+  'Republic of the Seven Zenden': '#f0e68c',
+  Luxembourg: '#87cefa',
   Venice: '#40e0d0',
   Genoa: '#daa520',
   'Papal States': '#ffd700',
@@ -42,11 +43,9 @@ const SUBJECTO_COLORS: Record<string, string> = {
   // Southeast Asian
   Ayutthaya: '#9acd32',
   'Dutch East Indies': '#ff7f00',
-  // Americas
-  'Vice-Royalty of New Spain': '#ffff33',
-  'Vice Royalty of Peru': '#ffff33',
-  'Portuguese Brazil': '#4daf4a',
-  'New France': '#377eb8',
+  // Colonial territories
+  'Portuguese East Africa': '#4daf4a',
+  'Portuguese Guinea': '#4daf4a',
 };
 
 /**
