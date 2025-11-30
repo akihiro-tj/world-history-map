@@ -32,7 +32,7 @@
 - [x] T005 [P] shadcn/uiを初期化: `pnpm dlx shadcn@latest init`
 - [x] T006 [P] MapLibre GL JSとreact-map-glをインストール: `pnpm add maplibre-gl react-map-gl pmtiles`
 - [x] T007 [P] テスト依存関係をインストール: `pnpm add -D vitest @testing-library/react @testing-library/jest-dom jsdom @playwright/test`
-- [ ] T008 `vitest.config.ts` でVitestを設定
+- [x] T008 `vitest.config.ts` でVitestを設定
 - [ ] T009 [P] `playwright.config.ts` でPlaywrightを設定
 - [ ] T010 plan.mdに従って `src/` に基本プロジェクト構造を作成
 

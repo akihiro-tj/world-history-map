@@ -9,7 +9,10 @@
     "preview": "vite preview",
     "check": "biome check .",
     "format": "biome format --write .",
-    "lint": "biome lint ."
+    "lint": "biome lint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
