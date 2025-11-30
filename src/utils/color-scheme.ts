@@ -435,7 +435,7 @@ const SUBJECTO_COLORS: Record<string, string> = {
   'Songhai': 'hsl(85, 49%, 65%)',
   'South Carolina': 'hsl(286, 46%, 62%)',
   'Southern Paiute': 'hsl(210, 57%, 69%)',
-  'Spanish Habsburg': '#ffff33',
+  'Spanish Habsburg': '#e6c74c',
   'Subarctic forest hunter-gatherers': 'hsl(245, 46%, 50%)',
   'Surinam': 'hsl(303, 48%, 66%)',
   'Suspiaq': 'hsl(206, 55%, 69%)',
