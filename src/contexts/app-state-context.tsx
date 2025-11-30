@@ -1,5 +1,5 @@
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
-import { initialAppState, type AppState, type AppStateActions, type MapViewState } from '../types';
+import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from 'react';
+import { type AppState, type AppStateActions, initialAppState, type MapViewState } from '../types';
 
 /**
  * AppStateコンテキストの型
@@ -35,7 +35,10 @@ interface AppStateProviderProps {
  * }
  * ```
  */
-export function AppStateProvider({ children, initialState = initialAppState }: AppStateProviderProps) {
+export function AppStateProvider({
+  children,
+  initialState = initialAppState,
+}: AppStateProviderProps) {
   const [state, setState] = useState<AppState>(initialState);
 
   const setSelectedYear = useCallback((year: number) => {
@@ -76,7 +79,15 @@ export function AppStateProvider({ children, initialState = initialAppState }: A
       setLoading,
       setError,
     }),
-    [setSelectedYear, setSelectedTerritory, setInfoPanelOpen, setDisclaimerOpen, setMapView, setLoading, setError],
+    [
+      setSelectedYear,
+      setSelectedTerritory,
+      setInfoPanelOpen,
+      setDisclaimerOpen,
+      setMapView,
+      setLoading,
+      setError,
+    ],
   );
 
   const value = useMemo(() => ({ state, actions }), [state, actions]);

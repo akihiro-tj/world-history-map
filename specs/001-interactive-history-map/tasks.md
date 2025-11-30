@@ -44,14 +44,14 @@
 
 **重要**: このフェーズが完了するまでユーザーストーリーの作業は開始不可
 
-- [ ] T011 `src/types/index.ts` にTypeScript型を定義（YearEntry, YearIndex, TerritoryProperties, TerritoryDescription, AppState）
-- [ ] T012 [P] `src/hooks/use-pmtiles-protocol.ts` にPMTilesプロトコル登録フックを作成
-- [ ] T013 [P] `src/utils/year-index.ts` に年代インデックスローダーを作成
-- [ ] T014 `src/contexts/app-state-context.tsx` にアプリ状態コンテキストを作成
-- [ ] T015 `src/styles/map-style.ts` にベース地図スタイル設定を作成
-- [ ] T016 [P] historical-basemaps GeoJSONをダウンロードし、`scripts/convert-to-pmtiles.sh` にPMTiles変換スクリプトを作成
-- [ ] T017 1650年（MVPデフォルト）のPMTilesを `public/pmtiles/world_1650.pmtiles` に生成
-- [ ] T018 `public/pmtiles/index.json` に利用可能な年代メタデータを作成
+- [x] T011 `src/types/index.ts` にTypeScript型を定義（YearEntry, YearIndex, TerritoryProperties, TerritoryDescription, AppState）
+- [x] T012 [P] `src/hooks/use-pmtiles-protocol.ts` にPMTilesプロトコル登録フックを作成
+- [x] T013 [P] `src/utils/year-index.ts` に年代インデックスローダーを作成
+- [x] T014 `src/contexts/app-state-context.tsx` にアプリ状態コンテキストを作成
+- [x] T015 `src/styles/map-style.ts` にベース地図スタイル設定を作成
+- [x] T016 [P] historical-basemaps GeoJSONをダウンロードし、`scripts/convert-to-pmtiles.sh` にPMTiles変換スクリプトを作成
+- [x] T017 1650年（MVPデフォルト）のPMTilesを `public/pmtiles/world_1650.pmtiles` に生成
+- [x] T018 `public/pmtiles/index.json` に利用可能な年代メタデータを作成
 
 **チェックポイント**: 基盤完了 - ユーザーストーリーの実装開始可能
 

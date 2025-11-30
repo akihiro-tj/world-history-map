@@ -1,6 +1,6 @@
-import { useEffect, useRef } from 'react';
 import maplibregl from 'maplibre-gl';
 import { Protocol } from 'pmtiles';
+import { useEffect, useRef } from 'react';
 
 /**
  * PMTilesプロトコルをMapLibre GL JSに登録するフック
