@@ -122,21 +122,21 @@
 
 ### ユーザーストーリー3のテスト
 
-- [ ] T042 [P] [US3] E2Eテスト: 領土クリックで情報パネルが表示される `tests/e2e/territory-info.spec.ts`
-- [ ] T043 [P] [US3] E2Eテスト: 説明内の年代リンクでその年代に遷移する `tests/e2e/year-link-navigation.spec.ts`
-- [ ] T044 [P] [US3] ユニットテスト: TerritoryInfoPanelコンポーネント `tests/unit/components/territory-info-panel.test.tsx`
-- [ ] T045 [P] [US3] ユニットテスト: 領土説明の読み込み `tests/unit/hooks/use-territory-description.test.ts`
+- [x] T042 [P] [US3] E2Eテスト: 領土クリックで情報パネルが表示される `tests/e2e/territory-info.spec.ts`
+- [x] T043 [P] [US3] E2Eテスト: 説明内の年代リンクでその年代に遷移する `tests/e2e/year-link-navigation.spec.ts`
+- [x] T044 [P] [US3] ユニットテスト: TerritoryInfoPanelコンポーネント `tests/unit/components/territory-info-panel.test.tsx`
+- [x] T045 [P] [US3] ユニットテスト: 領土説明の読み込み `tests/unit/hooks/use-territory-description.test.ts`
 
 ### ユーザーストーリー3の実装
 
-- [ ] T046 [P] [US3] `src/components/territory-info/territory-info-panel.tsx` にTerritoryInfoPanelコンポーネントを作成
-- [ ] T047 [US3] `src/hooks/use-territory-description.ts` にuseTerritoryDescriptionフックを作成
-- [ ] T048 [US3] TerritoryLayerに領土選択用のクリックハンドラを実装
-- [ ] T049 [US3] `src/components/territory-info/year-link.tsx` にクリック可能な年代参照用YearLinkコンポーネントを作成
-- [ ] T050 [US3] `src/components/territory-info/ai-notice.tsx` にAI生成表示コンポーネントを追加
-- [ ] T051 [US3] `src/data/descriptions/1650.json` に1650年のサンプル領土説明を作成
-- [ ] T052 [US3] 「説明がありません」状態をプレースホルダーメッセージで処理
-- [ ] T053 [US3] パネル閉じるボタンとキーボードEscapeハンドリングを追加
+- [x] T046 [P] [US3] `src/components/territory-info/territory-info-panel.tsx` にTerritoryInfoPanelコンポーネントを作成
+- [x] T047 [US3] `src/hooks/use-territory-description.ts` にuseTerritoryDescriptionフックを作成
+- [x] T048 [US3] TerritoryLayerに領土選択用のクリックハンドラを実装
+- [x] T049 [US3] `src/components/territory-info/year-link.tsx` にクリック可能な年代参照用YearLinkコンポーネントを作成
+- [x] T050 [US3] `src/components/territory-info/ai-notice.tsx` にAI生成表示コンポーネントを追加
+- [x] T051 [US3] `public/data/descriptions/1650/` に1650年のサンプル領土説明を作成
+- [x] T052 [US3] 「説明がありません」状態をプレースホルダーメッセージで処理
+- [x] T053 [US3] パネル閉じるボタンとキーボードEscapeハンドリングを追加
 
 **チェックポイント**: ユーザーストーリー3完了 - 領土情報パネルが年代ナビゲーション付きで動作
 
