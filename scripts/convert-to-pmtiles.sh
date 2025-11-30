@@ -130,7 +130,18 @@ download_geojson() {
     return 0
   fi
 
-  local url="${HISTORICAL_BASEMAPS_BASE_URL}/world_${year}.geojson"
+  # BCE years use "bc" prefix in filename (e.g., world_bc1000.geojson)
+  # CE years use the year directly (e.g., world_1650.geojson)
+  local remote_filename
+  if [[ $year -lt 0 ]]; then
+    # Convert negative year to positive for BCE filename
+    local bc_year=$(( -year ))
+    remote_filename="world_bc${bc_year}.geojson"
+  else
+    remote_filename="world_${year}.geojson"
+  fi
+
+  local url="${HISTORICAL_BASEMAPS_BASE_URL}/${remote_filename}"
   echo "Downloading: $url"
 
   if ! curl -fsSL "$url" -o "$output_path"; then

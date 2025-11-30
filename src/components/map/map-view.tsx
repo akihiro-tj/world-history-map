@@ -146,16 +146,6 @@ export function MapView() {
       aria-label="Interactive historical map showing territories from the selected year. Use arrow keys to pan and +/- to zoom."
       tabIndex={0}
     >
-      {/* Year indicator */}
-      <div
-        className="pointer-events-none absolute left-4 top-4 z-10 rounded bg-white/90 px-3 py-1 shadow"
-        data-testid="current-year"
-        aria-live="polite"
-      >
-        <span className="text-2xl font-bold tabular-nums">{state.selectedYear}</span>
-        <span className="ml-1 text-sm text-gray-600">年</span>
-      </div>
-
       {/* Loading overlay */}
       {(isLoading || !mapLoaded) && (
         <output

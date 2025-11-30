@@ -95,20 +95,20 @@
 
 ### ユーザーストーリー2のテスト
 
-- [ ] T031 [P] [US2] E2Eテスト: 年代セレクターが利用可能な年代を表示する `tests/e2e/year-selector.spec.ts`
-- [ ] T032 [P] [US2] E2Eテスト: 年代選択で地図の領土が更新される `tests/e2e/year-change.spec.ts`
-- [ ] T033 [P] [US2] ユニットテスト: YearSelectorコンポーネント `tests/unit/components/year-selector.test.tsx`
-- [ ] T034 [P] [US2] ユニットテスト: useYearNavigationフック `tests/unit/hooks/use-year-navigation.test.ts`
+- [x] T031 [P] [US2] E2Eテスト: 年代セレクターが利用可能な年代を表示する `tests/e2e/year-selector.spec.ts`
+- [x] T032 [P] [US2] E2Eテスト: 年代選択で地図の領土が更新される `tests/e2e/year-change.spec.ts`
+- [x] T033 [P] [US2] ユニットテスト: YearSelectorコンポーネント `tests/unit/components/year-selector.test.tsx`
+- [x] T034 [P] [US2] ユニットテスト: useYearNavigationフック `tests/unit/hooks/use-year-navigation.test.tsx`
 
 ### ユーザーストーリー2の実装
 
-- [ ] T035 [P] [US2] `src/components/year-selector/year-selector.tsx` にYearSelectorコンポーネントを作成
-- [ ] T036 [US2] `src/hooks/use-year-navigation.ts` にuseYearNavigationフックを作成
-- [ ] T037 [US2] YearSelectorに選択中の年代を中央にスクロールする横スクロールを実装
-- [ ] T038 [US2] YearSelectorにキーボードナビゲーション（左右矢印キー）を追加
-- [ ] T039 [US2] YearSelectorをAppStateに接続し、年代変更時に地図データを再読み込み
-- [ ] T040 [US2] `src/components/ui/loading-overlay.tsx` に年代遷移中のローディングインジケーターを追加
-- [ ] T041 [US2] テスト用に追加の年代（少なくとも5つ）のPMTilesを生成
+- [x] T035 [P] [US2] `src/components/year-selector/year-selector.tsx` にYearSelectorコンポーネントを作成
+- [x] T036 [US2] `src/hooks/use-year-navigation.ts` にuseYearNavigationフックを作成
+- [x] T037 [US2] YearSelectorに選択中の年代を中央にスクロールする横スクロールを実装
+- [x] T038 [US2] YearSelectorにキーボードナビゲーション（左右矢印キー）を追加
+- [x] T039 [US2] YearSelectorをAppStateに接続し、年代変更時に地図データを再読み込み
+- [x] T040 [US2] `src/components/ui/loading-overlay.tsx` に年代遷移中のローディングインジケーターを追加
+- [x] T041 [US2] テスト用に追加の年代（少なくとも5つ）のPMTilesを生成
 
 **チェックポイント**: ユーザーストーリー2完了 - 年代セレクター動作、年代変更で地図更新
 
