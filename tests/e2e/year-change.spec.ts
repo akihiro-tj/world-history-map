@@ -25,14 +25,10 @@ test.describe('Year Change - Territory Updates', () => {
     if (count > 1) {
       // Click on a different year (not 1650)
       const secondYearButton = yearButtons.nth(1);
-      const testId = await secondYearButton.getAttribute('data-testid');
-      const targetYear = testId?.replace('year-button-', '') ?? '';
-
       await secondYearButton.click();
 
-      // Wait for the year indicator to update
-      const yearIndicator = page.locator('[data-testid="current-year"]');
-      await expect(yearIndicator).toContainText(targetYear, { timeout: 5000 });
+      // Verify the selected year button has aria-current="true"
+      await expect(secondYearButton).toHaveAttribute('aria-current', 'true', { timeout: 5000 });
     }
   });
 

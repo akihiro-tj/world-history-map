@@ -15,9 +15,9 @@ test.describe('Map Display - Initial 1650 Territories', () => {
     const mapContainer = page.locator('[data-testid="map-container"]');
     await expect(mapContainer).toBeVisible();
 
-    // The year indicator should show 1650
-    const yearIndicator = page.locator('[data-testid="current-year"]');
-    await expect(yearIndicator).toContainText('1650');
+    // The year selector should show 1650 as selected
+    const year1650Button = page.locator('[data-testid="year-button-1650"]');
+    await expect(year1650Button).toHaveAttribute('aria-current', 'true');
   });
 
   test('should display territory boundaries on the map', async ({ page }) => {

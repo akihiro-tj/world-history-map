@@ -60,14 +60,6 @@ describe('MapView', () => {
     });
   });
 
-  it('should display the current year indicator', async () => {
-    renderWithProvider(<MapView />);
-    await waitFor(() => {
-      expect(screen.getByTestId('current-year')).toBeInTheDocument();
-      expect(screen.getByTestId('current-year')).toHaveTextContent('1650');
-    });
-  });
-
   it('should render map layers for territories', async () => {
     renderWithProvider(<MapView />);
     await waitFor(() => {
