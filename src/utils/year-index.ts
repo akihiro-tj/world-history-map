@@ -14,11 +14,10 @@ function validateYearEntry(entry: unknown): entry is YearEntry {
     return false;
   }
 
-  // biome-ignore lint/complexity/useLiteralKeys: Using bracket notation for type guard validation
   const e = entry as Record<string, unknown>;
-  const year = e['year'];
-  const filename = e['filename'];
-  const countries = e['countries'];
+  const year = e.year;
+  const filename = e.filename;
+  const countries = e.countries;
 
   if (typeof year !== 'number' || !Number.isInteger(year)) {
     return false;
@@ -47,9 +46,8 @@ function validateYearIndex(data: unknown): data is YearIndex {
     return false;
   }
 
-  // biome-ignore lint/complexity/useLiteralKeys: Using bracket notation for type guard validation
   const d = data as Record<string, unknown>;
-  const years = d['years'];
+  const years = d.years;
 
   if (!Array.isArray(years)) {
     return false;
