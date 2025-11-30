@@ -42,77 +42,43 @@ pnpm test && pnpm check
 
 #### ブランチ名
 
-`task/TXXX-task-name` 形式（例: `task/T002-setup-biome`）
+`phase/PX-phase-name` 形式（例: `phase/P1-project-setup`）
 
 #### 実装
 
-- 作業着手時にリポジトリのissue一覧から該当するissueを確認し、PR作成時の `Closes #<issue番号>` に使用する
+- 作業着手時にリポジトリのissue一覧から該当フェーズのissueを確認し、PR作成時の `Closes #<issue番号>` に使用する
 - テストファースト（TDD）を遵守する
-- コミットは適切な粒度で分割する
+- コミットはタスク単位など適切な粒度で分割する
 
 #### PR 作成
 
-タスク完了後、以下の設定で PR を作成する:
+フェーズ完了後、以下の設定で PR を作成する:
 
 - **Base branch**: `main`
 - **Assignee**: `akihiro-tj`
-- **Labels**: タスク内容に応じて適切なラベルを選択
+- **Labels**: フェーズ内容に応じて適切なラベルを選択
   - `enhancement`: 新機能や改善
   - `bug`: バグ修正
   - `documentation`: ドキュメント関連
   - `refactor`: リファクタリング
   - `test`: テスト関連
-- **Title**: conventional commit 形式（例: `feat(T001): add map component`）
-- **Body**: 日本語で記述し、`Closes #<issue番号>` を含めてマージ時に関連 issue を自動クローズする
+- **Title**: conventional commit 形式（例: `feat(P1): setup project infrastructure`）
+- **Body**: 日本語で記述し、フェーズ内の全issueに対して `Closes #<issue番号>` を含めてマージ時に関連 issue を自動クローズする
 
 ```bash
 gh pr create \
-  --title "feat(TXXX): 説明" \
-  --body "## 概要\n\n...\n\nCloses #123" \
+  --title "feat(PX): 説明" \
+  --body "## 概要\n\n...\n\nCloses #1\nCloses #2\nCloses #3" \
   --assignee akihiro-tj \
   --label <適切なラベル>
 ```
 
-### 単一タスクの実行
+### フェーズの実行
 
 ```bash
 git checkout main && git pull origin main
-git checkout -b task/T003-biome-setup
-# 実装 → PR作成
+git checkout -b phase/P1-project-setup
+# フェーズ内の全タスクを実装 → PR作成
 ```
-
-### 並列タスク実行
-
-tasks.md で `[P]` マークが付いたタスクは、他の `[P]` タスクと並列実行可能。
-
-#### gtr を使用する場合
-
-[git-worktree-runner (gtr)](https://github.com/coderabbitai/git-worktree-runner) がインストールされている場合:
-
-```bash
-git fetch origin main
-git gtr new task/T003-biome-setup
-git gtr ai task/T003-biome-setup
-# 実装 → PR作成
-git gtr rm task/T003-biome-setup
-```
-
-#### git worktree を使用する場合
-
-gtr が使えない場合は標準の git worktree を使用:
-
-```bash
-git fetch origin main
-git worktree add ../world-history-atlas-T003 -b task/T003-biome-setup origin/main
-cd ../world-history-atlas-T003
-# 実装 → PR作成
-git worktree remove ../world-history-atlas-T003
-```
-
-**制約**:
-
-- 同一フェーズ内の `[P]` タスクのみ並列実行可能
-- 依存関係のあるタスクは順次実行
-- マージ時のコンフリクトに注意
 
 <!-- MANUAL ADDITIONS END -->

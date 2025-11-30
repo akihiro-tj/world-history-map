@@ -1,7 +1,7 @@
 <!--
   SYNC IMPACT REPORT
   ====================
-  Version: 1.0.0 (initial creation)
+  Version: 1.2.0 (branch strategy change: task → phase)
 
   Sections:
     - Core Principles (5 principles)
@@ -85,8 +85,9 @@ YAGNI原則を遵守し、TypeScriptの厳密な型付けを徹底する。
 ### ブランチ戦略
 
 - `main`: 本番環境相当、常に安定状態
-- タスクブランチ: `task/###-task-name` 形式（例: `task/001-setup-project`）
-- タスク単位でブランチを切り、PRを作成してマージする
+- フェーズブランチ: `phase/PX-phase-name` 形式（例: `phase/P1-project-setup`）
+- フェーズ単位でブランチを切り、PRを作成してマージする
+- コミットはタスク単位など適切な粒度で分割する
 - PRマージ前にCIが全てパスすることを必須とする
 
 ### 品質ゲート
@@ -122,4 +123,4 @@ YAGNI原則を遵守し、TypeScriptの厳密な型付けを徹底する。
 - 原則違反が発見された場合は、修正を優先すること
 - 複雑さの追加は正当化を必要とし、`plan.md` のComplexity Trackingに記録すること
 
-**Version**: 1.1.0 | **Ratified**: 2025-11-29 | **Last Amended**: 2025-11-29
+**Version**: 1.2.0 | **Ratified**: 2025-11-29 | **Last Amended**: 2025-11-30
