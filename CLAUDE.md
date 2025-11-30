@@ -27,6 +27,7 @@ pnpm test && pnpm check
 
 - TypeScript 5.9.x (strict mode): Follow standard conventions
 - ディレクトリ名・ファイル名: ケバブケース（例: `year-selector.tsx`, `use-map-state.ts`）
+- コメント・ログ出力: 英語で記述（JSDoc、インラインコメント、シェルスクリプトのログ含む）
 
 ## Recent Changes
 
