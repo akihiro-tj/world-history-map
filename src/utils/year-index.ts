@@ -14,21 +14,25 @@ function validateYearEntry(entry: unknown): entry is YearEntry {
     return false;
   }
 
+  // biome-ignore lint/complexity/useLiteralKeys: Using bracket notation for type guard validation
   const e = entry as Record<string, unknown>;
+  const year = e['year'];
+  const filename = e['filename'];
+  const countries = e['countries'];
 
-  if (typeof e.year !== 'number' || !Number.isInteger(e.year)) {
+  if (typeof year !== 'number' || !Number.isInteger(year)) {
     return false;
   }
 
-  if (typeof e.filename !== 'string' || !FILENAME_PATTERN.test(e.filename)) {
+  if (typeof filename !== 'string' || !FILENAME_PATTERN.test(filename)) {
     return false;
   }
 
-  if (!Array.isArray(e.countries)) {
+  if (!Array.isArray(countries)) {
     return false;
   }
 
-  if (!e.countries.every((c): c is string => typeof c === 'string')) {
+  if (!countries.every((c): c is string => typeof c === 'string')) {
     return false;
   }
 
@@ -43,13 +47,15 @@ function validateYearIndex(data: unknown): data is YearIndex {
     return false;
   }
 
+  // biome-ignore lint/complexity/useLiteralKeys: Using bracket notation for type guard validation
   const d = data as Record<string, unknown>;
+  const years = d['years'];
 
-  if (!Array.isArray(d.years)) {
+  if (!Array.isArray(years)) {
     return false;
   }
 
-  return d.years.every(validateYearEntry);
+  return years.every(validateYearEntry);
 }
 
 /**
@@ -119,7 +125,11 @@ export function findNearestYear(yearIndex: YearIndex, targetYear: number): numbe
     return null;
   }
 
-  let nearest = yearIndex.years[0].year;
+  const firstEntry = yearIndex.years[0];
+  if (!firstEntry) {
+    return null;
+  }
+  let nearest = firstEntry.year;
   let minDiff = Math.abs(targetYear - nearest);
 
   for (const entry of yearIndex.years) {

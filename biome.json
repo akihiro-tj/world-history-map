@@ -37,6 +37,9 @@
       "correctness": {
         "noUnusedVariables": "error",
         "noUnusedImports": "error"
+      },
+      "a11y": {
+        "noNoninteractiveTabindex": "off"
       }
     }
   },

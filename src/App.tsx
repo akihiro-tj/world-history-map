@@ -1,32 +1,19 @@
-import { useState } from 'react';
-import viteLogo from '/vite.svg';
-import reactLogo from './assets/react.svg';
-import './App.css';
+import { MapView } from './components/map/map-view';
+import { AppStateProvider } from './contexts/app-state-context';
 
+/**
+ * Main application component
+ *
+ * Renders the interactive historical world map.
+ * Default view shows territories from 1650.
+ */
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank" rel="noopener">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noopener">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button type="button" onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-    </>
+    <AppStateProvider>
+      <main className="h-screen w-screen overflow-hidden">
+        <MapView />
+      </main>
+    </AppStateProvider>
   );
 }
 

@@ -67,21 +67,21 @@
 
 > **注意: これらのテストを先に書き、実装前に失敗することを確認**
 
-- [ ] T019 [P] [US1] E2Eテスト: 初期表示で1650年の領土が表示される `tests/e2e/map-display.spec.ts`
-- [ ] T020 [P] [US1] E2Eテスト: ズーム・パン操作が動作する `tests/e2e/map-interaction.spec.ts`
-- [ ] T021 [P] [US1] ユニットテスト: MapViewコンポーネントが正しくレンダリングされる `tests/unit/components/map-view.test.tsx`
-- [ ] T022 [P] [US1] ユニットテスト: TerritoryLayerが色付きで領土を表示する `tests/unit/components/territory-layer.test.tsx`
+- [x] T019 [P] [US1] E2Eテスト: 初期表示で1650年の領土が表示される `tests/e2e/map-display.spec.ts`
+- [x] T020 [P] [US1] E2Eテスト: ズーム・パン操作が動作する `tests/e2e/map-interaction.spec.ts`
+- [x] T021 [P] [US1] ユニットテスト: MapViewコンポーネントが正しくレンダリングされる `tests/unit/components/map-view.test.tsx`
+- [x] T022 [P] [US1] ユニットテスト: TerritoryLayerが色付きで領土を表示する `tests/unit/components/territory-layer.test.tsx`
 
 ### ユーザーストーリー1の実装
 
-- [ ] T023 [P] [US1] `src/components/map/map-view.tsx` にMapViewコンポーネントを作成
-- [ ] T024 [P] [US1] `src/components/map/territory-layer.tsx` にTerritoryLayerコンポーネントを作成
-- [ ] T025 [P] [US1] `src/components/map/territory-label.tsx` にTerritoryLabelコンポーネントを作成
-- [ ] T026 [US1] `src/hooks/use-map-data.ts` にPMTilesロード用useMapDataフックを作成
-- [ ] T027 [US1] `src/utils/color-scheme.ts` にSUBJECTOプロパティに基づく領土カラースキームを実装
-- [ ] T028 [US1] App.tsxにMapViewを統合し、1650年を初期表示
-- [ ] T029 [US1] 地図のキーボードナビゲーション対応（矢印キーでパン、+/-でズーム）
-- [ ] T030 [US1] 地図コンポーネントにアクセシビリティ用aria-labelを追加
+- [x] T023 [P] [US1] `src/components/map/map-view.tsx` にMapViewコンポーネントを作成
+- [x] T024 [P] [US1] `src/components/map/territory-layer.tsx` にTerritoryLayerコンポーネントを作成
+- [x] T025 [P] [US1] `src/components/map/territory-label.tsx` にTerritoryLabelコンポーネントを作成
+- [x] T026 [US1] `src/hooks/use-map-data.ts` にPMTilesロード用useMapDataフックを作成
+- [x] T027 [US1] `src/utils/color-scheme.ts` にSUBJECTOプロパティに基づく領土カラースキームを実装
+- [x] T028 [US1] App.tsxにMapViewを統合し、1650年を初期表示
+- [x] T029 [US1] 地図のキーボードナビゲーション対応（矢印キーでパン、+/-でズーム）
+- [x] T030 [US1] 地図コンポーネントにアクセシビリティ用aria-labelを追加
 
 **チェックポイント**: ユーザーストーリー1完了 - 地図表示、ズーム・パン動作、領土とラベルが表示
 
