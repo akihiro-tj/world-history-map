@@ -62,30 +62,30 @@ specs/001-interactive-history-map/
 ```text
 src/
 ├── components/
-│   ├── Map/
-│   │   ├── MapView.tsx           # 地図表示コンポーネント
-│   │   ├── TerritoryLayer.tsx    # 領土レイヤー
-│   │   └── TerritoryLabel.tsx    # 領土ラベル
-│   ├── YearSelector/
-│   │   └── YearSelector.tsx      # 年代選択UI
-│   ├── TerritoryInfo/
-│   │   └── TerritoryInfoPanel.tsx # 領土情報パネル
-│   └── Legal/
-│       └── LicenseDisclaimer.tsx  # ライセンス・免責事項
+│   ├── map/
+│   │   ├── map-view.tsx           # 地図表示コンポーネント
+│   │   ├── territory-layer.tsx    # 領土レイヤー
+│   │   └── territory-label.tsx    # 領土ラベル
+│   ├── year-selector/
+│   │   └── year-selector.tsx      # 年代選択UI
+│   ├── territory-info/
+│   │   └── territory-info-panel.tsx # 領土情報パネル
+│   └── legal/
+│       └── license-disclaimer.tsx  # ライセンス・免責事項
 ├── contexts/
-│   └── AppStateContext.tsx       # アプリ状態管理（年代、選択領土）
+│   └── app-state-context.tsx       # アプリ状態管理（年代、選択領土）
 ├── hooks/
-│   ├── useMapData.ts             # 地図データ取得
-│   └── useYearNavigation.ts      # 年代ナビゲーション
+│   ├── use-map-data.ts             # 地図データ取得
+│   └── use-year-navigation.ts      # 年代ナビゲーション
 ├── types/
 │   └── index.ts                  # 型定義
 ├── data/
 │   └── descriptions/             # AI生成の領土説明JSON
 ├── styles/
-│   └── mapStyle.ts               # MapLibreスタイル定義
+│   └── map-style.ts               # MapLibreスタイル定義
 ├── utils/
-│   ├── mapUtils.ts               # 地図ユーティリティ
-│   └── colorScheme.ts            # 領土色分けスキーム
+│   ├── map-utils.ts               # 地図ユーティリティ
+│   └── color-scheme.ts            # 領土色分けスキーム
 ├── App.tsx
 └── main.tsx
 

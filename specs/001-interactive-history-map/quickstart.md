@@ -65,10 +65,10 @@ world-history-atlas/
 │   └── pmtiles/           # PMTiles形式の地図データ
 ├── src/
 │   ├── components/        # Reactコンポーネント
-│   │   ├── Map/          # 地図関連
-│   │   ├── YearSelector/ # 年代選択
-│   │   ├── TerritoryInfo/# 領土情報
-│   │   └── Legal/        # ライセンス・免責
+│   │   ├── map/          # 地図関連
+│   │   ├── year-selector/ # 年代選択
+│   │   ├── territory-info/# 領土情報
+│   │   └── legal/        # ライセンス・免責
 │   ├── hooks/            # カスタムフック
 │   ├── types/            # 型定義
 │   ├── data/             # 静的データ（説明文等）

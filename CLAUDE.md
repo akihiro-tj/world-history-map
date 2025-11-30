@@ -25,7 +25,8 @@ pnpm test && pnpm check
 
 ## Code Style
 
-TypeScript 5.9.x (strict mode): Follow standard conventions
+- TypeScript 5.9.x (strict mode): Follow standard conventions
+- ディレクトリ名・ファイル名: ケバブケース（例: `year-selector.tsx`, `use-map-state.ts`）
 
 ## Recent Changes
 

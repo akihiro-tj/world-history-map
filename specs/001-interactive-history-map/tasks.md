@@ -45,10 +45,10 @@
 **重要**: このフェーズが完了するまでユーザーストーリーの作業は開始不可
 
 - [ ] T011 `src/types/index.ts` にTypeScript型を定義（YearEntry, YearIndex, TerritoryProperties, TerritoryDescription, AppState）
-- [ ] T012 [P] `src/hooks/usePMTilesProtocol.ts` にPMTilesプロトコル登録フックを作成
-- [ ] T013 [P] `src/utils/yearIndex.ts` に年代インデックスローダーを作成
-- [ ] T014 `src/contexts/AppStateContext.tsx` にアプリ状態コンテキストを作成
-- [ ] T015 `src/styles/mapStyle.ts` にベース地図スタイル設定を作成
+- [ ] T012 [P] `src/hooks/use-pmtiles-protocol.ts` にPMTilesプロトコル登録フックを作成
+- [ ] T013 [P] `src/utils/year-index.ts` に年代インデックスローダーを作成
+- [ ] T014 `src/contexts/app-state-context.tsx` にアプリ状態コンテキストを作成
+- [ ] T015 `src/styles/map-style.ts` にベース地図スタイル設定を作成
 - [ ] T016 [P] historical-basemaps GeoJSONをダウンロードし、`scripts/convert-to-pmtiles.sh` にPMTiles変換スクリプトを作成
 - [ ] T017 1650年（MVPデフォルト）のPMTilesを `public/pmtiles/world_1650.pmtiles` に生成
 - [ ] T018 `public/pmtiles/index.json` に利用可能な年代メタデータを作成
@@ -69,16 +69,16 @@
 
 - [ ] T019 [P] [US1] E2Eテスト: 初期表示で1650年の領土が表示される `tests/e2e/map-display.spec.ts`
 - [ ] T020 [P] [US1] E2Eテスト: ズーム・パン操作が動作する `tests/e2e/map-interaction.spec.ts`
-- [ ] T021 [P] [US1] ユニットテスト: MapViewコンポーネントが正しくレンダリングされる `tests/unit/components/MapView.test.tsx`
-- [ ] T022 [P] [US1] ユニットテスト: TerritoryLayerが色付きで領土を表示する `tests/unit/components/TerritoryLayer.test.tsx`
+- [ ] T021 [P] [US1] ユニットテスト: MapViewコンポーネントが正しくレンダリングされる `tests/unit/components/map-view.test.tsx`
+- [ ] T022 [P] [US1] ユニットテスト: TerritoryLayerが色付きで領土を表示する `tests/unit/components/territory-layer.test.tsx`
 
 ### ユーザーストーリー1の実装
 
-- [ ] T023 [P] [US1] `src/components/Map/MapView.tsx` にMapViewコンポーネントを作成
-- [ ] T024 [P] [US1] `src/components/Map/TerritoryLayer.tsx` にTerritoryLayerコンポーネントを作成
-- [ ] T025 [P] [US1] `src/components/Map/TerritoryLabel.tsx` にTerritoryLabelコンポーネントを作成
-- [ ] T026 [US1] `src/hooks/useMapData.ts` にPMTilesロード用useMapDataフックを作成
-- [ ] T027 [US1] `src/utils/colorScheme.ts` にSUBJECTOプロパティに基づく領土カラースキームを実装
+- [ ] T023 [P] [US1] `src/components/map/map-view.tsx` にMapViewコンポーネントを作成
+- [ ] T024 [P] [US1] `src/components/map/territory-layer.tsx` にTerritoryLayerコンポーネントを作成
+- [ ] T025 [P] [US1] `src/components/map/territory-label.tsx` にTerritoryLabelコンポーネントを作成
+- [ ] T026 [US1] `src/hooks/use-map-data.ts` にPMTilesロード用useMapDataフックを作成
+- [ ] T027 [US1] `src/utils/color-scheme.ts` にSUBJECTOプロパティに基づく領土カラースキームを実装
 - [ ] T028 [US1] App.tsxにMapViewを統合し、1650年を初期表示
 - [ ] T029 [US1] 地図のキーボードナビゲーション対応（矢印キーでパン、+/-でズーム）
 - [ ] T030 [US1] 地図コンポーネントにアクセシビリティ用aria-labelを追加
@@ -97,17 +97,17 @@
 
 - [ ] T031 [P] [US2] E2Eテスト: 年代セレクターが利用可能な年代を表示する `tests/e2e/year-selector.spec.ts`
 - [ ] T032 [P] [US2] E2Eテスト: 年代選択で地図の領土が更新される `tests/e2e/year-change.spec.ts`
-- [ ] T033 [P] [US2] ユニットテスト: YearSelectorコンポーネント `tests/unit/components/YearSelector.test.tsx`
-- [ ] T034 [P] [US2] ユニットテスト: useYearNavigationフック `tests/unit/hooks/useYearNavigation.test.ts`
+- [ ] T033 [P] [US2] ユニットテスト: YearSelectorコンポーネント `tests/unit/components/year-selector.test.tsx`
+- [ ] T034 [P] [US2] ユニットテスト: useYearNavigationフック `tests/unit/hooks/use-year-navigation.test.ts`
 
 ### ユーザーストーリー2の実装
 
-- [ ] T035 [P] [US2] `src/components/YearSelector/YearSelector.tsx` にYearSelectorコンポーネントを作成
-- [ ] T036 [US2] `src/hooks/useYearNavigation.ts` にuseYearNavigationフックを作成
+- [ ] T035 [P] [US2] `src/components/year-selector/year-selector.tsx` にYearSelectorコンポーネントを作成
+- [ ] T036 [US2] `src/hooks/use-year-navigation.ts` にuseYearNavigationフックを作成
 - [ ] T037 [US2] YearSelectorに選択中の年代を中央にスクロールする横スクロールを実装
 - [ ] T038 [US2] YearSelectorにキーボードナビゲーション（左右矢印キー）を追加
 - [ ] T039 [US2] YearSelectorをAppStateに接続し、年代変更時に地図データを再読み込み
-- [ ] T040 [US2] `src/components/ui/LoadingOverlay.tsx` に年代遷移中のローディングインジケーターを追加
+- [ ] T040 [US2] `src/components/ui/loading-overlay.tsx` に年代遷移中のローディングインジケーターを追加
 - [ ] T041 [US2] テスト用に追加の年代（少なくとも5つ）のPMTilesを生成
 
 **チェックポイント**: ユーザーストーリー2完了 - 年代セレクター動作、年代変更で地図更新
@@ -124,16 +124,16 @@
 
 - [ ] T042 [P] [US3] E2Eテスト: 領土クリックで情報パネルが表示される `tests/e2e/territory-info.spec.ts`
 - [ ] T043 [P] [US3] E2Eテスト: 説明内の年代リンクでその年代に遷移する `tests/e2e/year-link-navigation.spec.ts`
-- [ ] T044 [P] [US3] ユニットテスト: TerritoryInfoPanelコンポーネント `tests/unit/components/TerritoryInfoPanel.test.tsx`
-- [ ] T045 [P] [US3] ユニットテスト: 領土説明の読み込み `tests/unit/hooks/useTerritoryDescription.test.ts`
+- [ ] T044 [P] [US3] ユニットテスト: TerritoryInfoPanelコンポーネント `tests/unit/components/territory-info-panel.test.tsx`
+- [ ] T045 [P] [US3] ユニットテスト: 領土説明の読み込み `tests/unit/hooks/use-territory-description.test.ts`
 
 ### ユーザーストーリー3の実装
 
-- [ ] T046 [P] [US3] `src/components/TerritoryInfo/TerritoryInfoPanel.tsx` にTerritoryInfoPanelコンポーネントを作成
-- [ ] T047 [US3] `src/hooks/useTerritoryDescription.ts` にuseTerritoryDescriptionフックを作成
+- [ ] T046 [P] [US3] `src/components/territory-info/territory-info-panel.tsx` にTerritoryInfoPanelコンポーネントを作成
+- [ ] T047 [US3] `src/hooks/use-territory-description.ts` にuseTerritoryDescriptionフックを作成
 - [ ] T048 [US3] TerritoryLayerに領土選択用のクリックハンドラを実装
-- [ ] T049 [US3] `src/components/TerritoryInfo/YearLink.tsx` にクリック可能な年代参照用YearLinkコンポーネントを作成
-- [ ] T050 [US3] `src/components/TerritoryInfo/AINotice.tsx` にAI生成表示コンポーネントを追加
+- [ ] T049 [US3] `src/components/territory-info/year-link.tsx` にクリック可能な年代参照用YearLinkコンポーネントを作成
+- [ ] T050 [US3] `src/components/territory-info/ai-notice.tsx` にAI生成表示コンポーネントを追加
 - [ ] T051 [US3] `src/data/descriptions/1650.json` に1650年のサンプル領土説明を作成
 - [ ] T052 [US3] 「説明がありません」状態をプレースホルダーメッセージで処理
 - [ ] T053 [US3] パネル閉じるボタンとキーボードEscapeハンドリングを追加
@@ -151,11 +151,11 @@
 ### ユーザーストーリー4のテスト
 
 - [ ] T054 [P] [US4] E2Eテスト: ライセンスリンクで免責事項モーダルが開く `tests/e2e/license-disclaimer.spec.ts`
-- [ ] T055 [P] [US4] ユニットテスト: LicenseDisclaimerコンポーネント `tests/unit/components/LicenseDisclaimer.test.tsx`
+- [ ] T055 [P] [US4] ユニットテスト: LicenseDisclaimerコンポーネント `tests/unit/components/license-disclaimer.test.tsx`
 
 ### ユーザーストーリー4の実装
 
-- [ ] T056 [P] [US4] `src/components/Legal/LicenseDisclaimer.tsx` にLicenseDisclaimerモーダルコンポーネントを作成
+- [ ] T056 [P] [US4] `src/components/legal/license-disclaimer.tsx` にLicenseDisclaimerモーダルコンポーネントを作成
 - [ ] T057 [US4] Appのヘッダーまたはフッターにライセンストリガーリンク/ボタンを追加
 - [ ] T058 [US4] 免責事項コンテンツを作成:
   - historical-basemaps GPL-3.0帰属表示
