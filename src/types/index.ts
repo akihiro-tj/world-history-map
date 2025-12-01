@@ -65,9 +65,6 @@ export interface TerritoryDescription {
   /** Related years (for year link navigation) */
   relatedYears: number[];
 
-  /** Generation timestamp (ISO 8601 format) */
-  generatedAt: string;
-
   /** AI-generated flag (always true) */
   aiGenerated: true;
 }

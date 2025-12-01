@@ -1,14 +1,15 @@
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { MapRef } from 'react-map-gl/maplibre';
+import type { MapLayerMouseEvent, MapRef } from 'react-map-gl/maplibre';
 import MapGL, { Source } from 'react-map-gl/maplibre';
 import { useAppState } from '../../contexts/app-state-context';
 import { useMapData } from '../../hooks/use-map-data';
 import { usePMTilesProtocol } from '../../hooks/use-pmtiles-protocol';
 import { MAP_CONFIG } from '../../styles/map-style';
+import type { TerritoryProperties } from '../../types';
 import { TerritoryLabel } from './territory-label';
-import { TerritoryLayer } from './territory-layer';
+import { TERRITORY_LAYER_IDS, TerritoryLayer } from './territory-layer';
 
 /**
  * Source and layer constants
@@ -66,6 +67,32 @@ export function MapView() {
     setMapLoaded(true);
     actions.setLoading(false);
   }, [actions]);
+
+  // Handle territory click
+  const handleClick = useCallback(
+    (event: MapLayerMouseEvent) => {
+      const features = event.features;
+      if (!features || features.length === 0) {
+        // Clicked on empty area - close panel
+        actions.setInfoPanelOpen(false);
+        actions.setSelectedTerritory(null);
+        return;
+      }
+
+      // Get the first feature (topmost territory)
+      const feature = features[0];
+      const properties = feature.properties as TerritoryProperties;
+
+      // Get territory name - prefer SUBJECTO for the main identifier, fallback to NAME
+      const territoryName = properties.SUBJECTO || properties.NAME;
+
+      if (territoryName) {
+        actions.setSelectedTerritory(territoryName);
+        actions.setInfoPanelOpen(true);
+      }
+    },
+    [actions],
+  );
 
   // Handle keyboard navigation
   const handleKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -175,7 +202,10 @@ export function MapView() {
           style={{ width: '100%', height: '100%' }}
           mapStyle={mapStyle}
           onLoad={handleLoad}
+          onClick={handleClick}
+          interactiveLayerIds={[TERRITORY_LAYER_IDS.fill]}
           attributionControl={false}
+          cursor="pointer"
         >
           <Source id={SOURCE_ID} type="vector" url={pmtilesUrl}>
             <TerritoryLayer sourceId={SOURCE_ID} sourceLayer={SOURCE_LAYER_TERRITORIES} />
