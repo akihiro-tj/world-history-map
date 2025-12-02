@@ -15,10 +15,11 @@ test.describe('License Disclaimer Modal', () => {
     await expect(page.getByTestId('loading-overlay')).not.toBeVisible({ timeout: 15000 });
   });
 
-  test('license link is visible in the footer', async ({ page }) => {
-    const licenseLink = page.getByTestId('license-link');
-    await expect(licenseLink).toBeVisible();
-    await expect(licenseLink).toHaveText(/ライセンス|License/i);
+  test('info button is visible in the footer', async ({ page }) => {
+    const infoButton = page.getByTestId('license-link');
+    await expect(infoButton).toBeVisible();
+    // Button contains info icon with screen reader text
+    await expect(infoButton.locator('svg')).toBeVisible();
   });
 
   test('clicking license link opens the disclaimer modal', async ({ page }) => {
