@@ -150,19 +150,19 @@
 
 ### ユーザーストーリー4のテスト
 
-- [ ] T054 [P] [US4] E2Eテスト: ライセンスリンクで免責事項モーダルが開く `tests/e2e/license-disclaimer.spec.ts`
-- [ ] T055 [P] [US4] ユニットテスト: LicenseDisclaimerコンポーネント `tests/unit/components/license-disclaimer.test.tsx`
+- [x] T054 [P] [US4] E2Eテスト: ライセンスリンクで免責事項モーダルが開く `tests/e2e/license-disclaimer.spec.ts`
+- [x] T055 [P] [US4] ユニットテスト: LicenseDisclaimerコンポーネント `tests/unit/components/license-disclaimer.test.tsx`
 
 ### ユーザーストーリー4の実装
 
-- [ ] T056 [P] [US4] `src/components/legal/license-disclaimer.tsx` にLicenseDisclaimerモーダルコンポーネントを作成
-- [ ] T057 [US4] Appのヘッダーまたはフッターにライセンストリガーリンク/ボタンを追加
-- [ ] T058 [US4] 免責事項コンテンツを作成:
+- [x] T056 [P] [US4] `src/components/legal/license-disclaimer.tsx` にLicenseDisclaimerモーダルコンポーネントを作成
+- [x] T057 [US4] Appのヘッダーまたはフッターにライセンストリガーリンク/ボタンを追加
+- [x] T058 [US4] 免責事項コンテンツを作成:
   - historical-basemaps GPL-3.0帰属表示
   - データ精度の免責事項（作業中のプロジェクト、他のソースとの照合を推奨）
   - 歴史的国境の概念的限界
   - 係争地域の注意書き
-- [ ] T059 [US4] キーボードアクセシビリティを追加（Escapeで閉じる、フォーカストラップ）
+- [x] T059 [US4] キーボードアクセシビリティを追加（Escapeで閉じる、フォーカストラップ）
 
 **チェックポイント**: ユーザーストーリー4完了 - ライセンスと免責事項情報がアクセス可能
 
