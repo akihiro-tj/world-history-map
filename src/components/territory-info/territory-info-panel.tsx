@@ -60,7 +60,7 @@ export function TerritoryInfoPanel() {
         role="dialog"
         aria-labelledby="territory-info-title"
         aria-busy="true"
-        className="absolute right-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] rounded-lg bg-white/95 p-4 shadow-xl backdrop-blur-sm dark:bg-gray-900/95"
+        className="absolute right-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] rounded-lg bg-white/95 p-4 shadow-xl backdrop-blur-sm"
       >
         <div className="flex items-center justify-center py-8">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
@@ -76,19 +76,19 @@ export function TerritoryInfoPanel() {
         data-testid="territory-info-panel"
         role="dialog"
         aria-labelledby="territory-info-title"
-        className="absolute right-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] rounded-lg bg-white/95 p-4 shadow-xl backdrop-blur-sm dark:bg-gray-900/95"
+        className="absolute right-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] rounded-lg bg-white/95 p-4 shadow-xl backdrop-blur-sm"
       >
-        <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-gray-700">
+        <div className="flex items-center justify-between border-b border-gray-200 pb-3">
           <h2
             id="territory-info-title"
-            className="text-lg font-semibold text-gray-900 dark:text-white"
+            className="text-lg font-semibold text-gray-900"
           >
             エラー
           </h2>
           <button
             type="button"
             onClick={handleClose}
-            className="rounded-full p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+            className="rounded-lg p-1.5 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
             aria-label="閉じる"
           >
             <svg
@@ -107,7 +107,7 @@ export function TerritoryInfoPanel() {
             </svg>
           </button>
         </div>
-        <p className="mt-4 text-red-600 dark:text-red-400">{error}</p>
+        <p className="mt-4 text-red-600">{error}</p>
       </aside>
     );
   }
@@ -119,19 +119,19 @@ export function TerritoryInfoPanel() {
         data-testid="territory-info-panel"
         role="dialog"
         aria-labelledby="territory-info-title"
-        className="absolute right-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] rounded-lg bg-white/95 p-4 shadow-xl backdrop-blur-sm dark:bg-gray-900/95"
+        className="absolute right-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] rounded-lg bg-white/95 p-4 shadow-xl backdrop-blur-sm"
       >
-        <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-gray-700">
+        <div className="flex items-center justify-between border-b border-gray-200 pb-3">
           <h2
             id="territory-info-title"
-            className="text-lg font-semibold text-gray-900 dark:text-white"
+            className="text-lg font-semibold text-gray-900"
           >
             {selectedTerritory ?? '領土情報'}
           </h2>
           <button
             type="button"
             onClick={handleClose}
-            className="rounded-full p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+            className="rounded-lg p-1.5 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700"
             aria-label="閉じる"
           >
             <svg
@@ -152,7 +152,7 @@ export function TerritoryInfoPanel() {
         </div>
         <div
           data-testid="no-description-message"
-          className="mt-4 text-center text-gray-600 dark:text-gray-400"
+          className="mt-4 text-center text-gray-600"
         >
           <p>この領土の詳細情報は準備中です。</p>
         </div>
@@ -166,20 +166,20 @@ export function TerritoryInfoPanel() {
       data-testid="territory-info-panel"
       role="dialog"
       aria-labelledby="territory-info-title"
-      className="absolute right-4 top-4 z-30 max-h-[calc(100vh-2rem)] w-96 max-w-[calc(100vw-2rem)] overflow-y-auto rounded-lg bg-white/95 p-4 shadow-xl backdrop-blur-sm dark:bg-gray-900/95"
+      className="absolute right-4 top-4 z-30 max-h-[calc(100vh-2rem)] w-96 max-w-[calc(100vw-2rem)] overflow-y-auto rounded-lg bg-white/95 p-4 shadow-xl backdrop-blur-sm"
     >
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-gray-200 pb-3 dark:border-gray-700">
+      <div className="flex items-center justify-between border-b border-gray-200 pb-3">
         <h2
           id="territory-info-title"
-          className="text-lg font-semibold text-gray-900 dark:text-white"
+          className="text-lg font-semibold text-gray-900"
         >
           {description.name}
         </h2>
         <button
           type="button"
           onClick={handleClose}
-          className="rounded-full p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+          className="rounded-full p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
           aria-label="閉じる"
         >
           <svg
@@ -203,18 +203,18 @@ export function TerritoryInfoPanel() {
       <div data-testid="territory-description" className="mt-4 space-y-4">
         {/* Year badge */}
         <div className="flex items-center gap-2">
-          <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800 dark:bg-blue-900/50 dark:text-blue-200">
+          <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800">
             {description.year}年
           </span>
         </div>
 
         {/* Summary */}
-        <p className="text-sm text-gray-700 dark:text-gray-300">{description.summary}</p>
+        <p className="text-sm text-gray-700">{description.summary}</p>
 
         {/* Background */}
         <div>
-          <h3 className="mb-2 text-sm font-semibold text-gray-900 dark:text-white">歴史的背景</h3>
-          <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+          <h3 className="mb-2 text-sm font-semibold text-gray-900">歴史的背景</h3>
+          <p className="text-sm leading-relaxed text-gray-600">
             {description.background}
           </p>
         </div>
@@ -222,8 +222,8 @@ export function TerritoryInfoPanel() {
         {/* Key Events */}
         {description.keyEvents.length > 0 && (
           <div>
-            <h3 className="mb-2 text-sm font-semibold text-gray-900 dark:text-white">主な出来事</h3>
-            <ul className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
+            <h3 className="mb-2 text-sm font-semibold text-gray-900">主な出来事</h3>
+            <ul className="space-y-1 text-sm text-gray-600">
               {description.keyEvents.map((event) => (
                 <li key={event} className="flex items-start gap-2">
                   <span
@@ -240,7 +240,7 @@ export function TerritoryInfoPanel() {
         {/* Related Years */}
         {description.relatedYears.length > 0 && (
           <div data-testid="related-years">
-            <h3 className="mb-2 text-sm font-semibold text-gray-900 dark:text-white">
+            <h3 className="mb-2 text-sm font-semibold text-gray-900">
               関連する年代
             </h3>
             <div className="flex flex-wrap gap-2">

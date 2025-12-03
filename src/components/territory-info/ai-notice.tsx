@@ -22,7 +22,7 @@ export function AiNotice({ className = '' }: AiNoticeProps) {
   return (
     <div
       data-testid="ai-notice"
-      className={`flex items-center gap-1.5 rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-800 dark:bg-amber-900/30 dark:text-amber-200 ${className}`}
+      className={`flex items-center gap-1.5 rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-800 ${className}`}
       role="note"
       aria-label="AI生成コンテンツの注意"
     >

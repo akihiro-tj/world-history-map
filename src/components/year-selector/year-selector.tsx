@@ -144,10 +144,10 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
             aria-current={isSelected ? 'true' : undefined}
             onClick={() => handleYearClick(yearEntry.year)}
             onKeyDown={(e) => handleKeyDown(e, index)}
-            className={`shrink-0 rounded-md px-3 py-1.5 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+            className={`shrink-0 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
               isSelected
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700'
+                ? 'bg-blue-600 text-white hover:bg-blue-700'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
             {formatYear(yearEntry.year)}
