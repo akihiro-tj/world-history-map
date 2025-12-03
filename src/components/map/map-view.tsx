@@ -269,8 +269,24 @@ export function MapView() {
           aria-label="Loading map data"
         >
           <div className="flex flex-col items-center">
-            <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
-            <span className="mt-4 text-gray-300">Loading map...</span>
+            {/* Rotating globe */}
+            <div className="relative h-16 w-16">
+              <svg
+                className="h-16 w-16 animate-spin text-blue-400"
+                style={{ animationDuration: '3s' }}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="10" opacity="0.3" />
+                <circle cx="12" cy="12" r="10" strokeDasharray="40 20" />
+                <ellipse cx="12" cy="12" rx="4" ry="10" opacity="0.5" />
+                <ellipse cx="12" cy="12" rx="10" ry="4" opacity="0.5" />
+              </svg>
+            </div>
+            <span className="mt-5 text-sm tracking-wider text-gray-400">Loading...</span>
           </div>
         </output>
       )}
