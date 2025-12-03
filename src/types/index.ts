@@ -40,6 +40,16 @@ export interface TerritoryProperties {
 }
 
 /**
+ * Key historical event with year
+ */
+export interface KeyEvent {
+  /** Year of the event */
+  year: number;
+  /** Event description */
+  event: string;
+}
+
+/**
  * Territory description
  * AI-generated historical content
  */
@@ -59,8 +69,8 @@ export interface TerritoryDescription {
   /** Historical background (200-500 characters) */
   background: string;
 
-  /** Key events (recommended 3-5 items) */
-  keyEvents: string[];
+  /** Key events (recommended 3-5 items, sorted by year) */
+  keyEvents: KeyEvent[];
 
   /** Related years (for year link navigation) */
   relatedYears: number[];
