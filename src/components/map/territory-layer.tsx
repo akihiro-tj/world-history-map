@@ -16,7 +16,6 @@ interface TerritoryLayerProps {
  */
 export const TERRITORY_LAYER_IDS = {
   fill: 'territory-fill',
-  border: 'territory-border',
 } as const;
 
 /**
@@ -44,19 +43,6 @@ export function TerritoryLayer({ sourceId, sourceLayer }: TerritoryLayerProps) {
         paint={{
           'fill-color': createMatchColorExpression(),
           'fill-opacity': 0.7,
-        }}
-      />
-
-      {/* Territory border layer */}
-      <Layer
-        id={TERRITORY_LAYER_IDS.border}
-        type="line"
-        source={sourceId}
-        source-layer={sourceLayer}
-        paint={{
-          'line-color': '#333333',
-          'line-width': ['interpolate', ['linear'], ['zoom'], 1, 0.5, 5, 1, 10, 2],
-          'line-opacity': 0.8,
         }}
       />
     </>

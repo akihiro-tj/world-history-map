@@ -31,15 +31,6 @@ describe('TerritoryLayer', () => {
     expect(fillLayer).toHaveAttribute('data-source-layer', 'territories');
   });
 
-  it('should render border layer with correct configuration', () => {
-    render(<TerritoryLayer {...defaultProps} />);
-
-    const borderLayer = screen.getByTestId('layer-territory-border');
-    expect(borderLayer).toBeInTheDocument();
-    expect(borderLayer).toHaveAttribute('data-layer-type', 'line');
-    expect(borderLayer).toHaveAttribute('data-source', 'territories');
-  });
-
   it('should apply color scheme based on SUBJECTO property', () => {
     render(<TerritoryLayer {...defaultProps} />);
 
@@ -62,15 +53,5 @@ describe('TerritoryLayer', () => {
     // Fill opacity should be less than 1 for better visibility
     expect(paint['fill-opacity']).toBeDefined();
     expect(paint['fill-opacity']).toBeLessThan(1);
-  });
-
-  it('should have visible border lines', () => {
-    render(<TerritoryLayer {...defaultProps} />);
-
-    const borderLayer = screen.getByTestId('layer-territory-border');
-    const paint = JSON.parse(borderLayer.getAttribute('data-paint') || '{}');
-
-    expect(paint['line-color']).toBeDefined();
-    expect(paint['line-width']).toBeDefined();
   });
 });

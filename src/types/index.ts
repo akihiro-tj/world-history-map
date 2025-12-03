@@ -124,7 +124,7 @@ export const initialAppState: AppState = {
   isInfoPanelOpen: false,
   isDisclaimerOpen: false,
   mapView: {
-    longitude: 0,
+    longitude: 40,
     latitude: 30,
     zoom: 2,
   },

@@ -47,8 +47,8 @@ export function TerritoryLabel({ sourceId, sourceLayer }: TerritoryLabelProps) {
         'text-optional': true,
       }}
       paint={{
-        'text-color': '#1a1a1a',
-        'text-halo-color': '#ffffff',
+        'text-color': '#f0f0f0',
+        'text-halo-color': '#1a1a1a',
         'text-halo-width': 1.5,
         'text-halo-blur': 0.5,
         'text-opacity': ['interpolate', ['linear'], ['zoom'], 2, 0.6, 4, 0.9, 6, 1],

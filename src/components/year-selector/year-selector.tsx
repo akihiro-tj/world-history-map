@@ -155,10 +155,10 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
         onClick={() => navigateYear('prev')}
         disabled={!canGoPrev}
         aria-label="前の年代を選択"
-        className={`flex shrink-0 items-center border-r border-gray-200 px-3 py-2 transition-colors ${
+        className={`flex shrink-0 items-center border-r border-gray-600 px-3 py-2 transition-colors ${
           canGoPrev
-            ? 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
-            : 'cursor-not-allowed text-gray-300'
+            ? 'text-gray-300 hover:bg-gray-600 hover:text-white'
+            : 'cursor-not-allowed text-gray-500'
         }`}
       >
         <svg
@@ -188,10 +188,10 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
               aria-current={isSelected ? 'true' : undefined}
               onClick={() => handleYearClick(yearEntry.year)}
               onKeyDown={(e) => handleKeyDown(e, index)}
-              className={`flex shrink-0 items-center justify-center border-r border-gray-200 py-3 font-medium transition-colors last:border-r-0 ${
+              className={`flex shrink-0 items-center justify-center border-r border-gray-600 py-3 font-medium transition-colors last:border-r-0 ${
                 isSelected
                   ? 'min-w-[5rem] bg-blue-600 px-5 text-xl text-white'
-                  : 'min-w-[4rem] px-3 text-base text-gray-500 hover:bg-gray-100 hover:text-gray-900'
+                  : 'min-w-[4rem] px-3 text-base text-gray-300 hover:bg-gray-600 hover:text-white'
               }`}
             >
               {formatYear(yearEntry.year)}
@@ -206,10 +206,10 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
         onClick={() => navigateYear('next')}
         disabled={!canGoNext}
         aria-label="次の年代を選択"
-        className={`flex shrink-0 items-center border-l border-gray-200 px-3 py-2 transition-colors ${
+        className={`flex shrink-0 items-center border-l border-gray-600 px-3 py-2 transition-colors ${
           canGoNext
-            ? 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
-            : 'cursor-not-allowed text-gray-300'
+            ? 'text-gray-300 hover:bg-gray-600 hover:text-white'
+            : 'cursor-not-allowed text-gray-500'
         }`}
       >
         <svg

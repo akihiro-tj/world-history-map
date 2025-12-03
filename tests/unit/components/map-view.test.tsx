@@ -63,9 +63,15 @@ describe('MapView', () => {
   it('should render map layers for territories', async () => {
     renderWithProvider(<MapView />);
     await waitFor(() => {
-      // Territory fill and border layers should be rendered
+      // Territory fill layer should be rendered
       expect(screen.getByTestId('map-layer-territory-fill')).toBeInTheDocument();
-      expect(screen.getByTestId('map-layer-territory-border')).toBeInTheDocument();
+    });
+  });
+
+  it('should render projection toggle button', async () => {
+    renderWithProvider(<MapView />);
+    await waitFor(() => {
+      expect(screen.getByTestId('projection-toggle')).toBeInTheDocument();
     });
   });
 

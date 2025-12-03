@@ -17,7 +17,7 @@ export const CloseButton = forwardRef<HTMLButtonElement, CloseButtonProps>(
       <button
         ref={ref}
         type="button"
-        className={`rounded-lg text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 ${sizeClasses} ${className}`}
+        className={`rounded-lg text-gray-300 transition-colors hover:bg-gray-600 hover:text-white ${sizeClasses} ${className}`}
         {...props}
       >
         <svg

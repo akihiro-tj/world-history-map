@@ -8,6 +8,7 @@ import { useMapData } from '../../hooks/use-map-data';
 import { usePMTilesProtocol } from '../../hooks/use-pmtiles-protocol';
 import { MAP_CONFIG } from '../../styles/map-style';
 import type { TerritoryProperties } from '../../types';
+import { ProjectionToggle, type ProjectionType } from './projection-toggle';
 import { TerritoryLabel } from './territory-label';
 import { TERRITORY_LAYER_IDS, TerritoryLayer } from './territory-layer';
 
@@ -48,6 +49,8 @@ export function MapView() {
   const { pmtilesUrl, isLoading, error } = useMapData(state.selectedYear);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [isHoveringTerritory, setIsHoveringTerritory] = useState(false);
+  const [projection, setProjection] = useState<ProjectionType>('mercator');
+  const prevProjectionRef = useRef<ProjectionType | null>(null);
   const rafRef = useRef<number | null>(null);
 
   // Register PMTiles protocol
@@ -78,6 +81,59 @@ export function MapView() {
     setMapLoaded(true);
     actions.setLoading(false);
   }, [actions]);
+
+  // Update projection when state changes with dynamic transition
+  useEffect(() => {
+    const mapInstance = mapRef.current?.getMap();
+    if (!mapInstance || !mapLoaded) return;
+
+    const prevProjection = prevProjectionRef.current;
+
+    // Skip animation on initial load (when there's no previous projection)
+    if (prevProjection === null) {
+      prevProjectionRef.current = projection;
+      mapInstance.setProjection({ type: projection });
+      return;
+    }
+
+    // Skip if projection hasn't changed
+    if (prevProjection === projection) return;
+
+    prevProjectionRef.current = projection;
+
+    // Get current view state
+    const currentZoom = mapInstance.getZoom();
+    const currentCenter = mapInstance.getCenter();
+
+    if (projection === 'globe') {
+      // Switch to globe with dramatic zoom out
+      mapInstance.setProjection({ type: 'globe' });
+      mapInstance.flyTo({
+        center: currentCenter,
+        zoom: Math.min(currentZoom, 2),
+        pitch: 0,
+        bearing: 0,
+        duration: 1200,
+        curve: 1.8,
+        essential: true,
+      });
+    } else {
+      // Switch to mercator with zoom in
+      mapInstance.flyTo({
+        center: currentCenter,
+        zoom: Math.max(currentZoom, 3),
+        pitch: 0,
+        bearing: 0,
+        duration: 800,
+        curve: 1.5,
+        essential: true,
+      });
+      // Set projection during animation for smooth blend
+      setTimeout(() => {
+        mapInstance.setProjection({ type: 'mercator' });
+      }, 200);
+    }
+  }, [projection, mapLoaded]);
 
   // Handle territory click
   const handleClick = useCallback(
@@ -172,7 +228,7 @@ export function MapView() {
           id: 'background',
           type: 'background' as const,
           paint: {
-            'background-color': '#b3d1ff',
+            'background-color': '#1a2a3a',
           },
         },
       ],
@@ -184,12 +240,12 @@ export function MapView() {
   if (error) {
     return (
       <div
-        className="flex h-screen w-full items-center justify-center bg-red-50"
+        className="flex h-screen w-full items-center justify-center bg-gray-900"
         data-testid="map-error"
       >
         <div className="text-center">
-          <p className="text-lg text-red-600">Failed to load map data</p>
-          <p className="text-sm text-red-500">{error}</p>
+          <p className="text-lg text-red-400">Failed to load map data</p>
+          <p className="text-sm text-red-300">{error}</p>
         </div>
       </div>
     );
@@ -208,16 +264,40 @@ export function MapView() {
       {(isLoading || !mapLoaded) && (
         <output
           className="absolute inset-0 z-20 flex items-center justify-center"
-          style={{ backgroundColor: '#b3d1ff' }}
+          style={{ backgroundColor: '#1a2a3a' }}
           data-testid="loading-overlay"
           aria-label="Loading map data"
         >
           <div className="flex flex-col items-center">
-            <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
-            <span className="mt-4 text-gray-700">Loading map...</span>
+            {/* Rotating globe */}
+            <div className="relative h-16 w-16">
+              <svg
+                className="h-16 w-16 animate-spin text-blue-400"
+                style={{ animationDuration: '3s' }}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="10" opacity="0.3" />
+                <circle cx="12" cy="12" r="10" strokeDasharray="40 20" />
+                <ellipse cx="12" cy="12" rx="4" ry="10" opacity="0.5" />
+                <ellipse cx="12" cy="12" rx="10" ry="4" opacity="0.5" />
+              </svg>
+            </div>
+            <span className="mt-5 text-sm tracking-wider text-gray-400">Loading...</span>
           </div>
         </output>
       )}
+
+      {/* Projection toggle */}
+      <ProjectionToggle
+        projection={projection}
+        onToggle={setProjection}
+        className="absolute right-4 top-4 z-10"
+        data-testid="projection-toggle"
+      />
 
       {/* Map */}
       {pmtilesUrl && (
@@ -230,7 +310,7 @@ export function MapView() {
           }}
           minZoom={MAP_CONFIG.minZoom}
           maxZoom={MAP_CONFIG.maxZoom}
-          style={{ width: '100%', height: '100%' }}
+          style={{ width: '100%', height: '100%', background: '#000' }}
           mapStyle={mapStyle}
           onLoad={handleLoad}
           onClick={handleClick}
