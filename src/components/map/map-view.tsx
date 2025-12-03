@@ -47,9 +47,20 @@ export function MapView() {
   const { state, actions } = useAppState();
   const { pmtilesUrl, isLoading, error } = useMapData(state.selectedYear);
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [isHoveringTerritory, setIsHoveringTerritory] = useState(false);
+  const rafRef = useRef<number | null>(null);
 
   // Register PMTiles protocol
   usePMTilesProtocol();
+
+  // Cleanup requestAnimationFrame on unmount
+  useEffect(() => {
+    return () => {
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, []);
 
   // Expose map ref to window for E2E tests
   useEffect(() => {
@@ -93,6 +104,28 @@ export function MapView() {
     },
     [actions],
   );
+
+  // Handle mouse move on map to update cursor
+  // Throttled with requestAnimationFrame for performance
+  const handleMouseMove = useCallback((event: MapLayerMouseEvent) => {
+    // Capture features immediately before rAF callback
+    const features = event.features;
+    const hasClickableTerritory =
+      features &&
+      features.length > 0 &&
+      !!(features[0].properties as TerritoryProperties).SUBJECTO;
+
+    if (rafRef.current !== null) {
+      cancelAnimationFrame(rafRef.current);
+    }
+
+    rafRef.current = requestAnimationFrame(() => {
+      setIsHoveringTerritory((prev) =>
+        prev !== hasClickableTerritory ? hasClickableTerritory : prev,
+      );
+      rafRef.current = null;
+    });
+  }, []);
 
   // Handle keyboard navigation
   const handleKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -203,9 +236,10 @@ export function MapView() {
           mapStyle={mapStyle}
           onLoad={handleLoad}
           onClick={handleClick}
+          onMouseMove={handleMouseMove}
           interactiveLayerIds={[TERRITORY_LAYER_IDS.fill]}
           attributionControl={false}
-          cursor="pointer"
+          cursor={isHoveringTerritory ? 'pointer' : 'grab'}
         >
           <Source id={SOURCE_ID} type="vector" url={pmtilesUrl}>
             <TerritoryLayer sourceId={SOURCE_ID} sourceLayer={SOURCE_LAYER_TERRITORIES} />
