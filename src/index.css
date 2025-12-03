@@ -38,36 +38,36 @@ body {
 }
 
 /*
- * Accessibility base styles
+ * Base layer styles - lower specificity than utilities
  */
+@layer base {
+  /* Focus visible - only show focus ring for keyboard navigation */
+  :focus {
+    outline: none;
+  }
 
-/* Focus visible - only show focus ring for keyboard navigation */
-:focus {
-  outline: none;
-}
+  :focus-visible {
+    outline: 2px solid oklch(0.55 0.18 250); /* primary-500 */
+    outline-offset: 2px;
+  }
 
-:focus-visible {
-  outline: 2px solid oklch(0.55 0.18 250); /* primary-500 */
-  outline-offset: 2px;
-}
+  /* Button reset - remove browser defaults */
+  button {
+    font: inherit;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+  }
 
-/* Button reset - remove browser defaults */
-button {
-  font: inherit;
-  background: transparent;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-}
+  button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 
-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-/* Anchor reset - remove browser defaults */
-a {
-  text-decoration: none;
+  /* Anchor reset - remove browser defaults */
+  a {
+    text-decoration: none;
+  }
 }
 
 /* Map cursor - grabbing when dragging */
