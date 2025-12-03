@@ -172,7 +172,7 @@ export function MapView() {
           id: 'background',
           type: 'background' as const,
           paint: {
-            'background-color': '#b3d1ff',
+            'background-color': '#1a2a3a',
           },
         },
       ],
@@ -184,12 +184,12 @@ export function MapView() {
   if (error) {
     return (
       <div
-        className="flex h-screen w-full items-center justify-center bg-red-50"
+        className="flex h-screen w-full items-center justify-center bg-gray-900"
         data-testid="map-error"
       >
         <div className="text-center">
-          <p className="text-lg text-red-600">Failed to load map data</p>
-          <p className="text-sm text-red-500">{error}</p>
+          <p className="text-lg text-red-400">Failed to load map data</p>
+          <p className="text-sm text-red-300">{error}</p>
         </div>
       </div>
     );
@@ -208,13 +208,13 @@ export function MapView() {
       {(isLoading || !mapLoaded) && (
         <output
           className="absolute inset-0 z-20 flex items-center justify-center"
-          style={{ backgroundColor: '#b3d1ff' }}
+          style={{ backgroundColor: '#1a2a3a' }}
           data-testid="loading-overlay"
           aria-label="Loading map data"
         >
           <div className="flex flex-col items-center">
-            <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
-            <span className="mt-4 text-gray-700">Loading map...</span>
+            <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
+            <span className="mt-4 text-gray-300">Loading map...</span>
           </div>
         </output>
       )}

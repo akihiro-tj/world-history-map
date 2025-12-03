@@ -58,19 +58,19 @@ function AppContent() {
       <MapView />
       <TerritoryInfoPanel />
       {!isLoading && years.length > 0 && (
-        <div className="absolute inset-x-4 bottom-4 z-20 mx-auto max-w-2xl overflow-hidden rounded-lg bg-white/95 shadow-lg backdrop-blur-sm">
+        <div className="absolute inset-x-4 bottom-4 z-20 mx-auto max-w-2xl overflow-hidden rounded-lg bg-gray-700/95 shadow-lg backdrop-blur-sm">
           <YearSelector years={years} onYearSelect={handleYearSelect} />
         </div>
       )}
 
       {/* Footer links */}
       <footer className="absolute right-4 top-4 z-20 md:bottom-4 md:top-auto">
-        <div className="flex items-center gap-3 rounded-lg bg-white px-3 py-2.5 shadow-md">
+        <div className="flex items-center gap-3 rounded-lg bg-gray-700 px-3 py-2.5 shadow-md">
           <button
             type="button"
             data-testid="license-link"
             onClick={handleOpenLicense}
-            className="text-gray-600 transition-colors duration-200 hover:text-gray-900"
+            className="text-gray-300 transition-colors duration-200 hover:text-white"
           >
             <svg
               className="h-6 w-6"
@@ -88,13 +88,13 @@ function AppContent() {
             </svg>
             <span className="sr-only">このサイトについて</span>
           </button>
-          <div className="h-5 w-px bg-gray-300" aria-hidden="true" />
+          <div className="h-5 w-px bg-gray-500" aria-hidden="true" />
           <a
             href="https://github.com/akihiro-tj/world-history-map"
             target="_blank"
             rel="noopener noreferrer"
             data-testid="github-link"
-            className="text-gray-600 transition-colors duration-200 hover:text-gray-900"
+            className="text-gray-300 transition-colors duration-200 hover:text-white"
           >
             <svg
               className="h-6 w-6"

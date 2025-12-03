@@ -54,9 +54,9 @@ export function TerritoryLayer({ sourceId, sourceLayer }: TerritoryLayerProps) {
         source={sourceId}
         source-layer={sourceLayer}
         paint={{
-          'line-color': '#333333',
+          'line-color': '#4a5568',
           'line-width': ['interpolate', ['linear'], ['zoom'], 1, 0.5, 5, 1, 10, 2],
-          'line-opacity': 0.8,
+          'line-opacity': 0.9,
         }}
       />
     </>
