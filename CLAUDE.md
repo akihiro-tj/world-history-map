@@ -26,8 +26,8 @@ pnpm test && pnpm check
 ## Code Style
 
 - TypeScript 5.9.x (strict mode): Follow standard conventions
-- ディレクトリ名・ファイル名: ケバブケース（例: `year-selector.tsx`, `use-map-state.ts`）
-- コメント・ログ出力: 英語で記述（JSDoc、インラインコメント、シェルスクリプトのログ含む）
+- Directory and file names: kebab-case (e.g., `year-selector.tsx`, `use-map-state.ts`)
+- Comments and log output: Write in English (JSDoc, inline comments, shell script logs)
 
 ## Recent Changes
 
@@ -35,51 +35,52 @@ pnpm test && pnpm check
 
 <!-- MANUAL ADDITIONS START -->
 
-## /speckit.implement ワークフロー
+## /speckit.implement Workflow
 
-`/speckit.implement` コマンドでタスクを実行する際は、以下のワークフローに従うこと:
+Follow this workflow when executing tasks with the `/speckit.implement` command:
 
-### 共通ルール
+### Common Rules
 
-#### ブランチ名
+#### Branch Naming
 
-`phase/PX-phase-name` 形式（例: `phase/P1-project-setup`）
+Use the format `phase/PX-phase-name` (e.g., `phase/P1-project-setup`)
 
-#### 実装
+#### Implementation
 
-- 作業着手時にリポジトリのissue一覧から該当フェーズのissueを確認し、PR作成時の `Closes #<issue番号>` に使用する
-- テストファースト（TDD）を遵守する
-- コミットはタスク単位など適切な粒度で分割する
+- Check the repository's issue list for the relevant phase before starting work, and use `Closes #<issue-number>` when creating the PR
+- Follow test-first development (TDD)
+- Split commits into appropriate granularity (e.g., per task)
+- When fixes are needed, create fixup commits with `git commit --fixup <target-commit>` and squash them with `git rebase -i --autosquash` before creating the PR
 
-#### PR 作成
+#### PR Creation
 
-フェーズ完了後、以下の設定で PR を作成する:
+After completing a phase, create a PR with the following settings:
 
 - **Base branch**: `main`
 - **Assignee**: `akihiro-tj`
-- **Labels**: フェーズ内容に応じて適切なラベルを選択
-  - `enhancement`: 新機能や改善
-  - `bug`: バグ修正
-  - `documentation`: ドキュメント関連
-  - `refactor`: リファクタリング
-  - `test`: テスト関連
-- **Title**: conventional commit 形式（例: `feat(P1): setup project infrastructure`）
-- **Body**: 日本語で記述し、フェーズ内の全issueに対して `Closes #<issue番号>` を含めてマージ時に関連 issue を自動クローズする
+- **Labels**: Select appropriate labels based on the phase content
+  - `enhancement`: New features or improvements
+  - `bug`: Bug fixes
+  - `documentation`: Documentation-related
+  - `refactor`: Refactoring
+  - `test`: Test-related
+- **Title**: Use conventional commit format (e.g., `feat(P1): setup project infrastructure`)
+- **Body**: Write in Japanese, include `Closes #<issue-number>` for all issues in the phase to auto-close related issues on merge
 
 ```bash
 gh pr create \
-  --title "feat(PX): 説明" \
-  --body "## 概要\n\n...\n\nCloses #1\nCloses #2\nCloses #3" \
+  --title "feat(PX): description" \
+  --body "## Summary\n\n...\n\nCloses #1\nCloses #2\nCloses #3" \
   --assignee akihiro-tj \
-  --label <適切なラベル>
+  --label <appropriate-label>
 ```
 
-### フェーズの実行
+### Phase Execution
 
 ```bash
 git checkout main && git pull origin main
 git checkout -b phase/P1-project-setup
-# フェーズ内の全タスクを実装 → PR作成
+# Implement all tasks in the phase → Create PR
 ```
 
 <!-- MANUAL ADDITIONS END -->
