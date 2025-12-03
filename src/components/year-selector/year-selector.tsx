@@ -46,6 +46,24 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
   // Sort years chronologically
   const sortedYears = [...years].sort((a, b) => a.year - b.year);
 
+  // Get current year index
+  const currentIndex = sortedYears.findIndex((y) => y.year === state.selectedYear);
+  const canGoPrev = currentIndex > 0;
+  const canGoNext = currentIndex < sortedYears.length - 1;
+
+  // Navigate to previous/next year
+  const navigateYear = useCallback(
+    (direction: 'prev' | 'next') => {
+      const newIndex = direction === 'prev' ? currentIndex - 1 : currentIndex + 1;
+      const newYear = sortedYears[newIndex];
+      if (newYear) {
+        actions.setSelectedYear(newYear.year);
+        onYearSelect?.(newYear.year);
+      }
+    },
+    [currentIndex, sortedYears, actions, onYearSelect],
+  );
+
   // Scroll selected year into view on mount and when selection changes
   // Use instant scroll on initial mount, smooth scroll afterwards
   useEffect(() => {
@@ -129,31 +147,82 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
       ref={containerRef}
       data-testid="year-selector"
       aria-label="年代選択"
-      className="flex items-center gap-1 overflow-x-auto px-2 py-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-400"
+      className="flex items-stretch"
     >
-      {sortedYears.map((yearEntry, index) => {
-        const isSelected = yearEntry.year === state.selectedYear;
+      {/* Previous year button */}
+      <button
+        type="button"
+        onClick={() => navigateYear('prev')}
+        disabled={!canGoPrev}
+        aria-label="前の年代を選択"
+        className={`flex shrink-0 items-center border-r border-gray-200 px-3 py-2 transition-colors ${
+          canGoPrev
+            ? 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
+            : 'cursor-not-allowed text-gray-300'
+        }`}
+      >
+        <svg
+          className="h-4 w-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+          aria-hidden="true"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
 
-        return (
-          <button
-            key={yearEntry.year}
-            ref={(el) => setButtonRef(yearEntry.year, el)}
-            type="button"
-            data-testid={`year-button-${yearEntry.year}`}
-            aria-label={`${formatYear(yearEntry.year)}年を選択`}
-            aria-current={isSelected ? 'true' : undefined}
-            onClick={() => handleYearClick(yearEntry.year)}
-            onKeyDown={(e) => handleKeyDown(e, index)}
-            className={`shrink-0 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-              isSelected
-                ? 'bg-blue-600 text-white hover:bg-blue-700'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            {formatYear(yearEntry.year)}
-          </button>
-        );
-      })}
+      {/* Scrollable year list */}
+      <div className="flex flex-1 items-stretch overflow-x-auto scrollbar-none">
+        {sortedYears.map((yearEntry, index) => {
+          const isSelected = yearEntry.year === state.selectedYear;
+
+          return (
+            <button
+              key={yearEntry.year}
+              ref={(el) => setButtonRef(yearEntry.year, el)}
+              type="button"
+              data-testid={`year-button-${yearEntry.year}`}
+              aria-label={`${formatYear(yearEntry.year)}年を選択`}
+              aria-current={isSelected ? 'true' : undefined}
+              onClick={() => handleYearClick(yearEntry.year)}
+              onKeyDown={(e) => handleKeyDown(e, index)}
+              className={`flex shrink-0 items-center justify-center border-r border-gray-200 py-3 font-medium transition-colors last:border-r-0 ${
+                isSelected
+                  ? 'min-w-[5rem] bg-blue-600 px-5 text-xl text-white'
+                  : 'min-w-[4rem] px-3 text-base text-gray-500 hover:bg-gray-100 hover:text-gray-900'
+              }`}
+            >
+              {formatYear(yearEntry.year)}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Next year button */}
+      <button
+        type="button"
+        onClick={() => navigateYear('next')}
+        disabled={!canGoNext}
+        aria-label="次の年代を選択"
+        className={`flex shrink-0 items-center border-l border-gray-200 px-3 py-2 transition-colors ${
+          canGoNext
+            ? 'text-gray-500 hover:bg-gray-100 hover:text-gray-900'
+            : 'cursor-not-allowed text-gray-300'
+        }`}
+      >
+        <svg
+          className="h-4 w-4"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+          aria-hidden="true"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
     </nav>
   );
 }
