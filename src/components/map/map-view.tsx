@@ -111,9 +111,7 @@ export function MapView() {
     // Capture features immediately before rAF callback
     const features = event.features;
     const hasClickableTerritory =
-      features &&
-      features.length > 0 &&
-      !!(features[0].properties as TerritoryProperties).SUBJECTO;
+      features && features.length > 0 && !!(features[0].properties as TerritoryProperties).SUBJECTO;
 
     if (rafRef.current !== null) {
       cancelAnimationFrame(rafRef.current);
