@@ -50,7 +50,7 @@ export function YearLink({ year, className = '' }: YearLinkProps) {
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       data-testid="year-link"
-      className={`inline-flex items-center rounded-md px-1.5 py-0.5 text-blue-600 underline transition-colors hover:bg-blue-50 hover:text-blue-800 ${className}`}
+      className={`inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700 transition-colors hover:bg-blue-100 hover:text-blue-700 ${className}`}
       aria-label={`${year}年に移動`}
     >
       {year}年
