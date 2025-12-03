@@ -31,9 +31,9 @@ const mockDescription: TerritoryDescription = {
   background:
     'ルイ14世の治世下、フランスは絶対王政の頂点に達しました。宰相マザランの指導のもと、三十年戦争の終結に向けた交渉が進められ、ウェストファリア条約（1648年）によりフランスはアルザス地方を獲得しました。この時期のフランスは、軍事力、文化、芸術の面でヨーロッパをリードしていました。',
   keyEvents: [
-    'ウェストファリア条約締結（1648年）',
-    'フロンドの乱（1648-1653年）',
-    'マザランの宰相就任',
+    { year: 1648, event: 'ウェストファリア条約締結' },
+    { year: 1648, event: 'フロンドの乱' },
+    { year: 1643, event: 'マザランの宰相就任' },
   ],
   relatedYears: [1600, 1700, 1789],
   aiGenerated: true,
@@ -78,9 +78,13 @@ describe('TerritoryInfoPanel', () => {
   it('renders key events list', () => {
     render(<TerritoryInfoPanel />);
 
-    expect(screen.getByText('ウェストファリア条約締結（1648年）')).toBeInTheDocument();
-    expect(screen.getByText('フロンドの乱（1648-1653年）')).toBeInTheDocument();
+    // Events are rendered with year and event text separately
+    expect(screen.getByText('ウェストファリア条約締結')).toBeInTheDocument();
+    expect(screen.getByText('フロンドの乱')).toBeInTheDocument();
     expect(screen.getByText('マザランの宰相就任')).toBeInTheDocument();
+    // Years are displayed in timeline format (sorted by year)
+    expect(screen.getByText('1643年')).toBeInTheDocument();
+    expect(screen.getAllByText('1648年')).toHaveLength(2);
   });
 
   it('renders AI-generated notice', () => {

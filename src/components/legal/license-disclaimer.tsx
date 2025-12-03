@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
+import { CloseButton } from '../ui/close-button';
 
 /**
  * Props for LicenseDisclaimer component
@@ -119,63 +120,37 @@ export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
       {/* Modal content */}
       <div
         data-testid="license-modal-content"
-        className="relative z-10 mx-4 max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-6 shadow-2xl dark:bg-gray-900"
+        className="relative z-10 mx-4 max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-6 shadow-2xl"
       >
         {/* Header */}
-        <div className="mb-6 flex items-center justify-between border-b border-gray-200 pb-4 dark:border-gray-700">
-          <h2
-            id="license-disclaimer-title"
-            className="text-xl font-semibold text-gray-900 dark:text-white"
-          >
+        <div className="mb-6 flex items-center justify-between border-b border-gray-200 pb-4">
+          <h2 id="license-disclaimer-title" className="text-xl font-semibold text-gray-900">
             ライセンス・免責事項
           </h2>
-          <button
-            ref={closeButtonRef}
-            type="button"
-            onClick={onClose}
-            className="rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-            aria-label="閉じる"
-          >
-            <svg
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
+          <CloseButton ref={closeButtonRef} onClick={onClose} aria-label="閉じる" />
         </div>
 
         {/* Content */}
         <div className="space-y-6">
           {/* License Attribution Section */}
           <section>
-            <h3 className="mb-3 text-lg font-medium text-gray-900 dark:text-white">
-              ライセンス情報
-            </h3>
-            <div className="rounded-lg bg-gray-50 p-4 dark:bg-gray-800">
-              <p className="mb-2 text-sm text-gray-700 dark:text-gray-300">
+            <h3 className="mb-3 text-lg font-medium text-gray-900">ライセンス情報</h3>
+            <div className="rounded-lg bg-gray-50 p-4">
+              <p className="mb-2 text-sm text-gray-700">
                 本アプリケーションで使用している地図データは{' '}
                 <a
                   href="https://github.com/aourednik/historical-basemaps"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-medium text-blue-600 hover:underline dark:text-blue-400"
+                  className="font-medium text-blue-600 hover:underline"
                 >
                   historical-basemaps
                 </a>{' '}
                 プロジェクトに基づいています。
               </p>
-              <p className="text-sm text-gray-700 dark:text-gray-300">
+              <p className="text-sm text-gray-700">
                 このデータは{' '}
-                <span className="font-medium text-gray-900 dark:text-white">
+                <span className="font-medium text-gray-900">
                   GNU General Public License v3.0 (GPL-3.0)
                 </span>{' '}
                 の下で提供されています。
@@ -185,10 +160,8 @@ export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
 
           {/* Data Accuracy Disclaimer */}
           <section data-testid="data-disclaimer">
-            <h3 className="mb-3 text-lg font-medium text-gray-900 dark:text-white">
-              データの正確性について
-            </h3>
-            <div className="rounded-lg border-l-4 border-yellow-400 bg-yellow-50 p-4 dark:border-yellow-500 dark:bg-yellow-900/20">
+            <h3 className="mb-3 text-lg font-medium text-gray-900">データの正確性について</h3>
+            <div className="rounded-lg border-l-4 border-yellow-400 bg-yellow-50 p-4">
               <div className="flex">
                 <div className="flex-shrink-0">
                   <svg
@@ -205,7 +178,7 @@ export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
                   </svg>
                 </div>
                 <div className="ml-3">
-                  <p className="text-sm text-yellow-700 dark:text-yellow-200">
+                  <p className="text-sm text-yellow-700">
                     本アプリケーションは開発中のプロジェクトであり、表示されるデータは完全または正確でない可能性があります。歴史的な調査や学術的な目的には、複数の信頼できる情報源との照合をお勧めします。
                   </p>
                 </div>
@@ -215,21 +188,17 @@ export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
 
           {/* Historical Borders Disclaimer */}
           <section data-testid="borders-disclaimer">
-            <h3 className="mb-3 text-lg font-medium text-gray-900 dark:text-white">
-              歴史的国境の概念的限界
-            </h3>
-            <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+            <h3 className="mb-3 text-lg font-medium text-gray-900">歴史的国境の概念的限界</h3>
+            <p className="text-sm leading-relaxed text-gray-600">
               現代の明確な国境線という概念は、近代国民国家の発展とともに生まれたものです。歴史上の多くの時代において、国境は流動的であり、現代のような明確な線として存在していませんでした。本アプリケーションで表示される境界線は、歴史的な支配領域を概念的に示すものであり、厳密な境界を表すものではありません。
             </p>
           </section>
 
           {/* Disputed Territories Disclaimer */}
           <section data-testid="disputed-disclaimer">
-            <h3 className="mb-3 text-lg font-medium text-gray-900 dark:text-white">
-              係争地域について
-            </h3>
-            <div className="rounded-lg border-l-4 border-blue-400 bg-blue-50 p-4 dark:border-blue-500 dark:bg-blue-900/20">
-              <p className="text-sm text-blue-700 dark:text-blue-200">
+            <h3 className="mb-3 text-lg font-medium text-gray-900">係争地域について</h3>
+            <div className="rounded-lg border-l-4 border-blue-400 bg-blue-50 p-4">
+              <p className="text-sm text-blue-700">
                 歴史上、多くの地域は複数の勢力によって領有権が主張されており、その帰属は時代や資料によって異なる解釈が存在します。本アプリケーションで表示される領土区分は、特定の政治的立場を支持するものではなく、歴史的な参考情報として提供されています。
               </p>
             </div>
@@ -237,10 +206,8 @@ export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
 
           {/* AI-Generated Content Notice */}
           <section>
-            <h3 className="mb-3 text-lg font-medium text-gray-900 dark:text-white">
-              AI生成コンテンツについて
-            </h3>
-            <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+            <h3 className="mb-3 text-lg font-medium text-gray-900">AI生成コンテンツについて</h3>
+            <p className="text-sm leading-relaxed text-gray-600">
               本アプリケーションの一部のテキスト説明はAIによって生成されています。これらの説明は参考情報として提供されており、正確性や完全性は保証されません。重要な情報については、信頼できる歴史的資料をご確認ください。
             </p>
           </section>

@@ -59,8 +59,9 @@ describe('YearSelector', () => {
   it('should display years in chronological order', () => {
     renderWithProvider(<YearSelector years={mockYears} />);
 
-    const buttons = screen.getAllByRole('button');
-    const years = buttons.map((btn) => Number(btn.textContent));
+    // Only get year buttons, not navigation buttons
+    const yearButtons = mockYears.map((y) => screen.getByTestId(`year-button-${y.year}`));
+    const years = yearButtons.map((btn) => Number(btn.textContent));
 
     for (let i = 1; i < years.length; i++) {
       const currentYear = years[i];
@@ -194,7 +195,8 @@ describe('YearSelector', () => {
 
     const selector = screen.getByTestId('year-selector');
     expect(selector).toBeInTheDocument();
-    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    // Year buttons should not exist, but navigation buttons still exist
+    expect(screen.queryByTestId(/^year-button-/)).not.toBeInTheDocument();
   });
 
   it('should handle years with BCE notation', () => {
