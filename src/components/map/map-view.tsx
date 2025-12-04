@@ -151,8 +151,8 @@ export function MapView() {
       if (!feature) return;
       const properties = feature.properties as TerritoryProperties;
 
-      // Get territory name - prefer SUBJECTO for the main identifier, fallback to NAME
-      const territoryName = properties.SUBJECTO || properties.NAME;
+      // Get territory name - prefer NAME for the clicked territory, fallback to SUBJECTO
+      const territoryName = properties.NAME || properties.SUBJECTO;
 
       if (territoryName) {
         actions.setSelectedTerritory(territoryName);
