@@ -11,19 +11,35 @@ historical-basemapsのデータをPMTiles形式に変換し、世界史の各年
 
 **Language/Version**: TypeScript 5.9.x (strict mode)
 **Primary Dependencies**: React 19.x, MapLibre GL JS + react-map-gl v8, PMTiles
-**UI Components**: shadcn/ui (Tailwind v4)
+**UI Components**: Tailwind v4
 **Build Tool**: Vite 7.x
 **Package Manager**: pnpm
 **Linter/Formatter**: Biome 2.x
-**Storage**: N/A（静的データ、バックエンド不要）
 **Testing**: Vitest 4.x + React Testing Library + Playwright 1.57.x (E2E)
 **Target Platform**: モダンブラウザ（Chrome, Firefox, Safari, Edge 最新2バージョン）
 **Runtime**: Node.js 22.x (LTS)
 **Project Type**: Web application (frontend only)
-**Hosting**: Cloudflare Pages
 **Performance Goals**: 初期表示3秒以内、地図操作60fps、年代切替2秒以内
 **Constraints**: 静的ホスティング可能、オフライン対応不要
 **Scale/Scope**: 約50年代分のPMTilesデータ、日本語UI
+
+### Infrastructure
+
+| Component | Service | Purpose |
+|-----------|---------|---------|
+| Frontend Hosting | Cloudflare Pages | React アプリケーションの配信 |
+| Tile Storage | Cloudflare R2 | PMTiles ファイルの保存（エグレス無料） |
+| Tile Server | Cloudflare Workers | PMTiles の Range Request 対応配信 |
+
+**Environment Configuration**:
+- 本番環境: `VITE_TILES_BASE_URL` に Worker URL を設定 → R2 から配信
+- 開発環境: 環境変数未設定 → `/public/pmtiles/` からローカル配信
+
+**Security**:
+- Worker の `ALLOWED_ORIGINS` で Pages ドメインのみアクセス許可
+- 開発環境は Worker を経由しないため、ローカルからの不正アクセスを防止
+
+詳細は [deployment.md](./deployment.md) を参照。
 
 ## Constitution Check
 
