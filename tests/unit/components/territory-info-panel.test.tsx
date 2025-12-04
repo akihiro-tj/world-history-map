@@ -27,9 +27,7 @@ const mockDescription: TerritoryDescription = {
   id: 'France_1650',
   name: 'フランス王国',
   year: 1650,
-  summary: '17世紀のフランスはヨーロッパ最強の国家でした。',
-  background:
-    'ルイ14世の治世下、フランスは絶対王政の頂点に達しました。宰相マザランの指導のもと、三十年戦争の終結に向けた交渉が進められ、ウェストファリア条約（1648年）によりフランスはアルザス地方を獲得しました。この時期のフランスは、軍事力、文化、芸術の面でヨーロッパをリードしていました。',
+  facts: ['首都: パリ', '君主: ルイ14世（在位1643-1715年）', '政体: 絶対王政'],
   keyEvents: [
     { year: 1648, event: 'ウェストファリア条約締結' },
     { year: 1648, event: 'フロンドの乱' },
@@ -63,16 +61,12 @@ describe('TerritoryInfoPanel', () => {
     expect(heading).toHaveTextContent('フランス王国');
   });
 
-  it('renders territory summary', () => {
+  it('renders territory facts', () => {
     render(<TerritoryInfoPanel />);
 
-    expect(screen.getByText(/17世紀のフランスはヨーロッパ最強の国家/)).toBeInTheDocument();
-  });
-
-  it('renders historical background', () => {
-    render(<TerritoryInfoPanel />);
-
-    expect(screen.getByText(/ルイ14世の治世下/)).toBeInTheDocument();
+    expect(screen.getByText('首都: パリ')).toBeInTheDocument();
+    expect(screen.getByText('君主: ルイ14世（在位1643-1715年）')).toBeInTheDocument();
+    expect(screen.getByText('政体: 絶対王政')).toBeInTheDocument();
   });
 
   it('renders key events list', () => {

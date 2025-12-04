@@ -51,7 +51,7 @@ export interface KeyEvent {
 
 /**
  * Territory description
- * AI-generated historical content
+ * AI-generated factual historical data
  */
 export interface TerritoryDescription {
   /** Unique identifier (`{NAME}_{year}` format) */
@@ -63,11 +63,8 @@ export interface TerritoryDescription {
   /** Target year */
   year: number;
 
-  /** Summary (1-2 sentences, recommended under 100 characters) */
-  summary: string;
-
-  /** Historical background (200-500 characters) */
-  background: string;
+  /** Basic facts about the territory (e.g., "首都: パリ", "君主: ルイ14世") */
+  facts: string[];
 
   /** Key events (recommended 3-5 items, sorted by year) */
   keyEvents: KeyEvent[];
