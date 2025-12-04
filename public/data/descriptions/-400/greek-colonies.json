@@ -2,7 +2,10 @@
   "id": "Greek_colonies_-400",
   "name": "Greek colonies",
   "year": -400,
-  "facts": ["首都: 不明", "政体: 不明"],
+  "facts": [
+    "首都: 不明",
+    "政体: 不明"
+  ],
   "keyEvents": [],
   "aiGenerated": true
 }

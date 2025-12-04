@@ -2,7 +2,10 @@
   "id": "Sixteen_Kingdoms_400",
   "name": "五胡十六国",
   "year": 400,
-  "facts": ["首都: 各地", "政体: 分裂時代"],
+  "facts": [
+    "首都: 各地",
+    "政体: 分裂時代"
+  ],
   "keyEvents": [
     {
       "year": 304,

@@ -1,8 +1,27 @@
 {
   "id": "Kingdom_of_David_and_Solomon_-1000",
-  "name": "Kingdom of David and Solomon",
+  "name": "統一イスラエル王国",
   "year": -1000,
-  "facts": ["首都: 不明", "政体: 不明"],
-  "keyEvents": [],
+  "facts": [
+    "首都: エルサレム",
+    "君主: ダビデ王、ソロモン王",
+    "政体: 王政",
+    "宗教: ユダヤ教",
+    "建築: エルサレム神殿（ソロモン時代）"
+  ],
+  "keyEvents": [
+    {
+      "year": -1000,
+      "event": "ダビデ王がエルサレムを首都に"
+    },
+    {
+      "year": -970,
+      "event": "ソロモン王即位"
+    },
+    {
+      "year": -930,
+      "event": "王国分裂（イスラエル・ユダ）"
+    }
+  ],
   "aiGenerated": true
 }

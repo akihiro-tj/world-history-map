@@ -2,7 +2,10 @@
   "id": "Ethiopian_highland_farmers_-323",
   "name": "Ethiopian highland farmers",
   "year": -323,
-  "facts": ["首都: 不明", "政体: 不明"],
+  "facts": [
+    "首都: 不明",
+    "政体: 不明"
+  ],
   "keyEvents": [],
   "aiGenerated": true
 }

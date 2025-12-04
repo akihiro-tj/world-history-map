@@ -2,7 +2,10 @@
   "id": "Maya_city-states_800",
   "name": "Maya city-states",
   "year": 800,
-  "facts": ["首都: 不明", "政体: 不明"],
+  "facts": [
+    "首都: 不明",
+    "政体: 不明"
+  ],
   "keyEvents": [],
   "aiGenerated": true
 }

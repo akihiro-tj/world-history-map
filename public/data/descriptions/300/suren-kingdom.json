@@ -2,7 +2,10 @@
   "id": "Suren_Kingdom_300",
   "name": "Suren Kingdom",
   "year": 300,
-  "facts": ["首都: 不明", "政体: 不明"],
+  "facts": [
+    "首都: 不明",
+    "政体: 不明"
+  ],
   "keyEvents": [],
   "aiGenerated": true
 }

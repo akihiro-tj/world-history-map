@@ -2,7 +2,10 @@
   "id": "Korea,_Republic_of_1994",
   "name": "Korea, Republic of",
   "year": 1994,
-  "facts": ["首都: 不明", "政体: 不明"],
+  "facts": [
+    "首都: 不明",
+    "政体: 不明"
+  ],
   "keyEvents": [],
   "aiGenerated": true
 }

@@ -2,7 +2,10 @@
   "id": "Visigothic_Kingdom_600",
   "name": "Visigothic Kingdom",
   "year": 600,
-  "facts": ["首都: 不明", "政体: 不明"],
+  "facts": [
+    "首都: 不明",
+    "政体: 不明"
+  ],
   "keyEvents": [],
   "aiGenerated": true
 }

@@ -2,7 +2,10 @@
   "id": "Himyarite_Kingdom_400",
   "name": "Himyarite Kingdom",
   "year": 400,
-  "facts": ["首都: 不明", "政体: 不明"],
+  "facts": [
+    "首都: 不明",
+    "政体: 不明"
+  ],
   "keyEvents": [],
   "aiGenerated": true
 }

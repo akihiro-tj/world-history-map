@@ -2,7 +2,10 @@
   "id": "Toltec_Empire_1200",
   "name": "Toltec Empire",
   "year": 1200,
-  "facts": ["首都: 不明", "政体: 不明"],
+  "facts": [
+    "首都: 不明",
+    "政体: 不明"
+  ],
   "keyEvents": [],
   "aiGenerated": true
 }

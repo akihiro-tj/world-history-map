@@ -1,8 +1,26 @@
 {
   "id": "Hurrian_Kingdoms_-5000",
-  "name": "Hurrian Kingdoms",
+  "name": "フルリ人諸王国",
   "year": -5000,
-  "facts": ["首都: 不明", "政体: 不明"],
-  "keyEvents": [],
+  "facts": [
+    "地域: 北メソポタミア、アナトリア東部",
+    "時代: 形成期",
+    "文化: フルリ人文化圏の形成",
+    "特徴: 山岳地帯の諸部族"
+  ],
+  "keyEvents": [
+    {
+      "year": -1500,
+      "event": "ミタンニ王国最盛期"
+    },
+    {
+      "year": -1350,
+      "event": "ヒッタイトにより弱体化"
+    },
+    {
+      "year": -1270,
+      "event": "アッシリアに併合"
+    }
+  ],
   "aiGenerated": true
 }

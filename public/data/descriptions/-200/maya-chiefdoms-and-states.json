@@ -2,7 +2,10 @@
   "id": "Maya_chiefdoms_and_states_-200",
   "name": "マヤ諸国",
   "year": -200,
-  "facts": ["首都: 各都市国家", "政体: 都市国家"],
+  "facts": [
+    "首都: 各都市国家",
+    "政体: 都市国家"
+  ],
   "keyEvents": [
     {
       "year": 900,

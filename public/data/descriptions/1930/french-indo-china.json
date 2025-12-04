@@ -2,7 +2,10 @@
   "id": "French_Indo-China_1930",
   "name": "French Indo-China",
   "year": 1930,
-  "facts": ["首都: 不明", "政体: 不明"],
+  "facts": [
+    "首都: 不明",
+    "政体: 不明"
+  ],
   "keyEvents": [],
   "aiGenerated": true
 }

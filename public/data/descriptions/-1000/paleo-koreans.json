@@ -2,7 +2,10 @@
   "id": "Paleo-Koreans_-1000",
   "name": "Paleo-Koreans",
   "year": -1000,
-  "facts": ["首都: 不明", "政体: 不明"],
+  "facts": [
+    "首都: 不明",
+    "政体: 不明"
+  ],
   "keyEvents": [],
   "aiGenerated": true
 }

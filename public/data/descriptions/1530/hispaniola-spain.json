@@ -2,7 +2,10 @@
   "id": "Hispaniola_(Spain)_1530",
   "name": "Hispaniola (Spain)",
   "year": 1530,
-  "facts": ["首都: 不明", "政体: 不明"],
+  "facts": [
+    "首都: 不明",
+    "政体: 不明"
+  ],
   "keyEvents": [],
   "aiGenerated": true
 }

@@ -2,7 +2,10 @@
   "id": "Chinantla_(Tsa_ju_jmí’)_1492",
   "name": "Chinantla (Tsa ju jmí’)",
   "year": 1492,
-  "facts": ["首都: 不明", "政体: 不明"],
+  "facts": [
+    "首都: 不明",
+    "政体: 不明"
+  ],
   "keyEvents": [],
   "aiGenerated": true
 }

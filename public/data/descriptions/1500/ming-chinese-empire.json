@@ -2,7 +2,10 @@
   "id": "Ming_Chinese_Empire_1500",
   "name": "明",
   "year": 1500,
-  "facts": ["首都: 北京", "政体: 帝政"],
+  "facts": [
+    "首都: 北京",
+    "政体: 帝政"
+  ],
   "keyEvents": [
     {
       "year": 1368,

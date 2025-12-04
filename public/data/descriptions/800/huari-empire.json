@@ -2,7 +2,10 @@
   "id": "Huari_Empire_800",
   "name": "ワリ帝国",
   "year": 800,
-  "facts": ["首都: ワリ", "政体: 帝政"],
+  "facts": [
+    "首都: ワリ",
+    "政体: 帝政"
+  ],
   "keyEvents": [
     {
       "year": 500,

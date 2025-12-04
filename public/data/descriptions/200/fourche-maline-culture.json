@@ -2,7 +2,10 @@
   "id": "Fourche_Maline_Culture_200",
   "name": "Fourche Maline Culture",
   "year": 200,
-  "facts": ["首都: 不明", "政体: 不明"],
+  "facts": [
+    "首都: 不明",
+    "政体: 不明"
+  ],
   "keyEvents": [],
   "aiGenerated": true
 }

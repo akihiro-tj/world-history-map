@@ -2,7 +2,10 @@
   "id": "Kingdom_of_Lysimachus_-300",
   "name": "Kingdom of Lysimachus",
   "year": -300,
-  "facts": ["首都: 不明", "政体: 不明"],
+  "facts": [
+    "首都: 不明",
+    "政体: 不明"
+  ],
   "keyEvents": [],
   "aiGenerated": true
 }

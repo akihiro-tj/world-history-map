@@ -2,7 +2,10 @@
   "id": "United_States_Virgin_Islands_1930",
   "name": "United States Virgin Islands",
   "year": 1930,
-  "facts": ["首都: 不明", "政体: 不明"],
+  "facts": [
+    "首都: 不明",
+    "政体: 不明"
+  ],
   "keyEvents": [],
   "aiGenerated": true
 }

@@ -2,7 +2,10 @@
   "id": "Shogun_Japan_(Kamakura)_1400",
   "name": "日本（鎌倉幕府）",
   "year": 1400,
-  "facts": ["首都: 鎌倉", "政体: 幕府制"],
+  "facts": [
+    "首都: 鎌倉",
+    "政体: 幕府制"
+  ],
   "keyEvents": [
     {
       "year": 1185,

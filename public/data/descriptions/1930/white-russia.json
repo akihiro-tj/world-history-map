@@ -2,7 +2,10 @@
   "id": "White_Russia_1930",
   "name": "White Russia",
   "year": 1930,
-  "facts": ["首都: 不明", "政体: 不明"],
+  "facts": [
+    "首都: 不明",
+    "政体: 不明"
+  ],
   "keyEvents": [],
   "aiGenerated": true
 }

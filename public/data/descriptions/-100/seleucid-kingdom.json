@@ -1,8 +1,26 @@
 {
   "id": "Seleucid_Kingdom_-100",
-  "name": "Seleucid Kingdom",
+  "name": "セレウコス朝",
   "year": -100,
-  "facts": ["首都: 不明", "政体: 不明"],
-  "keyEvents": [],
+  "facts": [
+    "首都: アンティオキア",
+    "政体: 王政（ギリシャ系王朝）",
+    "状況: ローマへの従属、衰退期",
+    "領土: シリア周辺のみ"
+  ],
+  "keyEvents": [
+    {
+      "year": -312,
+      "event": "セレウコス1世が建国"
+    },
+    {
+      "year": -190,
+      "event": "マグネシアの戦いでローマに敗北"
+    },
+    {
+      "year": -63,
+      "event": "ポンペイウスにより滅ぼされる"
+    }
+  ],
   "aiGenerated": true
 }

@@ -2,7 +2,10 @@
   "id": "Cochin_China_1815",
   "name": "Cochin China",
   "year": 1815,
-  "facts": ["首都: 不明", "政体: 不明"],
+  "facts": [
+    "首都: 不明",
+    "政体: 不明"
+  ],
   "keyEvents": [],
   "aiGenerated": true
 }

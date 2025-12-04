@@ -1,8 +1,28 @@
 {
   "id": "Greek_city-states_-300",
-  "name": "Greek city-states",
+  "name": "ギリシャ都市国家群",
   "year": -300,
-  "facts": ["首都: 不明", "政体: 不明"],
-  "keyEvents": [],
+  "facts": [
+    "主要都市: アテネ、スパルタ",
+    "政体: 都市国家（ポリス）"
+  ],
+  "keyEvents": [
+    {
+      "year": -776,
+      "event": "第1回オリンピック競技会"
+    },
+    {
+      "year": -490,
+      "event": "マラトンの戦い（ペルシア戦争）"
+    },
+    {
+      "year": -480,
+      "event": "サラミスの海戦"
+    },
+    {
+      "year": -338,
+      "event": "カイロネイアの戦い、マケドニアに敗北"
+    }
+  ],
   "aiGenerated": true
 }

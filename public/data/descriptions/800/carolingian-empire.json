@@ -2,7 +2,10 @@
   "id": "Carolingian_Empire_800",
   "name": "カロリング帝国",
   "year": 800,
-  "facts": ["首都: アーヘン", "政体: 帝政"],
+  "facts": [
+    "首都: アーヘン",
+    "政体: 帝政"
+  ],
   "keyEvents": [
     {
       "year": 800,

@@ -2,7 +2,10 @@
   "id": "Poland-Lithuania_1500",
   "name": "Poland-Lithuania",
   "year": 1500,
-  "facts": ["首都: 不明", "政体: 不明"],
+  "facts": [
+    "首都: 不明",
+    "政体: 不明"
+  ],
   "keyEvents": [],
   "aiGenerated": true
 }

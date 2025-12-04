@@ -2,7 +2,10 @@
   "id": "Germanic_tribes_-400",
   "name": "Germanic tribes",
   "year": -400,
-  "facts": ["首都: 不明", "政体: 不明"],
+  "facts": [
+    "首都: 不明",
+    "政体: 不明"
+  ],
   "keyEvents": [],
   "aiGenerated": true
 }

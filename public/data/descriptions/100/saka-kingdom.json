@@ -2,7 +2,10 @@
   "id": "Saka_Kingdom_100",
   "name": "Saka Kingdom",
   "year": 100,
-  "facts": ["首都: 不明", "政体: 不明"],
+  "facts": [
+    "首都: 不明",
+    "政体: 不明"
+  ],
   "keyEvents": [],
   "aiGenerated": true
 }

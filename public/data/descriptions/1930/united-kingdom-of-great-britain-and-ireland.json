@@ -2,7 +2,10 @@
   "id": "United_Kingdom_of_Great_Britain_and_Ireland_1930",
   "name": "グレートブリテン及びアイルランド連合王国",
   "year": 1930,
-  "facts": ["首都: ロンドン", "政体: 立憲君主制"],
+  "facts": [
+    "首都: ロンドン",
+    "政体: 立憲君主制"
+  ],
   "keyEvents": [
     {
       "year": 1801,

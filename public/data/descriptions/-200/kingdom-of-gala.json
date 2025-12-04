@@ -2,7 +2,10 @@
   "id": "Kingdom_of_Gala_-200",
   "name": "Kingdom of Gala",
   "year": -200,
-  "facts": ["首都: 不明", "政体: 不明"],
+  "facts": [
+    "首都: 不明",
+    "政体: 不明"
+  ],
   "keyEvents": [],
   "aiGenerated": true
 }
