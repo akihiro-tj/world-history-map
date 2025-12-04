@@ -74,7 +74,8 @@ binding = "BUCKET"
 bucket_name = "world-history-map-tiles"
 
 [vars]
-ALLOWED_ORIGINS = "https://world-history-map.pages.dev"
+# Supports wildcard subdomain pattern for preview deployments
+ALLOWED_ORIGINS = "https://world-history-map.pages.dev,https://*.world-history-map.pages.dev"
 ```
 
 **キャッシュ戦略:**
@@ -149,17 +150,17 @@ PMTiles を以前のバージョンに戻す場合：
 
 ### CORS 設定
 
-Worker は本番 Pages ドメインからのリクエストのみ許可：
+Worker は本番・プレビュー Pages ドメインからのリクエストのみ許可：
 
 ```toml
 # worker/wrangler.toml
-ALLOWED_ORIGINS = "https://world-history-map.pages.dev"
+ALLOWED_ORIGINS = "https://world-history-map.pages.dev,https://*.world-history-map.pages.dev"
 ```
 
 **この設定の意義:**
 - 他のウェブサイトからのタイルサーバー利用を防止
+- ワイルドカードパターンでプレビューデプロイ（`*.world-history-map.pages.dev`）を許可
 - 開発環境はローカルファイルを使用するため、`localhost` は許可リストに不要
-- 本番タイルをローカルでテストする必要がある場合は一時的に localhost を追加
 
 ### 複数オリジンの許可
 

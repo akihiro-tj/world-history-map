@@ -8,5 +8,5 @@ binding = "BUCKET"
 bucket_name = "world-history-map-tiles"
 
 [vars]
-# Comma-separated list of allowed origins (production Pages domain only)
-ALLOWED_ORIGINS = "https://world-history-map.pages.dev"
+# Comma-separated list of allowed origins (supports wildcard subdomain pattern)
+ALLOWED_ORIGINS = "https://world-history-map.pages.dev,https://*.world-history-map.pages.dev"

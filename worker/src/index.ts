@@ -126,10 +126,24 @@ export default {
     }
 
     let allowedOrigin = '';
-    if (typeof env.ALLOWED_ORIGINS !== 'undefined') {
-      for (const o of env.ALLOWED_ORIGINS.split(',')) {
-        if (o === request.headers.get('Origin') || o === '*') {
-          allowedOrigin = o;
+    const requestOrigin = request.headers.get('Origin');
+    if (typeof env.ALLOWED_ORIGINS !== 'undefined' && requestOrigin) {
+      for (const pattern of env.ALLOWED_ORIGINS.split(',')) {
+        if (pattern === '*') {
+          allowedOrigin = requestOrigin;
+          break;
+        }
+        if (pattern === requestOrigin) {
+          allowedOrigin = requestOrigin;
+          break;
+        }
+        // Support wildcard subdomain pattern (e.g., https://*.example.com)
+        if (pattern.includes('*')) {
+          const regex = new RegExp(`^${pattern.replace(/\./g, '\\.').replace('*', '[^.]+')}$`);
+          if (regex.test(requestOrigin)) {
+            allowedOrigin = requestOrigin;
+            break;
+          }
         }
       }
     }
