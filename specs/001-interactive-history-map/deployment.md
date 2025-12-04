@@ -66,7 +66,7 @@ dist/pmtiles/                    # ハッシュ付き PMTiles（アップロー�
 ```toml
 name = "world-history-map-tiles"
 main = "src/index.ts"
-compatibility_date = "2024-12-01"
+compatibility_date = "2025-12-01"
 minify = true
 
 [[r2_buckets]]
