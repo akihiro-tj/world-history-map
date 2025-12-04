@@ -137,14 +137,17 @@ export function TerritoryInfoPanel() {
           </span>
         </div>
 
-        {/* Summary */}
-        <p className="text-sm text-gray-200">{description.summary}</p>
-
-        {/* Background */}
-        <div>
-          <h3 className="mb-2 text-sm font-semibold text-white">歴史的背景</h3>
-          <p className="text-sm leading-relaxed text-gray-300">{description.background}</p>
-        </div>
+        {/* Facts */}
+        {description.facts.length > 0 && (
+          <div>
+            <h3 className="mb-2 text-sm font-semibold text-white">基本情報</h3>
+            <ul className="space-y-1 text-sm text-gray-300">
+              {description.facts.map((fact) => (
+                <li key={fact}>{fact}</li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         {/* Key Events */}
         {description.keyEvents.length > 0 && (
