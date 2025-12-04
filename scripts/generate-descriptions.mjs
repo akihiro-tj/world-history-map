@@ -116,8 +116,26 @@ const nationData = {
   },
   'Roman Republic': {
     name: 'ローマ共和国',
-    capital: 'ローマ',
-    type: '共和制',
+    facts: (year) => {
+      if (year >= -264 && year <= -146) {
+        return [
+          '首都: ローマ',
+          '政体: 共和制',
+          '指導: 元老院、執政官',
+          '時代: ポエニ戦争期',
+          '敵国: カルタゴ',
+        ];
+      }
+      if (year >= -133 && year <= -27) {
+        return [
+          '首都: ローマ',
+          '政体: 共和制（内乱期）',
+          '状況: グラックス兄弟改革、内乱の1世紀',
+          '人物: マリウス、スッラ、カエサル',
+        ];
+      }
+      return ['首都: ローマ', '政体: 共和制', '指導: 元老院'];
+    },
     events: [
       { year: -509, event: '王政廃止、共和制開始' },
       { year: -494, event: '護民官設置（身分闘争）' },
@@ -1710,12 +1728,6 @@ const nationData = {
     type: '都市国家',
     events: [{ year: 900, event: '古典期終焉、都市の衰退' }],
   },
-  'Maya chiefdoms and states': {
-    name: 'マヤ諸国',
-    capital: '各都市国家',
-    type: '都市国家',
-    events: [{ year: 900, event: '古典期終焉' }],
-  },
 
   // African
   Ethiopia: {
@@ -1800,16 +1812,6 @@ const nationData = {
     events: [
       { year: 1464, event: 'ソンニ・アリが拡大開始' },
       { year: 1591, event: 'モロッコに敗北、衰退' },
-    ],
-  },
-  'Carthaginian Empire': {
-    name: 'カルタゴ',
-    capital: 'カルタゴ',
-    type: '共和制',
-    events: [
-      { year: -264, event: '第一次ポエニ戦争開始' },
-      { year: -218, event: 'ハンニバルのアルプス越え' },
-      { year: -146, event: 'ローマにより滅亡' },
     ],
   },
   'Empire of Alexander': {
@@ -2388,34 +2390,6 @@ const nationData = {
       { year: -63, event: 'ポンペイウスによりシリア属州化、滅亡' },
     ],
   },
-  'Roman Republic': {
-    name: 'ローマ共和国',
-    facts: (year) => {
-      if (year >= -264 && year <= -146) {
-        return [
-          '首都: ローマ',
-          '政体: 共和制',
-          '指導: 元老院、執政官',
-          '時代: ポエニ戦争期',
-          '敵国: カルタゴ',
-        ];
-      }
-      if (year >= -133 && year <= -27) {
-        return [
-          '首都: ローマ',
-          '政体: 共和制（内乱期）',
-          '状況: グラックス兄弟改革、内乱の1世紀',
-          '人物: マリウス、スッラ、カエサル',
-        ];
-      }
-      return ['首都: ローマ', '政体: 共和制', '指導: 元老院'];
-    },
-    events: [
-      { year: -509, event: '王政廃止、共和制開始' },
-      { year: -264, event: '第一次ポエニ戦争開始' },
-      { year: -27, event: '帝政へ移行（アウグストゥス）' },
-    ],
-  },
   'Carthaginian Empire': {
     name: 'カルタゴ',
     facts: (year) => {
@@ -2850,10 +2824,7 @@ const nationData = {
           '状況: アッシリアに順次併合',
         ];
       }
-      return [
-        '地域: 南アナトリア、北シリア',
-        '特徴: ヒッタイト帝国滅亡後の後継国家群',
-      ];
+      return ['地域: 南アナトリア、北シリア', '特徴: ヒッタイト帝国滅亡後の後継国家群'];
     },
     events: [
       { year: -1180, event: 'ヒッタイト帝国滅亡後に諸国家形成' },
@@ -3240,11 +3211,7 @@ const nationData = {
           '目的: 人口過剰対策、交易拡大',
         ];
       }
-      return [
-        '地域: 地中海・黒海沿岸',
-        '政体: 都市国家群',
-        '文化: ヘレニズム文化の拡散拠点',
-      ];
+      return ['地域: 地中海・黒海沿岸', '政体: 都市国家群', '文化: ヘレニズム文化の拡散拠点'];
     },
     events: [
       { year: -775, event: 'ピテクサイ植民（最初のギリシャ植民地）' },
@@ -3398,7 +3365,7 @@ function scorePriority(name) {
       break;
     }
     // Partial match gets lower priority
-    if (name.startsWith(kw + ' ') || name.includes(kw)) {
+    if (name.startsWith(`${kw} `) || name.includes(kw)) {
       score += 12;
       break;
     }
