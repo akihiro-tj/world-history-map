@@ -8,6 +8,7 @@
 - Node.js 22.x (LTS)
 - pnpm 9.x 以上
 - Git
+- Tippecanoe（PMTiles生成用、オプション）
 
 ## Setup
 
@@ -24,26 +25,16 @@ cd world-history-map
 pnpm install
 ```
 
-### 3. historical-basemapsデータの取得と変換
-
-```bash
-# GeoJSONデータをダウンロードしPMTilesに変換
-pnpm fetch-geodata
-```
-
-このスクリプトは以下を実行します:
-- historical-basemapsリポジトリからGeoJSONファイルを取得
-- Tippecanoeを使用してPMTiles形式に変換
-- `public/pmtiles/` ディレクトリに配置
-- index.jsonを生成
-
-### 4. 開発サーバーの起動
+### 3. 開発サーバーの起動
 
 ```bash
 pnpm dev
 ```
 
 ブラウザで http://localhost:5173 を開く
+
+> **Note**: PMTilesデータはリポジトリに含まれています（`public/pmtiles/`）。
+> データを再生成する必要がある場合は、`scripts/convert-to-pmtiles.sh` を使用してください。
 
 ## Development Commands
 
@@ -55,7 +46,6 @@ pnpm dev
 | `pnpm test` | ユニットテスト実行 |
 | `pnpm test:e2e` | E2Eテスト実行 |
 | `pnpm check` | Biome lint + format チェック |
-| `pnpm typecheck` | TypeScript型チェック |
 
 ## Project Structure
 
@@ -112,9 +102,6 @@ world-history-map/
 ### 地図データが表示されない
 
 ```bash
-# データを再取得
-pnpm fetch-geodata
-
 # キャッシュクリア
 rm -rf node_modules/.vite
 pnpm dev
@@ -123,8 +110,8 @@ pnpm dev
 ### 型エラーが発生する
 
 ```bash
-# 型定義を再生成
-pnpm typecheck
+# TypeScript型チェック
+pnpm exec tsc --noEmit
 ```
 
 ### テストが失敗する

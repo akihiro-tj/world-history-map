@@ -172,14 +172,14 @@
 
 **目的**: 複数のユーザーストーリーに影響する改善
 
-- [ ] T060 [P] `wrangler.toml` またはダッシュボードでCloudflare Pagesデプロイを設定
-- [ ] T061 [P] `.github/workflows/ci.yml` にテストとリンティングのCIワークフローを追加
-- [ ] T062 [P] Playwrightテストでaxe-coreアクセシビリティ監査を実行
-- [ ] T063 [P] `index.html` にメタタグとOpen Graphデータを追加
-- [ ] T064 パフォーマンス最適化: Lighthouseで初期読み込み3秒以内を確認
-- [ ] T065 [P] historical-basemapsの全利用可能年代のPMTilesを生成
-- [ ] T066 コードクリーンアップとテストカバレッジ80%を確認
-- [ ] T067 quickstart.mdの検証を実行し、必要に応じて更新
+- [x] T060 [P] `wrangler.toml` またはダッシュボードでCloudflare Pagesデプロイを設定
+- [x] T061 [P] `.github/workflows/ci.yml` にテストとリンティングのCIワークフローを追加
+- [x] T062 [P] Playwrightテストでaxe-coreアクセシビリティ監査を実行
+- [x] T063 [P] `index.html` にメタタグとOpen Graphデータを追加
+- [x] T064 パフォーマンス最適化: Lighthouseで初期読み込み3秒以内を確認
+- [x] T065 [P] historical-basemapsの全利用可能年代のPMTilesを生成
+- [x] T066 コードクリーンアップとテストカバレッジ80%を確認
+- [x] T067 quickstart.mdの検証を実行し、必要に応じて更新
 
 ---
 
