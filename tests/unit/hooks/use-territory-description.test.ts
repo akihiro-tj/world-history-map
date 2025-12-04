@@ -229,7 +229,7 @@ describe('useTerritoryDescription', () => {
       expect(mockFetch).toHaveBeenCalled();
     });
 
-    const calledUrl = mockFetch.mock.calls[0][0];
+    const calledUrl = mockFetch.mock.calls[0]?.[0] as string | undefined;
     expect(calledUrl).toBe('/data/descriptions/1650/france.json');
   });
 
@@ -246,7 +246,7 @@ describe('useTerritoryDescription', () => {
       expect(mockFetch).toHaveBeenCalled();
     });
 
-    const calledUrl = mockFetch.mock.calls[0][0];
+    const calledUrl = mockFetch.mock.calls[0]?.[0] as string | undefined;
     expect(calledUrl).toBe('/data/descriptions/1650/england-and-ireland.json');
   });
 });

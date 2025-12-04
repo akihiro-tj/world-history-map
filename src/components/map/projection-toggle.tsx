@@ -5,7 +5,8 @@ import { type ComponentProps, forwardRef } from 'react';
  */
 export type ProjectionType = 'mercator' | 'globe';
 
-interface ProjectionToggleProps extends Omit<ComponentProps<'button'>, 'children' | 'onClick'> {
+interface ProjectionToggleProps
+  extends Omit<ComponentProps<'button'>, 'children' | 'onClick' | 'onToggle'> {
   /** Current projection type */
   projection: ProjectionType;
   /** Callback when projection changes */

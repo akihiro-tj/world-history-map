@@ -72,12 +72,12 @@ export function useTerritoryDescription(
 
     let cancelled = false;
 
-    async function fetchDescription() {
+    async function fetchDescription(name: string) {
       setIsLoading(true);
       setError(null);
 
       try {
-        const url = buildDescriptionUrl(territoryName, year);
+        const url = buildDescriptionUrl(name, year);
         const response = await fetch(url);
 
         if (cancelled) return;
@@ -119,7 +119,7 @@ export function useTerritoryDescription(
       }
     }
 
-    fetchDescription();
+    fetchDescription(territoryName);
 
     return () => {
       cancelled = true;

@@ -148,6 +148,7 @@ export function MapView() {
 
       // Get the first feature (topmost territory)
       const feature = features[0];
+      if (!feature) return;
       const properties = feature.properties as TerritoryProperties;
 
       // Get territory name - prefer SUBJECTO for the main identifier, fallback to NAME
@@ -166,8 +167,10 @@ export function MapView() {
   const handleMouseMove = useCallback((event: MapLayerMouseEvent) => {
     // Capture features immediately before rAF callback
     const features = event.features;
-    const hasClickableTerritory =
-      features && features.length > 0 && !!(features[0].properties as TerritoryProperties).SUBJECTO;
+    const firstFeature = features?.[0];
+    const hasClickableTerritory = !!(
+      firstFeature && (firstFeature.properties as TerritoryProperties).SUBJECTO
+    );
 
     if (rafRef.current !== null) {
       cancelAnimationFrame(rafRef.current);
