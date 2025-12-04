@@ -105,7 +105,11 @@ async function handleManifest(
   // Fetch from R2
   const obj = await env.BUCKET.get('manifest.json');
   if (!obj) {
-    return new Response('Manifest not found', { status: 404 });
+    const headers = new Headers();
+    headers.set('Cache-Control', 'no-store');
+    if (allowedOrigin) headers.set('Access-Control-Allow-Origin', allowedOrigin);
+    headers.set('Vary', 'Origin');
+    return new Response('Manifest not found', { headers, status: 404 });
   }
 
   const body = await obj.text();
@@ -181,6 +185,62 @@ class R2Source implements Source {
   }
 }
 
+/**
+ * Handle direct PMTiles file requests with Range support
+ */
+async function handlePMTilesFile(
+  request: Request,
+  env: Env,
+  filename: string,
+): Promise<Response> {
+  const allowedOrigin = getAllowedOrigin(request, env);
+
+  // Parse Range header
+  const rangeHeader = request.headers.get('Range');
+  let range: { offset: number; length: number } | undefined;
+
+  if (rangeHeader) {
+    const match = rangeHeader.match(/bytes=(\d+)-(\d+)?/);
+    if (match) {
+      const start = Number.parseInt(match[1], 10);
+      const end = match[2] ? Number.parseInt(match[2], 10) : undefined;
+      range = {
+        offset: start,
+        length: end !== undefined ? end - start + 1 : 1,
+      };
+    }
+  }
+
+  // Fetch from R2
+  const obj = await env.BUCKET.get(filename, range ? { range } : undefined);
+  if (!obj) {
+    const headers = new Headers();
+    // Short cache for 404 to prevent abuse while allowing quick recovery
+    headers.set('Cache-Control', 'public, max-age=60');
+    if (allowedOrigin) headers.set('Access-Control-Allow-Origin', allowedOrigin);
+    headers.set('Vary', 'Origin');
+    return new Response('File not found', { headers, status: 404 });
+  }
+
+  const headers = new Headers();
+  headers.set('Content-Type', 'application/octet-stream');
+  headers.set('Accept-Ranges', 'bytes');
+  // PMTiles files are immutable (hash-based filenames)
+  headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+  if (allowedOrigin) headers.set('Access-Control-Allow-Origin', allowedOrigin);
+  headers.set('Vary', 'Origin');
+
+  if (rangeHeader && obj.range) {
+    const r = obj.range as { offset: number; length: number };
+    headers.set('Content-Range', `bytes ${r.offset}-${r.offset + r.length - 1}/${obj.size}`);
+    headers.set('Content-Length', String(r.length));
+    return new Response(obj.body, { headers, status: 206 });
+  }
+
+  headers.set('Content-Length', String(obj.size));
+  return new Response(obj.body, { headers, status: 200 });
+}
+
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     if (request.method.toUpperCase() === 'POST') return new Response(undefined, { status: 405 });
@@ -191,6 +251,12 @@ export default {
     // Handle manifest.json directly from R2
     if (url.pathname === '/manifest.json') {
       return handleManifest(request, env, ctx, cache);
+    }
+
+    // Handle .pmtiles files directly (for Range requests from PMTiles library)
+    const pmtilesMatch = url.pathname.match(/^\/(.+\.pmtiles)$/);
+    if (pmtilesMatch) {
+      return handlePMTilesFile(request, env, pmtilesMatch[1]);
     }
 
     const { ok, name, tile, ext } = tilePath(url.pathname);
@@ -218,20 +284,23 @@ export default {
       cacheableHeaders: Headers,
       status: number,
     ) => {
-      // manifest.json is short-cached to allow updates to propagate
-      // PMTiles files use immutable since URLs change with content hash
-      const cacheControl =
-        ext === 'json'
-          ? 'public, max-age=300'
-          : 'public, max-age=31536000, immutable';
-      cacheableHeaders.set('Cache-Control', cacheControl);
+      // Only cache successful responses (2xx)
+      const isSuccess = status >= 200 && status < 300;
 
-      const cacheable = new Response(body, {
-        headers: cacheableHeaders,
-        status: status,
-      });
+      if (isSuccess) {
+        // PMTiles files use immutable since URLs change with content hash
+        cacheableHeaders.set('Cache-Control', 'public, max-age=31536000, immutable');
 
-      ctx.waitUntil(cache.put(request.url, cacheable));
+        const cacheable = new Response(body, {
+          headers: cacheableHeaders,
+          status: status,
+        });
+
+        ctx.waitUntil(cache.put(request.url, cacheable));
+      } else {
+        // Short cache for error responses to prevent abuse
+        cacheableHeaders.set('Cache-Control', 'public, max-age=60');
+      }
 
       const respHeaders = new Headers(cacheableHeaders);
       if (allowedOrigin) respHeaders.set('Access-Control-Allow-Origin', allowedOrigin);
