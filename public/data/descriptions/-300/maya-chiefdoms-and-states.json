@@ -1,0 +1,13 @@
+{
+  "id": "Maya_chiefdoms_and_states_-300",
+  "name": "マヤ諸国",
+  "year": -300,
+  "facts": ["首都: 各都市国家", "政体: 都市国家"],
+  "keyEvents": [
+    {
+      "year": 900,
+      "event": "古典期終焉"
+    }
+  ],
+  "aiGenerated": true
+}

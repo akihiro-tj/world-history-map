@@ -1,0 +1,21 @@
+{
+  "id": "Korea_1715",
+  "name": "朝鮮",
+  "year": 1715,
+  "facts": ["首都: 漢城", "政体: 王政"],
+  "keyEvents": [
+    {
+      "year": 1392,
+      "event": "李成桂が朝鮮を建国"
+    },
+    {
+      "year": 1592,
+      "event": "文禄の役（壬辰倭乱）"
+    },
+    {
+      "year": 1910,
+      "event": "日本に併合"
+    }
+  ],
+  "aiGenerated": true
+}

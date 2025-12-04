@@ -1,0 +1,21 @@
+{
+  "id": "Abbasid_Caliphate_800",
+  "name": "アッバース朝",
+  "year": 800,
+  "facts": ["首都: バグダード", "政体: カリフ制"],
+  "keyEvents": [
+    {
+      "year": 750,
+      "event": "アブー・アルアッバースが建国"
+    },
+    {
+      "year": 762,
+      "event": "バグダード建設"
+    },
+    {
+      "year": 1258,
+      "event": "モンゴル軍により滅亡"
+    }
+  ],
+  "aiGenerated": true
+}

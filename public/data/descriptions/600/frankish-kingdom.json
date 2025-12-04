@@ -1,0 +1,21 @@
+{
+  "id": "Frankish_Kingdom_600",
+  "name": "フランク王国",
+  "year": 600,
+  "facts": ["首都: パリ/アーヘン", "政体: 王政"],
+  "keyEvents": [
+    {
+      "year": 481,
+      "event": "クローヴィス1世即位"
+    },
+    {
+      "year": 768,
+      "event": "カール大帝即位"
+    },
+    {
+      "year": 843,
+      "event": "ヴェルダン条約で分裂"
+    }
+  ],
+  "aiGenerated": true
+}

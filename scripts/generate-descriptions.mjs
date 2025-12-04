@@ -186,8 +186,36 @@ const nationData = {
   },
   'Manchu Empire': {
     name: '清',
-    capital: '北京',
-    type: '帝政',
+    facts: (year) => {
+      if (year >= 1661 && year <= 1722) {
+        return [
+          '首都: 北京',
+          '皇帝: 康熙帝（在位1661-1722年）',
+          '政体: 帝政（満洲族王朝）',
+          '特徴: 清朝最盛期、三藩の乱鎮圧',
+          '人口: 約1億5000万人',
+        ];
+      }
+      if (year >= 1735 && year <= 1796) {
+        return [
+          '首都: 北京',
+          '皇帝: 乾隆帝（在位1735-1796年）',
+          '政体: 帝政（満洲族王朝）',
+          '特徴: 最大版図、文化の黄金期',
+          '人口: 約3億人',
+        ];
+      }
+      if (year >= 1644 && year <= 1661) {
+        return [
+          '首都: 北京',
+          '皇帝: 順治帝（在位1644-1661年）',
+          '政体: 帝政（満洲族王朝）',
+          '摂政: ドルゴン（〜1650年）',
+          '状況: 中国統一戦争中',
+        ];
+      }
+      return ['首都: 北京', '政体: 帝政（満洲族王朝）', '民族: 満洲族支配'];
+    },
     events: [
       { year: 1644, event: '北京入城、中国支配開始' },
       { year: 1661, event: '康熙帝即位' },
@@ -196,8 +224,18 @@ const nationData = {
   },
   'Qing Empire': {
     name: '清',
-    capital: '北京',
-    type: '帝政',
+    facts: (year) => {
+      if (year >= 1839 && year <= 1861) {
+        return [
+          '首都: 北京',
+          '皇帝: 道光帝/咸豊帝',
+          '政体: 帝政',
+          '危機: アヘン戦争、太平天国の乱',
+          '状況: 西洋列強の圧力下',
+        ];
+      }
+      return ['首都: 北京', '政体: 帝政', '民族: 満洲族支配'];
+    },
     events: [
       { year: 1644, event: '北京入城' },
       { year: 1839, event: 'アヘン戦争開始' },
@@ -242,8 +280,27 @@ const nationData = {
   },
   'Safavid Empire': {
     name: 'サファヴィー朝',
-    capital: 'イスファハーン',
-    type: '王政',
+    facts: (year) => {
+      if (year >= 1588 && year <= 1629) {
+        return [
+          '首都: イスファハーン',
+          '君主: アッバース1世（在位1588-1629年）',
+          '政体: シャー制（王政）',
+          '宗教: シーア派イスラム教（国教）',
+          '特徴: 最盛期、「世界の半分」と称された首都',
+        ];
+      }
+      if (year >= 1642 && year <= 1666) {
+        return [
+          '首都: イスファハーン',
+          '君主: アッバース2世（在位1642-1666年）',
+          '政体: シャー制（王政）',
+          '宗教: シーア派イスラム教（国教）',
+          '交易: シルクロード貿易の要衝',
+        ];
+      }
+      return ['首都: イスファハーン', '政体: シャー制（王政）', '宗教: シーア派イスラム教'];
+    },
     events: [
       { year: 1501, event: 'イスマーイール1世が建国' },
       { year: 1588, event: 'アッバース1世即位、最盛期へ' },
@@ -299,8 +356,35 @@ const nationData = {
   },
   'Ottoman Empire': {
     name: 'オスマン帝国',
-    capital: 'イスタンブール',
-    type: 'スルタン制',
+    facts: (year) => {
+      if (year >= 1520 && year <= 1566) {
+        return [
+          '首都: イスタンブール',
+          '君主: スレイマン1世（在位1520-1566年）',
+          '政体: スルタン制',
+          '別称: 「壮麗帝」の治世、最盛期',
+          '領土: バルカン半島、中東、北アフリカ',
+        ];
+      }
+      if (year >= 1648 && year <= 1687) {
+        return [
+          '首都: イスタンブール',
+          '君主: メフメト4世（在位1648-1687年）',
+          '政体: スルタン制',
+          '宰相: キョプリュリュ家による改革期',
+          '領土: バルカン半島、中東、北アフリカ',
+        ];
+      }
+      if (year >= 1876 && year <= 1909) {
+        return [
+          '首都: イスタンブール',
+          '君主: アブデュルハミト2世（在位1876-1909年）',
+          '政体: 専制君主制',
+          '状況: 「瀕死の病人」と呼ばれる衰退期',
+        ];
+      }
+      return ['首都: イスタンブール', '政体: スルタン制', '宗教: イスラム教スンナ派'];
+    },
     events: [
       { year: 1299, event: 'オスマン1世が建国' },
       { year: 1453, event: 'コンスタンティノープル征服' },
@@ -338,8 +422,36 @@ const nationData = {
   },
   'Mughal Empire': {
     name: 'ムガル帝国',
-    capital: 'デリー/アーグラ',
-    type: '帝政',
+    facts: (year) => {
+      if (year >= 1556 && year <= 1605) {
+        return [
+          '首都: アーグラ/ファテープル・シークリー',
+          '君主: アクバル大帝（在位1556-1605年）',
+          '政体: 帝政',
+          '特徴: 宗教寛容政策、ヒンドゥーとの融和',
+          '人口: 約1億人',
+        ];
+      }
+      if (year >= 1628 && year <= 1658) {
+        return [
+          '首都: アーグラ',
+          '君主: シャー・ジャハーン（在位1628-1658年）',
+          '政体: 帝政',
+          '建築: タージ・マハル建設（1632-1653年）',
+          '人口: 約1億人',
+        ];
+      }
+      if (year >= 1658 && year <= 1707) {
+        return [
+          '首都: デリー',
+          '君主: アウラングゼーブ（在位1658-1707年）',
+          '政体: 帝政',
+          '特徴: 最大版図達成、イスラム正統主義',
+          '領土: インド亜大陸のほぼ全域',
+        ];
+      }
+      return ['首都: デリー/アーグラ', '政体: 帝政', '宗教: イスラム教'];
+    },
     events: [
       { year: 1526, event: 'バーブルが建国' },
       { year: 1556, event: 'アクバル即位' },
@@ -396,17 +508,33 @@ const nationData = {
   },
   France: {
     name: 'フランス',
-    capital: 'パリ',
-    type: '共和制',
+    facts: (year) => {
+      if (year >= 1643 && year <= 1715) {
+        return [
+          '首都: パリ',
+          '君主: ルイ14世（在位1643-1715年）',
+          '政体: 絶対王政',
+          '宰相: マザラン枢機卿（〜1661年）',
+          '人口: 約2000万人',
+        ];
+      }
+      if (year >= 1958) {
+        return ['首都: パリ', '政体: 共和制', '大統領: 第五共和制（1958年〜）'];
+      }
+      if (year >= 1792 && year < 1804) {
+        return ['首都: パリ', '政体: 共和制（第一共和政）'];
+      }
+      return ['首都: パリ', '政体: 王政/共和制'];
+    },
     events: [
+      { year: 1643, event: 'ルイ14世即位' },
       { year: 1789, event: 'フランス革命' },
       { year: 1958, event: '第五共和制成立' },
     ],
   },
   'Kingdom of France': {
     name: 'フランス王国',
-    capital: 'パリ',
-    type: '王政',
+    facts: ['首都: パリ', '政体: 王政'],
     events: [
       { year: 987, event: 'カペー朝成立' },
       { year: 1337, event: '百年戦争開始' },
@@ -415,8 +543,7 @@ const nationData = {
   },
   England: {
     name: 'イングランド王国',
-    capital: 'ロンドン',
-    type: '王政',
+    facts: ['首都: ロンドン', '政体: 王政'],
     events: [
       { year: 1066, event: 'ノルマン征服' },
       { year: 1215, event: 'マグナカルタ制定' },
@@ -425,8 +552,17 @@ const nationData = {
   },
   'England and Ireland': {
     name: 'イングランド・アイルランド',
-    capital: 'ロンドン',
-    type: '王政/共和制',
+    facts: (year) => {
+      if (year === 1650) {
+        return [
+          '首都: ロンドン',
+          '政体: 共和制（コモンウェルス）',
+          '指導者: オリバー・クロムウェル',
+          '備考: ピューリタン革命後の共和制期',
+        ];
+      }
+      return ['首都: ロンドン', '政体: 王政/共和制'];
+    },
     events: [
       { year: 1649, event: 'チャールズ1世処刑、共和制開始' },
       { year: 1653, event: 'クロムウェルが護国卿に就任' },
@@ -444,8 +580,25 @@ const nationData = {
   },
   Spain: {
     name: 'スペイン王国',
-    capital: 'マドリード',
-    type: '王政',
+    facts: (year) => {
+      if (year >= 1621 && year <= 1665) {
+        return [
+          '首都: マドリード',
+          '君主: フェリペ4世（在位1621-1665年）',
+          '政体: 絶対王政',
+          '植民地: 中南米、フィリピン、ネーデルラント南部',
+        ];
+      }
+      if (year >= 1556 && year <= 1598) {
+        return [
+          '首都: マドリード',
+          '君主: フェリペ2世（在位1556-1598年）',
+          '政体: 絶対王政',
+          '植民地: 中南米、フィリピン、ポルトガル（1580-1640）',
+        ];
+      }
+      return ['首都: マドリード', '政体: 王政'];
+    },
     events: [
       { year: 1469, event: 'カスティーリャとアラゴンの統合' },
       { year: 1492, event: 'グラナダ陥落、新大陸発見' },
@@ -607,8 +760,27 @@ const nationData = {
   },
   'Dutch Republic': {
     name: 'ネーデルラント連邦共和国',
-    capital: 'アムステルダム',
-    type: '共和制',
+    facts: (year) => {
+      if (year >= 1625 && year <= 1650) {
+        return [
+          '首都: ハーグ（政治）/アムステルダム（経済）',
+          '政体: 連邦共和制',
+          '総督: フレデリック・ヘンドリック（〜1647年）',
+          '特徴: 「オランダ黄金時代」',
+          '経済: 世界貿易の中心、VOC（東インド会社）',
+        ];
+      }
+      if (year >= 1650 && year <= 1672) {
+        return [
+          '首都: ハーグ（政治）/アムステルダム（経済）',
+          '政体: 連邦共和制（無総督時代）',
+          '指導者: ヨハン・デ・ウィット（大年金官）',
+          '特徴: 「真の自由」時代',
+          '経済: 世界貿易・金融の中心',
+        ];
+      }
+      return ['首都: アムステルダム', '政体: 連邦共和制', '経済: 海上貿易大国'];
+    },
     events: [
       { year: 1581, event: 'スペインから独立宣言' },
       { year: 1602, event: 'オランダ東インド会社設立' },
@@ -638,8 +810,36 @@ const nationData = {
   // Japanese
   'Tokugawa Shogunate': {
     name: '江戸幕府',
-    capital: '江戸',
-    type: '幕藩体制',
+    facts: (year) => {
+      if (year >= 1603 && year <= 1605) {
+        return [
+          '首都: 江戸',
+          '将軍: 徳川家康（初代、在職1603-1605年）',
+          '政体: 幕藩体制',
+          '天皇: 後陽成天皇',
+          '状況: 幕府創設期',
+        ];
+      }
+      if (year >= 1623 && year <= 1651) {
+        return [
+          '首都: 江戸',
+          '将軍: 徳川家光（3代、在職1623-1651年）',
+          '政体: 幕藩体制',
+          '政策: 鎖国体制確立（1639年）',
+          '人口: 約1200万人',
+        ];
+      }
+      if (year >= 1651 && year <= 1680) {
+        return [
+          '首都: 江戸',
+          '将軍: 徳川家綱（4代、在職1651-1680年）',
+          '政体: 幕藩体制',
+          '状況: 文治政治への転換',
+          '人口: 約2500万人',
+        ];
+      }
+      return ['首都: 江戸', '政体: 幕藩体制', '対外政策: 鎖国（長崎出島のみ開港）'];
+    },
     events: [
       { year: 1603, event: '徳川家康が征夷大将軍に就任' },
       { year: 1639, event: '鎖国体制確立' },
@@ -1020,6 +1220,32 @@ function scorePriority(name) {
   if (name.includes('Caliphate')) score += 8;
   if (name.includes('Shogunate')) score += 7;
 
+  // Very high priority: exact major powers (these should always appear)
+  const veryHighPriority = [
+    'France',
+    'Spain',
+    'England',
+    'Portugal',
+    'Sweden',
+    'Prussia',
+    'Korea',
+    'Japan',
+    'Ethiopia',
+    'Dutch Republic',
+  ];
+  for (const kw of veryHighPriority) {
+    // Exact match gets highest priority
+    if (name === kw) {
+      score += 20;
+      break;
+    }
+    // Partial match gets lower priority
+    if (name.startsWith(kw + ' ') || name.includes(kw)) {
+      score += 12;
+      break;
+    }
+  }
+
   // High priority specific names
   const highPriority = [
     'Roman',
@@ -1032,16 +1258,10 @@ function scorePriority(name) {
     'Ming',
     'Qing',
     'Manchu',
-    'France',
-    'England',
-    'Spain',
-    'Portugal',
     'Russia',
-    'Prussia',
     'Austria',
     'German',
     'United States',
-    'Japan',
     'China',
     'India',
     'Mughal',
@@ -1051,8 +1271,8 @@ function scorePriority(name) {
     'Britain',
     'British',
     'Dutch',
-    'Sweden',
     'Poland',
+    'Tokugawa',
   ];
 
   for (const kw of highPriority) {
@@ -1086,15 +1306,30 @@ function getKeyEvents(name) {
   return data?.events || [];
 }
 
+// Get facts for a nation (supports both old and new format)
+function getFacts(name, year) {
+  const data = nationData[name];
+  if (!data) return ['首都: 不明', '政体: 不明'];
+
+  // New format: facts as array or function
+  if (data.facts) {
+    if (typeof data.facts === 'function') {
+      return data.facts(year);
+    }
+    return data.facts;
+  }
+
+  // Old format: capital and type
+  const capital = data.capital || '不明';
+  const govType = data.type || '不明';
+  return [`首都: ${capital}`, `政体: ${govType}`];
+}
+
 // Generate description JSON
 function generateDescription(name, year) {
   const data = nationData[name];
   const japaneseName = data?.name || name;
-  const capital = data?.capital || '不明';
-  const govType = data?.type || '不明';
-
-  const facts = [`首都: ${capital}`, `政体: ${govType}`];
-
+  const facts = getFacts(name, year);
   const keyEvents = getKeyEvents(name);
 
   return {
@@ -1123,8 +1358,8 @@ async function main() {
     const scored = nations.map((n) => ({ name: n, score: scorePriority(n) }));
     scored.sort((a, b) => b.score - a.score);
 
-    // Take top 5-10 nations
-    const topNations = scored.slice(0, 8).map((s) => s.name);
+    // Take top 15 nations to include more major powers
+    const topNations = scored.slice(0, 15).map((s) => s.name);
 
     // Create year directory
     const yearDir = path.join(outputDir, yearStr);

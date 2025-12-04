@@ -1,0 +1,17 @@
+{
+  "id": "Tiahuanaco_Empire_1000",
+  "name": "ティワナク帝国",
+  "year": 1000,
+  "facts": ["首都: ティワナク", "政体: 帝政"],
+  "keyEvents": [
+    {
+      "year": 300,
+      "event": "帝国成立"
+    },
+    {
+      "year": 1000,
+      "event": "崩壊"
+    }
+  ],
+  "aiGenerated": true
+}
