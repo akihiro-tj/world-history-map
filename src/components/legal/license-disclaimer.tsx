@@ -155,6 +155,16 @@ export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
                 </span>{' '}
                 の下で提供されています。
               </p>
+              <p className="mt-2 text-sm text-gray-200">
+                <a
+                  href="/LICENSE-data.txt"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-blue-400 hover:underline"
+                >
+                  ライセンス全文を見る
+                </a>
+              </p>
             </div>
           </section>
 
