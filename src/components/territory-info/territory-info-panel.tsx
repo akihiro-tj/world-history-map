@@ -175,7 +175,7 @@ export function TerritoryInfoPanel() {
         )}
 
         {/* Related Years */}
-        {description.relatedYears.length > 0 && (
+        {description.relatedYears && description.relatedYears.length > 0 && (
           <div data-testid="related-years">
             <h3 className="mb-2 text-sm font-semibold text-white">関連する年代</h3>
             <div className="flex flex-wrap gap-2">

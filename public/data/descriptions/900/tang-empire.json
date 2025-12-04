@@ -1,0 +1,21 @@
+{
+  "id": "Tang_Empire_900",
+  "name": "唐",
+  "year": 900,
+  "facts": ["首都: 長安", "政体: 帝政"],
+  "keyEvents": [
+    {
+      "year": 618,
+      "event": "李淵が建国"
+    },
+    {
+      "year": 690,
+      "event": "則天武后が即位"
+    },
+    {
+      "year": 755,
+      "event": "安史の乱"
+    }
+  ],
+  "aiGenerated": true
+}

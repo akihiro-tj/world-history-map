@@ -1,0 +1,21 @@
+{
+  "id": "Roman_Republic_-300",
+  "name": "ローマ共和国",
+  "year": -300,
+  "facts": ["首都: ローマ", "政体: 共和制"],
+  "keyEvents": [
+    {
+      "year": -509,
+      "event": "王政廃止、共和制開始"
+    },
+    {
+      "year": -264,
+      "event": "第一次ポエニ戦争開始"
+    },
+    {
+      "year": -27,
+      "event": "帝政へ移行"
+    }
+  ],
+  "aiGenerated": true
+}

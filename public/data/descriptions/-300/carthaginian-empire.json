@@ -1,0 +1,21 @@
+{
+  "id": "Carthaginian_Empire_-300",
+  "name": "カルタゴ",
+  "year": -300,
+  "facts": ["首都: カルタゴ", "政体: 共和制"],
+  "keyEvents": [
+    {
+      "year": -264,
+      "event": "第一次ポエニ戦争開始"
+    },
+    {
+      "year": -218,
+      "event": "ハンニバルのアルプス越え"
+    },
+    {
+      "year": -146,
+      "event": "ローマにより滅亡"
+    }
+  ],
+  "aiGenerated": true
+}

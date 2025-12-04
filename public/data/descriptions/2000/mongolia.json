@@ -1,0 +1,17 @@
+{
+  "id": "Mongolia_2000",
+  "name": "モンゴル",
+  "year": 2000,
+  "facts": ["首都: ウランバートル", "政体: 共和制"],
+  "keyEvents": [
+    {
+      "year": 1924,
+      "event": "モンゴル人民共和国成立"
+    },
+    {
+      "year": 1990,
+      "event": "民主化"
+    }
+  ],
+  "aiGenerated": true
+}

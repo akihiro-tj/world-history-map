@@ -69,8 +69,8 @@ export interface TerritoryDescription {
   /** Key events (recommended 3-5 items, sorted by year) */
   keyEvents: KeyEvent[];
 
-  /** Related years (for year link navigation) */
-  relatedYears: number[];
+  /** Related years (for year link navigation) - optional */
+  relatedYears?: number[];
 
   /** AI-generated flag (always true) */
   aiGenerated: true;

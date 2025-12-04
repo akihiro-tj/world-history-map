@@ -1,0 +1,21 @@
+{
+  "id": "Sasanian_Empire_600",
+  "name": "ササン朝ペルシア",
+  "year": 600,
+  "facts": ["首都: クテシフォン", "政体: 帝政"],
+  "keyEvents": [
+    {
+      "year": 224,
+      "event": "アルダシール1世が建国"
+    },
+    {
+      "year": 260,
+      "event": "ローマ皇帝ウァレリアヌスを捕虜に"
+    },
+    {
+      "year": 651,
+      "event": "アラブに滅ぼされる"
+    }
+  ],
+  "aiGenerated": true
+}

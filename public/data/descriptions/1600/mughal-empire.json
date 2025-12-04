@@ -1,0 +1,21 @@
+{
+  "id": "Mughal_Empire_1600",
+  "name": "ムガル帝国",
+  "year": 1600,
+  "facts": ["首都: デリー/アーグラ", "政体: 帝政"],
+  "keyEvents": [
+    {
+      "year": 1526,
+      "event": "バーブルが建国"
+    },
+    {
+      "year": 1556,
+      "event": "アクバル即位"
+    },
+    {
+      "year": 1658,
+      "event": "アウラングゼーブ即位、最大版図へ"
+    }
+  ],
+  "aiGenerated": true
+}

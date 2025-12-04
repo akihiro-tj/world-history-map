@@ -1,0 +1,21 @@
+{
+  "id": "Roman_Empire_-1",
+  "name": "ローマ帝国",
+  "year": -1,
+  "facts": ["首都: ローマ", "政体: 帝政"],
+  "keyEvents": [
+    {
+      "year": -27,
+      "event": "アウグストゥスが初代皇帝に即位"
+    },
+    {
+      "year": 117,
+      "event": "トラヤヌス帝治下で最大版図に達する"
+    },
+    {
+      "year": 395,
+      "event": "東西に分裂"
+    }
+  ],
+  "aiGenerated": true
+}

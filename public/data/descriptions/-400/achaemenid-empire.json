@@ -1,0 +1,21 @@
+{
+  "id": "Achaemenid_Empire_-400",
+  "name": "アケメネス朝ペルシア",
+  "year": -400,
+  "facts": ["首都: ペルセポリス", "政体: 帝政"],
+  "keyEvents": [
+    {
+      "year": -550,
+      "event": "キュロス2世が建国"
+    },
+    {
+      "year": -490,
+      "event": "マラトンの戦い"
+    },
+    {
+      "year": -330,
+      "event": "アレクサンドロスにより滅亡"
+    }
+  ],
+  "aiGenerated": true
+}

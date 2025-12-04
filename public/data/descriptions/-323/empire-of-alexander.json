@@ -1,0 +1,21 @@
+{
+  "id": "Empire_of_Alexander_-323",
+  "name": "アレクサンドロス帝国",
+  "year": -323,
+  "facts": ["首都: バビロン", "政体: 帝政"],
+  "keyEvents": [
+    {
+      "year": -334,
+      "event": "ペルシア遠征開始"
+    },
+    {
+      "year": -331,
+      "event": "ガウガメラの戦い"
+    },
+    {
+      "year": -323,
+      "event": "アレクサンドロス死去、帝国分裂"
+    }
+  ],
+  "aiGenerated": true
+}

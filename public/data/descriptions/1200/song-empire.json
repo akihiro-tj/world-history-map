@@ -1,0 +1,17 @@
+{
+  "id": "Song_Empire_1200",
+  "name": "宋",
+  "year": 1200,
+  "facts": ["首都: 開封", "政体: 帝政"],
+  "keyEvents": [
+    {
+      "year": 960,
+      "event": "趙匡胤が建国"
+    },
+    {
+      "year": 1127,
+      "event": "靖康の変"
+    }
+  ],
+  "aiGenerated": true
+}

@@ -1,0 +1,13 @@
+{
+  "id": "Rome_-500",
+  "name": "ローマ",
+  "year": -500,
+  "facts": ["首都: ローマ", "政体: 王政/共和制"],
+  "keyEvents": [
+    {
+      "year": -753,
+      "event": "伝承上のローマ建国"
+    }
+  ],
+  "aiGenerated": true
+}

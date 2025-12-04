@@ -1,0 +1,21 @@
+{
+  "id": "Mongol_Empire_1200",
+  "name": "モンゴル帝国",
+  "year": 1200,
+  "facts": ["首都: カラコルム", "政体: ハーン制"],
+  "keyEvents": [
+    {
+      "year": 1206,
+      "event": "チンギス・ハーンが即位"
+    },
+    {
+      "year": 1258,
+      "event": "バグダード攻略"
+    },
+    {
+      "year": 1279,
+      "event": "南宋を滅ぼす"
+    }
+  ],
+  "aiGenerated": true
+}

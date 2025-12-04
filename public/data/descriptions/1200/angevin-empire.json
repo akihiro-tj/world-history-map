@@ -1,0 +1,17 @@
+{
+  "id": "Angevin_Empire_1200",
+  "name": "アンジュー帝国",
+  "year": 1200,
+  "facts": ["首都: ロンドン/パリ", "政体: 王政"],
+  "keyEvents": [
+    {
+      "year": 1154,
+      "event": "ヘンリー2世即位"
+    },
+    {
+      "year": 1189,
+      "event": "リチャード1世即位"
+    }
+  ],
+  "aiGenerated": true
+}

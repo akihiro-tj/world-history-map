@@ -1,0 +1,17 @@
+{
+  "id": "Mongolia_1960",
+  "name": "モンゴル",
+  "year": 1960,
+  "facts": ["首都: ウランバートル", "政体: 共和制"],
+  "keyEvents": [
+    {
+      "year": 1924,
+      "event": "モンゴル人民共和国成立"
+    },
+    {
+      "year": 1990,
+      "event": "民主化"
+    }
+  ],
+  "aiGenerated": true
+}

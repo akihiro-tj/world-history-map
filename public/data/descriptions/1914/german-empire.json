@@ -1,0 +1,21 @@
+{
+  "id": "German_Empire_1914",
+  "name": "ドイツ帝国",
+  "year": 1914,
+  "facts": ["首都: ベルリン", "政体: 帝政"],
+  "keyEvents": [
+    {
+      "year": 1871,
+      "event": "ヴィルヘルム1世が皇帝に即位"
+    },
+    {
+      "year": 1914,
+      "event": "第一次世界大戦開戦"
+    },
+    {
+      "year": 1918,
+      "event": "帝政廃止"
+    }
+  ],
+  "aiGenerated": true
+}

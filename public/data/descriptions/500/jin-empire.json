@@ -1,0 +1,17 @@
+{
+  "id": "Jin_Empire_500",
+  "name": "晋",
+  "year": 500,
+  "facts": ["首都: 洛陽", "政体: 帝政"],
+  "keyEvents": [
+    {
+      "year": 265,
+      "event": "司馬炎が建国"
+    },
+    {
+      "year": 280,
+      "event": "三国統一"
+    }
+  ],
+  "aiGenerated": true
+}

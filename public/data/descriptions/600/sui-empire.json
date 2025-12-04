@@ -1,0 +1,21 @@
+{
+  "id": "Sui_Empire_600",
+  "name": "隋",
+  "year": 600,
+  "facts": ["首都: 大興城", "政体: 帝政"],
+  "keyEvents": [
+    {
+      "year": 581,
+      "event": "楊堅が建国"
+    },
+    {
+      "year": 589,
+      "event": "南北統一"
+    },
+    {
+      "year": 618,
+      "event": "滅亡、唐に禅譲"
+    }
+  ],
+  "aiGenerated": true
+}

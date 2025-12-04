@@ -1,0 +1,21 @@
+{
+  "id": "Ottoman_Empire_1500",
+  "name": "オスマン帝国",
+  "year": 1500,
+  "facts": ["首都: イスタンブール", "政体: スルタン制"],
+  "keyEvents": [
+    {
+      "year": 1299,
+      "event": "オスマン1世が建国"
+    },
+    {
+      "year": 1453,
+      "event": "コンスタンティノープル征服"
+    },
+    {
+      "year": 1922,
+      "event": "滅亡"
+    }
+  ],
+  "aiGenerated": true
+}

@@ -1,0 +1,21 @@
+{
+  "id": "Umayyad_Caliphate_700",
+  "name": "ウマイヤ朝",
+  "year": 700,
+  "facts": ["首都: ダマスカス", "政体: カリフ制"],
+  "keyEvents": [
+    {
+      "year": 661,
+      "event": "ムアーウィヤが建国"
+    },
+    {
+      "year": 711,
+      "event": "イベリア半島征服開始"
+    },
+    {
+      "year": 750,
+      "event": "アッバース朝により滅亡"
+    }
+  ],
+  "aiGenerated": true
+}

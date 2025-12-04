@@ -1,0 +1,17 @@
+{
+  "id": "France_1945",
+  "name": "フランス",
+  "year": 1945,
+  "facts": ["首都: パリ", "政体: 共和制"],
+  "keyEvents": [
+    {
+      "year": 1789,
+      "event": "フランス革命"
+    },
+    {
+      "year": 1958,
+      "event": "第五共和制成立"
+    }
+  ],
+  "aiGenerated": true
+}

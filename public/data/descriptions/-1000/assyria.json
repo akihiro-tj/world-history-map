@@ -1,0 +1,17 @@
+{
+  "id": "Assyria_-1000",
+  "name": "アッシリア",
+  "year": -1000,
+  "facts": ["首都: ニネヴェ", "政体: 帝政"],
+  "keyEvents": [
+    {
+      "year": -911,
+      "event": "新アッシリア帝国成立"
+    },
+    {
+      "year": -612,
+      "event": "ニネヴェ陥落、滅亡"
+    }
+  ],
+  "aiGenerated": true
+}

@@ -1,0 +1,21 @@
+{
+  "id": "Safavid_Empire_1600",
+  "name": "サファヴィー朝",
+  "year": 1600,
+  "facts": ["首都: イスファハーン", "政体: 王政"],
+  "keyEvents": [
+    {
+      "year": 1501,
+      "event": "イスマーイール1世が建国"
+    },
+    {
+      "year": 1588,
+      "event": "アッバース1世即位、最盛期へ"
+    },
+    {
+      "year": 1736,
+      "event": "滅亡"
+    }
+  ],
+  "aiGenerated": true
+}

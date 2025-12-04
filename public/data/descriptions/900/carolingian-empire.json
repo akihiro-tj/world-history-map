@@ -1,0 +1,17 @@
+{
+  "id": "Carolingian_Empire_900",
+  "name": "カロリング帝国",
+  "year": 900,
+  "facts": ["首都: アーヘン", "政体: 帝政"],
+  "keyEvents": [
+    {
+      "year": 800,
+      "event": "カール大帝がローマ皇帝として戴冠"
+    },
+    {
+      "year": 843,
+      "event": "ヴェルダン条約で分裂"
+    }
+  ],
+  "aiGenerated": true
+}

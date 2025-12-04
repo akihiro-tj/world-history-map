@@ -1,0 +1,21 @@
+{
+  "id": "Byzantine_Empire_1200",
+  "name": "ビザンツ帝国",
+  "year": 1200,
+  "facts": ["首都: コンスタンティノープル", "政体: 帝政"],
+  "keyEvents": [
+    {
+      "year": 527,
+      "event": "ユスティニアヌス1世が即位"
+    },
+    {
+      "year": 1054,
+      "event": "東西教会分裂"
+    },
+    {
+      "year": 1453,
+      "event": "コンスタンティノープル陥落"
+    }
+  ],
+  "aiGenerated": true
+}
