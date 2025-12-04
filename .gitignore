@@ -44,3 +44,6 @@ coverage
 # Storybook
 *storybook.log
 storybook-static
+
+# Cloudflare
+.wrangler

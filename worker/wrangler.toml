@@ -1,0 +1,12 @@
+name = "world-history-map-tiles"
+main = "src/index.ts"
+compatibility_date = "2025-12-01"
+minify = true
+
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "world-history-map-tiles"
+
+[vars]
+# Comma-separated list of allowed origins (supports wildcard subdomain pattern)
+ALLOWED_ORIGINS = "https://world-history-map.pages.dev,https://*.world-history-map.pages.dev"
