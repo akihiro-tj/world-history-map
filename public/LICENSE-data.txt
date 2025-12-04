@@ -1,0 +1,35 @@
+Map Data License and Attribution
+=================================
+
+This application uses historical map data from the following source:
+
+Source Project
+--------------
+Name: historical-basemaps
+Author: André Ourednik
+Repository: https://github.com/aourednik/historical-basemaps
+
+License
+-------
+The map data is licensed under the GNU General Public License v3.0 (GPL-3.0).
+
+Full license text: https://www.gnu.org/licenses/gpl-3.0.en.html
+
+Summary of GPL-3.0
+------------------
+- You are free to use, modify, and distribute this data
+- If you distribute modified versions, you must:
+  - Make the source available under GPL-3.0
+  - Include this license notice
+  - State your changes
+- No warranty is provided
+
+Attribution
+-----------
+When using this data, please credit:
+"Map data based on historical-basemaps by André Ourednik (GPL-3.0)"
+
+Contact
+-------
+For questions about the original data, please visit:
+https://github.com/aourednik/historical-basemaps
