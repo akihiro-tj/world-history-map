@@ -1,11 +1,23 @@
 {
   "id": "North_American_Pacifi_foraging,_hunting_and_fishing_peoples_-400",
-  "name": "North American Pacifi foraging, hunting and fishing peoples",
+  "name": "北米太平洋岸採集狩猟漁労民",
   "year": -400,
   "facts": [
-    "首都: 不明",
-    "政体: 不明"
+    "地域: 北米太平洋岸",
+    "生活: 漁労・狩猟・採集",
+    "資源: サケ、海洋哺乳類、堅果類",
+    "文化: トーテムポール、ポトラッチ",
+    "社会: 階層社会"
   ],
-  "keyEvents": [],
+  "keyEvents": [
+    {
+      "year": -10000,
+      "event": "太平洋岸への人類到達"
+    },
+    {
+      "year": -3000,
+      "event": "定住化の進展"
+    }
+  ],
   "aiGenerated": true
 }

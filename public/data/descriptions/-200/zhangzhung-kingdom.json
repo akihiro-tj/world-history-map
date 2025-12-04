@@ -1,11 +1,27 @@
 {
   "id": "Zhangzhung_Kingdom_-200",
-  "name": "Zhangzhung Kingdom",
+  "name": "象雄王国",
   "year": -200,
   "facts": [
-    "首都: 不明",
-    "政体: 不明"
+    "首都: キュンルン",
+    "政体: 王政",
+    "宗教: ボン教",
+    "領土: チベット高原西部・中央部",
+    "文化: 象雄文字、独自の暦法"
   ],
-  "keyEvents": [],
+  "keyEvents": [
+    {
+      "year": -1800,
+      "event": "象雄王国形成（伝承）"
+    },
+    {
+      "year": -500,
+      "event": "ボン教の体系化"
+    },
+    {
+      "year": 645,
+      "event": "吐蕃に併合される"
+    }
+  ],
   "aiGenerated": true
 }

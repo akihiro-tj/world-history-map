@@ -1,11 +1,22 @@
 {
   "id": "Bosporian_Kingdom_-1",
-  "name": "Bosporian Kingdom",
+  "name": "ボスポロス王国",
   "year": -1,
   "facts": [
-    "首都: 不明",
-    "政体: 不明"
+    "首都: パンティカパイオン",
+    "地域: クリミア半島、黒海北岸",
+    "政体: 王政（ギリシャ系）",
+    "経済: 穀物貿易"
   ],
-  "keyEvents": [],
+  "keyEvents": [
+    {
+      "year": -480,
+      "event": "王国成立"
+    },
+    {
+      "year": 370,
+      "event": "フン族により滅亡"
+    }
+  ],
   "aiGenerated": true
 }

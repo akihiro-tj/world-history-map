@@ -1,11 +1,23 @@
 {
   "id": "Fourche_Maline_Culture_200",
-  "name": "Fourche Maline Culture",
+  "name": "フォーシュ・マリーン文化",
   "year": 200,
   "facts": [
-    "首都: 不明",
-    "政体: 不明"
+    "地域: 北アメリカ南部（現オクラホマ、アーカンソー）",
+    "時代: 先史時代（前300年〜後800年）",
+    "生活: 狩猟採集・初期農耕",
+    "特徴: ウッドランド期の文化",
+    "遺跡: 貝塚・土器"
   ],
-  "keyEvents": [],
+  "keyEvents": [
+    {
+      "year": -300,
+      "event": "文化形成期"
+    },
+    {
+      "year": 800,
+      "event": "カドー文化への移行"
+    }
+  ],
   "aiGenerated": true
 }
