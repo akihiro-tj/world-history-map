@@ -93,7 +93,7 @@ Territory description JSON files are stored in:
 public/data/descriptions/{year}/{kebab-case-name}.json
 ```
 
-**Important**: The filename must match the territory identifier from PMTiles, converted to kebab-case. The identifier is `SUBJECTO` attribute (preferred) or `NAME` attribute (fallback) - see `src/components/map/map-view.tsx:154-155`.
+**Important**: The filename must match the territory identifier from PMTiles, converted to kebab-case. The identifier is `NAME` attribute (preferred) or `SUBJECTO` attribute (fallback) - see `src/components/map/map-view.tsx:154-155`.
 
 ### Data Schema
 

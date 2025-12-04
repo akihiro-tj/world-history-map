@@ -1,0 +1,20 @@
+{
+  "id": "Japan_1815",
+  "name": "日本",
+  "year": 1815,
+  "facts": [
+    "首都: 東京",
+    "政体: 立憲君主制"
+  ],
+  "keyEvents": [
+    {
+      "year": 1947,
+      "event": "日本国憲法施行"
+    },
+    {
+      "year": 1964,
+      "event": "東京オリンピック開催"
+    }
+  ],
+  "aiGenerated": true
+}

@@ -1,0 +1,20 @@
+{
+  "id": "Kushan_Empire_100",
+  "name": "クシャーナ朝",
+  "year": 100,
+  "facts": [
+    "首都: プルシャプラ",
+    "政体: 帝政"
+  ],
+  "keyEvents": [
+    {
+      "year": 60,
+      "event": "建国"
+    },
+    {
+      "year": 127,
+      "event": "カニシカ王即位、最盛期へ"
+    }
+  ],
+  "aiGenerated": true
+}

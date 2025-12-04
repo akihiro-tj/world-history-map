@@ -1,0 +1,24 @@
+{
+  "id": "Hunnic_Empire_400",
+  "name": "フン帝国",
+  "year": 400,
+  "facts": [
+    "首都: 移動",
+    "政体: 部族連合"
+  ],
+  "keyEvents": [
+    {
+      "year": 434,
+      "event": "アッティラが王に"
+    },
+    {
+      "year": 451,
+      "event": "カタラウヌムの戦い"
+    },
+    {
+      "year": 453,
+      "event": "アッティラ死去、帝国崩壊"
+    }
+  ],
+  "aiGenerated": true
+}

@@ -1,0 +1,20 @@
+{
+  "id": "Srivijaya_Empire_1000",
+  "name": "シュリーヴィジャヤ王国",
+  "year": 1000,
+  "facts": [
+    "首都: パレンバン",
+    "政体: 王政"
+  ],
+  "keyEvents": [
+    {
+      "year": 650,
+      "event": "王国成立"
+    },
+    {
+      "year": 1025,
+      "event": "チョーラ朝に攻撃される"
+    }
+  ],
+  "aiGenerated": true
+}

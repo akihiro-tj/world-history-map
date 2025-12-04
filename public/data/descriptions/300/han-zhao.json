@@ -1,0 +1,16 @@
+{
+  "id": "Han_Zhao_300",
+  "name": "漢趙",
+  "year": 300,
+  "facts": [
+    "首都: 平陽",
+    "政体: 帝政"
+  ],
+  "keyEvents": [
+    {
+      "year": 304,
+      "event": "劉淵が建国"
+    }
+  ],
+  "aiGenerated": true
+}

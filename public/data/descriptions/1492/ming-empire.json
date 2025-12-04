@@ -1,0 +1,21 @@
+{
+  "id": "Ming_Empire_1492",
+  "name": "明",
+  "year": 1492,
+  "facts": [
+    "首都: 北京",
+    "政体: 帝政",
+    "特徴: 中国最後の漢民族王朝"
+  ],
+  "keyEvents": [
+    {
+      "year": 1368,
+      "event": "朱元璋が建国"
+    },
+    {
+      "year": 1421,
+      "event": "永楽帝が北京に遷都"
+    }
+  ],
+  "aiGenerated": true
+}

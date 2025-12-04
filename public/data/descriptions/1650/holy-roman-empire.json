@@ -1,0 +1,24 @@
+{
+  "id": "Holy_Roman_Empire_1650",
+  "name": "神聖ローマ帝国",
+  "year": 1650,
+  "facts": [
+    "首都: ウィーン",
+    "政体: 帝政（選挙王制）"
+  ],
+  "keyEvents": [
+    {
+      "year": 962,
+      "event": "オットー1世が皇帝に戴冠"
+    },
+    {
+      "year": 1618,
+      "event": "三十年戦争開始"
+    },
+    {
+      "year": 1806,
+      "event": "解体"
+    }
+  ],
+  "aiGenerated": true
+}

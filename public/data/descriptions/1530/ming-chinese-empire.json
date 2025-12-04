@@ -1,0 +1,20 @@
+{
+  "id": "Ming_Chinese_Empire_1530",
+  "name": "明",
+  "year": 1530,
+  "facts": [
+    "首都: 北京",
+    "政体: 帝政"
+  ],
+  "keyEvents": [
+    {
+      "year": 1368,
+      "event": "朱元璋が建国"
+    },
+    {
+      "year": 1405,
+      "event": "鄭和の大航海開始"
+    }
+  ],
+  "aiGenerated": true
+}
