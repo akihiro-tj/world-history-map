@@ -27,7 +27,9 @@ let cachedManifest: TilesManifest | null = null;
  * @returns Base URL (empty string for local, Worker URL for production)
  */
 export function getTilesBaseUrl(): string {
-  return import.meta.env.VITE_TILES_BASE_URL || '';
+  const url = import.meta.env.VITE_TILES_BASE_URL || '';
+  // Remove trailing slash to avoid double slashes in URLs
+  return url.replace(/\/+$/, '');
 }
 
 /**

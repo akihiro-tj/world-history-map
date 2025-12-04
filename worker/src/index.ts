@@ -55,6 +55,75 @@ const tilePath = (
 
 class KeyNotFoundError extends Error {}
 
+/**
+ * Get allowed origin from request
+ */
+function getAllowedOrigin(request: Request, env: Env): string {
+  const requestOrigin = request.headers.get('Origin');
+  if (typeof env.ALLOWED_ORIGINS === 'undefined' || !requestOrigin) {
+    return '';
+  }
+
+  for (const pattern of env.ALLOWED_ORIGINS.split(',')) {
+    if (pattern === '*') {
+      return requestOrigin;
+    }
+    if (pattern === requestOrigin) {
+      return requestOrigin;
+    }
+    // Support wildcard subdomain pattern (e.g., https://*.example.com)
+    if (pattern.includes('*')) {
+      const regex = new RegExp(`^${pattern.replace(/\./g, '\\.').replace('*', '[^.]+')}$`);
+      if (regex.test(requestOrigin)) {
+        return requestOrigin;
+      }
+    }
+  }
+  return '';
+}
+
+/**
+ * Handle manifest.json requests directly from R2
+ */
+async function handleManifest(
+  request: Request,
+  env: Env,
+  ctx: ExecutionContext,
+  cache: Cache,
+): Promise<Response> {
+  const allowedOrigin = getAllowedOrigin(request, env);
+
+  // Check cache first
+  const cached = await cache.match(request.url);
+  if (cached) {
+    const respHeaders = new Headers(cached.headers);
+    if (allowedOrigin) respHeaders.set('Access-Control-Allow-Origin', allowedOrigin);
+    respHeaders.set('Vary', 'Origin');
+    return new Response(cached.body, { headers: respHeaders, status: cached.status });
+  }
+
+  // Fetch from R2
+  const obj = await env.BUCKET.get('manifest.json');
+  if (!obj) {
+    return new Response('Manifest not found', { status: 404 });
+  }
+
+  const body = await obj.text();
+  const headers = new Headers();
+  headers.set('Content-Type', 'application/json');
+  headers.set('Cache-Control', 'public, max-age=300');
+
+  // Cache the response
+  const cacheable = new Response(body, { headers, status: 200 });
+  ctx.waitUntil(cache.put(request.url, cacheable.clone()));
+
+  // Add CORS headers for the actual response
+  if (allowedOrigin) headers.set('Access-Control-Allow-Origin', allowedOrigin);
+  headers.set('Vary', 'Origin');
+
+  return new Response(body, { headers, status: 200 });
+}
+
 async function nativeDecompress(buf: ArrayBuffer, compression: Compression): Promise<ArrayBuffer> {
   if (compression === Compression.None || compression === Compression.Unknown) {
     return buf;
@@ -117,36 +186,20 @@ export default {
     if (request.method.toUpperCase() === 'POST') return new Response(undefined, { status: 405 });
 
     const url = new URL(request.url);
-    const { ok, name, tile, ext } = tilePath(url.pathname);
-
     const cache = caches.default;
+
+    // Handle manifest.json directly from R2
+    if (url.pathname === '/manifest.json') {
+      return handleManifest(request, env, ctx, cache);
+    }
+
+    const { ok, name, tile, ext } = tilePath(url.pathname);
 
     if (!ok) {
       return new Response('Invalid URL', { status: 404 });
     }
 
-    let allowedOrigin = '';
-    const requestOrigin = request.headers.get('Origin');
-    if (typeof env.ALLOWED_ORIGINS !== 'undefined' && requestOrigin) {
-      for (const pattern of env.ALLOWED_ORIGINS.split(',')) {
-        if (pattern === '*') {
-          allowedOrigin = requestOrigin;
-          break;
-        }
-        if (pattern === requestOrigin) {
-          allowedOrigin = requestOrigin;
-          break;
-        }
-        // Support wildcard subdomain pattern (e.g., https://*.example.com)
-        if (pattern.includes('*')) {
-          const regex = new RegExp(`^${pattern.replace(/\./g, '\\.').replace('*', '[^.]+')}$`);
-          if (regex.test(requestOrigin)) {
-            allowedOrigin = requestOrigin;
-            break;
-          }
-        }
-      }
-    }
+    const allowedOrigin = getAllowedOrigin(request, env);
 
     const cached = await cache.match(request.url);
     if (cached) {
