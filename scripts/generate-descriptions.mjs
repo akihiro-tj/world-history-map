@@ -848,33 +848,206 @@ const nationData = {
   },
   Japan: {
     name: '日本',
-    capital: '東京',
-    type: '立憲君主制',
+    facts: (year) => {
+      if (year >= 794 && year <= 1185) {
+        return [
+          '首都: 平安京（京都）',
+          '天皇: 平安時代',
+          '政体: 律令制・摂関政治',
+          '特徴: 国風文化の発展',
+        ];
+      }
+      if (year >= 1945 && year <= 1952) {
+        return [
+          '首都: 東京',
+          '天皇: 昭和天皇',
+          '政体: 連合国占領下',
+          '総司令官: ダグラス・マッカーサー',
+          '状況: 戦後復興期',
+        ];
+      }
+      if (year >= 1960 && year <= 1989) {
+        return [
+          '首都: 東京',
+          '天皇: 昭和天皇',
+          '政体: 立憲君主制（象徴天皇制）',
+          '特徴: 高度経済成長',
+          '人口: 約1億人',
+        ];
+      }
+      if (year >= 1989) {
+        return [
+          '首都: 東京',
+          '天皇: 平成天皇/令和天皇',
+          '政体: 立憲君主制（象徴天皇制）',
+          '人口: 約1億2000万人',
+        ];
+      }
+      return ['首都: 東京', '政体: 立憲君主制'];
+    },
     events: [
       { year: 1947, event: '日本国憲法施行' },
       { year: 1964, event: '東京オリンピック開催' },
     ],
   },
+  'Japan (USA)': {
+    name: '日本（米国占領下）',
+    facts: [
+      '首都: 東京',
+      '天皇: 昭和天皇',
+      '政体: 連合国占領下',
+      '総司令官: ダグラス・マッカーサー',
+      '状況: 戦後復興・民主化改革',
+    ],
+    events: [
+      { year: 1945, event: '終戦、連合国占領開始' },
+      { year: 1946, event: '日本国憲法公布' },
+      { year: 1952, event: 'サンフランシスコ講和条約発効、主権回復' },
+    ],
+  },
+  'Imperial Japan': {
+    name: '大日本帝国',
+    facts: (year) => {
+      if (year >= 1868 && year <= 1912) {
+        return [
+          '首都: 東京',
+          '天皇: 明治天皇（在位1867-1912年）',
+          '政体: 立憲君主制',
+          '特徴: 明治維新、富国強兵',
+          '人口: 約3500万人→5000万人',
+        ];
+      }
+      if (year >= 1912 && year <= 1926) {
+        return [
+          '首都: 東京',
+          '天皇: 大正天皇（在位1912-1926年）',
+          '政体: 立憲君主制',
+          '特徴: 大正デモクラシー',
+        ];
+      }
+      return ['首都: 東京', '政体: 立憲君主制', '特徴: 近代化・帝国主義'];
+    },
+    events: [
+      { year: 1868, event: '明治維新' },
+      { year: 1894, event: '日清戦争' },
+      { year: 1904, event: '日露戦争' },
+    ],
+  },
   'Empire of Japan': {
     name: '大日本帝国',
-    capital: '東京',
-    type: '立憲君主制',
+    facts: (year) => {
+      if (year >= 1926 && year <= 1945) {
+        return [
+          '首都: 東京',
+          '天皇: 昭和天皇（在位1926-1989年）',
+          '政体: 立憲君主制',
+          '状況: 軍国主義・太平洋戦争',
+        ];
+      }
+      return ['首都: 東京', '天皇: 昭和天皇', '政体: 立憲君主制'];
+    },
     events: [
       { year: 1868, event: '明治維新' },
       { year: 1889, event: '大日本帝国憲法発布' },
       { year: 1945, event: '敗戦、連合国占領開始' },
     ],
   },
+  'Imperial Japan (Fujiwara)': {
+    name: '日本（摂関時代）',
+    facts: (year) => {
+      if (year >= 967 && year <= 1068) {
+        return [
+          '首都: 平安京（京都）',
+          '政体: 摂関政治',
+          '摂政/関白: 藤原氏',
+          '特徴: 藤原氏全盛期、国風文化',
+          '文化: 源氏物語、枕草子',
+        ];
+      }
+      return ['首都: 平安京', '政体: 摂関政治', '実権: 藤原氏'];
+    },
+    events: [
+      { year: 794, event: '平安京遷都' },
+      { year: 1016, event: '藤原道長が摂政就任' },
+      { year: 1086, event: '院政開始' },
+    ],
+  },
+  'Shogun Japan (Kamakura)': {
+    name: '日本（鎌倉幕府）',
+    facts: (year) => {
+      if (year >= 1185 && year <= 1333) {
+        return [
+          '首都: 鎌倉（幕府）/京都（朝廷）',
+          '政体: 幕府制（武家政権）',
+          '将軍: 源氏→摂家→皇族',
+          '執権: 北条氏',
+          '特徴: 武家政権の確立',
+        ];
+      }
+      return ['首都: 鎌倉', '政体: 幕府制'];
+    },
+    events: [
+      { year: 1185, event: '壇ノ浦の戦い、平氏滅亡' },
+      { year: 1274, event: '文永の役（元寇）' },
+      { year: 1333, event: '鎌倉幕府滅亡' },
+    ],
+  },
+  'Japan (Warring States)': {
+    name: '日本（戦国時代）',
+    facts: (year) => {
+      if (year >= 1467 && year <= 1590) {
+        return [
+          '首都: 京都（名目上）',
+          '政体: 戦国大名割拠',
+          '状況: 群雄割拠、下剋上',
+          '主要大名: 織田・豊臣・徳川・武田・上杉等',
+        ];
+      }
+      if (year >= 1590 && year <= 1603) {
+        return ['首都: 大坂/伏見', '政体: 豊臣政権', '関白: 豊臣秀吉', '特徴: 天下統一'];
+      }
+      return ['首都: 京都', '政体: 戦国大名割拠'];
+    },
+    events: [
+      { year: 1467, event: '応仁の乱勃発' },
+      { year: 1582, event: '本能寺の変' },
+      { year: 1600, event: '関ヶ原の戦い' },
+    ],
+  },
 
   // Korean
   Korea: {
     name: '朝鮮',
-    capital: '漢城',
-    type: '王政',
+    facts: (year) => {
+      if (year >= 1392 && year <= 1897) {
+        return ['首都: 漢城（ソウル）', '王朝: 李氏朝鮮', '政体: 王政', '思想: 儒教（朱子学）'];
+      }
+      if (year >= 1897 && year <= 1910) {
+        return ['首都: 漢城', '国名: 大韓帝国', '皇帝: 高宗', '政体: 帝政', '状況: 日本の影響下'];
+      }
+      return ['首都: 漢城', '政体: 王政'];
+    },
     events: [
       { year: 1392, event: '李成桂が朝鮮を建国' },
       { year: 1592, event: '文禄の役（壬辰倭乱）' },
       { year: 1910, event: '日本に併合' },
+    ],
+  },
+  'Korea (Republic of)': {
+    name: '大韓民国',
+    facts: ['首都: ソウル', '政体: 共和制', '特徴: 朝鮮戦争後の分断国家'],
+    events: [
+      { year: 1948, event: '大韓民国建国' },
+      { year: 1950, event: '朝鮮戦争勃発' },
+      { year: 1988, event: 'ソウルオリンピック開催' },
+    ],
+  },
+  'Korea (Democratic Peoples Republic of)': {
+    name: '朝鮮民主主義人民共和国',
+    facts: ['首都: 平壌', '政体: 社会主義共和制', '指導者: 金日成→金正日→金正恩'],
+    events: [
+      { year: 1948, event: '朝鮮民主主義人民共和国建国' },
+      { year: 1950, event: '朝鮮戦争勃発' },
     ],
   },
 
@@ -1232,6 +1405,15 @@ function scorePriority(name) {
     'Japan',
     'Ethiopia',
     'Dutch Republic',
+    'Imperial Japan',
+    'Empire of Japan',
+    'Tokugawa Shogunate',
+    'Shogun Japan',
+    'Russia',
+    'United States',
+    'Soviet Union',
+    'China',
+    'India',
   ];
   for (const kw of veryHighPriority) {
     // Exact match gets highest priority

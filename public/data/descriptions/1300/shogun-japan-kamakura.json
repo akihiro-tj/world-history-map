@@ -1,8 +1,27 @@
 {
   "id": "Shogun_Japan_(Kamakura)_1300",
-  "name": "Shogun Japan (Kamakura)",
+  "name": "日本（鎌倉幕府）",
   "year": 1300,
-  "facts": ["首都: 不明", "政体: 不明"],
-  "keyEvents": [],
+  "facts": [
+    "首都: 鎌倉（幕府）/京都（朝廷）",
+    "政体: 幕府制（武家政権）",
+    "将軍: 源氏→摂家→皇族",
+    "執権: 北条氏",
+    "特徴: 武家政権の確立"
+  ],
+  "keyEvents": [
+    {
+      "year": 1185,
+      "event": "壇ノ浦の戦い、平氏滅亡"
+    },
+    {
+      "year": 1274,
+      "event": "文永の役（元寇）"
+    },
+    {
+      "year": 1333,
+      "event": "鎌倉幕府滅亡"
+    }
+  ],
   "aiGenerated": true
 }

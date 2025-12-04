@@ -1,0 +1,21 @@
+{
+  "id": "United_States_1938",
+  "name": "アメリカ合衆国",
+  "year": 1938,
+  "facts": ["首都: ワシントンD.C.", "政体: 連邦共和制"],
+  "keyEvents": [
+    {
+      "year": 1776,
+      "event": "独立宣言"
+    },
+    {
+      "year": 1861,
+      "event": "南北戦争開始"
+    },
+    {
+      "year": 1945,
+      "event": "第二次世界大戦勝利"
+    }
+  ],
+  "aiGenerated": true
+}
