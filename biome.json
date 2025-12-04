@@ -13,7 +13,8 @@
       "!**/dist",
       "!**/build",
       "!**/coverage",
-      "!src/index.css"
+      "!src/index.css",
+      "!worker"
     ]
   },
   "formatter": {
