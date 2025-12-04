@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { YearIndex } from '../types';
-import { getYearFilePath, loadYearIndex } from '../utils/year-index';
+import { getTilesUrl, loadTilesManifest, type TilesManifest } from '../utils/tiles-config';
+import { loadYearIndex } from '../utils/year-index';
 
 /**
  * Map data state
@@ -8,6 +9,8 @@ import { getYearFilePath, loadYearIndex } from '../utils/year-index';
 interface MapDataState {
   /** Year index data */
   yearIndex: YearIndex | null;
+  /** Tiles manifest (for hashed filenames) */
+  tilesManifest: TilesManifest | null;
   /** Current PMTiles URL */
   pmtilesUrl: string | null;
   /** Loading state */
@@ -48,34 +51,37 @@ interface UseMapDataReturn extends MapDataState {
 export function useMapData(initialYear = 1650): UseMapDataReturn {
   const [state, setState] = useState<MapDataState>({
     yearIndex: null,
+    tilesManifest: null,
     pmtilesUrl: null,
     isLoading: true,
     error: null,
   });
 
-  // Load year index on mount
+  // Load year index and tiles manifest on mount
   useEffect(() => {
     let isMounted = true;
 
-    async function loadIndex() {
+    async function loadData() {
       try {
-        const index = await loadYearIndex();
+        const [index, manifest] = await Promise.all([loadYearIndex(), loadTilesManifest()]);
         if (!isMounted) return;
 
-        const filePath = getYearFilePath(index, initialYear);
-        if (!filePath) {
+        const pmtilesUrl = getTilesUrl(initialYear, manifest);
+        if (!pmtilesUrl) {
           setState({
             yearIndex: index,
+            tilesManifest: manifest,
             pmtilesUrl: null,
             isLoading: false,
-            error: `Year ${initialYear} not found in index`,
+            error: `Year ${initialYear} not found`,
           });
           return;
         }
 
         setState({
           yearIndex: index,
-          pmtilesUrl: `pmtiles://${filePath}`,
+          tilesManifest: manifest,
+          pmtilesUrl,
           isLoading: false,
           error: null,
         });
@@ -84,12 +90,12 @@ export function useMapData(initialYear = 1650): UseMapDataReturn {
         setState((prev) => ({
           ...prev,
           isLoading: false,
-          error: err instanceof Error ? err.message : 'Failed to load year index',
+          error: err instanceof Error ? err.message : 'Failed to load data',
         }));
       }
     }
 
-    loadIndex();
+    loadData();
 
     return () => {
       isMounted = false;
@@ -98,34 +104,34 @@ export function useMapData(initialYear = 1650): UseMapDataReturn {
 
   const loadYear = useCallback(
     (year: number) => {
-      if (!state.yearIndex) {
+      if (!state.yearIndex || !state.tilesManifest) {
         setState((prev) => ({
           ...prev,
-          error: 'Year index not loaded',
+          error: 'Data not loaded',
         }));
         return;
       }
 
       setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
-      const filePath = getYearFilePath(state.yearIndex, year);
-      if (!filePath) {
+      const pmtilesUrl = getTilesUrl(year, state.tilesManifest);
+      if (!pmtilesUrl) {
         setState((prev) => ({
           ...prev,
           isLoading: false,
-          error: `Year ${year} not found in index`,
+          error: `Year ${year} not found`,
         }));
         return;
       }
 
       setState((prev) => ({
         ...prev,
-        pmtilesUrl: `pmtiles://${filePath}`,
+        pmtilesUrl,
         isLoading: false,
         error: null,
       }));
     },
-    [state.yearIndex],
+    [state.yearIndex, state.tilesManifest],
   );
 
   return {
