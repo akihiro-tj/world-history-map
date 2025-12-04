@@ -38,11 +38,9 @@ Thumbs.db
 # Test coverage
 coverage
 
-# Playwright
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
-
 # Cache
 .cache/
+
+# Storybook
+*storybook.log
+storybook-static
