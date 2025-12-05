@@ -54,7 +54,7 @@ function AppContent() {
   }, []);
 
   return (
-    <main className="relative h-screen w-screen overflow-hidden">
+    <main className="relative h-dvh w-screen overflow-hidden">
       <MapView />
       <TerritoryInfoPanel />
       {!isLoading && years.length > 0 && (
