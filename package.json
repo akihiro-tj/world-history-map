@@ -17,32 +17,32 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "maplibre-gl": "^5.13.0",
+    "maplibre-gl": "^5.14.0",
     "pmtiles": "^4.3.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
     "react-map-gl": "^8.1.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.8",
-    "@storybook/addon-a11y": "^10.1.4",
-    "@storybook/addon-docs": "^10.1.4",
-    "@storybook/react-vite": "^10.1.4",
-    "@tailwindcss/vite": "^4.1.17",
+    "@storybook/addon-a11y": "^10.1.7",
+    "@storybook/addon-docs": "^10.1.7",
+    "@storybook/react-vite": "^10.1.7",
+    "@tailwindcss/vite": "^4.1.18",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
     "@turf/turf": "^7.3.1",
-    "@types/node": "^24.10.1",
-    "@types/react": "^19.2.5",
+    "@types/node": "^24.10.3",
+    "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.1.1",
-    "@vitest/coverage-v8": "^4.0.14",
-    "jsdom": "^27.2.0",
-    "storybook": "^10.1.4",
-    "tailwindcss": "^4.1.17",
+    "@vitejs/plugin-react": "^5.1.2",
+    "@vitest/coverage-v8": "^4.0.15",
+    "jsdom": "^27.3.0",
+    "storybook": "^10.1.7",
+    "tailwindcss": "^4.1.18",
     "typescript": "~5.9.3",
-    "vite": "^7.2.4",
-    "vitest": "^4.0.14"
+    "vite": "^7.2.7",
+    "vitest": "^4.0.15"
   }
 }
