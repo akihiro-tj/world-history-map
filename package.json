@@ -17,10 +17,10 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "maplibre-gl": "^5.14.0",
-    "pmtiles": "^4.3.0",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
+    "maplibre-gl": "^5.18.0",
+    "pmtiles": "^4.4.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "react-map-gl": "^8.1.0"
   },
   "devDependencies": {
@@ -34,7 +34,7 @@
     "@testing-library/user-event": "^14.6.1",
     "@turf/turf": "^7.3.1",
     "@types/node": "^25.0.2",
-    "@types/react": "^19.2.7",
+    "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.2",
     "@vitest/coverage-v8": "^4.0.15",
