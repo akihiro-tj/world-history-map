@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "validation-report.schema.json",
+  "title": "ValidationReport",
+  "description": "Per-run data quality check summary (FR-005)",
+  "type": "object",
+  "required": ["runId", "timestamp", "totalYears", "totalFeatures", "totalErrors", "totalWarnings", "totalRepairs", "yearSummaries"],
+  "properties": {
+    "runId": { "type": "string" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "totalYears": { "type": "integer", "minimum": 0 },
+    "totalFeatures": { "type": "integer", "minimum": 0 },
+    "totalErrors": { "type": "integer", "minimum": 0 },
+    "totalWarnings": { "type": "integer", "minimum": 0 },
+    "totalRepairs": { "type": "integer", "minimum": 0 },
+    "yearSummaries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["year", "featureCount", "territoryCount", "errors", "warnings", "repairs"],
+        "properties": {
+          "year": { "type": "integer" },
+          "featureCount": { "type": "integer", "minimum": 0 },
+          "territoryCount": { "type": "integer", "minimum": 0 },
+          "errors": { "type": "integer", "minimum": 0 },
+          "warnings": { "type": "integer", "minimum": 0 },
+          "repairs": { "type": "integer", "minimum": 0 }
+        }
+      }
+    }
+  }
+}
