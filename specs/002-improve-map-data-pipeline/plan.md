@@ -54,8 +54,9 @@ specs/002-improve-map-data-pipeline/
 ├── data-model.md        # Phase 1 output
 ├── quickstart.md        # Phase 1 output
 ├── contracts/           # Phase 1 output
-│   ├── cli.md           # CLI interface contract
-│   └── state-files.md   # State file schemas
+│   ├── cli-interface.md              # CLI interface contract
+│   ├── pipeline-state-schema.json    # Pipeline state JSON schema
+│   └── validation-report-schema.json # Validation report JSON schema
 └── tasks.md             # Phase 2 output (NOT created by /speckit.plan)
 ```
 
@@ -74,8 +75,8 @@ src/
 │   │   ├── validate.ts     # Stage 3: GeoJSON validation + auto-repair
 │   │   ├── convert.ts      # Stage 4: tippecanoe/tile-join conversion
 │   │   ├── prepare.ts      # Stage 5: SHA-256 hash + deployment manifest
-│   │   ├── upload.ts       # Stage 6: Differential R2 upload
-│   │   └── index-gen.ts    # Stage 7: Year index generation
+│   │   ├── index-gen.ts    # Stage 6: Year index generation
+│   │   └── upload.ts       # Stage 7: Differential R2 upload
 │   ├── state/
 │   │   ├── checkpoint.ts   # Checkpoint persistence + resume logic
 │   │   ├── lock.ts         # Concurrent execution prevention (PID lock file)

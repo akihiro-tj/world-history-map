@@ -27,7 +27,7 @@ SourceGeoJSON ─── 1:1 ──→ MergedGeoJSON ─── 1:1 ──→ MapT
 | Field | Type | Description | Validation |
 |-------|------|-------------|------------|
 | year | `number` | 年（BCE は負数: -1000 = BC 1000） | 整数 |
-| filePath | `string` | `.cache/geojson/world_{year}.geojson` | ファイル存在 |
+| filePath | `string` | `.cache/historical-basemaps/geojson/world_{year}.geojson` | ファイル存在 |
 | contentHash | `string` | SHA-256 ハッシュ（全内容） | 64 hex chars |
 | features | `GeoJSON.Feature[]` | FeatureCollection のフィーチャー | 非空 |
 
@@ -273,7 +273,7 @@ interface PipelineLogger {
 
 | Entity | Path Pattern | Example |
 |--------|-------------|---------|
-| Source GeoJSON | `.cache/geojson/world_{year}.geojson` | `.cache/geojson/world_1650.geojson` |
+| Source GeoJSON | `.cache/historical-basemaps/geojson/world_{year}.geojson` | `.cache/historical-basemaps/geojson/world_1650.geojson` |
 | Merged polygons | `.cache/geojson/world_{year}_merged.geojson` | `.cache/geojson/world_1650_merged.geojson` |
 | Merged labels | `.cache/geojson/world_{year}_merged_labels.geojson` | `.cache/geojson/world_1650_merged_labels.geojson` |
 | PMTiles (local) | `public/pmtiles/world_{year}.pmtiles` | `public/pmtiles/world_1650.pmtiles` |
