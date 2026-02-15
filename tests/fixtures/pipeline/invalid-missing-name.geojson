@@ -1,0 +1,44 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "SUBJECTO": "",
+        "PARTOF": "Europe"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [2.0, 46.0],
+            [3.0, 46.0],
+            [3.0, 47.0],
+            [2.0, 47.0],
+            [2.0, 46.0]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NAME": "",
+        "SUBJECTO": "",
+        "PARTOF": "Europe"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-4.0, 38.0],
+            [-3.0, 38.0],
+            [-3.0, 39.0],
+            [-4.0, 39.0],
+            [-4.0, 38.0]
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "NAME": "France",
+        "SUBJECTO": "",
+        "PARTOF": "Europe",
+        "BORDERPRECISION": 2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [2.0, 46.0],
+            [3.0, 46.0],
+            [3.0, 47.0],
+            [2.0, 47.0],
+            [2.0, 46.0]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NAME": "Spain",
+        "SUBJECTO": "",
+        "PARTOF": "Europe",
+        "BORDERPRECISION": 2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-4.0, 38.0],
+            [-3.0, 38.0],
+            [-3.0, 39.0],
+            [-4.0, 39.0],
+            [-4.0, 38.0]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NAME": "Ottoman Empire",
+        "SUBJECTO": "",
+        "PARTOF": "Middle East",
+        "BORDERPRECISION": 1
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [28.0, 38.0],
+            [32.0, 38.0],
+            [32.0, 42.0],
+            [28.0, 42.0],
+            [28.0, 38.0]
+          ]
+        ]
+      }
+    }
+  ]
+}

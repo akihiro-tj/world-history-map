@@ -1,0 +1,37 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "NAME": "Invalid Territory",
+        "SUBJECTO": "",
+        "PARTOF": "Test"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.0, 46.0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NAME": "Self Intersecting",
+        "SUBJECTO": "",
+        "PARTOF": "Test"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [0.0, 0.0],
+            [2.0, 2.0],
+            [2.0, 0.0],
+            [0.0, 2.0],
+            [0.0, 0.0]
+          ]
+        ]
+      }
+    }
+  ]
+}
