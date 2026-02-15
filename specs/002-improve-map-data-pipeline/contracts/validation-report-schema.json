@@ -4,7 +4,16 @@
   "title": "ValidationReport",
   "description": "Per-run data quality check summary (FR-005)",
   "type": "object",
-  "required": ["runId", "timestamp", "totalYears", "totalFeatures", "totalErrors", "totalWarnings", "totalRepairs", "yearSummaries"],
+  "required": [
+    "runId",
+    "timestamp",
+    "totalYears",
+    "totalFeatures",
+    "totalErrors",
+    "totalWarnings",
+    "totalRepairs",
+    "yearSummaries"
+  ],
   "properties": {
     "runId": { "type": "string" },
     "timestamp": { "type": "string", "format": "date-time" },

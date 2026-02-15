@@ -34,7 +34,10 @@
           "type": "object",
           "properties": {
             "completedAt": { "type": "string", "format": "date-time" },
-            "sourceCommitHash": { "type": "string", "description": "Git commit SHA of historical-basemaps" }
+            "sourceCommitHash": {
+              "type": "string",
+              "description": "Git commit SHA of historical-basemaps"
+            }
           },
           "required": ["completedAt", "sourceCommitHash"]
         }
@@ -97,7 +100,10 @@
           "type": "object",
           "properties": {
             "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
-            "hashedFilename": { "type": "string", "pattern": "^world_-?\\d+\\.[a-f0-9]{8}\\.pmtiles$" },
+            "hashedFilename": {
+              "type": "string",
+              "pattern": "^world_-?\\d+\\.[a-f0-9]{8}\\.pmtiles$"
+            },
             "completedAt": { "type": "string", "format": "date-time" }
           },
           "required": ["hash", "hashedFilename", "completedAt"]

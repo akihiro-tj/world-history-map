@@ -17,11 +17,11 @@
 
 **目的**: プロジェクト初期化、TypeScript 設定、テストインフラ構築
 
-- [ ] T001 パイプライン専用 TypeScript 設定を tsconfig.pipeline.json に作成（target ES2023, lib ES2023, types node のみ, include src/pipeline/**/\*.ts と src/types/pipeline.ts）
-- [ ] T002 tsconfig.json にパイプライン参照を追加し、tsconfig.app.json から src/pipeline/ を除外
-- [ ] T003 [P] tsx devDependency とパイプライン pnpm スクリプト（"pipeline": "tsx src/pipeline/cli.ts"）を package.json に追加
-- [ ] T004 [P] vitest の environmentMatchGlobs で tests/**/pipeline/** に node 環境を設定（vitest.config.ts）
-- [ ] T005 [P] テストフィクスチャ GeoJSON ファイル（valid.geojson, valid-multi.geojson, invalid-missing-name.geojson, invalid-empty-collection.geojson, invalid-geometry.geojson）を tests/fixtures/pipeline/ に作成
+- [x] T001 パイプライン専用 TypeScript 設定を tsconfig.pipeline.json に作成（target ES2023, lib ES2023, types node のみ, include src/pipeline/**/\*.ts と src/types/pipeline.ts）
+- [x] T002 tsconfig.json にパイプライン参照を追加し、tsconfig.app.json から src/pipeline/ を除外
+- [x] T003 [P] tsx devDependency とパイプライン pnpm スクリプト（"pipeline": "tsx src/pipeline/cli.ts"）を package.json に追加
+- [x] T004 [P] vitest の environmentMatchGlobs で tests/**/pipeline/** に node 環境を設定（vitest.config.ts）
+- [x] T005 [P] テストフィクスチャ GeoJSON ファイル（valid.geojson, valid-multi.geojson, invalid-missing-name.geojson, invalid-empty-collection.geojson, invalid-geometry.geojson）を tests/fixtures/pipeline/ に作成
 
 ---
 
@@ -31,13 +31,13 @@
 
 **注意**: このフェーズが完了するまでユーザーストーリーの作業は開始不可
 
-- [ ] T006 全パイプライン型定義（PipelineState, YearState, ValidationResult, ValidationError, ValidationWarning, RepairAction, DeploymentManifest, ManifestMetadata, ValidationReport, YearValidationSummary）を src/types/pipeline.ts に定義
-- [ ] T007 [P] PipelineStage ジェネリックインターフェース、PipelineContext、PipelineLogger 型を src/pipeline/stages/types.ts に定義
-- [ ] T008 [P] パイプライン設定（.cache/, public/pmtiles/, dist/pmtiles/ のパス、年エンコーディングヘルパー、tippecanoe フラグ定数）を src/pipeline/config.ts に実装
-- [ ] T009 [P] SHA-256 ストリーミングハッシュのユニットテスト（ハッシュ出力検証、空ファイル、大容量ファイルストリーミング）を tests/unit/pipeline/state/hash.test.ts に作成
-- [ ] T010 node:crypto の createHash とファイルストリームパイピングによる SHA-256 ストリーミングハッシュユーティリティを src/pipeline/state/hash.ts に実装
-- [ ] T011 [P] ファイルロック機構のユニットテスト（取得、解放、stale 検出、同時実行拒否）を tests/unit/pipeline/state/lock.test.ts に作成
-- [ ] T012 mkdir ベースのファイルロック（PID info.json、process.kill(pid,0) 生存確認、5分 mtime stale 検出、SIGINT/SIGTERM クリーンアップ）を src/pipeline/state/lock.ts に実装
+- [x] T006 全パイプライン型定義（PipelineState, YearState, ValidationResult, ValidationError, ValidationWarning, RepairAction, DeploymentManifest, ManifestMetadata, ValidationReport, YearValidationSummary）を src/types/pipeline.ts に定義
+- [x] T007 [P] PipelineStage ジェネリックインターフェース、PipelineContext、PipelineLogger 型を src/pipeline/stages/types.ts に定義
+- [x] T008 [P] パイプライン設定（.cache/, public/pmtiles/, dist/pmtiles/ のパス、年エンコーディングヘルパー、tippecanoe フラグ定数）を src/pipeline/config.ts に実装
+- [x] T009 [P] SHA-256 ストリーミングハッシュのユニットテスト（ハッシュ出力検証、空ファイル、大容量ファイルストリーミング）を tests/unit/pipeline/state/hash.test.ts に作成
+- [x] T010 node:crypto の createHash とファイルストリームパイピングによる SHA-256 ストリーミングハッシュユーティリティを src/pipeline/state/hash.ts に実装
+- [x] T011 [P] ファイルロック機構のユニットテスト（取得、解放、stale 検出、同時実行拒否）を tests/unit/pipeline/state/lock.test.ts に作成
+- [x] T012 mkdir ベースのファイルロック（PID info.json、process.kill(pid,0) 生存確認、5分 mtime stale 検出、SIGINT/SIGTERM クリーンアップ）を src/pipeline/state/lock.ts に実装
 
 **チェックポイント**: 基盤完了 - 型定義、ハッシュ、ロックインフラが全ステージで利用可能
 
@@ -53,21 +53,21 @@
 
 > **注意: これらのテストを先に書き、実装前に FAIL することを確認（TDD）**
 
-- [ ] T013 [P] [US1] fetch ステージのユニットテスト（execFile git clone/pull のモック、キャッシュ存在時のオフラインフォールバック、ファイル名からの年度自動検出）を tests/unit/pipeline/stages/fetch.test.ts に作成
-- [ ] T014 [P] [US1] merge ステージのユニットテスト（同名ポリゴンの MultiPolygon マージ、重心ラベルポイント生成、フィーチャー数検証）を tests/unit/pipeline/stages/merge.test.ts に作成
-- [ ] T015 [P] [US1] convert ステージのユニットテスト（execFile tippecanoe/tile-join のモック、フラグ引数検証、tippecanoe 未インストール時のエラー）を tests/unit/pipeline/stages/convert.test.ts に作成
-- [ ] T016 [P] [US1] prepare ステージのユニットテスト（PMTiles の SHA-256 ハッシュ、8文字 hex ファイル名、dist/ へのコピー）を tests/unit/pipeline/stages/prepare.test.ts に作成
-- [ ] T017 [P] [US1] チェックポイント永続化のユニットテスト（状態の保存/読み込み、最後の成功ステージからの再開、--restart フラグによる状態クリア）を tests/unit/pipeline/state/checkpoint.test.ts に作成
+- [x] T013 [P] [US1] fetch ステージのユニットテスト（execFile git clone/pull のモック、キャッシュ存在時のオフラインフォールバック、ファイル名からの年度自動検出）を tests/unit/pipeline/stages/fetch.test.ts に作成
+- [x] T014 [P] [US1] merge ステージのユニットテスト（同名ポリゴンの MultiPolygon マージ、重心ラベルポイント生成、フィーチャー数検証）を tests/unit/pipeline/stages/merge.test.ts に作成
+- [x] T015 [P] [US1] convert ステージのユニットテスト（execFile tippecanoe/tile-join のモック、フラグ引数検証、tippecanoe 未インストール時のエラー）を tests/unit/pipeline/stages/convert.test.ts に作成
+- [x] T016 [P] [US1] prepare ステージのユニットテスト（PMTiles の SHA-256 ハッシュ、8文字 hex ファイル名、dist/ へのコピー）を tests/unit/pipeline/stages/prepare.test.ts に作成
+- [x] T017 [P] [US1] チェックポイント永続化のユニットテスト（状態の保存/読み込み、最後の成功ステージからの再開、--restart フラグによる状態クリア）を tests/unit/pipeline/state/checkpoint.test.ts に作成
 
 ### US1 の実装
 
-- [ ] T018 [P] [US1] fetch ステージ実装: 初回は git clone --depth 1、更新時は git -C pull、オフラインフォールバック（警告付き）、.cache/historical-basemaps/geojson/ のファイル名（world_{year}.geojson, world_bc{n}.geojson）からの年度自動検出を src/pipeline/stages/fetch.ts に実装
-- [ ] T019 [P] [US1] チェックポイント永続化実装: .cache/pipeline-state.json へのアトミック JSON 書き込み（temp + rename）、年度×ステージ粒度、ソースハッシュ比較による再開ロジック、--restart サポートを src/pipeline/state/checkpoint.ts に実装
-- [ ] T020 [US1] merge ステージ実装: NAME プロパティでフィーチャーをグループ化、@turf/union でポリゴンを MultiPolygon に統合、@turf/centroid で重心ラベルポイント生成、マージ済み + ラベル GeoJSON を .cache/geojson/ に出力を src/pipeline/stages/merge.ts に実装
-- [ ] T021 [US1] convert ステージ実装: tippecanoe（-l territories -z 10 -Z 0 --simplification=10）と labels（-l labels -z 10 -Z 0 -r1 --no-feature-limit --no-tile-size-limit）の promisified execFile、tile-join でレイヤー結合（--attribution でデータ出典 historical-basemaps GPL-3.0 を保持）、public/pmtiles/ に出力を src/pipeline/stages/convert.ts に実装
-- [ ] T022 [US1] prepare ステージ実装: PMTiles ファイルの SHA-256 計算、8文字 hex ハッシュ付きファイル名（world_{year}.{hash8}.pmtiles）生成、dist/pmtiles/ へコピー、デプロイメントマニフェストの files と metadata フィールド更新を src/pipeline/stages/prepare.ts に実装
-- [ ] T023 [US1] パイプラインオーケストレータ実装: ステージ順序制御（fetch → merge → convert → prepare）、年度ごとの反復処理、SHA-256 変更検出による未変更年度スキップ、各ステージ後のチェックポイント保存、ロック取得/解放、[HH:MM:SS] [STAGE] 形式のログ出力を src/pipeline/pipeline.ts に実装
-- [ ] T024 [US1] CLI エントリポイント実装: コマンド解析（run, status, list）とオプション（--year, --years, --restart, --dry-run, --skip-upload, --verbose）、終了コード（0=成功, 1=パイプラインエラー, 2=ロックエラー, 3=設定エラー）、個別ステージコマンドを src/pipeline/cli.ts に実装
+- [x] T018 [P] [US1] fetch ステージ実装: 初回は git clone --depth 1、更新時は git -C pull、オフラインフォールバック（警告付き）、.cache/historical-basemaps/geojson/ のファイル名（world_{year}.geojson, world_bc{n}.geojson）からの年度自動検出を src/pipeline/stages/fetch.ts に実装
+- [x] T019 [P] [US1] チェックポイント永続化実装: .cache/pipeline-state.json へのアトミック JSON 書き込み（temp + rename）、年度×ステージ粒度、ソースハッシュ比較による再開ロジック、--restart サポートを src/pipeline/state/checkpoint.ts に実装
+- [x] T020 [US1] merge ステージ実装: NAME プロパティでフィーチャーをグループ化、@turf/union でポリゴンを MultiPolygon に統合、@turf/centroid で重心ラベルポイント生成、マージ済み + ラベル GeoJSON を .cache/geojson/ に出力を src/pipeline/stages/merge.ts に実装
+- [x] T021 [US1] convert ステージ実装: tippecanoe（-l territories -z 10 -Z 0 --simplification=10）と labels（-l labels -z 10 -Z 0 -r1 --no-feature-limit --no-tile-size-limit）の promisified execFile、tile-join でレイヤー結合（--attribution でデータ出典 historical-basemaps GPL-3.0 を保持）、public/pmtiles/ に出力を src/pipeline/stages/convert.ts に実装
+- [x] T022 [US1] prepare ステージ実装: PMTiles ファイルの SHA-256 計算、8文字 hex ハッシュ付きファイル名（world_{year}.{hash8}.pmtiles）生成、dist/pmtiles/ へコピー、デプロイメントマニフェストの files と metadata フィールド更新を src/pipeline/stages/prepare.ts に実装
+- [x] T023 [US1] パイプラインオーケストレータ実装: ステージ順序制御（fetch → merge → convert → prepare）、年度ごとの反復処理、SHA-256 変更検出による未変更年度スキップ、各ステージ後のチェックポイント保存、ロック取得/解放、[HH:MM:SS] [STAGE] 形式のログ出力を src/pipeline/pipeline.ts に実装
+- [x] T024 [US1] CLI エントリポイント実装: コマンド解析（run, status, list）とオプション（--year, --years, --restart, --dry-run, --skip-upload, --verbose）、終了コード（0=成功, 1=パイプラインエラー, 2=ロックエラー, 3=設定エラー）、個別ステージコマンドを src/pipeline/cli.ts に実装
 
 **チェックポイント**: `pnpm pipeline run` で fetch、merge、convert、prepare が変更検出とチェックポイント再開付きで実行可能
 
@@ -83,16 +83,16 @@
 
 > **注意: これらのテストを先に書き、実装前に FAIL することを確認（TDD）**
 
-- [ ] T025 [P] [US2] GeoJSON バリデーションルールのユニットテスト（NAME 属性チェック、空 FeatureCollection 拒否、ジオメトリタイプ検証、@turf/boolean-valid による OGC 検証、@turf/kinks による自己交差検出）と自動修復（clean-coords, rewind, buffer(0), unkink-polygon）を tests/unit/pipeline/validation/geojson.test.ts に作成
-- [ ] T026 [P] [US2] バリデーションレポート生成のユニットテスト（年度ごとのサマリー、合計集計、エラー/警告/修復数）を tests/unit/pipeline/validation/report.test.ts に作成
-- [ ] T027 [P] [US2] validate ステージのユニットテスト（有効データの通過、エラー時のブロック、警告時の続行、修復アクションの記録）を tests/unit/pipeline/stages/validate.test.ts に作成
+- [x] T025 [P] [US2] GeoJSON バリデーションルールのユニットテスト（NAME 属性チェック、空 FeatureCollection 拒否、ジオメトリタイプ検証、@turf/boolean-valid による OGC 検証、@turf/kinks による自己交差検出）と自動修復（clean-coords, rewind, buffer(0), unkink-polygon）を tests/unit/pipeline/validation/geojson.test.ts に作成
+- [x] T026 [P] [US2] バリデーションレポート生成のユニットテスト（年度ごとのサマリー、合計集計、エラー/警告/修復数）を tests/unit/pipeline/validation/report.test.ts に作成
+- [x] T027 [P] [US2] validate ステージのユニットテスト（有効データの通過、エラー時のブロック、警告時の続行、修復アクションの記録）を tests/unit/pipeline/stages/validate.test.ts に作成
 
 ### US2 の実装
 
-- [ ] T028 [US2] GeoJSON バリデーションルール実装: FeatureCollection 構造チェック、空 features 拒否、NAME プロパティ必須・非空チェック、Polygon/MultiPolygon のみ許可、@turf/boolean-valid OGC チェック、@turf/kinks 自己交差検出; 自動修復パイプライン: @turf/clean-coords → @turf/rewind → @turf/buffer(0) → @turf/unkink-polygon → 修復不可なら拒否を src/pipeline/validation/geojson.ts に実装
-- [ ] T029 [US2] バリデーションレポート生成実装: 年度ごとの ValidationResult を ValidationReport に集約（totalYears, totalFeatures, totalErrors, totalWarnings, totalRepairs, yearSummaries 配列）を src/pipeline/validation/report.ts に実装
-- [ ] T030 [US2] validate ステージ実装: 年度ごとにマージ済み GeoJSON にバリデーションルールを適用、エラー時はパイプライン停止（FR-004）、警告と修復を記録、年度ごとに ValidationResult を出力を src/pipeline/stages/validate.ts に実装
-- [ ] T031 [US2] validate ステージをパイプラインオーケストレータの merge と convert の間に統合、全年度バリデーション後にバリデーションレポート生成を追加を src/pipeline/pipeline.ts に実装
+- [x] T028 [US2] GeoJSON バリデーションルール実装: FeatureCollection 構造チェック、空 features 拒否、NAME プロパティ必須・非空チェック、Polygon/MultiPolygon のみ許可、@turf/boolean-valid OGC チェック、@turf/kinks 自己交差検出; 自動修復パイプライン: @turf/clean-coords → @turf/rewind → @turf/buffer(0) → @turf/unkink-polygon → 修復不可なら拒否を src/pipeline/validation/geojson.ts に実装
+- [x] T029 [US2] バリデーションレポート生成実装: 年度ごとの ValidationResult を ValidationReport に集約（totalYears, totalFeatures, totalErrors, totalWarnings, totalRepairs, yearSummaries 配列）を src/pipeline/validation/report.ts に実装
+- [x] T030 [US2] validate ステージ実装: 年度ごとにマージ済み GeoJSON にバリデーションルールを適用、エラー時はパイプライン停止（FR-004）、警告と修復を記録、年度ごとに ValidationResult を出力を src/pipeline/stages/validate.ts に実装
+- [x] T031 [US2] validate ステージをパイプラインオーケストレータの merge と convert の間に統合、全年度バリデーション後にバリデーションレポート生成を追加を src/pipeline/pipeline.ts に実装
 
 **チェックポイント**: パイプラインがマージ後にデータを検証し、ジオメトリ問題を自動修復し、エラー時に停止し、バリデーションサマリーレポートを生成
 
@@ -108,12 +108,12 @@
 
 > **注意: これらのテストを先に書き、実装前に FAIL することを確認（TDD）**
 
-- [ ] T032 [P] [US3] upload ステージのユニットテスト（マニフェストハッシュ比較による差分検出、wrangler R2 アップロードのモック、初回デプロイ時の全量アップロード、未変更ファイルのスキップ、アップロード/スキップのログ表示）を tests/unit/pipeline/stages/upload.test.ts に作成
+- [x] T032 [P] [US3] upload ステージのユニットテスト（マニフェストハッシュ比較による差分検出、wrangler R2 アップロードのモック、初回デプロイ時の全量アップロード、未変更ファイルのスキップ、アップロード/スキップのログ表示）を tests/unit/pipeline/stages/upload.test.ts に作成
 
 ### US3 の実装
 
-- [ ] T033 [US3] 差分アップロードステージ実装: dist/pmtiles/ から既存 manifest.json を読み込み、ローカル SHA-256 ハッシュとマニフェスト metadata を比較、変更ファイルのみ wrangler r2 object put でアップロード、更新済み manifest.json（version タイムスタンプと metadata フィールド付き）を書き込み、アップロード/スキップファイルをログ出力を src/pipeline/stages/upload.ts に実装
-- [ ] T034 [US3] upload ステージをパイプラインの最終ステージとして統合（index-gen がある場合はその後、なければ prepare の後）、--skip-upload フラグを尊重、以前のマニフェストがない場合は全量アップロードを src/pipeline/pipeline.ts に実装
+- [x] T033 [US3] 差分アップロードステージ実装: dist/pmtiles/ から既存 manifest.json を読み込み、ローカル SHA-256 ハッシュとマニフェスト metadata を比較、変更ファイルのみ wrangler r2 object put でアップロード、更新済み manifest.json（version タイムスタンプと metadata フィールド付き）を書き込み、アップロード/スキップファイルをログ出力を src/pipeline/stages/upload.ts に実装
+- [x] T034 [US3] upload ステージをパイプラインの最終ステージとして統合（index-gen がある場合はその後、なければ prepare の後）、--skip-upload フラグを尊重、以前のマニフェストがない場合は全量アップロードを src/pipeline/pipeline.ts に実装
 
 **チェックポイント**: `pnpm pipeline run` で変更ファイルのみを差分検出して R2 にアップロード
 
@@ -129,12 +129,12 @@
 
 > **注意: これらのテストを先に書き、実装前に FAIL することを確認（TDD）**
 
-- [ ] T035 [P] [US4] インデックス生成ステージのユニットテスト（PMTiles ディレクトリスキャン、マージ済み GeoJSON からの年度と領土抽出、ソート済み出力、年度の追加/削除検出）を tests/unit/pipeline/stages/index-gen.test.ts に作成
+- [x] T035 [P] [US4] インデックス生成ステージのユニットテスト（PMTiles ディレクトリスキャン、マージ済み GeoJSON からの年度と領土抽出、ソート済み出力、年度の追加/削除検出）を tests/unit/pipeline/stages/index-gen.test.ts に作成
 
 ### US4 の実装
 
-- [ ] T036 [US4] 年代インデックス生成ステージ実装: 処理済み年度をスキャン、マージ済み GeoJSON から領土名を抽出、YearEntry 配列（year, filename, ソート済み countries リスト）を構築、index.json を public/pmtiles/ に書き込みを src/pipeline/stages/index-gen.ts に実装
-- [ ] T037 [US4] index-gen ステージをパイプラインオーケストレータの prepare と upload の間に統合を src/pipeline/pipeline.ts に実装
+- [x] T036 [US4] 年代インデックス生成ステージ実装: 処理済み年度をスキャン、マージ済み GeoJSON から領土名を抽出、YearEntry 配列（year, filename, ソート済み countries リスト）を構築、index.json を public/pmtiles/ に書き込みを src/pipeline/stages/index-gen.ts に実装
+- [x] T037 [US4] index-gen ステージをパイプラインオーケストレータの prepare と upload の間に統合を src/pipeline/pipeline.ts に実装
 
 **チェックポイント**: `pnpm pipeline run` で実際のタイルデータと一致する index.json を自動生成
 
@@ -144,9 +144,9 @@
 
 **目的**: 統合テスト、レガシースクリプトのクリーンアップ、エンドツーエンド検証
 
-- [ ] T038 全パイプラインフローの統合テスト（fetch → merge → validate → convert → prepare → index → upload、外部依存はモック）を tests/integration/pipeline/pipeline.test.ts に作成
-- [ ] T039 [P] 移行検証後にレガシーシェルスクリプト（convert-to-pmtiles.sh, upload-to-r2.sh, generate-index.sh）を確認・クリーンアップ（scripts/ ディレクトリ）
-- [ ] T040 quickstart.md 検証の実行: クリーン環境でドキュメント記載のコマンドを実行し、エンドツーエンドの開発者ワークフローを確認
+- [x] T038 全パイプラインフローの統合テスト（fetch → merge → validate → convert → prepare → index → upload、外部依存はモック）を tests/integration/pipeline/pipeline.test.ts に作成
+- [x] T039 [P] 移行検証後にレガシーシェルスクリプト（convert-to-pmtiles.sh, upload-to-r2.sh, generate-index.sh）を確認・クリーンアップ（scripts/ ディレクトリ）
+- [x] T040 quickstart.md 検証の実行: クリーン環境でドキュメント記載のコマンドを実行し、エンドツーエンドの開発者ワークフローを確認
 
 ---
 
