@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { TerritoryDescription } from '../types';
+import type { TerritoryDescription } from '../../../types';
 
 /**
  * Result of the useTerritoryDescription hook

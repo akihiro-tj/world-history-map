@@ -37,7 +37,7 @@ const mockDescription: TerritoryDescription = {
   aiGenerated: true,
 };
 
-vi.mock('../../../src/hooks/use-territory-description', () => ({
+vi.mock('../../../src/components/territory-info/hooks/use-territory-description', () => ({
   useTerritoryDescription: () => ({
     description: mockDescription,
     isLoading: false,
@@ -137,7 +137,7 @@ describe('TerritoryInfoPanel - Loading state', () => {
     vi.clearAllMocks();
 
     // Reset mock to loading state
-    vi.doMock('../../../src/hooks/use-territory-description', () => ({
+    vi.doMock('../../../src/components/territory-info/hooks/use-territory-description', () => ({
       useTerritoryDescription: () => ({
         description: null,
         isLoading: true,
@@ -157,7 +157,7 @@ describe('TerritoryInfoPanel - No description state', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    vi.doMock('../../../src/hooks/use-territory-description', () => ({
+    vi.doMock('../../../src/components/territory-info/hooks/use-territory-description', () => ({
       useTerritoryDescription: () => ({
         description: null,
         isLoading: false,

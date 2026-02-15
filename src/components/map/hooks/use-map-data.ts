@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import type { YearIndex } from '../types';
-import { getTilesUrl, loadTilesManifest, type TilesManifest } from '../utils/tiles-config';
-import { loadYearIndex } from '../utils/year-index';
+import type { YearIndex } from '../../../types';
+import { getTilesUrl, loadTilesManifest, type TilesManifest } from '../../../utils/tiles-config';
+import { loadYearIndex } from '../../../utils/year-index';
 
 /**
  * Map data state
