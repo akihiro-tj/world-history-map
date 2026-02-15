@@ -50,7 +50,7 @@ pnpm pipeline run
 pnpm pipeline run --year 1650
 
 # 年度範囲を指定
-pnpm pipeline run --years 1600-1800
+pnpm pipeline run --years 1600..1800
 
 # 状態をクリアして最初から実行
 pnpm pipeline run --restart

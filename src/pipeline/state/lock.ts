@@ -40,6 +40,8 @@ export function acquireLock(lockDir?: string): boolean {
   const infoPath = path.join(lockPath, INFO_FILE);
 
   try {
+    // Ensure parent directory exists before attempting atomic mkdir
+    mkdirSync(path.dirname(lockPath), { recursive: true });
     mkdirSync(lockPath, { recursive: false });
   } catch (err: unknown) {
     if ((err as NodeJS.ErrnoException).code !== 'EEXIST') {
