@@ -14,7 +14,8 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "pipeline": "tsx src/pipeline/cli.ts"
   },
   "dependencies": {
     "maplibre-gl": "^5.18.0",
@@ -41,6 +42,7 @@
     "jsdom": "^27.3.0",
     "storybook": "^10.1.10",
     "tailwindcss": "^4.1.18",
+    "tsx": "^4.19.4",
     "typescript": "~5.9.3",
     "vite": "^7.2.7",
     "vitest": "^4.0.15"

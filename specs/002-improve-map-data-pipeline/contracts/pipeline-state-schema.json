@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pipeline-state.schema.json",
+  "title": "PipelineState",
+  "description": "Pipeline execution state including checkpoints and content hashes",
+  "type": "object",
+  "required": ["version", "runId", "startedAt", "status", "years"],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "const": 1,
+      "description": "Schema version for forward compatibility"
+    },
+    "runId": {
+      "type": "string",
+      "description": "Unique run identifier (ISO timestamp + random suffix)"
+    },
+    "startedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completedAt": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["running", "completed", "failed"]
+    },
+    "stages": {
+      "type": "object",
+      "properties": {
+        "fetch": {
+          "type": "object",
+          "properties": {
+            "completedAt": { "type": "string", "format": "date-time" },
+            "sourceCommitHash": {
+              "type": "string",
+              "description": "Git commit SHA of historical-basemaps"
+            }
+          },
+          "required": ["completedAt", "sourceCommitHash"]
+        }
+      }
+    },
+    "years": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/YearState"
+      }
+    },
+    "indexGen": {
+      "type": "object",
+      "properties": {
+        "completedAt": { "type": ["string", "null"], "format": "date-time" },
+        "hash": { "type": ["string", "null"] }
+      }
+    }
+  },
+  "$defs": {
+    "YearState": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "object",
+          "properties": {
+            "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+            "fetchedAt": { "type": "string", "format": "date-time" }
+          },
+          "required": ["hash", "fetchedAt"]
+        },
+        "merge": {
+          "type": "object",
+          "properties": {
+            "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+            "completedAt": { "type": "string", "format": "date-time" },
+            "featureCount": { "type": "integer", "minimum": 0 },
+            "labelCount": { "type": "integer", "minimum": 0 }
+          },
+          "required": ["hash", "completedAt", "featureCount", "labelCount"]
+        },
+        "validate": {
+          "type": "object",
+          "properties": {
+            "completedAt": { "type": "string", "format": "date-time" },
+            "warnings": { "type": "integer", "minimum": 0 },
+            "errors": { "type": "integer", "minimum": 0 }
+          },
+          "required": ["completedAt", "warnings", "errors"]
+        },
+        "convert": {
+          "type": "object",
+          "properties": {
+            "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+            "completedAt": { "type": "string", "format": "date-time" }
+          },
+          "required": ["hash", "completedAt"]
+        },
+        "prepare": {
+          "type": "object",
+          "properties": {
+            "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+            "hashedFilename": {
+              "type": "string",
+              "pattern": "^world_-?\\d+\\.[a-f0-9]{8}\\.pmtiles$"
+            },
+            "completedAt": { "type": "string", "format": "date-time" }
+          },
+          "required": ["hash", "hashedFilename", "completedAt"]
+        },
+        "upload": {
+          "type": "object",
+          "properties": {
+            "completedAt": { "type": "string", "format": "date-time" },
+            "skipped": { "type": "boolean" }
+          },
+          "required": ["completedAt", "skipped"]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "NAME": "France",
+        "SUBJECTO": "",
+        "PARTOF": "Europe",
+        "BORDERPRECISION": 2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [2.0, 46.0],
+            [3.0, 46.0],
+            [3.0, 47.0],
+            [2.0, 47.0],
+            [2.0, 46.0]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NAME": "France",
+        "SUBJECTO": "",
+        "PARTOF": "Europe",
+        "BORDERPRECISION": 2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [8.5, 41.5],
+            [9.5, 41.5],
+            [9.5, 42.5],
+            [8.5, 42.5],
+            [8.5, 41.5]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "NAME": "Spain",
+        "SUBJECTO": "",
+        "PARTOF": "Europe",
+        "BORDERPRECISION": 2
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-4.0, 38.0],
+            [-3.0, 38.0],
+            [-3.0, 39.0],
+            [-4.0, 39.0],
+            [-4.0, 38.0]
+          ]
+        ]
+      }
+    }
+  ]
+}
