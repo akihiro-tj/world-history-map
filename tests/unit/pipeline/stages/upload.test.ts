@@ -105,11 +105,10 @@ describe('upload stage', () => {
       await executeUpload(plan, distDir, 'my-bucket', logger);
 
       expect(mockExecFileAsync).toHaveBeenCalledTimes(1);
-      expect(mockExecFileAsync).toHaveBeenCalledWith(
-        'wrangler',
-        expect.arrayContaining(['r2', 'object', 'put']),
-        expect.anything(),
-      );
+      const callArgs = mockExecFileAsync.mock.calls[0];
+      expect(callArgs?.[0]).toBe('wrangler');
+      expect(callArgs?.[1]).toContain('--remote');
+      expect(callArgs?.[1]).toEqual(expect.arrayContaining(['r2', 'object', 'put']));
     });
 
     it('should log skipped files', async () => {

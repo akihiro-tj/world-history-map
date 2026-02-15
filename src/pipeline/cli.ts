@@ -6,6 +6,7 @@
 import type { PipelineOptions } from '@/pipeline/pipeline.ts';
 import { listYears, PipelineError, runPipeline, showStatus } from '@/pipeline/pipeline.ts';
 import { createLogger } from '@/pipeline/stages/types.ts';
+import { publishManifest, runStandaloneUpload } from '@/pipeline/stages/upload.ts';
 
 function parseArgs(argv: string[]): { command: string; options: PipelineOptions } {
   const args = argv.slice(2);
@@ -79,12 +80,17 @@ async function main(): Promise<void> {
     case 'list':
       await listYears(logger);
       break;
+    case 'upload':
+      await runStandaloneUpload(logger);
+      break;
+    case 'publish-manifest':
+      await publishManifest(logger);
+      break;
     case 'fetch':
     case 'merge':
     case 'validate':
     case 'convert':
     case 'prepare':
-    case 'upload':
     case 'index':
       // Individual stage execution - run pipeline with appropriate filtering
       logger.info('cli', `Running individual stage: ${command}`);
@@ -92,7 +98,7 @@ async function main(): Promise<void> {
       break;
     default:
       console.error(`Unknown command: ${command}`);
-      console.error('Usage: pnpm pipeline <run|status|list> [options]');
+      console.error('Usage: pnpm pipeline <run|status|list|upload|publish-manifest> [options]');
       process.exit(3);
   }
 }
