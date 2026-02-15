@@ -58,12 +58,12 @@ export function validateGeoJSON(geojson: FeatureCollection, year: number): Valid
     if (!feature) continue;
     const name = (feature.properties?.['NAME'] as string | undefined) ?? '';
 
-    // Check NAME property
+    // Check NAME property (warning: source data often has unnamed features)
     if (!name) {
-      errors.push({
+      warnings.push({
         type: 'missing_name',
         featureIndex: i,
-        details: `Feature at index ${i} is missing required NAME property`,
+        details: `Feature at index ${i} is missing NAME property`,
       });
       continue;
     }
@@ -92,7 +92,8 @@ export function validateGeoJSON(geojson: FeatureCollection, year: number): Valid
           // Replace geometry with repaired version
           feature.geometry = repaired.geometry as typeof feature.geometry;
         } else {
-          errors.push({
+          // Keep original geometry but warn (source data quality issue)
+          warnings.push({
             type: 'unrepairable_geometry',
             featureIndex: i,
             details: `Feature "${name}" has invalid geometry that could not be repaired`,

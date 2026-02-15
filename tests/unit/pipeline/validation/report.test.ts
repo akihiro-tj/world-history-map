@@ -41,8 +41,8 @@ describe('validation report', () => {
           passed: false,
           featureCount: 10,
           errors: [
-            { type: 'missing_name', featureIndex: 0, details: 'missing NAME' },
-            { type: 'missing_name', featureIndex: 1, details: 'missing NAME' },
+            { type: 'invalid_geometry_type', featureIndex: 0, details: 'invalid type' },
+            { type: 'invalid_geometry_type', featureIndex: 1, details: 'invalid type' },
           ],
           warnings: [],
           repairs: [],

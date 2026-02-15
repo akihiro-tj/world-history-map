@@ -45,13 +45,18 @@ export interface ValidationResult {
 }
 
 export interface ValidationError {
-  type: 'missing_name' | 'empty_collection' | 'invalid_geometry_type' | 'unrepairable_geometry';
+  type: 'empty_collection' | 'invalid_geometry_type';
   featureIndex: number;
   details: string;
 }
 
 export interface ValidationWarning {
-  type: 'missing_subjecto' | 'low_border_precision' | 'repaired_geometry';
+  type:
+    | 'missing_name'
+    | 'missing_subjecto'
+    | 'low_border_precision'
+    | 'repaired_geometry'
+    | 'unrepairable_geometry';
   featureIndex: number;
   details: string;
 }

@@ -17,16 +17,16 @@ describe('GeoJSON validation', () => {
       expect(result.featureCount).toBe(3);
     });
 
-    it('should detect missing NAME property', () => {
+    it('should warn on missing NAME property (non-blocking)', () => {
       const geojson = JSON.parse(
         readFileSync(path.join(FIXTURES, 'invalid-missing-name.geojson'), 'utf-8'),
       );
 
       const result = validateGeoJSON(geojson, 1650);
 
-      expect(result.passed).toBe(false);
-      const nameErrors = result.errors.filter((e) => e.type === 'missing_name');
-      expect(nameErrors.length).toBeGreaterThan(0);
+      // missing_name is a warning, not a blocking error
+      const nameWarnings = result.warnings.filter((w) => w.type === 'missing_name');
+      expect(nameWarnings.length).toBeGreaterThan(0);
     });
 
     it('should reject empty FeatureCollection', () => {
