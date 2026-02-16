@@ -34,5 +34,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/pipeline/**/*.ts", "src/types/pipeline.ts"]
+  "include": ["src/pipeline/**/*.ts", "src/types/pipeline.ts"],
+  "exclude": ["src/**/*.test.*", "src/**/*.spec.*"]
 }

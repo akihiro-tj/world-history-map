@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { MapView } from '../../../src/components/map/map-view';
-import { AppStateProvider } from '../../../src/contexts/app-state-context';
+import { AppStateProvider } from '@/contexts/app-state-context';
+import { MapView } from './map-view';
 
 // Mock MapLibre and react-map-gl
 vi.mock('react-map-gl/maplibre', () => ({

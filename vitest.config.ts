@@ -7,14 +7,17 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
-    environmentMatchGlobs: [['tests/**/pipeline/**', 'node']],
-    include: ['tests/**/*.{test,spec}.{ts,tsx}'],
+    environmentMatchGlobs: [
+      ['src/pipeline/**', 'node'],
+      ['tests/**/pipeline/**', 'node'],
+    ],
+    include: ['src/**/*.{test,spec}.{ts,tsx}', 'tests/**/*.{test,spec}.{ts,tsx}'],
     exclude: ['tests/e2e/**/*', 'node_modules/**/*'],
     setupFiles: ['./tests/setup.ts'],
     coverage: {
       provider: 'v8',
       include: ['src/**/*.{ts,tsx}'],
-      exclude: ['src/main.tsx', 'src/**/*.d.ts'],
+      exclude: ['src/main.tsx', 'src/**/*.d.ts', 'src/**/*.{test,spec}.{ts,tsx}'],
     },
   },
   resolve: {

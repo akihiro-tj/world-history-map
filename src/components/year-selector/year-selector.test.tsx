@@ -1,9 +1,9 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { YearSelector } from '../../../src/components/year-selector/year-selector';
-import { AppStateProvider } from '../../../src/contexts/app-state-context';
-import type { YearEntry } from '../../../src/types';
+import { AppStateProvider } from '@/contexts/app-state-context';
+import type { YearEntry } from '@/types';
+import { YearSelector } from './year-selector';
 
 // Mock scrollIntoView since it's not implemented in jsdom
 const scrollIntoViewMock = vi.fn();

@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { TerritoryLayer } from '../../../src/components/map/territory-layer';
+import { TerritoryLayer } from './territory-layer';
 
 // Mock react-map-gl/maplibre
 vi.mock('react-map-gl/maplibre', () => ({

@@ -1,8 +1,8 @@
 import { useCallback, useEffect } from 'react';
 import { useAppState } from '../../contexts/app-state-context';
-import { useTerritoryDescription } from '../../hooks/use-territory-description';
 import { CloseButton } from '../ui/close-button';
 import { AiNotice } from './ai-notice';
+import { useTerritoryDescription } from './hooks/use-territory-description';
 import { YearLink } from './year-link';
 
 /**

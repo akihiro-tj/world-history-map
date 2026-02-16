@@ -1,13 +1,13 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import type { TerritoryDescription } from '../../../src/types';
+import type { TerritoryDescription } from '@/types';
 
 // Mock the app state context
 const mockSetInfoPanelOpen = vi.fn();
 const mockSetSelectedYear = vi.fn();
 const mockSetSelectedTerritory = vi.fn();
 
-vi.mock('../../../src/contexts/app-state-context', () => ({
+vi.mock('@/contexts/app-state-context', () => ({
   useAppState: () => ({
     state: {
       selectedYear: 1650,
@@ -37,7 +37,7 @@ const mockDescription: TerritoryDescription = {
   aiGenerated: true,
 };
 
-vi.mock('../../../src/hooks/use-territory-description', () => ({
+vi.mock('./hooks/use-territory-description', () => ({
   useTerritoryDescription: () => ({
     description: mockDescription,
     isLoading: false,
@@ -46,7 +46,7 @@ vi.mock('../../../src/hooks/use-territory-description', () => ({
 }));
 
 // Import after mocks
-import { TerritoryInfoPanel } from '../../../src/components/territory-info/territory-info-panel';
+import { TerritoryInfoPanel } from './territory-info-panel';
 
 describe('TerritoryInfoPanel', () => {
   beforeEach(() => {
@@ -137,7 +137,7 @@ describe('TerritoryInfoPanel - Loading state', () => {
     vi.clearAllMocks();
 
     // Reset mock to loading state
-    vi.doMock('../../../src/hooks/use-territory-description', () => ({
+    vi.doMock('./hooks/use-territory-description', () => ({
       useTerritoryDescription: () => ({
         description: null,
         isLoading: true,
@@ -157,7 +157,7 @@ describe('TerritoryInfoPanel - No description state', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    vi.doMock('../../../src/hooks/use-territory-description', () => ({
+    vi.doMock('./hooks/use-territory-description', () => ({
       useTerritoryDescription: () => ({
         description: null,
         isLoading: false,
