@@ -17,8 +17,10 @@ Auto-generated from all feature plans. Last updated: 2025-11-29
 ## Project Structure
 
 ```text
-src/
-tests/
+packages/
+  app/          # React frontend (MapLibre GL JS + react-map-gl + PMTiles)
+  pipeline/     # CLI data pipeline (Node.js, @turf/turf, tippecanoe)
+  worker/       # Cloudflare Worker (R2 tile serving)
 ```
 
 ## Commands
