@@ -1,0 +1,8 @@
+{
+  "files": [],
+  "references": [{ "path": "./tsconfig.pipeline.json" }],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": { "@/*": ["./src/*"] }
+  }
+}

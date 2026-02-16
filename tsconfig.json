@@ -1,15 +1,4 @@
 {
   "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" },
-    { "path": "./tsconfig.pipeline.json" },
-    { "path": "./tsconfig.test.json" }
-  ],
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"]
-    }
-  }
+  "references": [{ "path": "./packages/app" }, { "path": "./packages/pipeline" }]
 }
