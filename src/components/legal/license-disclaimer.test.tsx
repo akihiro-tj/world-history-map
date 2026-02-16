@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { LicenseDisclaimer } from '../../../src/components/legal/license-disclaimer';
+import { LicenseDisclaimer } from './license-disclaimer';
 
 describe('LicenseDisclaimer', () => {
   const defaultProps = {

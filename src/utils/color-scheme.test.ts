@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createMatchColorExpression, getColorForSubjecto } from '../../../src/utils/color-scheme';
+import { createMatchColorExpression, getColorForSubjecto } from './color-scheme';
 
 describe('color-scheme', () => {
   describe('getColorForSubjecto', () => {

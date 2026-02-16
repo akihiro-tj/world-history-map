@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from 'vitest';
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
-import { useTerritoryDescription } from '../../../src/components/territory-info/hooks/use-territory-description';
+import { useTerritoryDescription } from './use-territory-description';
 
 /**
  * Helper to create mock headers

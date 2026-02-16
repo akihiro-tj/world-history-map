@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { TERRITORY_LABEL_ID, TerritoryLabel } from '../../../src/components/map/territory-label';
+import { TERRITORY_LABEL_ID, TerritoryLabel } from './territory-label';
 
 // Mock react-map-gl/maplibre
 vi.mock('react-map-gl/maplibre', () => ({
