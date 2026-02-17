@@ -296,7 +296,7 @@ apps/pipeline/                       # パイプラインパッケージ
         ├── geojson.ts
         └── report.ts
 
-apps/app/public/pmtiles/             # ローカル開発用ファイル
+apps/frontend/public/pmtiles/             # ローカル開発用ファイル
 ├── index.json                           # 年代インデックス
 └── world_1650.pmtiles                   # ハッシュなし PMTiles
 ```
@@ -315,9 +315,9 @@ apps/app/public/pmtiles/             # ローカル開発用ファイル
 
 ### 関連モジュール
 
-- `apps/app/src/utils/tiles-config.ts` — マニフェスト読み込みと URL 構築
-- `apps/app/src/utils/year-index.ts` — 年代インデックス読み込み、最近傍年検索
-- `apps/app/src/components/map/hooks/use-pmtiles-protocol.ts` — MapLibre に `pmtiles://` プロトコルを登録
+- `apps/frontend/src/utils/tiles-config.ts` — マニフェスト読み込みと URL 構築
+- `apps/frontend/src/utils/year-index.ts` — 年代インデックス読み込み、最近傍年検索
+- `apps/frontend/src/components/map/hooks/use-pmtiles-protocol.ts` — MapLibre に `pmtiles://` プロトコルを登録
 
 ### PMTiles のレイヤー構成
 
