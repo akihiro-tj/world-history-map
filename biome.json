@@ -13,8 +13,8 @@
       "!**/dist",
       "!**/build",
       "!**/coverage",
-      "!packages/app/public",
-      "!packages/app/src/index.css"
+      "!apps/app/public",
+      "!apps/app/src/index.css"
     ]
   },
   "formatter": {

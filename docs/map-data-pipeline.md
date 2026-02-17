@@ -97,7 +97,7 @@ historical-basemaps リポジトリを `.cache/historical-basemaps/` にクロ�
 - オフライン: キャッシュが存在すれば警告付きで続行
 - ファイル名パターンから利用可能な年度を自動検出
 
-**実装**: `packages/pipeline/src/stages/fetch.ts`
+**実装**: `apps/pipeline/src/stages/fetch.ts`
 
 ### ステージ 2: merge
 
@@ -108,7 +108,7 @@ historical-basemaps リポジトリを `.cache/historical-basemaps/` にクロ�
   - `.cache/geojson/world_{year}_merged.geojson`（領土ポリゴン）
   - `.cache/geojson/world_{year}_merged_labels.geojson`（ラベルポイント）
 
-**実装**: `packages/pipeline/src/stages/merge.ts`
+**実装**: `apps/pipeline/src/stages/merge.ts`
 
 ### ステージ 3: validate
 
@@ -126,7 +126,7 @@ historical-basemaps リポジトリを `.cache/historical-basemaps/` にクロ�
 
 全年度のバリデーション完了後、サマリーレポート（エラー数・警告数・修復数）をログ出力する。
 
-**実装**: `packages/pipeline/src/stages/validate.ts`, `packages/pipeline/src/validation/geojson.ts`
+**実装**: `apps/pipeline/src/stages/validate.ts`, `apps/pipeline/src/validation/geojson.ts`
 
 ### ステージ 4: convert
 
@@ -138,7 +138,7 @@ historical-basemaps リポジトリを `.cache/historical-basemaps/` にクロ�
 
 - **出力**: `public/pmtiles/world_{year}.pmtiles`
 
-**実装**: `packages/pipeline/src/stages/convert.ts`
+**実装**: `apps/pipeline/src/stages/convert.ts`
 
 ### ステージ 5: prepare
 
@@ -149,7 +149,7 @@ historical-basemaps リポジトリを `.cache/historical-basemaps/` にクロ�
 
 デプロイメントマニフェストの `files`（年度→ファイル名マッピング）と `metadata`（ハッシュ・サイズ）を更新する。
 
-**実装**: `packages/pipeline/src/stages/prepare.ts`
+**実装**: `apps/pipeline/src/stages/prepare.ts`
 
 ### ステージ 6: index-gen
 
@@ -165,7 +165,7 @@ historical-basemaps リポジトリを `.cache/historical-basemaps/` にクロ�
 }
 ```
 
-**実装**: `packages/pipeline/src/stages/index-gen.ts`
+**実装**: `apps/pipeline/src/stages/index-gen.ts`
 
 ### ステージ 7: upload
 
@@ -177,7 +177,7 @@ historical-basemaps リポジトリを `.cache/historical-basemaps/` にクロ�
 
 > **Note**: PMTiles ファイルはハッシュ付きファイル名のため、アップロードしても既存のプロダクション環境には影響しない。プロダクションへの反映は `publish-manifest` コマンドで行う。
 
-**実装**: `packages/pipeline/src/stages/upload.ts`
+**実装**: `apps/pipeline/src/stages/upload.ts`
 
 ### publish-manifest
 
@@ -187,7 +187,7 @@ historical-basemaps リポジトリを `.cache/historical-basemaps/` にクロ�
 pnpm pipeline publish-manifest
 ```
 
-**実装**: `packages/pipeline/src/stages/upload.ts` (`publishManifest`), `packages/pipeline/src/cli.ts`
+**実装**: `apps/pipeline/src/stages/upload.ts` (`publishManifest`), `apps/pipeline/src/cli.ts`
 
 ## 変更検出とチェックポイント
 
@@ -263,7 +263,7 @@ pnpm pipeline run --restart
 ## ディレクトリ構成
 
 ```
-packages/pipeline/                       # パイプラインパッケージ
+apps/pipeline/                       # パイプラインパッケージ
 ├── .cache/                              # gitignore 対象
 │   ├── historical-basemaps/             # git clone したソースリポジトリ
 │   │   └── geojson/world_1650.geojson   # 元データ
@@ -296,7 +296,7 @@ packages/pipeline/                       # パイプラインパッケージ
         ├── geojson.ts
         └── report.ts
 
-packages/app/public/pmtiles/             # ローカル開発用ファイル
+apps/app/public/pmtiles/             # ローカル開発用ファイル
 ├── index.json                           # 年代インデックス
 └── world_1650.pmtiles                   # ハッシュなし PMTiles
 ```
@@ -315,9 +315,9 @@ packages/app/public/pmtiles/             # ローカル開発用ファイル
 
 ### 関連モジュール
 
-- `packages/app/src/utils/tiles-config.ts` — マニフェスト読み込みと URL 構築
-- `packages/app/src/utils/year-index.ts` — 年代インデックス読み込み、最近傍年検索
-- `packages/app/src/components/map/hooks/use-pmtiles-protocol.ts` — MapLibre に `pmtiles://` プロトコルを登録
+- `apps/app/src/utils/tiles-config.ts` — マニフェスト読み込みと URL 構築
+- `apps/app/src/utils/year-index.ts` — 年代インデックス読み込み、最近傍年検索
+- `apps/app/src/components/map/hooks/use-pmtiles-protocol.ts` — MapLibre に `pmtiles://` プロトコルを登録
 
 ### PMTiles のレイヤー構成
 
