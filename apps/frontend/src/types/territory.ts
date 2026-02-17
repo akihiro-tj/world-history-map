@@ -52,3 +52,9 @@ export interface TerritoryDescription {
   /** AI-generated flag (always true) */
   aiGenerated: true;
 }
+
+/**
+ * Year-level bundle of territory descriptions
+ * Maps kebab-case territory name to its description
+ */
+export type YearDescriptionBundle = Record<string, TerritoryDescription>;

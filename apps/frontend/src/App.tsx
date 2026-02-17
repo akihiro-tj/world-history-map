@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { LicenseDisclaimer } from './components/legal/license-disclaimer';
 import { MapView } from './components/map/map-view';
+import { prefetchYearDescriptions } from './components/territory-info/hooks/use-territory-description';
 import { TerritoryInfoPanel } from './components/territory-info/territory-info-panel';
 import { YearSelector } from './components/year-selector/year-selector';
-import { AppStateProvider } from './contexts/app-state-context';
+import { AppStateProvider, useAppState } from './contexts/app-state-context';
 import type { YearEntry } from './types';
 import { loadYearIndex } from './utils/year-index';
 
@@ -11,9 +12,15 @@ import { loadYearIndex } from './utils/year-index';
  * Main app content with year selector integration
  */
 function AppContent() {
+  const { state } = useAppState();
   const [years, setYears] = useState<YearEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLicenseOpen, setIsLicenseOpen] = useState(false);
+
+  // Prefetch territory descriptions when year changes
+  useEffect(() => {
+    prefetchYearDescriptions(state.selectedYear);
+  }, [state.selectedYear]);
 
   // Load year index on mount
   useEffect(() => {
