@@ -3,14 +3,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "pnpm --filter @world-history-map/app run dev",
-    "build": "pnpm --filter @world-history-map/app run build",
+    "dev": "pnpm --filter @world-history-map/frontend run dev",
+    "build": "pnpm --filter @world-history-map/frontend run build",
     "check": "biome check .",
     "format": "biome format --write .",
     "lint": "biome lint .",
     "test": "pnpm -r run test",
     "test:coverage": "pnpm -r run test:coverage",
-    "storybook": "pnpm --filter @world-history-map/app run storybook",
+    "storybook": "pnpm --filter @world-history-map/frontend run storybook",
     "pipeline": "pnpm --filter @world-history-map/pipeline run pipeline",
     "typecheck": "tsc -b && pnpm --filter @world-history-map/worker exec tsc --noEmit"
   },

@@ -1,5 +1,5 @@
 {
-  "name": "@world-history-map/app",
+  "name": "@world-history-map/frontend",
   "private": true,
   "version": "0.0.1",
   "type": "module",
