@@ -21,9 +21,6 @@ export interface AppState {
   /** Territory info panel visibility */
   isInfoPanelOpen: boolean;
 
-  /** License/disclaimer modal visibility */
-  isDisclaimerOpen: boolean;
-
   /** Map view state */
   mapView: MapViewState;
 
@@ -41,7 +38,6 @@ export const initialAppState: AppState = {
   selectedYear: 1650,
   selectedTerritory: null,
   isInfoPanelOpen: false,
-  isDisclaimerOpen: false,
   mapView: {
     longitude: 40,
     latitude: 30,
@@ -58,7 +54,6 @@ export interface AppStateActions {
   setSelectedYear: (year: number) => void;
   setSelectedTerritory: (territory: string | null) => void;
   setInfoPanelOpen: (open: boolean) => void;
-  setDisclaimerOpen: (open: boolean) => void;
   setMapView: (view: MapViewState) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;

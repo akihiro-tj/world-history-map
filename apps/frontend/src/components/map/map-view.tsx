@@ -7,8 +7,11 @@ import { useAppState } from '../../contexts/app-state-context';
 import { MAP_CONFIG } from '../../styles/map-style';
 import type { TerritoryProperties } from '../../types';
 import { useMapData } from './hooks/use-map-data';
+import { useMapHover } from './hooks/use-map-hover';
+import { useMapKeyboard } from './hooks/use-map-keyboard';
 import { usePMTilesProtocol } from './hooks/use-pmtiles-protocol';
-import { ProjectionToggle, type ProjectionType } from './projection-toggle';
+import { useProjection } from './hooks/use-projection';
+import { ProjectionToggle } from './projection-toggle';
 import { TerritoryLabel } from './territory-label';
 import { TERRITORY_LAYER_IDS, TerritoryLayer } from './territory-layer';
 
@@ -18,11 +21,6 @@ import { TERRITORY_LAYER_IDS, TerritoryLayer } from './territory-layer';
 const SOURCE_ID = 'territories';
 const SOURCE_LAYER_TERRITORIES = 'territories';
 const SOURCE_LAYER_LABELS = 'labels';
-
-/**
- * Pan amount in pixels for keyboard navigation
- */
-const PAN_AMOUNT = 100;
 
 /**
  * MapView component
@@ -48,22 +46,11 @@ export function MapView() {
   const { state, actions } = useAppState();
   const { pmtilesUrl, isLoading, error } = useMapData(state.selectedYear);
   const [mapLoaded, setMapLoaded] = useState(false);
-  const [isHoveringTerritory, setIsHoveringTerritory] = useState(false);
-  const [projection, setProjection] = useState<ProjectionType>('mercator');
-  const prevProjectionRef = useRef<ProjectionType | null>(null);
-  const rafRef = useRef<number | null>(null);
+  const { isHoveringTerritory, handleMouseMove } = useMapHover();
+  const { projection, setProjection } = useProjection(mapRef, mapLoaded);
 
   // Register PMTiles protocol
   usePMTilesProtocol();
-
-  // Cleanup requestAnimationFrame on unmount
-  useEffect(() => {
-    return () => {
-      if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current);
-      }
-    };
-  }, []);
 
   // Expose map ref to window for E2E tests
   useEffect(() => {
@@ -81,59 +68,6 @@ export function MapView() {
     setMapLoaded(true);
     actions.setLoading(false);
   }, [actions]);
-
-  // Update projection when state changes with dynamic transition
-  useEffect(() => {
-    const mapInstance = mapRef.current?.getMap();
-    if (!mapInstance || !mapLoaded) return;
-
-    const prevProjection = prevProjectionRef.current;
-
-    // Skip animation on initial load (when there's no previous projection)
-    if (prevProjection === null) {
-      prevProjectionRef.current = projection;
-      mapInstance.setProjection({ type: projection });
-      return;
-    }
-
-    // Skip if projection hasn't changed
-    if (prevProjection === projection) return;
-
-    prevProjectionRef.current = projection;
-
-    // Get current view state
-    const currentZoom = mapInstance.getZoom();
-    const currentCenter = mapInstance.getCenter();
-
-    if (projection === 'globe') {
-      // Switch to globe with dramatic zoom out
-      mapInstance.setProjection({ type: 'globe' });
-      mapInstance.flyTo({
-        center: currentCenter,
-        zoom: Math.min(currentZoom, 2),
-        pitch: 0,
-        bearing: 0,
-        duration: 1200,
-        curve: 1.8,
-        essential: true,
-      });
-    } else {
-      // Switch to mercator with zoom in
-      mapInstance.flyTo({
-        center: currentCenter,
-        zoom: Math.max(currentZoom, 3),
-        pitch: 0,
-        bearing: 0,
-        duration: 800,
-        curve: 1.5,
-        essential: true,
-      });
-      // Set projection during animation for smooth blend
-      setTimeout(() => {
-        mapInstance.setProjection({ type: 'mercator' });
-      }, 200);
-    }
-  }, [projection, mapLoaded]);
 
   // Handle territory click
   const handleClick = useCallback(
@@ -162,63 +96,8 @@ export function MapView() {
     [actions],
   );
 
-  // Handle mouse move on map to update cursor
-  // Throttled with requestAnimationFrame for performance
-  const handleMouseMove = useCallback((event: MapLayerMouseEvent) => {
-    // Capture features immediately before rAF callback
-    const features = event.features;
-    const firstFeature = features?.[0];
-    const hasClickableTerritory = !!(
-      firstFeature && (firstFeature.properties as TerritoryProperties).SUBJECTO
-    );
-
-    if (rafRef.current !== null) {
-      cancelAnimationFrame(rafRef.current);
-    }
-
-    rafRef.current = requestAnimationFrame(() => {
-      setIsHoveringTerritory((prev) =>
-        prev !== hasClickableTerritory ? hasClickableTerritory : prev,
-      );
-      rafRef.current = null;
-    });
-  }, []);
-
   // Handle keyboard navigation
-  const handleKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
-    const map = mapRef.current;
-    if (!map) return;
-
-    switch (event.key) {
-      case 'ArrowUp':
-        event.preventDefault();
-        map.panBy([0, -PAN_AMOUNT], { duration: 200 });
-        break;
-      case 'ArrowDown':
-        event.preventDefault();
-        map.panBy([0, PAN_AMOUNT], { duration: 200 });
-        break;
-      case 'ArrowLeft':
-        event.preventDefault();
-        map.panBy([-PAN_AMOUNT, 0], { duration: 200 });
-        break;
-      case 'ArrowRight':
-        event.preventDefault();
-        map.panBy([PAN_AMOUNT, 0], { duration: 200 });
-        break;
-      case '=':
-      case '+':
-        event.preventDefault();
-        map.zoomIn({ duration: 200 });
-        break;
-      case '-':
-        event.preventDefault();
-        map.zoomOut({ duration: 200 });
-        break;
-      default:
-        break;
-    }
-  }, []);
+  const handleKeyDown = useMapKeyboard(mapRef);
 
   // Memoize map style to prevent unnecessary re-renders
   const mapStyle = useMemo(

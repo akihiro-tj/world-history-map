@@ -1,9 +1,36 @@
-import { useCallback, useEffect } from 'react';
+import type { ReactNode } from 'react';
+import { useCallback } from 'react';
+import { useEscapeKey } from '@/hooks/use-escape-key';
 import { useAppState } from '../../contexts/app-state-context';
 import { CloseButton } from '../ui/close-button';
 import { AiNotice } from './ai-notice';
 import { useTerritoryDescription } from './hooks/use-territory-description';
 import { YearLink } from './year-link';
+
+/**
+ * Shared aside wrapper for all panel states
+ */
+function PanelWrapper({
+  children,
+  scrollable,
+  busy,
+}: {
+  children: ReactNode;
+  scrollable?: boolean;
+  busy?: boolean;
+}) {
+  return (
+    <aside
+      data-testid="territory-info-panel"
+      role="dialog"
+      aria-labelledby="territory-info-title"
+      aria-busy={busy || undefined}
+      className={`absolute left-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] rounded-lg bg-gray-700/95 p-4 shadow-xl backdrop-blur-sm${scrollable ? ' max-h-[calc(100vh-2rem)] overflow-y-auto' : ''}`}
+    >
+      {children}
+    </aside>
+  );
+}
 
 /**
  * Territory info panel component
@@ -33,20 +60,7 @@ export function TerritoryInfoPanel() {
   }, [actions]);
 
   // Handle Escape key
-  useEffect(() => {
-    if (!isInfoPanelOpen) return;
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        handleClose();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isInfoPanelOpen, handleClose]);
+  useEscapeKey(isInfoPanelOpen, handleClose);
 
   // Don't render if panel is closed
   if (!isInfoPanelOpen) {
@@ -56,29 +70,18 @@ export function TerritoryInfoPanel() {
   // Loading state
   if (isLoading) {
     return (
-      <aside
-        data-testid="territory-info-panel"
-        role="dialog"
-        aria-labelledby="territory-info-title"
-        aria-busy="true"
-        className="absolute left-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] rounded-lg bg-gray-700/95 p-4 shadow-xl backdrop-blur-sm"
-      >
+      <PanelWrapper busy>
         <div className="flex items-center justify-center py-8">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
         </div>
-      </aside>
+      </PanelWrapper>
     );
   }
 
   // Error state
   if (error) {
     return (
-      <aside
-        data-testid="territory-info-panel"
-        role="dialog"
-        aria-labelledby="territory-info-title"
-        className="absolute left-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] rounded-lg bg-gray-700/95 p-4 shadow-xl backdrop-blur-sm"
-      >
+      <PanelWrapper>
         <div className="flex items-center justify-between border-b border-gray-600 pb-3">
           <h2 id="territory-info-title" className="text-lg font-semibold text-white">
             エラー
@@ -86,19 +89,14 @@ export function TerritoryInfoPanel() {
           <CloseButton onClick={handleClose} aria-label="閉じる" />
         </div>
         <p className="mt-4 text-red-400">{error}</p>
-      </aside>
+      </PanelWrapper>
     );
   }
 
   // No description available
   if (!description) {
     return (
-      <aside
-        data-testid="territory-info-panel"
-        role="dialog"
-        aria-labelledby="territory-info-title"
-        className="absolute left-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] rounded-lg bg-gray-700/95 p-4 shadow-xl backdrop-blur-sm"
-      >
+      <PanelWrapper>
         <div className="flex items-center justify-between border-b border-gray-600 pb-3">
           <h2 id="territory-info-title" className="text-lg font-semibold text-white">
             {selectedTerritory ?? '領土情報'}
@@ -108,18 +106,13 @@ export function TerritoryInfoPanel() {
         <div data-testid="no-description-message" className="mt-4 text-center text-gray-300">
           <p>この領土の詳細情報は準備中です。</p>
         </div>
-      </aside>
+      </PanelWrapper>
     );
   }
 
   // Full description display
   return (
-    <aside
-      data-testid="territory-info-panel"
-      role="dialog"
-      aria-labelledby="territory-info-title"
-      className="absolute left-4 top-4 z-30 max-h-[calc(100vh-2rem)] w-96 max-w-[calc(100vw-2rem)] overflow-y-auto rounded-lg bg-gray-700/95 p-4 shadow-xl backdrop-blur-sm"
-    >
+    <PanelWrapper scrollable>
       {/* Header */}
       <div className="flex items-center justify-between border-b border-gray-600 pb-3">
         <h2 id="territory-info-title" className="text-lg font-semibold text-white">
@@ -189,6 +182,6 @@ export function TerritoryInfoPanel() {
         {/* AI Notice */}
         <AiNotice className="mt-4" />
       </div>
-    </aside>
+    </PanelWrapper>
   );
 }

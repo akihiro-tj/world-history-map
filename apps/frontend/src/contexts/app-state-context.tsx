@@ -1,4 +1,4 @@
-import { createContext, type ReactNode, useCallback, useContext, useMemo, useState } from 'react';
+import { createContext, type ReactNode, useContext, useMemo, useReducer } from 'react';
 import { type AppState, type AppStateActions, initialAppState, type MapViewState } from '../types';
 
 /**
@@ -20,6 +20,31 @@ interface AppStateProviderProps {
   initialState?: AppState;
 }
 
+type AppStateAction =
+  | { type: 'SET_SELECTED_YEAR'; year: number }
+  | { type: 'SET_SELECTED_TERRITORY'; territory: string | null }
+  | { type: 'SET_INFO_PANEL_OPEN'; open: boolean }
+  | { type: 'SET_MAP_VIEW'; view: MapViewState }
+  | { type: 'SET_LOADING'; loading: boolean }
+  | { type: 'SET_ERROR'; error: string | null };
+
+function appStateReducer(state: AppState, action: AppStateAction): AppState {
+  switch (action.type) {
+    case 'SET_SELECTED_YEAR':
+      return { ...state, selectedYear: action.year };
+    case 'SET_SELECTED_TERRITORY':
+      return { ...state, selectedTerritory: action.territory };
+    case 'SET_INFO_PANEL_OPEN':
+      return { ...state, isInfoPanelOpen: action.open };
+    case 'SET_MAP_VIEW':
+      return { ...state, mapView: action.view };
+    case 'SET_LOADING':
+      return { ...state, isLoading: action.loading };
+    case 'SET_ERROR':
+      return { ...state, error: action.error };
+  }
+}
+
 /**
  * Provider that supplies application state
  *
@@ -39,55 +64,19 @@ export function AppStateProvider({
   children,
   initialState = initialAppState,
 }: AppStateProviderProps) {
-  const [state, setState] = useState<AppState>(initialState);
-
-  const setSelectedYear = useCallback((year: number) => {
-    setState((prev) => ({ ...prev, selectedYear: year }));
-  }, []);
-
-  const setSelectedTerritory = useCallback((territory: string | null) => {
-    setState((prev) => ({ ...prev, selectedTerritory: territory }));
-  }, []);
-
-  const setInfoPanelOpen = useCallback((open: boolean) => {
-    setState((prev) => ({ ...prev, isInfoPanelOpen: open }));
-  }, []);
-
-  const setDisclaimerOpen = useCallback((open: boolean) => {
-    setState((prev) => ({ ...prev, isDisclaimerOpen: open }));
-  }, []);
-
-  const setMapView = useCallback((view: MapViewState) => {
-    setState((prev) => ({ ...prev, mapView: view }));
-  }, []);
-
-  const setLoading = useCallback((loading: boolean) => {
-    setState((prev) => ({ ...prev, isLoading: loading }));
-  }, []);
-
-  const setError = useCallback((error: string | null) => {
-    setState((prev) => ({ ...prev, error }));
-  }, []);
+  const [state, dispatch] = useReducer(appStateReducer, initialState);
 
   const actions: AppStateActions = useMemo(
     () => ({
-      setSelectedYear,
-      setSelectedTerritory,
-      setInfoPanelOpen,
-      setDisclaimerOpen,
-      setMapView,
-      setLoading,
-      setError,
+      setSelectedYear: (year: number) => dispatch({ type: 'SET_SELECTED_YEAR', year }),
+      setSelectedTerritory: (territory: string | null) =>
+        dispatch({ type: 'SET_SELECTED_TERRITORY', territory }),
+      setInfoPanelOpen: (open: boolean) => dispatch({ type: 'SET_INFO_PANEL_OPEN', open }),
+      setMapView: (view: MapViewState) => dispatch({ type: 'SET_MAP_VIEW', view }),
+      setLoading: (loading: boolean) => dispatch({ type: 'SET_LOADING', loading }),
+      setError: (error: string | null) => dispatch({ type: 'SET_ERROR', error }),
     }),
-    [
-      setSelectedYear,
-      setSelectedTerritory,
-      setInfoPanelOpen,
-      setDisclaimerOpen,
-      setMapView,
-      setLoading,
-      setError,
-    ],
+    [],
   );
 
   const value = useMemo(() => ({ state, actions }), [state, actions]);
