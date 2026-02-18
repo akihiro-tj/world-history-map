@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { YearIndex } from '../../../types';
 import { getTilesUrl, loadTilesManifest, type TilesManifest } from '../../../utils/tiles-config';
 import { loadYearIndex } from '../../../utils/year-index';
@@ -22,10 +22,7 @@ interface MapDataState {
 /**
  * Map data hook return type
  */
-interface UseMapDataReturn extends MapDataState {
-  /** Load data for a specific year */
-  loadYear: (year: number) => void;
-}
+type UseMapDataReturn = MapDataState;
 
 /**
  * Hook to manage map data loading
@@ -34,12 +31,12 @@ interface UseMapDataReturn extends MapDataState {
  * for the specified year.
  *
  * @param initialYear Initial year to load (default: 1650)
- * @returns Map data state and load function
+ * @returns Map data state
  *
  * @example
  * ```tsx
  * function MapComponent() {
- *   const { pmtilesUrl, isLoading, error, loadYear } = useMapData(1650);
+ *   const { pmtilesUrl, isLoading, error } = useMapData(1650);
  *
  *   if (isLoading) return <LoadingSpinner />;
  *   if (error) return <Error message={error} />;
@@ -102,40 +99,5 @@ export function useMapData(initialYear = 1650): UseMapDataReturn {
     };
   }, [initialYear]);
 
-  const loadYear = useCallback(
-    (year: number) => {
-      if (!state.yearIndex || !state.tilesManifest) {
-        setState((prev) => ({
-          ...prev,
-          error: 'Data not loaded',
-        }));
-        return;
-      }
-
-      setState((prev) => ({ ...prev, isLoading: true, error: null }));
-
-      const pmtilesUrl = getTilesUrl(year, state.tilesManifest);
-      if (!pmtilesUrl) {
-        setState((prev) => ({
-          ...prev,
-          isLoading: false,
-          error: `Year ${year} not found`,
-        }));
-        return;
-      }
-
-      setState((prev) => ({
-        ...prev,
-        pmtilesUrl,
-        isLoading: false,
-        error: null,
-      }));
-    },
-    [state.yearIndex, state.tilesManifest],
-  );
-
-  return {
-    ...state,
-    loadYear,
-  };
+  return state;
 }
