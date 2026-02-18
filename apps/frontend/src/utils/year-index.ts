@@ -56,8 +56,13 @@ function validateYearIndex(data: unknown): data is YearIndex {
   return years.every(validateYearEntry);
 }
 
+/** Cached year index */
+let cachedYearIndex: YearIndex | null = null;
+
 /**
  * Load year index
+ *
+ * Returns a cached result if already loaded.
  *
  * @returns Year index data
  * @throws When loading or validation fails
@@ -69,6 +74,10 @@ function validateYearIndex(data: unknown): data is YearIndex {
  * ```
  */
 export async function loadYearIndex(): Promise<YearIndex> {
+  if (cachedYearIndex) {
+    return cachedYearIndex;
+  }
+
   const response = await fetch(INDEX_PATH);
 
   if (!response.ok) {
@@ -81,7 +90,15 @@ export async function loadYearIndex(): Promise<YearIndex> {
     throw new Error('Invalid year index format');
   }
 
+  cachedYearIndex = data;
   return data;
+}
+
+/**
+ * Clear the cached year index (for testing)
+ */
+export function clearYearIndexCache(): void {
+  cachedYearIndex = null;
 }
 
 /**
