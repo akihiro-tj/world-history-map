@@ -7,6 +7,7 @@ import { useAppState } from '../../contexts/app-state-context';
 import { MAP_CONFIG } from '../../styles/map-style';
 import type { TerritoryProperties } from '../../types';
 import { useMapData } from './hooks/use-map-data';
+import { useMapKeyboard } from './hooks/use-map-keyboard';
 import { usePMTilesProtocol } from './hooks/use-pmtiles-protocol';
 import { ProjectionToggle, type ProjectionType } from './projection-toggle';
 import { TerritoryLabel } from './territory-label';
@@ -18,11 +19,6 @@ import { TERRITORY_LAYER_IDS, TerritoryLayer } from './territory-layer';
 const SOURCE_ID = 'territories';
 const SOURCE_LAYER_TERRITORIES = 'territories';
 const SOURCE_LAYER_LABELS = 'labels';
-
-/**
- * Pan amount in pixels for keyboard navigation
- */
-const PAN_AMOUNT = 100;
 
 /**
  * MapView component
@@ -185,40 +181,7 @@ export function MapView() {
   }, []);
 
   // Handle keyboard navigation
-  const handleKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
-    const map = mapRef.current;
-    if (!map) return;
-
-    switch (event.key) {
-      case 'ArrowUp':
-        event.preventDefault();
-        map.panBy([0, -PAN_AMOUNT], { duration: 200 });
-        break;
-      case 'ArrowDown':
-        event.preventDefault();
-        map.panBy([0, PAN_AMOUNT], { duration: 200 });
-        break;
-      case 'ArrowLeft':
-        event.preventDefault();
-        map.panBy([-PAN_AMOUNT, 0], { duration: 200 });
-        break;
-      case 'ArrowRight':
-        event.preventDefault();
-        map.panBy([PAN_AMOUNT, 0], { duration: 200 });
-        break;
-      case '=':
-      case '+':
-        event.preventDefault();
-        map.zoomIn({ duration: 200 });
-        break;
-      case '-':
-        event.preventDefault();
-        map.zoomOut({ duration: 200 });
-        break;
-      default:
-        break;
-    }
-  }, []);
+  const handleKeyDown = useMapKeyboard(mapRef);
 
   // Memoize map style to prevent unnecessary re-renders
   const mapStyle = useMemo(
