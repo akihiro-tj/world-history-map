@@ -35,7 +35,6 @@ const meta = {
           mapView: { longitude: 0, latitude: 30, zoom: 2 },
           isLoading: false,
           isInfoPanelOpen: false,
-          isDisclaimerOpen: false,
           error: null,
         }}
       >
@@ -78,7 +77,6 @@ export const ManyYears: Story = {
           mapView: { longitude: 0, latitude: 30, zoom: 2 },
           isLoading: false,
           isInfoPanelOpen: false,
-          isDisclaimerOpen: false,
           error: null,
         }}
       >

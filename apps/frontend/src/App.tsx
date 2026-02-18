@@ -48,10 +48,6 @@ function AppContent() {
     };
   }, []);
 
-  const handleYearSelect = useCallback((year: number) => {
-    console.log('Year selected:', year);
-  }, []);
-
   const handleOpenLicense = useCallback(() => {
     setIsLicenseOpen(true);
   }, []);
@@ -66,7 +62,7 @@ function AppContent() {
       <TerritoryInfoPanel />
       {!isLoading && years.length > 0 && (
         <div className="absolute inset-x-4 bottom-4 z-20 mx-auto max-w-2xl overflow-hidden rounded-lg bg-gray-700/95 shadow-lg backdrop-blur-sm">
-          <YearSelector years={years} onYearSelect={handleYearSelect} />
+          <YearSelector years={years} />
         </div>
       )}
 

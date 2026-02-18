@@ -53,10 +53,6 @@ export function AppStateProvider({
     setState((prev) => ({ ...prev, isInfoPanelOpen: open }));
   }, []);
 
-  const setDisclaimerOpen = useCallback((open: boolean) => {
-    setState((prev) => ({ ...prev, isDisclaimerOpen: open }));
-  }, []);
-
   const setMapView = useCallback((view: MapViewState) => {
     setState((prev) => ({ ...prev, mapView: view }));
   }, []);
@@ -74,20 +70,11 @@ export function AppStateProvider({
       setSelectedYear,
       setSelectedTerritory,
       setInfoPanelOpen,
-      setDisclaimerOpen,
       setMapView,
       setLoading,
       setError,
     }),
-    [
-      setSelectedYear,
-      setSelectedTerritory,
-      setInfoPanelOpen,
-      setDisclaimerOpen,
-      setMapView,
-      setLoading,
-      setError,
-    ],
+    [setSelectedYear, setSelectedTerritory, setInfoPanelOpen, setMapView, setLoading, setError],
   );
 
   const value = useMemo(() => ({ state, actions }), [state, actions]);
