@@ -7,6 +7,7 @@ import { useAppState } from '../../contexts/app-state-context';
 import { MAP_CONFIG } from '../../styles/map-style';
 import type { TerritoryProperties } from '../../types';
 import { useMapData } from './hooks/use-map-data';
+import { useMapHover } from './hooks/use-map-hover';
 import { useMapKeyboard } from './hooks/use-map-keyboard';
 import { usePMTilesProtocol } from './hooks/use-pmtiles-protocol';
 import { ProjectionToggle, type ProjectionType } from './projection-toggle';
@@ -44,22 +45,12 @@ export function MapView() {
   const { state, actions } = useAppState();
   const { pmtilesUrl, isLoading, error } = useMapData(state.selectedYear);
   const [mapLoaded, setMapLoaded] = useState(false);
-  const [isHoveringTerritory, setIsHoveringTerritory] = useState(false);
   const [projection, setProjection] = useState<ProjectionType>('mercator');
   const prevProjectionRef = useRef<ProjectionType | null>(null);
-  const rafRef = useRef<number | null>(null);
+  const { isHoveringTerritory, handleMouseMove } = useMapHover();
 
   // Register PMTiles protocol
   usePMTilesProtocol();
-
-  // Cleanup requestAnimationFrame on unmount
-  useEffect(() => {
-    return () => {
-      if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current);
-      }
-    };
-  }, []);
 
   // Expose map ref to window for E2E tests
   useEffect(() => {
@@ -157,28 +148,6 @@ export function MapView() {
     },
     [actions],
   );
-
-  // Handle mouse move on map to update cursor
-  // Throttled with requestAnimationFrame for performance
-  const handleMouseMove = useCallback((event: MapLayerMouseEvent) => {
-    // Capture features immediately before rAF callback
-    const features = event.features;
-    const firstFeature = features?.[0];
-    const hasClickableTerritory = !!(
-      firstFeature && (firstFeature.properties as TerritoryProperties).SUBJECTO
-    );
-
-    if (rafRef.current !== null) {
-      cancelAnimationFrame(rafRef.current);
-    }
-
-    rafRef.current = requestAnimationFrame(() => {
-      setIsHoveringTerritory((prev) =>
-        prev !== hasClickableTerritory ? hasClickableTerritory : prev,
-      );
-      rafRef.current = null;
-    });
-  }, []);
 
   // Handle keyboard navigation
   const handleKeyDown = useMapKeyboard(mapRef);
