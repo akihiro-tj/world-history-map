@@ -10,7 +10,8 @@ import { useMapData } from './hooks/use-map-data';
 import { useMapHover } from './hooks/use-map-hover';
 import { useMapKeyboard } from './hooks/use-map-keyboard';
 import { usePMTilesProtocol } from './hooks/use-pmtiles-protocol';
-import { ProjectionToggle, type ProjectionType } from './projection-toggle';
+import { useProjection } from './hooks/use-projection';
+import { ProjectionToggle } from './projection-toggle';
 import { TerritoryLabel } from './territory-label';
 import { TERRITORY_LAYER_IDS, TerritoryLayer } from './territory-layer';
 
@@ -45,9 +46,8 @@ export function MapView() {
   const { state, actions } = useAppState();
   const { pmtilesUrl, isLoading, error } = useMapData(state.selectedYear);
   const [mapLoaded, setMapLoaded] = useState(false);
-  const [projection, setProjection] = useState<ProjectionType>('mercator');
-  const prevProjectionRef = useRef<ProjectionType | null>(null);
   const { isHoveringTerritory, handleMouseMove } = useMapHover();
+  const { projection, setProjection } = useProjection(mapRef, mapLoaded);
 
   // Register PMTiles protocol
   usePMTilesProtocol();
@@ -68,59 +68,6 @@ export function MapView() {
     setMapLoaded(true);
     actions.setLoading(false);
   }, [actions]);
-
-  // Update projection when state changes with dynamic transition
-  useEffect(() => {
-    const mapInstance = mapRef.current?.getMap();
-    if (!mapInstance || !mapLoaded) return;
-
-    const prevProjection = prevProjectionRef.current;
-
-    // Skip animation on initial load (when there's no previous projection)
-    if (prevProjection === null) {
-      prevProjectionRef.current = projection;
-      mapInstance.setProjection({ type: projection });
-      return;
-    }
-
-    // Skip if projection hasn't changed
-    if (prevProjection === projection) return;
-
-    prevProjectionRef.current = projection;
-
-    // Get current view state
-    const currentZoom = mapInstance.getZoom();
-    const currentCenter = mapInstance.getCenter();
-
-    if (projection === 'globe') {
-      // Switch to globe with dramatic zoom out
-      mapInstance.setProjection({ type: 'globe' });
-      mapInstance.flyTo({
-        center: currentCenter,
-        zoom: Math.min(currentZoom, 2),
-        pitch: 0,
-        bearing: 0,
-        duration: 1200,
-        curve: 1.8,
-        essential: true,
-      });
-    } else {
-      // Switch to mercator with zoom in
-      mapInstance.flyTo({
-        center: currentCenter,
-        zoom: Math.max(currentZoom, 3),
-        pitch: 0,
-        bearing: 0,
-        duration: 800,
-        curve: 1.5,
-        essential: true,
-      });
-      // Set projection during animation for smooth blend
-      setTimeout(() => {
-        mapInstance.setProjection({ type: 'mercator' });
-      }, 200);
-    }
-  }, [projection, mapLoaded]);
 
   // Handle territory click
   const handleClick = useCallback(
