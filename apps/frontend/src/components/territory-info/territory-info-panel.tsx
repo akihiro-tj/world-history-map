@@ -1,4 +1,5 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
+import { useEscapeKey } from '@/hooks/use-escape-key';
 import { useAppState } from '../../contexts/app-state-context';
 import { CloseButton } from '../ui/close-button';
 import { AiNotice } from './ai-notice';
@@ -33,20 +34,7 @@ export function TerritoryInfoPanel() {
   }, [actions]);
 
   // Handle Escape key
-  useEffect(() => {
-    if (!isInfoPanelOpen) return;
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        handleClose();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isInfoPanelOpen, handleClose]);
+  useEscapeKey(isInfoPanelOpen, handleClose);
 
   // Don't render if panel is closed
   if (!isInfoPanelOpen) {

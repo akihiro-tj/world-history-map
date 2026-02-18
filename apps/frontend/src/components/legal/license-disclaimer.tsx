@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
+import { useEscapeKey } from '@/hooks/use-escape-key';
 import { CloseButton } from '../ui/close-button';
 
 /**
@@ -28,20 +29,7 @@ export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   // Handle Escape key
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [isOpen, onClose]);
+  useEscapeKey(isOpen, onClose);
 
   // Focus close button when modal opens
   useEffect(() => {
