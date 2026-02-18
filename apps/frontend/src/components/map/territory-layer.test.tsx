@@ -1,5 +1,8 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { clearColorSchemeCache, loadColorScheme } from '../../utils/color-scheme';
 import { TerritoryLayer } from './territory-layer';
 
 // Mock react-map-gl/maplibre
@@ -15,11 +18,35 @@ vi.mock('react-map-gl/maplibre', () => ({
   )),
 }));
 
+const colorSchemeJson = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, '../../../public/data/color-scheme.json'), 'utf8'),
+) as Record<string, string>;
+
+const mockFetch = vi.fn();
+
+beforeAll(() => {
+  global.fetch = mockFetch;
+});
+
 describe('TerritoryLayer', () => {
   const defaultProps = {
     sourceId: 'territories',
     sourceLayer: 'territories',
   };
+
+  beforeEach(async () => {
+    clearColorSchemeCache();
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve(colorSchemeJson),
+    });
+    await loadColorScheme();
+  });
+
+  afterEach(() => {
+    clearColorSchemeCache();
+    mockFetch.mockReset();
+  });
 
   it('should render fill layer with correct configuration', () => {
     render(<TerritoryLayer {...defaultProps} />);

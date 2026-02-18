@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { YearIndex } from '../../../types';
+import { loadColorScheme } from '../../../utils/color-scheme';
 import { getTilesUrl, loadTilesManifest, type TilesManifest } from '../../../utils/tiles-config';
 import { loadYearIndex } from '../../../utils/year-index';
 
@@ -60,7 +61,11 @@ export function useMapData(initialYear = 1650): UseMapDataReturn {
 
     async function loadData() {
       try {
-        const [index, manifest] = await Promise.all([loadYearIndex(), loadTilesManifest()]);
+        const [index, manifest] = await Promise.all([
+          loadYearIndex(),
+          loadTilesManifest(),
+          loadColorScheme(),
+        ]);
         if (!isMounted) return;
 
         const pmtilesUrl = getTilesUrl(initialYear, manifest);
