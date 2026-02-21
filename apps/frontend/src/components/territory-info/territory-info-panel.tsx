@@ -8,9 +8,6 @@ import { AiNotice } from './ai-notice';
 import { useTerritoryDescription } from './hooks/use-territory-description';
 import { YearLink } from './year-link';
 
-/**
- * Shared aside wrapper for all panel states
- */
 function PanelWrapper({
   children,
   scrollable,
@@ -36,18 +33,6 @@ function PanelWrapper({
   );
 }
 
-/**
- * Territory info panel component
- *
- * Displays detailed historical information about the selected territory.
- * Includes territory name, summary, background, key events, and related years.
- * Shows AI-generated content notice and supports keyboard accessibility.
- *
- * @example
- * ```tsx
- * <TerritoryInfoPanel />
- * ```
- */
 export function TerritoryInfoPanel() {
   const { state, actions } = useAppState();
   const { selectedTerritory, selectedYear, isInfoPanelOpen } = state;
@@ -57,13 +42,11 @@ export function TerritoryInfoPanel() {
     selectedYear,
   );
 
-  // Handle close
   const handleClose = useCallback(() => {
     actions.setInfoPanelOpen(false);
     actions.setSelectedTerritory(null);
   }, [actions]);
 
-  // Handle Escape key
   useEscapeKey(isInfoPanelOpen, handleClose);
 
   const sortedKeyEvents = useMemo(
@@ -72,12 +55,10 @@ export function TerritoryInfoPanel() {
     [description?.keyEvents],
   );
 
-  // Don't render if panel is closed
   if (!isInfoPanelOpen) {
     return null;
   }
 
-  // Loading state
   if (isLoading) {
     return (
       <PanelWrapper busy>
@@ -88,7 +69,6 @@ export function TerritoryInfoPanel() {
     );
   }
 
-  // Error state
   if (error) {
     return (
       <PanelWrapper>
@@ -103,7 +83,6 @@ export function TerritoryInfoPanel() {
     );
   }
 
-  // No description available
   if (!description) {
     return (
       <PanelWrapper>
@@ -120,10 +99,8 @@ export function TerritoryInfoPanel() {
     );
   }
 
-  // Full description display
   return (
     <PanelWrapper scrollable>
-      {/* Header */}
       <div className="flex items-center justify-between border-b border-gray-600 pb-3">
         <h2 id="territory-info-title" className="text-lg font-semibold text-white">
           {description.name}
@@ -131,16 +108,13 @@ export function TerritoryInfoPanel() {
         <CloseButton onClick={handleClose} aria-label="閉じる" />
       </div>
 
-      {/* Content */}
       <div data-testid="territory-description" className="mt-4 space-y-4">
-        {/* Year badge */}
         <div className="flex items-center gap-2">
           <span className="rounded-full bg-blue-600 px-3 py-1 text-sm font-medium text-white">
             {description.year}年
           </span>
         </div>
 
-        {/* Facts */}
         {description.facts.length > 0 && (
           <div>
             <h3 className="mb-2 text-sm font-semibold text-white">基本情報</h3>
@@ -152,7 +126,6 @@ export function TerritoryInfoPanel() {
           </div>
         )}
 
-        {/* Key Events */}
         {sortedKeyEvents.length > 0 && (
           <div>
             <h3 className="mb-2 text-sm font-semibold text-white">主な出来事</h3>
@@ -175,7 +148,6 @@ export function TerritoryInfoPanel() {
           </div>
         )}
 
-        {/* Related Years */}
         {description.relatedYears && description.relatedYears.length > 0 && (
           <div data-testid="related-years">
             <h3 className="mb-2 text-sm font-semibold text-white">関連する年代</h3>
@@ -187,7 +159,6 @@ export function TerritoryInfoPanel() {
           </div>
         )}
 
-        {/* AI Notice */}
         <AiNotice className="mt-4" />
       </div>
     </PanelWrapper>

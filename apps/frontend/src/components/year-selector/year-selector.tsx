@@ -3,9 +3,6 @@ import { cn } from '@/lib/utils';
 import { useAppState } from '../../contexts/app-state-context';
 import type { YearEntry } from '../../types/year';
 
-/**
- * Props for YearSelector component
- */
 interface YearSelectorProps {
   /** Array of available year entries */
   years: YearEntry[];
@@ -24,35 +21,18 @@ function formatYear(year: number): string {
   return String(year);
 }
 
-/**
- * Year selector component
- *
- * Displays a horizontally scrollable list of available years.
- * Supports keyboard navigation with arrow keys and wrap-around behavior.
- *
- * @example
- * ```tsx
- * <YearSelector
- *   years={availableYears}
- *   onYearSelect={(year) => console.log('Selected:', year)}
- * />
- * ```
- */
 export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
   const { state, actions } = useAppState();
   const containerRef = useRef<HTMLDivElement>(null);
   const buttonRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
   const isInitialMount = useRef(true);
 
-  // Sort years chronologically
   const sortedYears = useMemo(() => [...years].sort((a, b) => a.year - b.year), [years]);
 
-  // Get current year index
   const currentIndex = sortedYears.findIndex((y) => y.year === state.selectedYear);
   const canGoPrev = currentIndex > 0;
   const canGoNext = currentIndex < sortedYears.length - 1;
 
-  // Navigate to previous/next year
   const navigateYear = useCallback(
     (direction: 'prev' | 'next') => {
       const newIndex = direction === 'prev' ? currentIndex - 1 : currentIndex + 1;
@@ -65,8 +45,6 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
     [currentIndex, sortedYears, actions, onYearSelect],
   );
 
-  // Scroll selected year into view on mount and when selection changes
-  // Use instant scroll on initial mount, smooth scroll afterwards
   useEffect(() => {
     const selectedButton = buttonRefs.current.get(state.selectedYear);
     if (selectedButton) {
@@ -79,7 +57,6 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
     }
   }, [state.selectedYear]);
 
-  // Handle year selection
   const handleYearClick = useCallback(
     (year: number) => {
       actions.setSelectedYear(year);
@@ -88,7 +65,6 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
     [actions, onYearSelect],
   );
 
-  // Handle keyboard navigation
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
       let nextIndex: number | null = null;
@@ -134,7 +110,6 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
     [sortedYears, handleYearClick],
   );
 
-  // Store button ref
   const setButtonRef = useCallback((year: number, element: HTMLButtonElement | null) => {
     if (element) {
       buttonRefs.current.set(year, element);
@@ -150,7 +125,6 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
       aria-label="年代選択"
       className="flex items-stretch"
     >
-      {/* Previous year button */}
       <button
         type="button"
         onClick={() => navigateYear('prev')}
@@ -175,7 +149,6 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
         </svg>
       </button>
 
-      {/* Scrollable year list */}
       <div className="flex flex-1 items-stretch overflow-x-auto scrollbar-none">
         {sortedYears.map((yearEntry, index) => {
           const isSelected = yearEntry.year === state.selectedYear;
@@ -203,7 +176,6 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
         })}
       </div>
 
-      {/* Next year button */}
       <button
         type="button"
         onClick={() => navigateYear('next')}

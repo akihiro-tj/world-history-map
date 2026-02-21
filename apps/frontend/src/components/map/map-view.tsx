@@ -15,32 +15,10 @@ import { ProjectionToggle } from './projection-toggle';
 import { TerritoryLabel } from './territory-label';
 import { TERRITORY_LAYER_IDS, TerritoryLayer } from './territory-layer';
 
-/**
- * Source and layer constants
- */
 const SOURCE_ID = 'territories';
 const SOURCE_LAYER_TERRITORIES = 'territories';
 const SOURCE_LAYER_LABELS = 'labels';
 
-/**
- * MapView component
- *
- * Main map display component that renders the historical world map
- * with territory boundaries, colors, and labels.
- *
- * Features:
- * - Displays territories from PMTiles for the selected year
- * - Supports zoom/pan via mouse and keyboard
- * - Color-codes territories by SUBJECTO property
- * - Shows territory name labels
- *
- * @example
- * ```tsx
- * <AppStateProvider>
- *   <MapView />
- * </AppStateProvider>
- * ```
- */
 export function MapView() {
   const mapRef = useRef<MapRef>(null);
   const { state, actions } = useAppState();
@@ -49,7 +27,6 @@ export function MapView() {
   const { isHoveringTerritory, handleMouseMove } = useMapHover();
   const { projection, setProjection } = useProjection(mapRef, mapLoaded);
 
-  // Register PMTiles protocol
   usePMTilesProtocol();
 
   // Expose map ref to window for E2E tests
@@ -63,12 +40,10 @@ export function MapView() {
     };
   });
 
-  // Handle map load
   const handleLoad = useCallback(() => {
     setMapLoaded(true);
   }, []);
 
-  // Handle territory click
   const handleClick = useCallback(
     (event: MapLayerMouseEvent) => {
       const features = event.features;
@@ -95,10 +70,8 @@ export function MapView() {
     [actions],
   );
 
-  // Handle keyboard navigation
   const handleKeyDown = useMapKeyboard(mapRef);
 
-  // Memoize map style to prevent unnecessary re-renders
   const mapStyle = useMemo(
     () => ({
       version: 8 as const,
@@ -141,7 +114,6 @@ export function MapView() {
       aria-label="Interactive historical map showing territories from the selected year. Use arrow keys to pan and +/- to zoom."
       tabIndex={0}
     >
-      {/* Loading overlay */}
       {(isLoading || !mapLoaded) && (
         <output
           className="absolute inset-0 z-20 flex items-center justify-center"
@@ -150,7 +122,6 @@ export function MapView() {
           aria-label="Loading map data"
         >
           <div className="flex flex-col items-center">
-            {/* Rotating globe */}
             <div className="relative h-16 w-16">
               <svg
                 className="h-16 w-16 animate-spin text-blue-400"
@@ -172,7 +143,6 @@ export function MapView() {
         </output>
       )}
 
-      {/* Projection toggle */}
       <ProjectionToggle
         projection={projection}
         onToggle={setProjection}
@@ -180,7 +150,6 @@ export function MapView() {
         data-testid="projection-toggle"
       />
 
-      {/* Map */}
       {pmtilesUrl && (
         <MapGL
           ref={mapRef}

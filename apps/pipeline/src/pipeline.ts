@@ -35,14 +35,10 @@ export interface PipelineOptions {
   verbose?: boolean | undefined;
 }
 
-/**
- * Run the full pipeline.
- */
 export async function runPipeline(
   logger: PipelineLogger,
   options: PipelineOptions = {},
 ): Promise<void> {
-  // Acquire lock
   if (!acquireLock()) {
     throw new PipelineError(
       'Pipeline is already running. Use `rm -rf .cache/pipeline.lock` to clear a stale lock.',
@@ -52,7 +48,6 @@ export async function runPipeline(
   registerCleanupHandlers();
 
   try {
-    // Load or create state
     let state: PipelineState;
     if (options.restart) {
       state = createInitialState();
@@ -64,7 +59,6 @@ export async function runPipeline(
       }
     }
 
-    // Stage 1: Fetch
     logger.info('pipeline', '=== Stage: fetch ===');
     await executeFetch(
       PATHS.historicalBasemaps,
@@ -84,7 +78,6 @@ export async function runPipeline(
     };
     saveState(state, PATHS.pipelineState);
 
-    // Detect available years
     const allYears = await parseYearsFromDirectory(PATHS.sourceGeojson);
     const yearsToProcess = filterYears(allYears, options);
     logger.info('pipeline', `Processing ${yearsToProcess.length} of ${allYears.length} years`);
@@ -97,13 +90,9 @@ export async function runPipeline(
       return;
     }
 
-    // Manifest for prepare stage
     const manifest: DeploymentManifest = loadManifest();
-
-    // Collect validation results for report
     const validationResults: ValidationResult[] = [];
 
-    // Per-year stages: merge → validate → convert → prepare
     for (const year of yearsToProcess) {
       const sourceFile = path.join(PATHS.sourceGeojson, yearToUpstreamFilename(year));
       if (!existsSync(sourceFile)) {
@@ -111,10 +100,8 @@ export async function runPipeline(
         continue;
       }
 
-      // Calculate source hash
       const sourceHash = await hashFile(sourceFile);
 
-      // Initialize year state
       if (!state.years[String(year)]) {
         state.years[String(year)] = {};
       }
@@ -122,19 +109,16 @@ export async function runPipeline(
       const yearState = state.years[String(year)];
       if (!yearState) continue;
 
-      // Check if source changed
       if (yearState.source && yearState.source.hash !== sourceHash) {
         logger.info('pipeline', `Year ${year}: source changed, invalidating downstream`);
         invalidateDownstream(state, year, 'source');
       }
 
-      // Update source state
       updateYearState(state, year, 'source', {
         hash: sourceHash,
         fetchedAt: new Date().toISOString(),
       });
 
-      // Stage 2: Merge
       if (shouldProcessYear(state, year, 'merge', sourceHash)) {
         logger.info('pipeline', `=== Year ${year}: merge ===`);
         const start = Date.now();
@@ -153,7 +137,6 @@ export async function runPipeline(
         logger.info('pipeline', `Year ${year}: merge skipped (unchanged)`);
       }
 
-      // Stage 3: Validate
       if (shouldProcessYear(state, year, 'validate', sourceHash)) {
         logger.info('pipeline', `=== Year ${year}: validate ===`);
         const mergedPath = path.join(PATHS.mergedGeojson, `world_${year}_merged.geojson`);
@@ -178,7 +161,6 @@ export async function runPipeline(
         logger.info('pipeline', `Year ${year}: validate skipped (unchanged)`);
       }
 
-      // Stage 4: Convert
       if (shouldProcessYear(state, year, 'convert', sourceHash)) {
         logger.info('pipeline', `=== Year ${year}: convert ===`);
         const mergeState = yearState.merge;
@@ -204,7 +186,6 @@ export async function runPipeline(
         logger.info('pipeline', `Year ${year}: convert skipped (unchanged)`);
       }
 
-      // Stage 5: Prepare
       if (shouldProcessYear(state, year, 'prepare', sourceHash)) {
         logger.info('pipeline', `=== Year ${year}: prepare ===`);
         const pmtilesPath = path.join(PATHS.publicPmtiles, `world_${year}.pmtiles`);
@@ -217,7 +198,6 @@ export async function runPipeline(
           completedAt: new Date().toISOString(),
         });
 
-        // Update manifest
         manifest.files[String(year)] = result.hashedFilename;
         if (!manifest.metadata) {
           manifest.metadata = {};
@@ -233,7 +213,6 @@ export async function runPipeline(
       }
     }
 
-    // Generate validation report
     if (validationResults.length > 0) {
       const report = generateReport(state.runId, validationResults);
       logger.info(
@@ -242,11 +221,9 @@ export async function runPipeline(
       );
     }
 
-    // Stage 6: Index generation
     logger.info('pipeline', '=== Stage: index-gen ===');
     await runIndexGenStage(yearsToProcess, logger);
 
-    // Stage 7: Upload
     if (!options.skipUpload) {
       logger.info('pipeline', '=== Stage: upload ===');
       await runUploadStage(manifest, logger);
@@ -254,10 +231,8 @@ export async function runPipeline(
       logger.info('pipeline', 'Upload skipped (--skip-upload)');
     }
 
-    // Save final manifest
     saveManifest(manifest);
 
-    // Mark pipeline as completed
     state.status = 'completed';
     state.completedAt = new Date().toISOString();
     saveState(state, PATHS.pipelineState);
@@ -274,9 +249,6 @@ export async function runPipeline(
   }
 }
 
-/**
- * Filter years based on pipeline options.
- */
 function filterYears(allYears: number[], options: PipelineOptions): number[] {
   if (options.year !== undefined) {
     return allYears.includes(options.year) ? [options.year] : [];
@@ -306,9 +278,6 @@ function loadManifest(): DeploymentManifest {
   };
 }
 
-/**
- * Save deployment manifest.
- */
 function saveManifest(manifest: DeploymentManifest): void {
   const manifestPath = path.join(PATHS.distPmtiles, 'manifest.json');
   mkdirSync(PATHS.distPmtiles, { recursive: true });
@@ -316,9 +285,6 @@ function saveManifest(manifest: DeploymentManifest): void {
   writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
 }
 
-/**
- * Custom pipeline error with exit code.
- */
 export class PipelineError extends Error {
   readonly exitCode: number;
 
@@ -329,9 +295,6 @@ export class PipelineError extends Error {
   }
 }
 
-/**
- * Display pipeline status.
- */
 export function showStatus(logger: PipelineLogger): void {
   const state = loadState(PATHS.pipelineState);
   if (!state) {
@@ -371,9 +334,6 @@ export function showStatus(logger: PipelineLogger): void {
   }
 }
 
-/**
- * List available years.
- */
 export async function listYears(logger: PipelineLogger): Promise<void> {
   const years = await parseYearsFromDirectory(PATHS.sourceGeojson);
   logger.info('list', `Available years (${years.length}):`);

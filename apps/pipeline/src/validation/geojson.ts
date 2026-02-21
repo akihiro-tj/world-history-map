@@ -32,7 +32,6 @@ export function validateGeoJSON(geojson: FeatureCollection, year: number): Valid
   const warnings: ValidationWarning[] = [];
   const repairs: RepairAction[] = [];
 
-  // Check FeatureCollection structure
   if (geojson.type !== 'FeatureCollection' || !Array.isArray(geojson.features)) {
     errors.push({
       type: 'empty_collection',
@@ -42,7 +41,6 @@ export function validateGeoJSON(geojson: FeatureCollection, year: number): Valid
     return { year, passed: false, featureCount: 0, errors, warnings, repairs };
   }
 
-  // Check empty features
   if (geojson.features.length === 0) {
     errors.push({
       type: 'empty_collection',
@@ -52,7 +50,6 @@ export function validateGeoJSON(geojson: FeatureCollection, year: number): Valid
     return { year, passed: false, featureCount: 0, errors, warnings, repairs };
   }
 
-  // Validate each feature
   for (let i = 0; i < geojson.features.length; i++) {
     const feature = geojson.features[i];
     if (!feature) continue;
@@ -68,7 +65,6 @@ export function validateGeoJSON(geojson: FeatureCollection, year: number): Valid
       continue;
     }
 
-    // Check geometry type
     const geomType = feature.geometry?.type;
     if (geomType !== 'Polygon' && geomType !== 'MultiPolygon') {
       errors.push({
@@ -79,14 +75,11 @@ export function validateGeoJSON(geojson: FeatureCollection, year: number): Valid
       continue;
     }
 
-    // Attempt geometry validation and repair
     try {
-      // Check OGC validity
       const isValid = turf.booleanValid(
         feature as unknown as Parameters<typeof turf.booleanValid>[0],
       );
       if (!isValid) {
-        // Attempt auto-repair pipeline
         const repaired = attemptRepair(feature, i, name, repairs, warnings);
         if (repaired) {
           // Replace geometry with repaired version

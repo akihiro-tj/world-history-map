@@ -11,15 +11,11 @@ import { YearSelector } from './components/year-selector/year-selector';
 import { AppStateProvider, useAppState } from './contexts/app-state-context';
 import { useYearIndex } from './hooks/use-year-index';
 
-/**
- * Main app content with year selector integration
- */
 function AppContent() {
   const { state } = useAppState();
   const { years, isLoading } = useYearIndex();
   const [isLicenseOpen, setIsLicenseOpen] = useState(false);
 
-  // Prefetch territory descriptions when year changes
   useEffect(() => {
     prefetchYearDescriptions(state.selectedYear);
   }, [state.selectedYear]);
@@ -42,7 +38,6 @@ function AppContent() {
         </div>
       )}
 
-      {/* Footer links */}
       <footer className="absolute right-4 top-[4.5rem] z-20 flex flex-col gap-2 lg:bottom-4 lg:top-auto lg:flex-row lg:gap-1 lg:rounded-lg lg:bg-gray-700/95 lg:p-1.5 lg:shadow-lg lg:backdrop-blur-sm">
         <button
           type="button"
@@ -91,7 +86,6 @@ function AppContent() {
         </a>
       </footer>
 
-      {/* License disclaimer modal */}
       <Suspense fallback={null}>
         <LicenseDisclaimer isOpen={isLicenseOpen} onClose={handleCloseLicense} />
       </Suspense>
@@ -99,12 +93,6 @@ function AppContent() {
   );
 }
 
-/**
- * Main application component
- *
- * Renders the interactive historical world map.
- * Default view shows territories from 1650.
- */
 function App() {
   return (
     <AppStateProvider>

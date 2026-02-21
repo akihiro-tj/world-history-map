@@ -40,7 +40,6 @@ export function useProjection(
 
     prevProjectionRef.current = projection;
 
-    // Get current view state
     const currentZoom = mapInstance.getZoom();
     const currentCenter = mapInstance.getCenter();
 
