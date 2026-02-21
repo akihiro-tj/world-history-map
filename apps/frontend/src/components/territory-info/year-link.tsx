@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { cn } from '@/lib/utils';
 import { useAppState } from '../../contexts/app-state-context';
 
 /**
@@ -23,7 +24,7 @@ interface YearLinkProps {
  * // Renders: "1700年"
  * ```
  */
-export function YearLink({ year, className = '' }: YearLinkProps) {
+export function YearLink({ year, className }: YearLinkProps) {
   const { actions } = useAppState();
 
   const handleClick = useCallback(() => {
@@ -50,7 +51,10 @@ export function YearLink({ year, className = '' }: YearLinkProps) {
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       data-testid="year-link"
-      className={`inline-flex items-center rounded-full bg-gray-600 px-3 py-1 text-sm font-medium text-gray-200 transition-colors hover:bg-blue-600 hover:text-white ${className}`}
+      className={cn(
+        'inline-flex items-center rounded-full bg-gray-600 px-3 py-1 text-sm font-medium text-gray-200 transition-colors hover:bg-blue-600 hover:text-white',
+        className,
+      )}
       aria-label={`${year}年に移動`}
     >
       {year}年

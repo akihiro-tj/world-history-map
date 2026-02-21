@@ -1,4 +1,5 @@
 import { type KeyboardEvent, useCallback, useEffect, useMemo, useRef } from 'react';
+import { cn } from '@/lib/utils';
 import { useAppState } from '../../contexts/app-state-context';
 import type { YearEntry } from '../../types/year';
 
@@ -155,11 +156,12 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
         onClick={() => navigateYear('prev')}
         disabled={!canGoPrev}
         aria-label="前の年代を選択"
-        className={`flex shrink-0 items-center border-r border-gray-600 px-3 py-2 transition-colors ${
+        className={cn(
+          'flex shrink-0 items-center border-r border-gray-600 px-3 py-2 transition-colors',
           canGoPrev
             ? 'text-gray-300 hover:bg-gray-600 hover:text-white'
-            : 'cursor-not-allowed text-gray-500'
-        }`}
+            : 'cursor-not-allowed text-gray-500',
+        )}
       >
         <svg
           className="h-4 w-4"
@@ -188,11 +190,12 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
               aria-current={isSelected ? 'true' : undefined}
               onClick={() => handleYearClick(yearEntry.year)}
               onKeyDown={(e) => handleKeyDown(e, index)}
-              className={`flex shrink-0 items-center justify-center border-r border-gray-600 py-3 font-medium transition-colors last:border-r-0 ${
+              className={cn(
+                'flex shrink-0 items-center justify-center border-r border-gray-600 py-3 font-medium transition-colors last:border-r-0',
                 isSelected
                   ? 'min-w-[5rem] bg-blue-600 px-5 text-xl text-white'
-                  : 'min-w-[4rem] px-3 text-base text-gray-300 hover:bg-gray-600 hover:text-white'
-              }`}
+                  : 'min-w-[4rem] px-3 text-base text-gray-300 hover:bg-gray-600 hover:text-white',
+              )}
             >
               {formatYear(yearEntry.year)}
             </button>
@@ -206,11 +209,12 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
         onClick={() => navigateYear('next')}
         disabled={!canGoNext}
         aria-label="次の年代を選択"
-        className={`flex shrink-0 items-center border-l border-gray-600 px-3 py-2 transition-colors ${
+        className={cn(
+          'flex shrink-0 items-center border-l border-gray-600 px-3 py-2 transition-colors',
           canGoNext
             ? 'text-gray-300 hover:bg-gray-600 hover:text-white'
-            : 'cursor-not-allowed text-gray-500'
-        }`}
+            : 'cursor-not-allowed text-gray-500',
+        )}
       >
         <svg
           className="h-4 w-4"

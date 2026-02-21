@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { useCallback, useMemo } from 'react';
 import { useEscapeKey } from '@/hooks/use-escape-key';
+import { cn } from '@/lib/utils';
 import { useAppState } from '../../contexts/app-state-context';
 import { CloseButton } from '../ui/close-button';
 import { AiNotice } from './ai-notice';
@@ -25,7 +26,10 @@ function PanelWrapper({
       role="dialog"
       aria-labelledby="territory-info-title"
       aria-busy={busy || undefined}
-      className={`absolute left-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] rounded-lg bg-gray-700/95 p-4 shadow-xl backdrop-blur-sm${scrollable ? ' max-h-[calc(100vh-2rem)] overflow-y-auto' : ''}`}
+      className={cn(
+        'absolute left-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] rounded-lg bg-gray-700/95 p-4 shadow-xl backdrop-blur-sm',
+        scrollable && 'max-h-[calc(100vh-2rem)] overflow-y-auto',
+      )}
     >
       {children}
     </aside>

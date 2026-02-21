@@ -1,4 +1,5 @@
 import { type ComponentProps, forwardRef } from 'react';
+import { cn } from '@/lib/utils';
 
 interface CloseButtonProps extends Omit<ComponentProps<'button'>, 'children'> {
   /** Size of the button */
@@ -9,15 +10,18 @@ interface CloseButtonProps extends Omit<ComponentProps<'button'>, 'children'> {
  * Reusable close button component with X icon
  */
 export const CloseButton = forwardRef<HTMLButtonElement, CloseButtonProps>(
-  ({ size = 'md', className = '', ...props }, ref) => {
-    const sizeClasses = size === 'sm' ? 'p-1' : 'p-1.5';
+  ({ size = 'md', className, ...props }, ref) => {
     const iconSize = size === 'sm' ? 'h-4 w-4' : 'h-5 w-5';
 
     return (
       <button
         ref={ref}
         type="button"
-        className={`rounded-lg text-gray-300 transition-colors hover:bg-gray-600 hover:text-white ${sizeClasses} ${className}`}
+        className={cn(
+          'rounded-lg text-gray-300 transition-colors hover:bg-gray-600 hover:text-white',
+          size === 'sm' ? 'p-1' : 'p-1.5',
+          className,
+        )}
         {...props}
       >
         <svg
