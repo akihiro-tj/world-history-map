@@ -33,18 +33,15 @@ export const TERRITORY_LAYER_IDS = {
  */
 export function TerritoryLayer({ sourceId, sourceLayer }: TerritoryLayerProps) {
   return (
-    <>
-      {/* Territory fill layer - interactive for click events */}
-      <Layer
-        id={TERRITORY_LAYER_IDS.fill}
-        type="fill"
-        source={sourceId}
-        source-layer={sourceLayer}
-        paint={{
-          'fill-color': createMatchColorExpression(),
-          'fill-opacity': 0.7,
-        }}
-      />
-    </>
+    <Layer
+      id={TERRITORY_LAYER_IDS.fill}
+      type="fill"
+      source={sourceId}
+      source-layer={sourceLayer}
+      paint={{
+        'fill-color': createMatchColorExpression(),
+        'fill-opacity': 0.7,
+      }}
+    />
   );
 }

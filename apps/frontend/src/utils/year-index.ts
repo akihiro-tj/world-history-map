@@ -1,4 +1,4 @@
-import type { YearEntry, YearIndex } from '../types';
+import type { YearEntry, YearIndex } from '../types/year';
 
 /** Path to PMTiles index file */
 const INDEX_PATH = '/pmtiles/index.json';

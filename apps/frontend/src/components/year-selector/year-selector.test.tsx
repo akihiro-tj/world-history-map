@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AppStateProvider } from '@/contexts/app-state-context';
-import type { YearEntry } from '@/types';
+import type { YearEntry } from '@/types/year';
 import { YearSelector } from './year-selector';
 
 // Mock scrollIntoView since it's not implemented in jsdom

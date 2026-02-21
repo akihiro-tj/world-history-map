@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useEscapeKey } from '@/hooks/use-escape-key';
 import { useAppState } from '../../contexts/app-state-context';
 import { CloseButton } from '../ui/close-button';
@@ -61,6 +61,12 @@ export function TerritoryInfoPanel() {
 
   // Handle Escape key
   useEscapeKey(isInfoPanelOpen, handleClose);
+
+  const sortedKeyEvents = useMemo(
+    () =>
+      description?.keyEvents ? [...description.keyEvents].sort((a, b) => a.year - b.year) : [],
+    [description?.keyEvents],
+  );
 
   // Don't render if panel is closed
   if (!isInfoPanelOpen) {
@@ -143,26 +149,24 @@ export function TerritoryInfoPanel() {
         )}
 
         {/* Key Events */}
-        {description.keyEvents.length > 0 && (
+        {sortedKeyEvents.length > 0 && (
           <div>
             <h3 className="mb-2 text-sm font-semibold text-white">主な出来事</h3>
             <ul className="relative space-y-2.5 border-l-2 border-blue-600 pl-4">
-              {[...description.keyEvents]
-                .sort((a, b) => a.year - b.year)
-                .map((keyEvent) => (
-                  <li
-                    key={`${keyEvent.year}-${keyEvent.event}`}
-                    className="relative text-sm text-gray-300"
-                  >
-                    <span
-                      className="absolute -left-[1.3rem] top-1.5 h-2 w-2 rounded-full bg-blue-400"
-                      aria-hidden="true"
-                    />
-                    <span className="font-medium text-gray-100">{keyEvent.year}年</span>
-                    <span className="mx-1.5 text-gray-400">—</span>
-                    {keyEvent.event}
-                  </li>
-                ))}
+              {sortedKeyEvents.map((keyEvent) => (
+                <li
+                  key={`${keyEvent.year}-${keyEvent.event}`}
+                  className="relative text-sm text-gray-300"
+                >
+                  <span
+                    className="absolute -left-[1.3rem] top-1.5 h-2 w-2 rounded-full bg-blue-400"
+                    aria-hidden="true"
+                  />
+                  <span className="font-medium text-gray-100">{keyEvent.year}年</span>
+                  <span className="mx-1.5 text-gray-400">—</span>
+                  {keyEvent.event}
+                </li>
+              ))}
             </ul>
           </div>
         )}

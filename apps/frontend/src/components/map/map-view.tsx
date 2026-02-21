@@ -5,7 +5,7 @@ import type { MapLayerMouseEvent, MapRef } from 'react-map-gl/maplibre';
 import MapGL, { Source } from 'react-map-gl/maplibre';
 import { useAppState } from '../../contexts/app-state-context';
 import { MAP_CONFIG } from '../../styles/map-style';
-import type { TerritoryProperties } from '../../types';
+import type { TerritoryProperties } from '../../types/territory';
 import { useMapData } from './hooks/use-map-data';
 import { useMapHover } from './hooks/use-map-hover';
 import { useMapKeyboard } from './hooks/use-map-keyboard';
@@ -66,8 +66,7 @@ export function MapView() {
   // Handle map load
   const handleLoad = useCallback(() => {
     setMapLoaded(true);
-    actions.setLoading(false);
-  }, [actions]);
+  }, []);
 
   // Handle territory click
   const handleClick = useCallback(

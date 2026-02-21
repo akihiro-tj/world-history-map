@@ -1,11 +1,15 @@
-import { useCallback, useEffect, useState } from 'react';
-import { LicenseDisclaimer } from './components/legal/license-disclaimer';
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
+
+const LicenseDisclaimer = lazy(() =>
+  import('./components/legal/license-disclaimer').then((m) => ({ default: m.LicenseDisclaimer })),
+);
+
 import { MapView } from './components/map/map-view';
 import { prefetchYearDescriptions } from './components/territory-info/hooks/use-territory-description';
 import { TerritoryInfoPanel } from './components/territory-info/territory-info-panel';
 import { YearSelector } from './components/year-selector/year-selector';
 import { AppStateProvider, useAppState } from './contexts/app-state-context';
-import type { YearEntry } from './types';
+import type { YearEntry } from './types/year';
 import { loadYearIndex } from './utils/year-index';
 
 /**
@@ -116,7 +120,9 @@ function AppContent() {
       </footer>
 
       {/* License disclaimer modal */}
-      <LicenseDisclaimer isOpen={isLicenseOpen} onClose={handleCloseLicense} />
+      <Suspense fallback={null}>
+        <LicenseDisclaimer isOpen={isLicenseOpen} onClose={handleCloseLicense} />
+      </Suspense>
     </main>
   );
 }

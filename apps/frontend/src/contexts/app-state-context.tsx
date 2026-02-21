@@ -1,5 +1,10 @@
 import { createContext, type ReactNode, useContext, useMemo, useReducer } from 'react';
-import { type AppState, type AppStateActions, initialAppState, type MapViewState } from '../types';
+import {
+  type AppState,
+  type AppStateActions,
+  initialAppState,
+  type MapViewState,
+} from '../types/app-state';
 
 /**
  * AppState context type

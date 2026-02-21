@@ -1,6 +1,6 @@
-import { type KeyboardEvent, useCallback, useEffect, useRef } from 'react';
+import { type KeyboardEvent, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useAppState } from '../../contexts/app-state-context';
-import type { YearEntry } from '../../types';
+import type { YearEntry } from '../../types/year';
 
 /**
  * Props for YearSelector component
@@ -44,7 +44,7 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
   const isInitialMount = useRef(true);
 
   // Sort years chronologically
-  const sortedYears = [...years].sort((a, b) => a.year - b.year);
+  const sortedYears = useMemo(() => [...years].sort((a, b) => a.year - b.year), [years]);
 
   // Get current year index
   const currentIndex = sortedYears.findIndex((y) => y.year === state.selectedYear);

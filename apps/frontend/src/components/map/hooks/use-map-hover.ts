@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { MapLayerMouseEvent } from 'react-map-gl/maplibre';
-import type { TerritoryProperties } from '../../../types';
+import type { TerritoryProperties } from '../../../types/territory';
 
 /**
  * Hook for tracking mouse hover state over map territories
