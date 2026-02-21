@@ -1,4 +1,5 @@
 import { type ComponentProps, forwardRef } from 'react';
+import { cn } from '@/lib/utils';
 
 /**
  * Projection type for the map
@@ -25,7 +26,7 @@ interface ProjectionToggleProps
  * ```
  */
 export const ProjectionToggle = forwardRef<HTMLButtonElement, ProjectionToggleProps>(
-  ({ projection, onToggle, className = '', ...props }, ref) => {
+  ({ projection, onToggle, className, ...props }, ref) => {
     const handleClick = () => {
       onToggle(projection === 'mercator' ? 'globe' : 'mercator');
     };
@@ -37,7 +38,10 @@ export const ProjectionToggle = forwardRef<HTMLButtonElement, ProjectionTogglePr
         ref={ref}
         type="button"
         onClick={handleClick}
-        className={`rounded-lg bg-gray-700/95 p-3 text-gray-300 shadow-lg backdrop-blur-sm transition-colors hover:bg-gray-600 hover:text-white ${className}`}
+        className={cn(
+          'rounded-lg bg-gray-700/95 p-3 text-gray-300 shadow-lg backdrop-blur-sm transition-colors hover:bg-gray-600 hover:text-white',
+          className,
+        )}
         aria-label={isGlobe ? '平面地図に切り替え' : '地球儀表示に切り替え'}
         aria-pressed={isGlobe}
         {...props}

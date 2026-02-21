@@ -1,3 +1,5 @@
+import { cn } from '@/lib/utils';
+
 /**
  * AI Notice props
  */
@@ -18,11 +20,14 @@ interface AiNoticeProps {
  * <AiNotice />
  * ```
  */
-export function AiNotice({ className = '' }: AiNoticeProps) {
+export function AiNotice({ className }: AiNoticeProps) {
   return (
     <div
       data-testid="ai-notice"
-      className={`flex items-center gap-1.5 rounded-md bg-amber-900/30 px-3 py-2 text-xs text-amber-300 ${className}`}
+      className={cn(
+        'flex items-center gap-1.5 rounded-md bg-amber-900/30 px-3 py-2 text-xs text-amber-300',
+        className,
+      )}
       role="note"
       aria-label="AI生成コンテンツの注意"
     >
