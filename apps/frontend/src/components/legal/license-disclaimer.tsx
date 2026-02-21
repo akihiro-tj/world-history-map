@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useEscapeKey } from '@/hooks/use-escape-key';
+import { useFocusTrap } from '@/hooks/use-focus-trap';
 import { CloseButton } from '../ui/close-button';
 
 /**
@@ -38,38 +39,8 @@ export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
     }
   }, [isOpen]);
 
-  // Focus trap
-  useEffect(() => {
-    if (!isOpen || !modalRef.current) return;
-
-    const modal = modalRef.current;
-    const focusableElements = modal.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-    );
-    const firstFocusable = focusableElements[0];
-    const lastFocusable = focusableElements[focusableElements.length - 1];
-
-    const handleTabKeyPress = (event: KeyboardEvent) => {
-      if (event.key !== 'Tab') return;
-
-      if (event.shiftKey) {
-        if (document.activeElement === firstFocusable) {
-          event.preventDefault();
-          lastFocusable?.focus();
-        }
-      } else {
-        if (document.activeElement === lastFocusable) {
-          event.preventDefault();
-          firstFocusable?.focus();
-        }
-      }
-    };
-
-    modal.addEventListener('keydown', handleTabKeyPress);
-    return () => {
-      modal.removeEventListener('keydown', handleTabKeyPress);
-    };
-  }, [isOpen]);
+  // Trap Tab focus within modal
+  useFocusTrap(isOpen, modalRef);
 
   // Handle dialog click (close when clicking outside content)
   const handleDialogClick = useCallback(

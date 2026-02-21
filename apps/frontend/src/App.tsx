@@ -9,48 +9,20 @@ import { prefetchYearDescriptions } from './components/territory-info/hooks/use-
 import { TerritoryInfoPanel } from './components/territory-info/territory-info-panel';
 import { YearSelector } from './components/year-selector/year-selector';
 import { AppStateProvider, useAppState } from './contexts/app-state-context';
-import type { YearEntry } from './types/year';
-import { loadYearIndex } from './utils/year-index';
+import { useYearIndex } from './hooks/use-year-index';
 
 /**
  * Main app content with year selector integration
  */
 function AppContent() {
   const { state } = useAppState();
-  const [years, setYears] = useState<YearEntry[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { years, isLoading } = useYearIndex();
   const [isLicenseOpen, setIsLicenseOpen] = useState(false);
 
   // Prefetch territory descriptions when year changes
   useEffect(() => {
     prefetchYearDescriptions(state.selectedYear);
   }, [state.selectedYear]);
-
-  // Load year index on mount
-  useEffect(() => {
-    let isMounted = true;
-
-    async function load() {
-      try {
-        const index = await loadYearIndex();
-        if (isMounted) {
-          setYears(index.years);
-          setIsLoading(false);
-        }
-      } catch (err) {
-        console.error('Failed to load year index:', err);
-        if (isMounted) {
-          setIsLoading(false);
-        }
-      }
-    }
-
-    load();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
 
   const handleOpenLicense = useCallback(() => {
     setIsLicenseOpen(true);
