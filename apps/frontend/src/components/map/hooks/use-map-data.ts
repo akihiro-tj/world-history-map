@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { YearIndex } from '../../../types';
+import type { YearIndex } from '../../../types/year';
 import { loadColorScheme } from '../../../utils/color-scheme';
 import { getTilesUrl, loadTilesManifest, type TilesManifest } from '../../../utils/tiles-config';
 import { loadYearIndex } from '../../../utils/year-index';
