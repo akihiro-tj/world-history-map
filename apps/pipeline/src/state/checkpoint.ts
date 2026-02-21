@@ -10,9 +10,6 @@ import type { PipelineState, YearState } from '@/types/pipeline.ts';
 
 type YearStageKey = keyof YearState;
 
-/**
- * Create a fresh initial pipeline state.
- */
 export function createInitialState(): PipelineState {
   const now = new Date().toISOString();
   const suffix = randomBytes(2).toString('hex');
@@ -87,9 +84,6 @@ export function shouldProcessYear(
   return false;
 }
 
-/**
- * Update a year's state for a specific stage.
- */
 export function updateYearState(
   state: PipelineState,
   year: number,

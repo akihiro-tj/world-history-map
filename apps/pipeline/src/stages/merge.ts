@@ -34,7 +34,6 @@ interface MergeResult {
  * is generated for each unique territory.
  */
 export function mergeByName(geojson: FeatureCollection): MergeResult {
-  // Group features by NAME
   const groups = new Map<string, GeoJSONFeature[]>();
 
   for (const feature of geojson.features) {
@@ -47,7 +46,6 @@ export function mergeByName(geojson: FeatureCollection): MergeResult {
     }
   }
 
-  // Merge each group
   const mergedFeatures: ReturnType<typeof turf.feature>[] = [];
   const labelPoints: ReturnType<typeof turf.point>[] = [];
 
@@ -58,7 +56,6 @@ export function mergeByName(geojson: FeatureCollection): MergeResult {
       mergedFeature = features[0] as unknown as ReturnType<typeof turf.feature>;
       mergedFeatures.push(mergedFeature);
     } else {
-      // Collect all polygon coordinates
       const allPolygonCoords: number[][][][] = [];
 
       for (const f of features) {
@@ -77,7 +74,6 @@ export function mergeByName(geojson: FeatureCollection): MergeResult {
       mergedFeatures.push(mergedFeature);
     }
 
-    // Generate label point on the largest polygon
     try {
       let largestPoly: ReturnType<typeof turf.polygon> | null = null;
       let largestArea = 0;
@@ -113,9 +109,6 @@ export function mergeByName(geojson: FeatureCollection): MergeResult {
   };
 }
 
-/**
- * Run the merge stage for a single year.
- */
 export async function runMergeForYear(
   year: number,
   sourcePath: string,

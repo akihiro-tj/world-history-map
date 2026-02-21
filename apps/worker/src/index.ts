@@ -54,9 +54,6 @@ const tilePath = (
 
 class KeyNotFoundError extends Error {}
 
-/**
- * Get allowed origin from request
- */
 function getAllowedOrigin(request: Request, env: Env): string {
   const requestOrigin = request.headers.get('Origin');
   if (typeof env.ALLOWED_ORIGINS === 'undefined' || !requestOrigin) {
@@ -81,9 +78,6 @@ function getAllowedOrigin(request: Request, env: Env): string {
   return '';
 }
 
-/**
- * Handle manifest.json requests directly from R2
- */
 async function handleManifest(
   request: Request,
   env: Env,
@@ -92,7 +86,6 @@ async function handleManifest(
 ): Promise<Response> {
   const allowedOrigin = getAllowedOrigin(request, env);
 
-  // Check cache first
   const cached = await cache.match(request.url);
   if (cached) {
     const respHeaders = new Headers(cached.headers);
@@ -101,7 +94,6 @@ async function handleManifest(
     return new Response(cached.body, { headers: respHeaders, status: cached.status });
   }
 
-  // Fetch from R2
   const obj = await env.BUCKET.get('manifest.json');
   if (!obj) {
     const headers = new Headers();
@@ -116,7 +108,6 @@ async function handleManifest(
   headers.set('Content-Type', 'application/json');
   headers.set('Cache-Control', 'public, max-age=300');
 
-  // Cache the response
   const cacheable = new Response(body, { headers, status: 200 });
   ctx.waitUntil(cache.put(request.url, cacheable.clone()));
 
@@ -190,7 +181,6 @@ class R2Source implements Source {
 async function handlePMTilesFile(request: Request, env: Env, filename: string): Promise<Response> {
   const allowedOrigin = getAllowedOrigin(request, env);
 
-  // Parse Range header
   const rangeHeader = request.headers.get('Range');
   let range: { offset: number; length: number } | undefined;
 
@@ -206,7 +196,6 @@ async function handlePMTilesFile(request: Request, env: Env, filename: string): 
     }
   }
 
-  // Fetch from R2
   const obj = await env.BUCKET.get(filename, range ? { range } : undefined);
   if (!obj) {
     const headers = new Headers();
@@ -243,7 +232,6 @@ export default {
     const url = new URL(request.url);
     const cache = caches.default;
 
-    // Handle manifest.json directly from R2
     if (url.pathname === '/manifest.json') {
       return handleManifest(request, env, ctx, cache);
     }

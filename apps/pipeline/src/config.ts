@@ -111,16 +111,10 @@ export function yearToLocalFilename(year: number): string {
   return `world_${year}.geojson`;
 }
 
-/**
- * Get the merged GeoJSON filename for a year.
- */
 export function yearToMergedFilename(year: number): string {
   return `world_${year}_merged.geojson`;
 }
 
-/**
- * Get the merged labels GeoJSON filename for a year.
- */
 export function yearToLabelsFilename(year: number): string {
   return `world_${year}_merged_labels.geojson`;
 }

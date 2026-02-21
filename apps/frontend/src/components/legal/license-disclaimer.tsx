@@ -3,9 +3,6 @@ import { useEscapeKey } from '@/hooks/use-escape-key';
 import { useFocusTrap } from '@/hooks/use-focus-trap';
 import { CloseButton } from '../ui/close-button';
 
-/**
- * Props for LicenseDisclaimer component
- */
 export interface LicenseDisclaimerProps {
   /** Whether the modal is open */
   isOpen: boolean;
@@ -13,36 +10,20 @@ export interface LicenseDisclaimerProps {
   onClose: () => void;
 }
 
-/**
- * License disclaimer modal component
- *
- * Displays GPL-3.0 license attribution, data accuracy disclaimers,
- * historical borders limitations, and disputed territories notice.
- * Supports keyboard accessibility with Escape to close and focus trapping.
- *
- * @example
- * ```tsx
- * <LicenseDisclaimer isOpen={isOpen} onClose={() => setIsOpen(false)} />
- * ```
- */
 export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
-  // Handle Escape key
   useEscapeKey(isOpen, onClose);
 
-  // Focus close button when modal opens
   useEffect(() => {
     if (isOpen && closeButtonRef.current) {
       closeButtonRef.current.focus();
     }
   }, [isOpen]);
 
-  // Trap Tab focus within modal
   useFocusTrap(isOpen, modalRef);
 
-  // Handle dialog click (close when clicking outside content)
   const handleDialogClick = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
       // Close only if clicking directly on the dialog wrapper (backdrop area)
@@ -76,12 +57,10 @@ export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
         aria-hidden="true"
       />
 
-      {/* Modal content */}
       <div
         data-testid="license-modal-content"
         className="relative z-10 mx-4 max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-gray-700 p-6 shadow-2xl"
       >
-        {/* Header */}
         <div className="mb-6 flex items-center justify-between border-b border-gray-600 pb-4">
           <h2 id="license-disclaimer-title" className="text-xl font-semibold text-white">
             ライセンス・免責事項
@@ -89,9 +68,7 @@ export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
           <CloseButton ref={closeButtonRef} onClick={onClose} aria-label="閉じる" />
         </div>
 
-        {/* Content */}
         <div className="space-y-6">
-          {/* License Attribution Section */}
           <section>
             <h3 className="mb-3 text-lg font-medium text-white">ライセンス情報</h3>
             <div className="rounded-lg bg-gray-600 p-4">
@@ -127,7 +104,6 @@ export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
             </div>
           </section>
 
-          {/* Data Accuracy Disclaimer */}
           <section data-testid="data-disclaimer">
             <h3 className="mb-3 text-lg font-medium text-white">データの正確性について</h3>
             <div className="rounded-lg border-l-4 border-yellow-600 bg-yellow-900/30 p-4">
@@ -155,7 +131,6 @@ export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
             </div>
           </section>
 
-          {/* Historical Borders Disclaimer */}
           <section data-testid="borders-disclaimer">
             <h3 className="mb-3 text-lg font-medium text-white">歴史的国境の概念的限界</h3>
             <p className="text-sm leading-relaxed text-gray-300">
@@ -163,7 +138,6 @@ export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
             </p>
           </section>
 
-          {/* Disputed Territories Disclaimer */}
           <section data-testid="disputed-disclaimer">
             <h3 className="mb-3 text-lg font-medium text-white">係争地域について</h3>
             <div className="rounded-lg border-l-4 border-blue-600 bg-blue-900/30 p-4">
@@ -173,7 +147,6 @@ export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
             </div>
           </section>
 
-          {/* AI-Generated Content Notice */}
           <section>
             <h3 className="mb-3 text-lg font-medium text-white">AI生成コンテンツについて</h3>
             <p className="text-sm leading-relaxed text-gray-300">
