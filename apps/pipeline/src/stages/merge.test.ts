@@ -43,14 +43,15 @@ describe('merge stage', () => {
       }
     });
 
-    it('should preserve feature properties from first feature in group', () => {
+    it('should only keep NAME and SUBJECTO properties', () => {
       const input = JSON.parse(readFileSync(path.join(FIXTURES, 'valid-multi.geojson'), 'utf-8'));
 
       const { polygons } = mergeByName(input);
 
       const france = polygons.features.find((f) => f.properties?.['NAME'] === 'France');
-      expect(france?.properties?.['PARTOF']).toBe('Europe');
-      expect(france?.properties?.['BORDERPRECISION']).toBe(2);
+      expect(france?.properties?.['NAME']).toBe('France');
+      expect(france?.properties?.['SUBJECTO']).toBe('');
+      expect(Object.keys(france?.properties ?? {})).toEqual(['NAME', 'SUBJECTO']);
     });
 
     it('should report feature count correctly', () => {

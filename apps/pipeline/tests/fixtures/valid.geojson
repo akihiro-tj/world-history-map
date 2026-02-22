@@ -5,9 +5,7 @@
       "type": "Feature",
       "properties": {
         "NAME": "France",
-        "SUBJECTO": "",
-        "PARTOF": "Europe",
-        "BORDERPRECISION": 2
+        "SUBJECTO": ""
       },
       "geometry": {
         "type": "Polygon",
@@ -26,9 +24,7 @@
       "type": "Feature",
       "properties": {
         "NAME": "Spain",
-        "SUBJECTO": "",
-        "PARTOF": "Europe",
-        "BORDERPRECISION": 2
+        "SUBJECTO": ""
       },
       "geometry": {
         "type": "Polygon",
@@ -47,9 +43,7 @@
       "type": "Feature",
       "properties": {
         "NAME": "Ottoman Empire",
-        "SUBJECTO": "",
-        "PARTOF": "Middle East",
-        "BORDERPRECISION": 1
+        "SUBJECTO": ""
       },
       "geometry": {
         "type": "Polygon",

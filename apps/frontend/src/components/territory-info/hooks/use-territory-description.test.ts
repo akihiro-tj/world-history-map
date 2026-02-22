@@ -28,7 +28,6 @@ const mockBundle1650 = {
     year: 1650,
     facts: ['首都: パリ', '君主: ルイ14世'],
     keyEvents: [{ year: 1643, event: 'ルイ14世の即位' }],
-    relatedYears: [1700],
     aiGenerated: true,
   },
   england: {
@@ -37,7 +36,6 @@ const mockBundle1650 = {
     year: 1650,
     facts: ['首都: ロンドン'],
     keyEvents: [],
-    relatedYears: [],
     aiGenerated: true,
   },
   'england-and-ireland': {
@@ -46,7 +44,6 @@ const mockBundle1650 = {
     year: 1650,
     facts: ['首都: ロンドン'],
     keyEvents: [],
-    relatedYears: [],
     aiGenerated: true,
   },
 };
@@ -58,7 +55,6 @@ const mockBundle1700 = {
     year: 1700,
     facts: ['首都: パリ'],
     keyEvents: [],
-    relatedYears: [],
     aiGenerated: true,
   },
 };

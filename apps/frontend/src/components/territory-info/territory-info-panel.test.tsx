@@ -45,7 +45,6 @@ const mockDescription: TerritoryDescription = {
     { year: 1648, event: 'フロンドの乱' },
     { year: 1643, event: 'マザランの宰相就任' },
   ],
-  relatedYears: [1600, 1700, 1789],
   aiGenerated: true,
 };
 
@@ -122,17 +121,6 @@ describe('TerritoryInfoPanel', () => {
     fireEvent.keyDown(document, { key: 'Escape' });
 
     expect(mockSetInfoPanelOpen).toHaveBeenCalledWith(false);
-  });
-
-  it('renders related years as clickable links', () => {
-    render(<TerritoryInfoPanel />);
-
-    const relatedYearsSection = screen.getByTestId('related-years');
-    expect(relatedYearsSection).toBeInTheDocument();
-
-    // Check that year links are rendered
-    const yearLinks = screen.getAllByTestId('year-link');
-    expect(yearLinks.length).toBe(3); // 1600, 1700, 1789
   });
 
   it('has proper accessibility attributes', () => {

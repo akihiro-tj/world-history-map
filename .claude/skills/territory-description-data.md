@@ -29,7 +29,6 @@ See `TerritoryDescription` type in `src/types/index.ts`:
   year: number;         // Target year
   facts: string[];      // Factual bullet points (e.g., "首都: パリ")
   keyEvents: KeyEvent[];// Historical events with year
-  relatedYears: number[];// Links to other years
   aiGenerated: true;    // Always true (AI-generated content)
 }
 ```
