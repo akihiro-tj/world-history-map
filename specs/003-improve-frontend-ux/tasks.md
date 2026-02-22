@@ -23,10 +23,10 @@
 
 **目的**: 複数のユーザーストーリーで使用する共有ユーティリティの抽出と基盤フックの作成
 
-- [ ] T001 `formatYear()` を `apps/frontend/src/components/year-selector/year-selector.tsx` から `apps/frontend/src/utils/format-year.ts` に抽出し、year-selector のインポートを更新
-- [ ] T002 [P] `useIsMobile` フックを `apps/frontend/src/hooks/use-is-mobile.ts` に作成 — `window.matchMedia('(max-width: 767px)')` と change イベントリスナーを使用
-- [ ] T003 [P] `useIsMobile` の単体テストを `apps/frontend/src/hooks/use-is-mobile.test.ts` に作成
-- [ ] T004 [P] `formatYear` の単体テストを `apps/frontend/src/utils/format-year.test.ts` に作成
+- [x] T001 `formatYear()` を `apps/frontend/src/components/year-selector/year-selector.tsx` から `apps/frontend/src/utils/format-year.ts` に抽出し、year-selector のインポートを更新
+- [x] T002 [P] `useIsMobile` フックを `apps/frontend/src/hooks/use-is-mobile.ts` に作成 — `window.matchMedia('(max-width: 767px)')` と change イベントリスナーを使用
+- [x] T003 [P] `useIsMobile` の単体テストを `apps/frontend/src/hooks/use-is-mobile.test.ts` に作成
+- [x] T004 [P] `formatYear` の単体テストを `apps/frontend/src/utils/format-year.test.ts` に作成
 
 ---
 
@@ -48,12 +48,12 @@
 
 > **注意: テストを先に書き、実装前に失敗することを確認する**
 
-- [ ] T005 [P] [US1] `YearDisplay` コンポーネントの単体テストを `apps/frontend/src/components/year-display/year-display.test.tsx` に作成 — フォーマット済み年代の描画、`aria-live="polite"`、フェードアニメーションの状態遷移、高速な年代切替の処理をテスト
+- [x] T005 [P] [US1] `YearDisplay` コンポーネントの単体テストを `apps/frontend/src/components/year-display/year-display.test.tsx` に作成 — フォーマット済み年代の描画、`aria-live="polite"`、フェードアニメーションの状態遷移、高速な年代切替の処理をテスト
 
 ### US1 の実装
 
-- [ ] T006 [US1] `YearDisplay` コンポーネントを `apps/frontend/src/components/year-display/year-display.tsx` に作成 — `useEffect` ベースのフェードアウト→フェードイン（150ms+150ms）アニメーション、スクリーンリーダー通知用の `aria-live="polite"` を含む画面上部中央の年代表示
-- [ ] T007 [US1] `YearDisplay` を `apps/frontend/src/App.tsx` に統合 — `absolute top-4 left-1/2 -translate-x-1/2 z-20` で地図の上に配置、視覚的に目立つ大きなフォントサイズ
+- [x] T006 [US1] `YearDisplay` コンポーネントを `apps/frontend/src/components/year-display/year-display.tsx` に作成 — `useEffect` ベースのフェードアウト→フェードイン（150ms+150ms）アニメーション、スクリーンリーダー通知用の `aria-live="polite"` を含む画面上部中央の年代表示
+- [x] T007 [US1] `YearDisplay` を `apps/frontend/src/App.tsx` に統合 — `absolute top-4 left-1/2 -translate-x-1/2 z-20` で地図の上に配置、視覚的に目立つ大きなフォントサイズ
 
 **チェックポイント**: 年代表示が表示され、正しくフォーマットされ（紀元前を含む）、年代切替時にアニメーションする
 
@@ -69,13 +69,13 @@
 
 > **注意: テストを先に書き、実装前に失敗することを確認する**
 
-- [ ] T008 [P] [US2] `ControlBar` コンポーネントの単体テストを `apps/frontend/src/components/control-bar/control-bar.test.tsx` に作成 — 投影法切替・ライセンスボタン・GitHubリンクが描画されること、`onOpenLicense` コールバックが発火することをテスト
+- [x] T008 [P] [US2] `ControlBar` コンポーネントの単体テストを `apps/frontend/src/components/control-bar/control-bar.test.tsx` に作成 — 投影法切替・ライセンスボタン・GitHubリンクが描画されること、`onOpenLicense` コールバックが発火することをテスト
 
 ### US2 の実装
 
-- [ ] T009 [US2] `ControlBar` コンポーネントを `apps/frontend/src/components/control-bar/control-bar.tsx` に作成 — `ProjectionToggle`、ライセンスボタン（情報アイコン）、GitHubリンクをグループ化。控えめなアイコンスタイル（`text-white/60`）、`flex-col gap-2` レイアウト、`absolute right-4 top-4 z-20` 配置
-- [ ] T010 [US2] `apps/frontend/src/App.tsx` をリファクタリング — インラインの `<footer>` を `<ControlBar>` に置換し、`onOpenLicense` コールバックを渡す。インラインのライセンス/GitHubボタンを削除
-- [ ] T011 [US2] `apps/frontend/src/components/map/map-view.tsx` をリファクタリング — `<ProjectionToggle>` の描画を削除し、`projection`/`setProjection` 状態を `App.tsx` にリフトアップするか props で渡して `ControlBar` が使用できるようにする
+- [x] T009 [US2] `ControlBar` コンポーネントを `apps/frontend/src/components/control-bar/control-bar.tsx` に作成 — `ProjectionToggle`、ライセンスボタン（情報アイコン）、GitHubリンクをグループ化。控えめなアイコンスタイル（`text-white/60`）、`flex-col gap-2` レイアウト、`absolute right-4 top-4 z-20` 配置
+- [x] T010 [US2] `apps/frontend/src/App.tsx` をリファクタリング — インラインの `<footer>` を `<ControlBar>` に置換し、`onOpenLicense` コールバックを渡す。インラインのライセンス/GitHubボタンを削除
+- [x] T011 [US2] `apps/frontend/src/components/map/map-view.tsx` をリファクタリング — `<ProjectionToggle>` の描画を削除し、`projection`/`setProjection` 状態を `App.tsx` にリフトアップするか props で渡して `ControlBar` が使用できるようにする
 
 **チェックポイント**: すべてのコントロールが右上にグループ化され、すべてのビューポート幅で一貫した位置。控えめなビジュアルスタイルが適用されている
 
@@ -91,12 +91,12 @@
 
 > **注意: テストを先に書き、実装前に失敗することを確認する**
 
-- [ ] T012 [P] [US3] `TerritoryHighlightLayer` コンポーネントの単体テストを `apps/frontend/src/components/map/territory-highlight-layer.test.tsx` に作成 — 2つの `<Layer>` コンポーネント（fill + line）が正しいフィルター式 `['==', ['get', 'NAME'], selectedTerritory]` とペイントプロパティで描画されることをテスト
+- [x] T012 [P] [US3] `TerritoryHighlightLayer` コンポーネントの単体テストを `apps/frontend/src/components/map/territory-highlight-layer.test.tsx` に作成 — 2つの `<Layer>` コンポーネント（fill + line）が正しいフィルター式 `['==', ['get', 'NAME'], selectedTerritory]` とペイントプロパティで描画されることをテスト
 
 ### US3 の実装
 
-- [ ] T013 [US3] `TerritoryHighlightLayer` コンポーネントを `apps/frontend/src/components/map/territory-highlight-layer.tsx` に作成 — react-map-gl の `<Layer>` コンポーネントを2つ描画: `territory-highlight-fill`（白、opacity 0.15）と `territory-highlight-outline`（白ライン、3.5px幅）。NAME プロパティでフィルタリング、`territory-fill` と `territory-label` レイヤーの間に配置
-- [ ] T014 [US3] `TerritoryHighlightLayer` を `apps/frontend/src/components/map/map-view.tsx` に統合 — `state.selectedTerritory` が非 null の場合に `<Source>` 内で条件付き描画し、`sourceId`、`sourceLayer`、`selectedTerritory` props を渡す
+- [x] T013 [US3] `TerritoryHighlightLayer` コンポーネントを `apps/frontend/src/components/map/territory-highlight-layer.tsx` に作成 — react-map-gl の `<Layer>` コンポーネントを2つ描画: `territory-highlight-fill`（白、opacity 0.15）と `territory-highlight-outline`（白ライン、3.5px幅）。NAME プロパティでフィルタリング、`territory-fill` と `territory-label` レイヤーの間に配置
+- [x] T014 [US3] `TerritoryHighlightLayer` を `apps/frontend/src/components/map/map-view.tsx` に統合 — `state.selectedTerritory` が非 null の場合に `<Source>` 内で条件付き描画し、`sourceId`、`sourceLayer`、`selectedTerritory` props を渡す
 
 **チェックポイント**: 領土選択時にハイライトが正しく描画され、再選択時に移動し、パネルクローズ時および年代切替時に領土が存在しない場合に消える
 
@@ -112,14 +112,14 @@
 
 > **注意: テストを先に書き、実装前に失敗することを確認する**
 
-- [ ] T015 [P] [US4] `useOnboardingHint` フックの単体テストを `apps/frontend/src/hooks/use-onboarding-hint.test.ts` に作成 — localStorage の読み書き、自動非表示タイマー（10秒）、`dismiss()` コールバック、localStorage が利用不可時のグレースフルデグラデーションをテスト
-- [ ] T016 [P] [US4] `OnboardingHint` コンポーネントの単体テストを `apps/frontend/src/components/onboarding-hint/onboarding-hint.test.tsx` に作成 — 表示状態、閉じるボタン、フェードイン/フェードアウトアニメーション、メッセージ内容をテスト
+- [x] T015 [P] [US4] `useOnboardingHint` フックの単体テストを `apps/frontend/src/hooks/use-onboarding-hint.test.ts` に作成 — localStorage の読み書き、自動非表示タイマー（10秒）、`dismiss()` コールバック、localStorage が利用不可時のグレースフルデグラデーションをテスト
+- [x] T016 [P] [US4] `OnboardingHint` コンポーネントの単体テストを `apps/frontend/src/components/onboarding-hint/onboarding-hint.test.tsx` に作成 — 表示状態、閉じるボタン、フェードイン/フェードアウトアニメーション、メッセージ内容をテスト
 
 ### US4 の実装
 
-- [ ] T017 [US4] `useOnboardingHint` フックを `apps/frontend/src/hooks/use-onboarding-hint.ts` に作成 — マウント時に localStorage キー `"world-history-map:hint-dismissed"` をチェック、`isVisible` と `dismiss()` を公開、10秒自動非表示タイマーをクリーンアップ付きで管理、localStorage エラーをキャッチ
-- [ ] T018 [US4] `OnboardingHint` コンポーネントを `apps/frontend/src/components/onboarding-hint/onboarding-hint.tsx` に作成 — 画面下部中央のトースト（年代セレクターの上）、ヒントメッセージ（「領土をクリックして詳細を見る」/「下部で年代を切り替え」）を表示、閉じるボタン、フェードイン/フェードアウトアニメーション
-- [ ] T019 [US4] `OnboardingHint` を `apps/frontend/src/App.tsx` に統合 — `<main>` 内に `<OnboardingHint />` を描画、年代セレクターと他のUI要素の間のz-indexレイヤリングを確保
+- [x] T017 [US4] `useOnboardingHint` フックを `apps/frontend/src/hooks/use-onboarding-hint.ts` に作成 — マウント時に localStorage キー `"world-history-map:hint-dismissed"` をチェック、`isVisible` と `dismiss()` を公開、10秒自動非表示タイマーをクリーンアップ付きで管理、localStorage エラーをキャッチ
+- [x] T018 [US4] `OnboardingHint` コンポーネントを `apps/frontend/src/components/onboarding-hint/onboarding-hint.tsx` に作成 — 画面下部中央のトースト（年代セレクターの上）、ヒントメッセージ（「領土をクリックして詳細を見る」/「下部で年代を切り替え」）を表示、閉じるボタン、フェードイン/フェードアウトアニメーション
+- [x] T019 [US4] `OnboardingHint` を `apps/frontend/src/App.tsx` に統合 — `<main>` 内に `<OnboardingHint />` を描画、年代セレクターと他のUI要素の間のz-indexレイヤリングを確保
 
 **チェックポイント**: 初回訪問時にオンボーディングヒントが表示され、正しく非表示になり、セッション間で永続化される
 
@@ -135,14 +135,14 @@
 
 > **注意: テストを先に書き、実装前に失敗することを確認する**
 
-- [ ] T020 [P] [US5] `useSwipeToClose` フックの単体テストを `apps/frontend/src/hooks/use-swipe-to-close.test.ts` に作成 — ハンドル要素へのタッチイベントリスナー、80px距離閾値、0.5px/ms速度閾値、アンマウント時のクリーンアップをテスト
-- [ ] T021 [P] [US5] `BottomSheet` コンポーネントの単体テストを `apps/frontend/src/components/ui/bottom-sheet.test.tsx` に作成 — 開閉アニメーション、バックドロップクリックでのクローズ、ポータル描画、`aria-labelledby`、Escapeキークローズ、フォーカストラップをテスト
+- [x] T020 [P] [US5] `useSwipeToClose` フックの単体テストを `apps/frontend/src/hooks/use-swipe-to-close.test.ts` に作成 — ハンドル要素へのタッチイベントリスナー、80px距離閾値、0.5px/ms速度閾値、アンマウント時のクリーンアップをテスト
+- [x] T021 [P] [US5] `BottomSheet` コンポーネントの単体テストを `apps/frontend/src/components/ui/bottom-sheet.test.tsx` に作成 — 開閉アニメーション、バックドロップクリックでのクローズ、ポータル描画、`aria-labelledby`、Escapeキークローズ、フォーカストラップをテスト
 
 ### US5 の実装
 
-- [ ] T022 [US5] `useSwipeToClose` フックを `apps/frontend/src/hooks/use-swipe-to-close.ts` に作成 — ハンドル ref に `touchstart`/`touchend` リスナーをアタッチ、下方向スワイプ（80px距離 OR 0.5px/ms速度）を検知して `onClose` を呼び出す、ハンドルに `touch-action: none` を設定
-- [ ] T023 [US5] `BottomSheet` コンポーネントを `apps/frontend/src/components/ui/bottom-sheet.tsx` に作成 — ポータル描画（`createPortal` で `document.body`）、高さ 60dvh（最大 80dvh）、ドラッグハンドルバー、タップクローズ付きバックドロップオーバーレイ、スライドアップアニメーション（`translateY(100%) → translateY(0)`、300ms、`cubic-bezier(0.32, 0.72, 0, 1)`）、`useEscapeKey` と `useFocusTrap` フックを再利用
-- [ ] T024 [US5] `apps/frontend/src/components/territory-info/territory-info-panel.tsx` をリファクタリング — `useIsMobile()` で描画を分岐: デスクトップ（768px以上）は既存の `PanelWrapper` を維持、モバイル（768px未満）はパネルコンテンツを `BottomSheet` でラップ。共有パネルコンテンツを内部 `PanelContent` コンポーネントとして抽出
+- [x] T022 [US5] `useSwipeToClose` フックを `apps/frontend/src/hooks/use-swipe-to-close.ts` に作成 — ハンドル ref に `touchstart`/`touchend` リスナーをアタッチ、下方向スワイプ（80px距離 OR 0.5px/ms速度）を検知して `onClose` を呼び出す、ハンドルに `touch-action: none` を設定
+- [x] T023 [US5] `BottomSheet` コンポーネントを `apps/frontend/src/components/ui/bottom-sheet.tsx` に作成 — ポータル描画（`createPortal` で `document.body`）、高さ 60dvh（最大 80dvh）、ドラッグハンドルバー、タップクローズ付きバックドロップオーバーレイ、スライドアップアニメーション（`translateY(100%) → translateY(0)`、300ms、`cubic-bezier(0.32, 0.72, 0, 1)`）、`useEscapeKey` と `useFocusTrap` フックを再利用
+- [x] T024 [US5] `apps/frontend/src/components/territory-info/territory-info-panel.tsx` をリファクタリング — `useIsMobile()` で描画を分岐: デスクトップ（768px以上）は既存の `PanelWrapper` を維持、モバイル（768px未満）はパネルコンテンツを `BottomSheet` でラップ。共有パネルコンテンツを内部 `PanelContent` コンポーネントとして抽出
 
 **チェックポイント**: モバイルでスワイプクローズ付きボトムシートが表示され、デスクトップではサイドパネルが維持される。両方のレスポンシブ状態が正しく動作する
 
@@ -156,7 +156,7 @@
 
 ### US6 の実装
 
-- [ ] T025 [US6] `apps/frontend/src/App.tsx` と `apps/frontend/src/components/control-bar/control-bar.tsx` にビジュアル階層スタイルを適用 — `YearDisplay` は大きなテキスト（text-3xl/text-4xl, font-bold, text-white）、`ControlBar` のアイコンは `text-white/60` で不透明なボタン背景、情報パネルの前面における優位性をコントロールバーと比較して確認
+- [x] T025 [US6] `apps/frontend/src/App.tsx` と `apps/frontend/src/components/control-bar/control-bar.tsx` にビジュアル階層スタイルを適用 — `YearDisplay` は大きなテキスト（text-3xl/text-4xl, font-bold, text-white）、`ControlBar` のアイコンは `text-white/60` で不透明なボタン背景、情報パネルの前面における優位性をコントロールバーと比較して確認
 
 **チェックポイント**: 主要ナビゲーション（年代表示/セレクター）と補助コントロール（コントロールバー）の間に明確な視覚的差異
 
@@ -166,11 +166,11 @@
 
 **目的**: すべてのストーリーにわたる最終検証とクリーンアップ
 
-- [ ] T026 [P] 既存の `apps/frontend/src/components/map/map-view.test.tsx` を更新 — 投影法トグル削除とハイライトレイヤー統合に対応
-- [ ] T027 [P] 既存の `apps/frontend/src/components/territory-info/territory-info-panel.test.tsx` を更新 — レスポンシブなデスクトップ/モバイル描画に対応
-- [ ] T028 `pnpm test && pnpm check` を実行 — すべての既存テストと新規テストが通り、型エラーなし、Lint違反なしを確認
-- [ ] T029 `pnpm --filter @world-history-map/frontend build` を実行 — プロダクションビルドの成功を確認
-- [ ] T030 quickstart.md の検証を実行 — デスクトップ（1024px以上）とモバイル（375px）ビューポートでの目視確認（quickstart.md の手順に従う）
+- [x] T026 [P] 既存の `apps/frontend/src/components/map/map-view.test.tsx` を更新 — 投影法トグル削除とハイライトレイヤー統合に対応
+- [x] T027 [P] 既存の `apps/frontend/src/components/territory-info/territory-info-panel.test.tsx` を更新 — レスポンシブなデスクトップ/モバイル描画に対応
+- [x] T028 `pnpm test && pnpm check` を実行 — すべての既存テストと新規テストが通り、型エラーなし、Lint違反なしを確認
+- [x] T029 `pnpm --filter @world-history-map/frontend build` を実行 — プロダクションビルドの成功を確認
+- [x] T030 quickstart.md の検証を実行 — デスクトップ（1024px以上）とモバイル（375px）ビューポートでの目視確認（quickstart.md の手順に従う）
 
 ---
 
