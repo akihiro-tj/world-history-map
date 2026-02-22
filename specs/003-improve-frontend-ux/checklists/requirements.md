@@ -35,7 +35,10 @@
 - Revision from v1: removed 2 user stories based on user feedback
   - Era labels (時代区分): removed due to regional ambiguity in world history context
   - Year navigation from InfoPanel: removed as `relatedYears` data does not exist in current dataset
+- Revision from v2: removed OnboardingHint (US4), updated BottomSheet to 3-snap design
+  - OnboardingHint: removed after implementation as unnecessary (UI is intuitive enough)
+  - BottomSheet: upgraded from 2-state (open/close) to 3-snap (collapsed/half/expanded) per Google Maps pattern
 - Scope decisions documented in dedicated section
-- 6 user stories covering all remaining improvements, prioritized P1-P3
-- 15 functional requirements (FR-001〜FR-015)
-- 5 success criteria (SC-001〜SC-005)
+- 5 user stories covering all remaining improvements, prioritized P1-P3
+- 14 functional requirements (FR-001〜FR-014)
+- 4 success criteria (SC-001〜SC-005, SC-003 removed)

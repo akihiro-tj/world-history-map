@@ -5,13 +5,13 @@
 
 ## 概要
 
-フロントエンドに対する6つのUX改善: 現在年の常設表示、コントロールバー統合、選択領土マップハイライト、初回ヒントUI、モバイルInfoPanelボトムシート化、ビジュアル階層見直し。すべてフロントエンドのみの変更で、`apps/frontend/` ワークスペース内の既存Reactコンポーネントの修正と新規コンポーネントの追加で構成される。バックエンドやAPIの変更は不要。
+フロントエンドに対する5つのUX改善: 現在年の常設表示、コントロールバー統合、選択領土マップハイライト、モバイルInfoPanelボトムシート化、ビジュアル階層見直し。すべてフロントエンドのみの変更で、`apps/frontend/` ワークスペース内の既存Reactコンポーネントの修正と新規コンポーネントの追加で構成される。バックエンドやAPIの変更は不要。
 
 ## 技術コンテキスト
 
 **言語/バージョン**: TypeScript 5.9.x (strict mode)
 **主要依存関係**: React 19.x, MapLibre GL JS 5.x, react-map-gl 8.x, Tailwind CSS v4, clsx, tailwind-merge
-**ストレージ**: localStorage（初回ヒントの非表示状態の永続化のみ）
+**ストレージ**: なし（クライアントサイドのみ）
 **テスト**: Vitest 4.x + @testing-library/react 16.x + @testing-library/user-event 14.x（単体/コンポーネント）, Playwright 1.57.x（E2E）
 **対象プラットフォーム**: Web（レスポンシブ — デスクトップ 1024px以上、タブレット 768-1023px、モバイル 375px以上）
 **プロジェクト種別**: Web（モノレポ: `apps/frontend/`）
@@ -25,9 +25,9 @@
 
 | 原則 | 状態 | 備考 |
 |------|------|------|
-| I. テストファースト | ✅ 合格 | 6つの改善すべてでTDDを実施。テストを先に記述してから実装する。 |
-| II. シンプルさと型安全性 | ✅ 合格 | 外部アニメーション/ジェスチャーライブラリの追加なし。スワイプはネイティブタッチイベントで実装。`any`型の使用なし。YAGNI適用 — ヒントの設定UI、マルチスナップのボトムシートは不要。 |
-| III. コンポーネント駆動とアクセシビリティ | ✅ 合格 | 新コンポーネント（YearDisplay, ControlBar, TerritoryHighlightLayer, OnboardingHint, BottomSheet）は独立・再利用可能。WCAG 2.1 AA: 年代表示に`aria-live`、ボトムシートにキーボードクローズ、既存フックからフォーカストラップを再利用。 |
+| I. テストファースト | ✅ 合格 | 5つの改善すべてでTDDを実施。テストを先に記述してから実装する。 |
+| II. シンプルさと型安全性 | ✅ 合格 | 外部アニメーション/ジェスチャーライブラリの追加なし。スワイプはネイティブタッチイベントで実装。`any`型の使用なし。 |
+| III. コンポーネント駆動とアクセシビリティ | ✅ 合格 | 新コンポーネント（YearDisplay, ControlBar, TerritoryHighlightLayer, BottomSheet）は独立・再利用可能。WCAG 2.1 AA: 年代表示に`aria-live`、ボトムシートにキーボードクローズ、既存フックからフォーカストラップを再利用。 |
 | IV. 歴史的正確性 | ✅ 該当なし | UIのみの変更であり、歴史データの変更なし。 |
 | V. パフォーマンス | ✅ 合格 | MapLibreハイライトレイヤーはGPUアクセラレーションされたfill/lineレンダリングを使用。CSSトランジションはコンポジタースレッドで実行。地図操作中のJSアニメーションなし。 |
 
@@ -67,17 +67,14 @@ apps/frontend/src/
 │   │   └── year-display.tsx                # 新規: 画面上部中央の常設年代表示
 │   ├── control-bar/
 │   │   └── control-bar.tsx                 # 新規: コントロールボタン統合（投影法切替 + 情報 + GitHub）
-│   ├── onboarding-hint/
-│   │   └── onboarding-hint.tsx             # 新規: 初回訪問時のトーストヒント
 │   ├── ui/
 │   │   ├── bottom-sheet.tsx                # 新規: モバイル用ボトムシートコンテナ
 │   │   └── close-button.tsx                # 既存（変更なし）
 │   └── legal/
 │       └── license-disclaimer.tsx          # 既存（変更なし）
 ├── hooks/
-│   ├── use-swipe-to-close.ts              # 新規: タッチイベントによるスワイプ検知
+│   ├── use-bottom-sheet-snap.ts           # 新規: 3段階スナップ制御（collapsed/half/expanded）
 │   ├── use-is-mobile.ts                   # 新規: matchMediaによるブレイクポイントフック
-│   ├── use-onboarding-hint.ts             # 新規: localStorage連携のヒント状態管理
 │   ├── use-escape-key.ts                  # 既存（再利用）
 │   └── use-focus-trap.ts                  # 既存（再利用）
 ├── contexts/
@@ -86,7 +83,7 @@ apps/frontend/src/
 │   └── format-year.ts                     # 新規: year-selector.tsxから抽出して共有化
 ├── styles/
 │   └── map-style.ts                       # 既存（変更なし）
-├── App.tsx                                # 変更: YearDisplay, ControlBar, OnboardingHintを配置する新レイアウト
+├── App.tsx                                # 変更: YearDisplay, ControlBarを配置する新レイアウト
 └── index.css                              # 変更: フェードインキーフレームアニメーション追加
 ```
 

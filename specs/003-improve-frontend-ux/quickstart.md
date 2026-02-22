@@ -57,7 +57,7 @@ pnpm --filter @world-history-map/frontend dev
 
 | ファイル | 役割 |
 |---------|------|
-| `apps/frontend/src/App.tsx` | ルートレイアウト — YearDisplay, ControlBar, OnboardingHintを配置する場所 |
+| `apps/frontend/src/App.tsx` | ルートレイアウト — YearDisplay, ControlBarを配置する場所 |
 | `apps/frontend/src/components/map/map-view.tsx` | マップコンテナ — TerritoryHighlightLayerを統合する場所 |
 | `apps/frontend/src/components/territory-info/territory-info-panel.tsx` | 情報パネル — モバイルボトムシート対応に変更 |
 | `apps/frontend/src/contexts/app-state-context.tsx` | アプリ状態 (selectedYear, selectedTerritory) — 変更不要 |

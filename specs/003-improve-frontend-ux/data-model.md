@@ -6,7 +6,7 @@
 
 ### 既存のAppState（変更なし）
 
-現在の`AppState`には6つの改善に必要なフィールドがすべて含まれている:
+現在の`AppState`には5つの改善に必要なフィールドがすべて含まれている:
 
 ```typescript
 interface AppState {
@@ -23,18 +23,6 @@ interface AppState {
 
 ### 新しいローカルState（コンポーネントレベル）
 
-#### OnboardingHintの状態（`useOnboardingHint`フック）
-
-```typescript
-interface OnboardingHintState {
-  isVisible: boolean;    // ヒントが現在表示されているか
-  isDismissed: boolean;  // ヒントが一度でも非表示にされたか（localStorageから）
-}
-```
-
-- **永続化**: `localStorage`キー `"world-history-map:hint-dismissed"` → `"true"` | 未設定
-- **ライフサイクル**: マウント時にlocalStorageをチェック → 未非表示なら表示 → 10秒後またはユーザー操作で自動非表示 → localStorageに書き込み
-
 #### YearDisplayのアニメーション状態（コンポーネントレベル）
 
 ```typescript
@@ -45,15 +33,21 @@ const [visible, setVisible] = useState(true);           // フェード用のopa
 
 - 永続化なし。純粋なトランジェントなアニメーション状態。
 
-#### BottomSheetの状態（コンポーネントレベル）
+#### BottomSheetの状態（`useBottomSheetSnap`フック）
 
 ```typescript
-// BottomSheet / useSwipeToClose 内部
-const startY = useRef(0);     // タッチ開始のY座標
-const startTime = useRef(0);  // タッチ開始のタイムスタンプ
+type SnapPoint = 'collapsed' | 'half' | 'expanded';
+
+interface UseBottomSheetSnapReturn {
+  snap: SnapPoint;            // 現在のスナップポイント
+  setSnap: (s: SnapPoint) => void;
+  sheetStyle: React.CSSProperties;  // height + transition + will-change
+  isDragging: boolean;        // ドラッグ中かどうか
+}
 ```
 
-- 永続化なし。タッチトラッキング用のrefのみ。
+- 永続化なし。スナップポイントはトランジェントなUI状態。
+- ドラッグ中は `transition: none` + rAF で height をリアルタイム更新、リリース時に `transition: height 300ms cubic-bezier(0.32, 0.72, 0, 1)` で最近接スナップにアニメーション。
 
 #### モバイル検知（`useIsMobile`フック）
 
@@ -86,11 +80,13 @@ interface YearDisplayProps {
 **Props**:
 ```typescript
 interface ControlBarProps {
+  projection: ProjectionType;
+  onToggleProjection: (p: ProjectionType) => void;
   onOpenLicense: () => void;
 }
 ```
 **動作**: 画面右上にProjectionToggle + ライセンスボタン + GitHubリンクをグループ化。すべてのブレイクポイントで一貫した位置。控えめな視覚スタイル（アイコンは`text-white/60`、ボタン背景は不透明）。
-**依存**: `ProjectionToggle`、mapのref（投影法状態用）
+**依存**: `ProjectionToggle`（投影法状態はApp.tsxからprops経由で受け取る）
 
 #### 3. TerritoryHighlightLayer
 
@@ -106,14 +102,7 @@ interface TerritoryHighlightLayerProps {
 **動作**: NAMEプロパティでフィルタリングされた2つのMapLibreレイヤー（fill + line）をレンダリング。`selectedTerritory`が非nullの場合のみ条件付きレンダリング。
 **依存**: react-map-gl `Layer`コンポーネント
 
-#### 4. OnboardingHint
-
-**配置先**: `components/onboarding-hint/onboarding-hint.tsx`
-**Props**: なし（自己完結型、`useOnboardingHint`フックから状態を読み取る）
-**動作**: 画面下部のトースト通知。操作ヒントを表示。10秒後に自動非表示。閉じるボタンクリックまたはマップ操作でも非表示。
-**依存**: `useOnboardingHint`フック
-
-#### 5. BottomSheet
+#### 4. BottomSheet
 
 **配置先**: `components/ui/bottom-sheet.tsx`
 **Props**:
@@ -121,27 +110,35 @@ interface TerritoryHighlightLayerProps {
 interface BottomSheetProps {
   isOpen: boolean;
   onClose: () => void;
+  header: React.ReactNode;
   children: React.ReactNode;
   'aria-labelledby'?: string;
 }
 ```
-**動作**: モバイル専用のボトムシート。スライドアップアニメーション、ドラッグハンドル、背景タップクローズ、スワイプクローズ対応。`createPortal`で描画。
-**依存**: `useSwipeToClose`フック、`useEscapeKey`フック、`useFocusTrap`フック
+**動作**: モバイル専用の3段階スナップボトムシート（collapsed/half/expanded）。header は sticky でドラッグハンドルを含む。expanded 時のみバックドロップ表示とフォーカストラップが有効。`createPortal`で描画。入場時はdouble rAFによるheight 0→snap heightのトランジション。
+**依存**: `useBottomSheetSnap`フック、`useEscapeKey`フック、`useFocusTrap`フック
 
 ### 新規フック
 
-#### 1. useSwipeToClose
+#### 1. useBottomSheetSnap
 
-**配置先**: `hooks/use-swipe-to-close.ts`
+**配置先**: `hooks/use-bottom-sheet-snap.ts`
 **シグネチャ**:
 ```typescript
-function useSwipeToClose(
-  isActive: boolean,
-  handleRef: RefObject<HTMLElement | null>,
-  onClose: () => void,
-): void
+function useBottomSheetSnap(options: {
+  isActive: boolean;
+  headerRef: RefObject<HTMLElement | null>;
+  sheetRef: RefObject<HTMLElement | null>;
+  onClose: () => void;
+  initialSnap?: SnapPoint;
+}): {
+  snap: SnapPoint;
+  setSnap: (s: SnapPoint) => void;
+  sheetStyle: React.CSSProperties;
+  isDragging: boolean;
+}
 ```
-**動作**: ハンドル要素にタッチイベントリスナーをアタッチ。下方向スワイプ（80px超の距離 または 0.5px/ms超の速度）を検知し、`onClose`を呼び出す。
+**動作**: headerRefにtouchstart/touchmove/touchendリスナーをアタッチ。3段階スナップ（collapsed: ヘッダー実測高、half: 40vh、expanded: 90vh）間の遷移を管理。速度≥0.5px/msのフリックで1段階遷移、それ以外は最近接スナップ。collapsed状態から下スワイプでonClose呼び出し。
 
 #### 2. useIsMobile
 
@@ -151,18 +148,6 @@ function useSwipeToClose(
 function useIsMobile(breakpoint?: number): boolean
 ```
 **動作**: ビューポート幅がブレイクポイント（デフォルト768）未満の場合に`true`を返す。`window.matchMedia`と`change`イベントリスナーを使用。
-
-#### 3. useOnboardingHint
-
-**配置先**: `hooks/use-onboarding-hint.ts`
-**シグネチャ**:
-```typescript
-function useOnboardingHint(): {
-  isVisible: boolean;
-  dismiss: () => void;
-}
-```
-**動作**: マウント時にlocalStorageをチェック。表示状態と非表示コールバックを返す。自動非表示タイマーを管理。localStorageが利用不可の場合もグレースフルに対応。
 
 ### 新規ユーティリティ
 
@@ -182,8 +167,8 @@ function formatYear(year: number): string
 **変更内容**:
 - `YearDisplay`コンポーネントを追加（画面上部中央）
 - インラインのfooterを`ControlBar`コンポーネントに置換（画面右上）
-- `OnboardingHint`コンポーネントを追加
 - インラインのライセンス/GitHubボタンを削除（ControlBarに移動）
+- 投影法状態をApp.tsxにリフトアップし、`ControlBar`にprops経由で渡す
 
 ### MapView（`map-view.tsx`）
 
@@ -235,21 +220,19 @@ function formatYear(year: number): string
 │  ┌─────────────────────────────────────────────┐ │
 │  │ ◀  | 前200 | 1 | ... | 1650 | ... | 2000 |▶│ │  ← 年代セレクター (z-20)
 │  └─────────────────────────────────────────────┘ │
-│  ┌─────────────────────────────────────────────┐ │
-│  │         初回ヒントトースト                    │ │  ← 初回訪問時のみ (z-20)
-│  └─────────────────────────────────────────────┘ │
 └─────────────────────────────────────────────────┘
 
-モバイルレイアウト (768px未満):
+モバイルレイアウト (768px未満) — BottomSheet half状態:
 ┌───────────────────────┐
 │  [1650]     [ControlBar]│
 │                       │
-│        MAP            │
+│        MAP            │  ← 地図操作可能（half/collapsed時）
 │                       │
 │  ┌───────────────────┐│
-│  │  ═══ (ハンドル)    ││  ← BottomSheet (60dvh)
-│  │  InfoPanel        ││
-│  │  (スクロール可)    ││
+│  │  ═══ (ハンドル)    ││  ← BottomSheet half (40vh)
+│  │  国名 ─────────── ││    ヘッダーはスティッキー
+│  │  InfoPanel        ││    ↑スワイプで expanded (90vh)
+│  │  (スクロール可)    ││    ↓スワイプで collapsed
 │  └───────────────────┘│
 │  [◀ 年代セレクター ▶ ] │
 └───────────────────────┘
