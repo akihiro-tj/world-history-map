@@ -68,10 +68,11 @@ describe('MapView', () => {
     });
   });
 
-  it('should render projection toggle button', async () => {
-    renderWithProvider(<MapView />);
+  it('should call onProjectionReady when map loads', async () => {
+    const onProjectionReady = vi.fn();
+    renderWithProvider(<MapView onProjectionReady={onProjectionReady} />);
     await waitFor(() => {
-      expect(screen.getByTestId('projection-toggle')).toBeInTheDocument();
+      expect(onProjectionReady).toHaveBeenCalled();
     });
   });
 

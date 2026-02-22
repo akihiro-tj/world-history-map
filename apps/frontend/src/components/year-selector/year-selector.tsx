@@ -1,5 +1,6 @@
 import { type KeyboardEvent, useCallback, useEffect, useMemo, useRef } from 'react';
 import { cn } from '@/lib/utils';
+import { formatYear } from '@/utils/format-year';
 import { useAppState } from '../../contexts/app-state-context';
 import type { YearEntry } from '../../types/year';
 
@@ -8,17 +9,6 @@ interface YearSelectorProps {
   years: YearEntry[];
   /** Callback when a year is selected */
   onYearSelect?: (year: number) => void;
-}
-
-/**
- * Format year for display
- * Handles BCE notation for negative years using Japanese short format
- */
-function formatYear(year: number): string {
-  if (year < 0) {
-    return `前${Math.abs(year)}`;
-  }
-  return String(year);
 }
 
 export function YearSelector({ years, onYearSelect }: YearSelectorProps) {

@@ -11,21 +11,35 @@ import { useMapHover } from './hooks/use-map-hover';
 import { useMapKeyboard } from './hooks/use-map-keyboard';
 import { usePMTilesProtocol } from './hooks/use-pmtiles-protocol';
 import { useProjection } from './hooks/use-projection';
-import { ProjectionToggle } from './projection-toggle';
+import type { ProjectionType } from './projection-toggle';
+import { TerritoryHighlightLayer } from './territory-highlight-layer';
 import { TerritoryLabel } from './territory-label';
 import { TERRITORY_LAYER_IDS, TerritoryLayer } from './territory-layer';
+
+export type { ProjectionType } from './projection-toggle';
 
 const SOURCE_ID = 'territories';
 const SOURCE_LAYER_TERRITORIES = 'territories';
 const SOURCE_LAYER_LABELS = 'labels';
 
-export function MapView() {
+interface MapViewProps {
+  onProjectionReady?: (
+    projection: ProjectionType,
+    setProjection: (p: ProjectionType) => void,
+  ) => void;
+}
+
+export function MapView({ onProjectionReady }: MapViewProps = {}) {
   const mapRef = useRef<MapRef>(null);
   const { state, actions } = useAppState();
   const { pmtilesUrl, isLoading, error } = useMapData(state.selectedYear);
   const [mapLoaded, setMapLoaded] = useState(false);
   const { isHoveringTerritory, handleMouseMove } = useMapHover();
   const { projection, setProjection } = useProjection(mapRef, mapLoaded);
+
+  useEffect(() => {
+    onProjectionReady?.(projection, setProjection);
+  }, [projection, setProjection, onProjectionReady]);
 
   usePMTilesProtocol();
 
@@ -143,13 +157,6 @@ export function MapView() {
         </output>
       )}
 
-      <ProjectionToggle
-        projection={projection}
-        onToggle={setProjection}
-        className="absolute right-4 top-4 z-10"
-        data-testid="projection-toggle"
-      />
-
       {pmtilesUrl && (
         <MapGL
           ref={mapRef}
@@ -171,6 +178,13 @@ export function MapView() {
         >
           <Source id={SOURCE_ID} type="vector" url={pmtilesUrl}>
             <TerritoryLayer sourceId={SOURCE_ID} sourceLayer={SOURCE_LAYER_TERRITORIES} />
+            {state.selectedTerritory && (
+              <TerritoryHighlightLayer
+                sourceId={SOURCE_ID}
+                sourceLayer={SOURCE_LAYER_TERRITORIES}
+                selectedTerritory={state.selectedTerritory}
+              />
+            )}
             <TerritoryLabel sourceId={SOURCE_ID} sourceLayer={SOURCE_LAYER_LABELS} />
           </Source>
         </MapGL>
