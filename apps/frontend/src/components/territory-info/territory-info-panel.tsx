@@ -8,7 +8,6 @@ import { BottomSheet } from '../ui/bottom-sheet';
 import { CloseButton } from '../ui/close-button';
 import { AiNotice } from './ai-notice';
 import { useTerritoryDescription } from './hooks/use-territory-description';
-import { YearLink } from './year-link';
 
 function PanelWrapper({
   children,
@@ -113,17 +112,6 @@ function DescriptionBody({
               </li>
             ))}
           </ul>
-        </div>
-      )}
-
-      {description.relatedYears && description.relatedYears.length > 0 && (
-        <div data-testid="related-years">
-          <h3 className="mb-2 text-sm font-semibold text-white">関連する年代</h3>
-          <div className="flex flex-wrap gap-2">
-            {description.relatedYears.map((year) => (
-              <YearLink key={year} year={year} />
-            ))}
-          </div>
         </div>
       )}
 
@@ -258,17 +246,6 @@ export function TerritoryInfoPanel() {
                 </li>
               ))}
             </ul>
-          </div>
-        )}
-
-        {description.relatedYears && description.relatedYears.length > 0 && (
-          <div data-testid="related-years">
-            <h3 className="mb-2 text-sm font-semibold text-white">関連する年代</h3>
-            <div className="flex flex-wrap gap-2">
-              {description.relatedYears.map((year) => (
-                <YearLink key={year} year={year} />
-              ))}
-            </div>
           </div>
         )}
 

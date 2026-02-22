@@ -4,8 +4,7 @@
     {
       "type": "Feature",
       "properties": {
-        "SUBJECTO": "",
-        "PARTOF": "Europe"
+        "SUBJECTO": ""
       },
       "geometry": {
         "type": "Polygon",
@@ -24,8 +23,7 @@
       "type": "Feature",
       "properties": {
         "NAME": "",
-        "SUBJECTO": "",
-        "PARTOF": "Europe"
+        "SUBJECTO": ""
       },
       "geometry": {
         "type": "Polygon",

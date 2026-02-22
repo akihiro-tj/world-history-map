@@ -5,8 +5,7 @@
       "type": "Feature",
       "properties": {
         "NAME": "Invalid Territory",
-        "SUBJECTO": "",
-        "PARTOF": "Test"
+        "SUBJECTO": ""
       },
       "geometry": {
         "type": "Point",
@@ -17,8 +16,7 @@
       "type": "Feature",
       "properties": {
         "NAME": "Self Intersecting",
-        "SUBJECTO": "",
-        "PARTOF": "Test"
+        "SUBJECTO": ""
       },
       "geometry": {
         "type": "Polygon",

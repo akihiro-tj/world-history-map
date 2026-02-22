@@ -57,7 +57,7 @@ describe('pipeline integration', () => {
       features: [
         {
           type: 'Feature',
-          properties: { NAME: 'France', SUBJECTO: '', PARTOF: 'Europe', BORDERPRECISION: 2 },
+          properties: { NAME: 'France', SUBJECTO: '' },
           geometry: {
             type: 'Polygon',
             coordinates: [
@@ -73,7 +73,7 @@ describe('pipeline integration', () => {
         },
         {
           type: 'Feature',
-          properties: { NAME: 'France', SUBJECTO: '', PARTOF: 'Europe', BORDERPRECISION: 2 },
+          properties: { NAME: 'France', SUBJECTO: '' },
           geometry: {
             type: 'Polygon',
             coordinates: [
@@ -89,7 +89,7 @@ describe('pipeline integration', () => {
         },
         {
           type: 'Feature',
-          properties: { NAME: 'Spain', SUBJECTO: '', PARTOF: 'Europe', BORDERPRECISION: 2 },
+          properties: { NAME: 'Spain', SUBJECTO: '' },
           geometry: {
             type: 'Polygon',
             coordinates: [

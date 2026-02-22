@@ -18,6 +18,18 @@ interface GeoJSONFeature {
   };
 }
 
+const KEPT_PROPERTIES = new Set(['NAME', 'SUBJECTO']);
+
+function stripProperties(props: Record<string, unknown>): Record<string, unknown> {
+  const stripped: Record<string, unknown> = {};
+  for (const key of KEPT_PROPERTIES) {
+    if (key in props) {
+      stripped[key] = props[key];
+    }
+  }
+  return stripped;
+}
+
 interface FeatureCollection {
   type: 'FeatureCollection';
   features: GeoJSONFeature[];
@@ -53,7 +65,9 @@ export function mergeByName(geojson: FeatureCollection): MergeResult {
     let mergedFeature: ReturnType<typeof turf.feature>;
 
     if (features.length === 1 && features[0]) {
-      mergedFeature = features[0] as unknown as ReturnType<typeof turf.feature>;
+      const f = features[0];
+      f.properties = stripProperties(f.properties);
+      mergedFeature = f as unknown as ReturnType<typeof turf.feature>;
       mergedFeatures.push(mergedFeature);
     } else {
       const allPolygonCoords: number[][][][] = [];
@@ -69,7 +83,7 @@ export function mergeByName(geojson: FeatureCollection): MergeResult {
       }
 
       const firstFeature = features[0];
-      const properties = firstFeature ? { ...firstFeature.properties } : {};
+      const properties = firstFeature ? stripProperties(firstFeature.properties) : {};
       mergedFeature = turf.multiPolygon(allPolygonCoords, properties);
       mergedFeatures.push(mergedFeature);
     }
