@@ -2,7 +2,7 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { BottomSheet } from './bottom-sheet';
 
-vi.mock('@/hooks/use-bottom-sheet-snap', () => ({
+vi.mock('./use-bottom-sheet-snap', () => ({
   useBottomSheetSnap: vi.fn(() => ({
     snap: 'half' as const,
     setSnap: vi.fn(),
@@ -11,7 +11,7 @@ vi.mock('@/hooks/use-bottom-sheet-snap', () => ({
   })),
 }));
 
-import { useBottomSheetSnap } from '@/hooks/use-bottom-sheet-snap';
+import { useBottomSheetSnap } from './use-bottom-sheet-snap';
 
 const mockUseBottomSheetSnap = vi.mocked(useBottomSheetSnap);
 

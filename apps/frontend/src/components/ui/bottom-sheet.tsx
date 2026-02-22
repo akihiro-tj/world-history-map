@@ -1,9 +1,9 @@
 import { useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { useBottomSheetSnap } from '@/hooks/use-bottom-sheet-snap';
 import { useEscapeKey } from '@/hooks/use-escape-key';
 import { useFocusTrap } from '@/hooks/use-focus-trap';
 import { cn } from '@/lib/utils';
+import { useBottomSheetSnap } from './use-bottom-sheet-snap';
 
 interface BottomSheetProps {
   isOpen: boolean;
