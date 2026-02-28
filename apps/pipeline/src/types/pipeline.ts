@@ -1,10 +1,3 @@
-/**
- * Pipeline-specific type definitions
- * All types for the map data pipeline (fetch → merge → validate → convert → prepare → index → upload)
- */
-
-// --- Pipeline State ---
-
 export interface PipelineState {
   version: 1;
   runId: string;
@@ -32,8 +25,6 @@ export interface YearState {
   prepare?: { hash: string; hashedFilename: string; completedAt: string };
   upload?: { completedAt: string; skipped: boolean };
 }
-
-// --- Validation ---
 
 export interface ValidationResult {
   year: number;
@@ -67,8 +58,6 @@ export interface RepairAction {
   featureName: string;
 }
 
-// --- Deployment ---
-
 export interface DeploymentManifest {
   version: string;
   files: Record<string, string>;
@@ -79,8 +68,6 @@ export interface ManifestMetadata {
   hash: string;
   size: number;
 }
-
-// --- Validation Report ---
 
 export interface ValidationReport {
   runId: string;

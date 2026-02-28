@@ -15,7 +15,6 @@ interface Env {
   PUBLIC_HOSTNAME?: string;
 }
 
-// Utility functions (from protomaps/PMTiles/serverless/shared)
 const pmtilesPath = (name: string, setting?: string): string => {
   if (setting) {
     return setting.replaceAll('{name}', name);
@@ -67,7 +66,6 @@ function getAllowedOrigin(request: Request, env: Env): string {
     if (pattern === requestOrigin) {
       return requestOrigin;
     }
-    // Support wildcard subdomain pattern (e.g., https://*.example.com)
     if (pattern.includes('*')) {
       const regex: RegExp = new RegExp(`^${pattern.replace(/\./g, '\\.').replace('*', '[^.]+')}$`);
       if (regex.test(requestOrigin)) {
@@ -111,7 +109,6 @@ async function handleManifest(
   const cacheable = new Response(body, { headers, status: 200 });
   ctx.waitUntil(cache.put(request.url, cacheable.clone()));
 
-  // Add CORS headers for the actual response
   if (allowedOrigin) headers.set('Access-Control-Allow-Origin', allowedOrigin);
   headers.set('Vary', 'Origin');
 
@@ -175,9 +172,6 @@ class R2Source implements Source {
   }
 }
 
-/**
- * Handle direct PMTiles file requests with Range support
- */
 async function handlePMTilesFile(request: Request, env: Env, filename: string): Promise<Response> {
   const allowedOrigin = getAllowedOrigin(request, env);
 
@@ -236,7 +230,6 @@ export default {
       return handleManifest(request, env, ctx, cache);
     }
 
-    // Handle .pmtiles files directly (for Range requests from PMTiles library)
     const pmtilesMatch = url.pathname.match(/^\/(.+\.pmtiles)$/);
     if (pmtilesMatch) {
       return handlePMTilesFile(request, env, pmtilesMatch[1]);
@@ -267,7 +260,6 @@ export default {
       cacheableHeaders: Headers,
       status: number,
     ) => {
-      // Only cache successful responses (2xx)
       const isSuccess = status >= 200 && status < 300;
 
       if (isSuccess) {

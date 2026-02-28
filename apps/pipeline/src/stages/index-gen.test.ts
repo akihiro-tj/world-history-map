@@ -36,11 +36,9 @@ describe('index-gen stage', () => {
 
   describe('generateYearIndex', () => {
     it('should scan PMTiles directory and extract year entries', async () => {
-      // Create mock PMTiles and merged GeoJSON files
       await writeFile(path.join(pmtilesDir, 'world_1650.pmtiles'), 'fake');
       await writeFile(path.join(pmtilesDir, 'world_1700.pmtiles'), 'fake');
 
-      // Merged GeoJSON for territory extraction
       const geojson1650 = {
         type: 'FeatureCollection',
         features: [

@@ -1,8 +1,3 @@
-/**
- * Integration test: Full pipeline flow
- * Tests fetch → merge → validate → convert → prepare → index stages
- * with external dependencies mocked (git, tippecanoe, wrangler)
- */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { mkdir, mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
@@ -43,7 +38,6 @@ describe('pipeline integration', () => {
   });
 
   it('should process a year through merge → validate → prepare flow', async () => {
-    // Setup directories
     const cacheDir = path.join(tempDir, '.cache', 'geojson');
     const publicDir = path.join(tempDir, 'public', 'pmtiles');
     const distDir = path.join(tempDir, 'dist', 'pmtiles');
@@ -51,7 +45,6 @@ describe('pipeline integration', () => {
     await mkdir(publicDir, { recursive: true });
     await mkdir(distDir, { recursive: true });
 
-    // Create sample source GeoJSON
     const sourceGeojson = {
       type: 'FeatureCollection',
       features: [
@@ -106,18 +99,15 @@ describe('pipeline integration', () => {
       ],
     };
 
-    // Stage 1: Merge
     const mergeResult = mergeByName(sourceGeojson as Parameters<typeof mergeByName>[0]);
     expect(mergeResult.polygons.features).toHaveLength(2); // France merged, Spain separate
     expect(mergeResult.labels.features).toHaveLength(2);
 
-    // Write merged output
     const mergedPath = path.join(cacheDir, 'world_1650_merged.geojson');
     const labelsPath = path.join(cacheDir, 'world_1650_merged_labels.geojson');
     writeFileSync(mergedPath, JSON.stringify(mergeResult.polygons));
     writeFileSync(labelsPath, JSON.stringify(mergeResult.labels));
 
-    // Stage 2: Validate
     const validationResult = validateGeoJSON(
       mergeResult.polygons as Parameters<typeof validateGeoJSON>[0],
       1650,
@@ -125,7 +115,6 @@ describe('pipeline integration', () => {
     expect(validationResult.passed).toBe(true);
     expect(validationResult.errors).toHaveLength(0);
 
-    // Stage 3: Prepare (using merged file as mock PMTiles)
     const fakePmtilesPath = path.join(publicDir, 'world_1650.pmtiles');
     writeFileSync(fakePmtilesPath, 'fake PMTiles binary content');
 
@@ -172,7 +161,6 @@ describe('pipeline integration', () => {
     await mkdir(mergedDir, { recursive: true });
     await mkdir(pmtilesDir, { recursive: true });
 
-    // Create test data for 3 years
     for (const year of [1600, 1650, 1700]) {
       writeFileSync(path.join(pmtilesDir, `world_${year}.pmtiles`), 'fake');
       writeFileSync(
@@ -202,7 +190,6 @@ describe('pipeline integration', () => {
   it('should persist and resume pipeline state', () => {
     const statePath = path.join(tempDir, 'pipeline-state.json');
 
-    // Create and save state
     const state = createInitialState();
     state.years['1650'] = {
       source: { hash: 'abc123', fetchedAt: new Date().toISOString() },
@@ -215,13 +202,11 @@ describe('pipeline integration', () => {
     };
     saveState(state, statePath);
 
-    // Load and verify
     const loaded = loadState(statePath);
     expect(loaded).not.toBeNull();
     expect(loaded?.years['1650']?.merge?.featureCount).toBe(42);
     expect(loaded?.runId).toBe(state.runId);
 
-    // Verify JSON is readable
     const raw = JSON.parse(readFileSync(statePath, 'utf-8'));
     expect(raw.version).toBe(1);
   });

@@ -1,7 +1,3 @@
-/**
- * Convert stage: tippecanoe + tile-join to produce PMTiles
- * Uses execFile (no shell) for safe CLI execution
- */
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { PATHS, TIPPECANOE, yearToPmtilesFilename } from '@/config.ts';
@@ -17,10 +13,6 @@ export function buildTippecanoeArgs(
   return [`--output=${outputPath}`, ...flags, inputPath];
 }
 
-/**
- * Execute the convert stage for a single year.
- * Runs tippecanoe for territories and labels, then tile-join to merge layers.
- */
 export async function executeConvert(
   input: { polygonsPath: string; labelsPath: string },
   outputPath: string,

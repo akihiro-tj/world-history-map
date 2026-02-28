@@ -40,14 +40,12 @@ describe('hash utilities', () => {
 
     it('should handle large files via streaming', async () => {
       const filePath = path.join(tempDir, 'large.bin');
-      // 1MB of data
       const data = Buffer.alloc(1024 * 1024, 0x42);
       await writeFile(filePath, data);
 
       const result = await hashFile(filePath);
 
       expect(result).toMatch(/^[a-f0-9]{64}$/);
-      // Same content should always produce same hash
       const result2 = await hashFile(filePath);
       expect(result).toBe(result2);
     });

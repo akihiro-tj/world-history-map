@@ -1,6 +1,3 @@
-/**
- * Pipeline stage interface definitions
- */
 import type { PipelineState } from '@/types/pipeline.ts';
 
 export interface PipelineStage<TInput, TOutput> {
@@ -22,9 +19,6 @@ export interface PipelineLogger {
   timing(stage: string, durationMs: number): void;
 }
 
-/**
- * Create a logger that formats messages as [HH:MM:SS] [STAGE] message
- */
 export function createLogger(verbose: boolean): PipelineLogger {
   const timestamp = (): string => {
     const now = new Date();

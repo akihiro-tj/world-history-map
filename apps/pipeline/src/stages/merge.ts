@@ -1,7 +1,3 @@
-/**
- * Merge stage: group features by NAME and merge into MultiPolygons
- * Generates centroid label points for each territory
- */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
@@ -40,11 +36,6 @@ interface MergeResult {
   labels: ReturnType<typeof turf.featureCollection>;
 }
 
-/**
- * Merge features by NAME property.
- * Same-name polygons become MultiPolygons, and a centroid label point
- * is generated for each unique territory.
- */
 export function mergeByName(geojson: FeatureCollection): MergeResult {
   const groups = new Map<string, GeoJSONFeature[]>();
 

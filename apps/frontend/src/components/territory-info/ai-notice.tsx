@@ -1,25 +1,9 @@
 import { cn } from '@/lib/utils';
 
-/**
- * AI Notice props
- */
 interface AiNoticeProps {
-  /** Optional additional className */
   className?: string;
 }
 
-/**
- * AI-generated content notice component
- *
- * Displays a notice indicating that the content is AI-generated.
- * This is required per the constitution for transparency about
- * automated content generation.
- *
- * @example
- * ```tsx
- * <AiNotice />
- * ```
- */
 export function AiNotice({ className }: AiNoticeProps) {
   return (
     <div

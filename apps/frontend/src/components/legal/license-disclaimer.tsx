@@ -4,9 +4,7 @@ import { useFocusTrap } from '@/hooks/use-focus-trap';
 import { CloseButton } from '../ui/close-button';
 
 export interface LicenseDisclaimerProps {
-  /** Whether the modal is open */
   isOpen: boolean;
-  /** Callback when modal should close */
   onClose: () => void;
 }
 

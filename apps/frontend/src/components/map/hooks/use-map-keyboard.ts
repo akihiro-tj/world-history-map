@@ -2,19 +2,8 @@ import type React from 'react';
 import { type RefObject, useCallback } from 'react';
 import type { MapRef } from 'react-map-gl/maplibre';
 
-/**
- * Pan amount in pixels for keyboard navigation
- */
 const PAN_AMOUNT = 100;
 
-/**
- * Hook for keyboard-based map navigation
- *
- * Handles arrow keys for panning and +/- for zoom.
- *
- * @param mapRef Ref to the MapLibre map instance
- * @returns keyDown event handler for the map container
- */
 export function useMapKeyboard(
   mapRef: RefObject<MapRef | null>,
 ): (event: React.KeyboardEvent<HTMLDivElement>) => void {

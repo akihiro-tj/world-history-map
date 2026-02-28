@@ -1,30 +1,14 @@
 import { type ComponentProps, forwardRef } from 'react';
 import { cn } from '@/lib/utils';
 
-/**
- * Projection type for the map
- */
 export type ProjectionType = 'mercator' | 'globe';
 
 interface ProjectionToggleProps
   extends Omit<ComponentProps<'button'>, 'children' | 'onClick' | 'onToggle'> {
-  /** Current projection type */
   projection: ProjectionType;
-  /** Callback when projection changes */
   onToggle: (projection: ProjectionType) => void;
 }
 
-/**
- * Toggle button for switching between mercator and globe projections
- *
- * @example
- * ```tsx
- * <ProjectionToggle
- *   projection={projection}
- *   onToggle={(p) => setProjection(p)}
- * />
- * ```
- */
 export const ProjectionToggle = forwardRef<HTMLButtonElement, ProjectionToggleProps>(
   ({ projection, onToggle, className, ...props }, ref) => {
     const handleClick = () => {

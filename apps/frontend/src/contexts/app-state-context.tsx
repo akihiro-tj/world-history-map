@@ -6,9 +6,6 @@ import {
   type MapViewState,
 } from '../types/app-state';
 
-/**
- * AppState context type
- */
 interface AppStateContextValue {
   state: AppState;
   actions: AppStateActions;
@@ -16,12 +13,8 @@ interface AppStateContextValue {
 
 const AppStateContext = createContext<AppStateContextValue | null>(null);
 
-/**
- * AppStateProvider props
- */
 interface AppStateProviderProps {
   children: ReactNode;
-  /** Initial state for testing (uses default when omitted) */
   initialState?: AppState;
 }
 
@@ -50,21 +43,6 @@ function appStateReducer(state: AppState, action: AppStateAction): AppState {
   }
 }
 
-/**
- * Provider that supplies application state
- *
- * @example
- * ```tsx
- * function App() {
- *   return (
- *     <AppStateProvider>
- *       <MapView />
- *       <YearSelector />
- *     </AppStateProvider>
- *   );
- * }
- * ```
- */
 export function AppStateProvider({
   children,
   initialState = initialAppState,
@@ -89,24 +67,6 @@ export function AppStateProvider({
   return <AppStateContext.Provider value={value}>{children}</AppStateContext.Provider>;
 }
 
-/**
- * Hook to get application state
- *
- * @returns Current state and update actions
- * @throws When used outside of AppStateProvider
- *
- * @example
- * ```tsx
- * function YearSelector() {
- *   const { state, actions } = useAppState();
- *   return (
- *     <button onClick={() => actions.setSelectedYear(1700)}>
- *       Current: {state.selectedYear}
- *     </button>
- *   );
- * }
- * ```
- */
 export function useAppState(): AppStateContextValue {
   const context = useContext(AppStateContext);
   if (!context) {

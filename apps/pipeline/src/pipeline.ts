@@ -1,7 +1,3 @@
-/**
- * Pipeline orchestrator
- * Controls stage execution order, year iteration, change detection, and checkpointing
- */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { PATHS, yearToUpstreamFilename } from '@/config.ts';
@@ -260,9 +256,6 @@ function filterYears(allYears: number[], options: PipelineOptions): number[] {
   return allYears;
 }
 
-/**
- * Load existing deployment manifest or create empty one.
- */
 function loadManifest(): DeploymentManifest {
   const manifestPath = path.join(PATHS.distPmtiles, 'manifest.json');
   try {

@@ -3,7 +3,6 @@ import { describe, expect, it, vi } from 'vitest';
 import { AppStateProvider } from '@/contexts/app-state-context';
 import { MapView } from './map-view';
 
-// Mock MapLibre and react-map-gl
 vi.mock('react-map-gl/maplibre', () => ({
   default: vi.fn(({ children }) => (
     <div data-testid="mock-map">
@@ -28,7 +27,6 @@ vi.mock('pmtiles', () => ({
   },
 }));
 
-// Mock year index fetch
 global.fetch = vi.fn(() =>
   Promise.resolve({
     ok: true,
@@ -63,7 +61,6 @@ describe('MapView', () => {
   it('should render map layers for territories', async () => {
     renderWithProvider(<MapView />);
     await waitFor(() => {
-      // Territory fill layer should be rendered
       expect(screen.getByTestId('map-layer-territory-fill')).toBeInTheDocument();
     });
   });

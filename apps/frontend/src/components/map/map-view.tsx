@@ -62,18 +62,15 @@ export function MapView({ onProjectionReady }: MapViewProps = {}) {
     (event: MapLayerMouseEvent) => {
       const features = event.features;
       if (!features || features.length === 0) {
-        // Clicked on empty area - close panel
         actions.setInfoPanelOpen(false);
         actions.setSelectedTerritory(null);
         return;
       }
 
-      // Get the first feature (topmost territory)
       const feature = features[0];
       if (!feature) return;
       const properties = feature.properties as TerritoryProperties;
 
-      // Get territory name - prefer NAME for the clicked territory, fallback to SUBJECTO
       const territoryName = properties.NAME || properties.SUBJECTO;
 
       if (territoryName) {

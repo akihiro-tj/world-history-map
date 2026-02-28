@@ -112,7 +112,6 @@ describe('LicenseDisclaimer', () => {
       const onClose = vi.fn();
       render(<LicenseDisclaimer isOpen={true} onClose={onClose} />);
 
-      // Click on backdrop area
       const backdrop = screen.getByTestId('license-modal-backdrop');
       fireEvent.click(backdrop);
 
@@ -167,11 +166,9 @@ describe('LicenseDisclaimer', () => {
     it('traps focus within modal when open', () => {
       render(<LicenseDisclaimer {...defaultProps} />);
 
-      // Modal should have focus trap mechanism
       const modal = screen.getByTestId('license-disclaimer-modal');
       expect(modal).toBeInTheDocument();
 
-      // First focusable element should be the close button
       const closeButton = screen.getByRole('button', { name: /close|閉じる/i });
       expect(closeButton).toBeInTheDocument();
     });

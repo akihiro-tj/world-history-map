@@ -58,7 +58,6 @@ describe('YearSelector', () => {
   it('should display years in chronological order', () => {
     renderWithProvider(<YearSelector years={mockYears} />);
 
-    // Only get year buttons, not navigation buttons
     const yearButtons = mockYears.map((y) => screen.getByTestId(`year-button-${y.year}`));
     const years = yearButtons.map((btn) => Number(btn.textContent));
 
@@ -77,7 +76,6 @@ describe('YearSelector', () => {
     const selectedButton = screen.getByTestId('year-button-1650');
     expect(selectedButton).toHaveAttribute('aria-current', 'true');
 
-    // Other buttons should not be current
     const otherButton = screen.getByTestId('year-button-1700');
     expect(otherButton).not.toHaveAttribute('aria-current', 'true');
   });
@@ -114,7 +112,6 @@ describe('YearSelector', () => {
     const year1650Button = screen.getByTestId('year-button-1650');
     year1650Button.focus();
 
-    // Press right arrow to move to next year
     await user.keyboard('{ArrowRight}');
 
     await waitFor(() => {
@@ -130,7 +127,6 @@ describe('YearSelector', () => {
     const year1650Button = screen.getByTestId('year-button-1650');
     year1650Button.focus();
 
-    // Press left arrow to move to previous year
     await user.keyboard('{ArrowLeft}');
 
     await waitFor(() => {
@@ -146,7 +142,6 @@ describe('YearSelector', () => {
     const year1800Button = screen.getByTestId('year-button-1800');
     year1800Button.focus();
 
-    // Press right arrow at the end should wrap to beginning
     await user.keyboard('{ArrowRight}');
 
     await waitFor(() => {
@@ -185,7 +180,6 @@ describe('YearSelector', () => {
   it('should scroll selected year into view', () => {
     renderWithProvider(<YearSelector years={mockYears} />, { initialYear: 1700 });
 
-    // scrollIntoView should be called for the selected year
     expect(scrollIntoViewMock).toHaveBeenCalled();
   });
 
@@ -207,7 +201,6 @@ describe('YearSelector', () => {
 
     renderWithProvider(<YearSelector years={yearsWithBCE} />, { initialYear: -500 });
 
-    // BCE years should be displayed with Japanese short notation
     const button500BCE = screen.getByTestId('year-button--500');
     expect(button500BCE).toBeInTheDocument();
     expect(button500BCE).toHaveTextContent('前500');

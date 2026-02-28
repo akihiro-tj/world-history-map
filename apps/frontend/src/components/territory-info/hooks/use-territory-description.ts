@@ -1,28 +1,15 @@
 import { useEffect, useState } from 'react';
 import type { TerritoryDescription, YearDescriptionBundle } from '../../../types/territory';
 
-/**
- * Result of the useTerritoryDescription hook
- */
 interface UseTerritoryDescriptionResult {
-  /** Territory description data, null if not found or loading */
   description: TerritoryDescription | null;
-  /** Loading state */
   isLoading: boolean;
-  /** Error message, null if no error */
   error: string | null;
 }
 
-/** Module-level cache: year → bundle of all territory descriptions for that year */
 const yearCache = new Map<number, YearDescriptionBundle>();
-
-/** In-flight fetch promises to deduplicate concurrent requests for the same year */
 const pendingFetches = new Map<number, Promise<YearDescriptionBundle | null>>();
 
-/**
- * Converts a territory name to kebab-case for bundle key lookup
- * e.g., "England and Ireland" -> "england-and-ireland"
- */
 function toKebabCase(name: string): string {
   return name
     .toLowerCase()
@@ -30,10 +17,6 @@ function toKebabCase(name: string): string {
     .replace(/[^a-z0-9-]/g, '');
 }
 
-/**
- * Fetches and caches the year description bundle.
- * Deduplicates concurrent requests for the same year.
- */
 async function fetchYearBundle(year: number): Promise<YearDescriptionBundle | null> {
   const cached = yearCache.get(year);
   if (cached) return cached;
@@ -66,35 +49,15 @@ async function fetchYearBundle(year: number): Promise<YearDescriptionBundle | nu
   return promise;
 }
 
-/**
- * Prefetch territory descriptions for a given year.
- * Call this on year selection to warm the cache before territory clicks.
- */
 export function prefetchYearDescriptions(year: number): void {
-  fetchYearBundle(year).catch(() => {
-    // Silently ignore prefetch errors
-  });
+  fetchYearBundle(year).catch(() => {});
 }
 
-/**
- * Clears the year description cache (for testing purposes)
- */
 export function clearDescriptionCache(): void {
   yearCache.clear();
   pendingFetches.clear();
 }
 
-/**
- * Hook to fetch and manage territory description data
- *
- * Fetches the year-level bundle and extracts the specific territory's
- * description. Uses module-level caching so subsequent lookups within
- * the same year are instant.
- *
- * @param territoryName - Name of the territory (null if none selected)
- * @param year - Year for the description
- * @returns Description data, loading state, and any error
- */
 export function useTerritoryDescription(
   territoryName: string | null,
   year: number,
@@ -104,7 +67,6 @@ export function useTerritoryDescription(
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Reset state when territory is deselected
     if (!territoryName) {
       setDescription(null);
       setIsLoading(false);

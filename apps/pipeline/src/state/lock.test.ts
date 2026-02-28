@@ -61,7 +61,6 @@ describe('pipeline lock', () => {
 
   describe('stale lock detection', () => {
     it('should detect stale lock with dead PID', () => {
-      // Create a lock with a PID that does not exist
       mkdirSync(lockDir, { recursive: true });
       const infoPath = path.join(lockDir, 'info.json');
       writeFileSync(
@@ -79,7 +78,6 @@ describe('pipeline lock', () => {
     });
 
     it('should detect stale lock with old mtime', () => {
-      // Create a lock with current PID but very old timestamp
       mkdirSync(lockDir, { recursive: true });
       const infoPath = path.join(lockDir, 'info.json');
       // Write info with a PID that is definitely not alive (0 is special)

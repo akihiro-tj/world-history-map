@@ -2,16 +2,6 @@ import { type RefObject, useEffect, useRef, useState } from 'react';
 import type { MapRef } from 'react-map-gl/maplibre';
 import type { ProjectionType } from '../projection-toggle';
 
-/**
- * Hook for managing map projection state and animated transitions
- *
- * Handles switching between mercator and globe projections with
- * appropriate flyTo animations. Skips animation on initial load.
- *
- * @param mapRef Ref to the MapLibre map instance
- * @param mapLoaded Whether the map has finished loading
- * @returns projection state and setter
- */
 export function useProjection(
   mapRef: RefObject<MapRef | null>,
   mapLoaded: boolean,
@@ -35,7 +25,6 @@ export function useProjection(
       return;
     }
 
-    // Skip if projection hasn't changed
     if (prevProjection === projection) return;
 
     prevProjectionRef.current = projection;
@@ -44,7 +33,6 @@ export function useProjection(
     const currentCenter = mapInstance.getCenter();
 
     if (projection === 'globe') {
-      // Switch to globe with dramatic zoom out
       mapInstance.setProjection({ type: 'globe' });
       mapInstance.flyTo({
         center: currentCenter,
@@ -56,7 +44,6 @@ export function useProjection(
         essential: true,
       });
     } else {
-      // Switch to mercator with zoom in
       mapInstance.flyTo({
         center: currentCenter,
         zoom: Math.max(currentZoom, 3),

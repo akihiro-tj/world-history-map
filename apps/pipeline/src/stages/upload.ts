@@ -1,7 +1,3 @@
-/**
- * Upload stage: differential R2 upload using SHA-256 hash comparison
- * Only uploads changed files to minimize bandwidth usage
- */
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { PATHS } from '@/config.ts';
@@ -27,9 +23,6 @@ export interface UploadPlan {
   toSkip: UploadEntry[];
 }
 
-/**
- * Compute which files need uploading by comparing with existing manifest.
- */
 export function computeUploadPlan(
   currentManifest: DeploymentManifest,
   newFiles: Map<string, FileInfo>,
@@ -50,9 +43,6 @@ export function computeUploadPlan(
   return { toUpload, toSkip };
 }
 
-/**
- * Execute the upload plan using wrangler r2 object put.
- */
 export async function executeUpload(
   plan: UploadPlan,
   distDir: string,
@@ -82,14 +72,10 @@ export async function executeUpload(
   );
 }
 
-/**
- * Run the upload stage using default configuration.
- */
 export async function runUploadStage(
   manifest: DeploymentManifest,
   logger: PipelineLogger,
 ): Promise<void> {
-  // Build file info map from manifest
   const newFiles = new Map<string, FileInfo>();
   for (const [year, filename] of Object.entries(manifest.files)) {
     const meta = manifest.metadata?.[year];
@@ -98,7 +84,6 @@ export async function runUploadStage(
     }
   }
 
-  // Load existing manifest for comparison
   const existingManifest: DeploymentManifest = {
     version: '',
     files: {},
@@ -108,9 +93,6 @@ export async function runUploadStage(
   await executeUpload(plan, PATHS.distPmtiles, R2_BUCKET, logger);
 }
 
-/**
- * Run the upload stage standalone by loading manifest from disk.
- */
 export async function runStandaloneUpload(logger: PipelineLogger): Promise<void> {
   const manifestPath = path.join(PATHS.distPmtiles, 'manifest.json');
   if (!existsSync(manifestPath)) {
@@ -122,9 +104,6 @@ export async function runStandaloneUpload(logger: PipelineLogger): Promise<void>
   await runUploadStage(manifest, logger);
 }
 
-/**
- * Publish manifest.json to R2, making uploaded PMTiles active in production.
- */
 export async function publishManifest(logger: PipelineLogger): Promise<void> {
   const manifestPath = path.join(PATHS.distPmtiles, 'manifest.json');
   logger.info('publish', 'Publishing manifest.json to R2...');

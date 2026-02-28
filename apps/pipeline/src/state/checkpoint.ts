@@ -1,8 +1,3 @@
-/**
- * Checkpoint persistence for pipeline state
- * Uses atomic write (temp + rename) for crash safety
- */
-
 import { randomBytes } from 'node:crypto';
 import { existsSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -24,20 +19,12 @@ export function createInitialState(): PipelineState {
   };
 }
 
-/**
- * Save pipeline state to a JSON file using atomic write.
- * Writes to a temp file first, then renames to ensure crash safety.
- */
 export function saveState(state: PipelineState, filePath: string): void {
   const tempPath = `${filePath}.tmp.${process.pid}`;
   writeFileSync(tempPath, JSON.stringify(state, null, 2));
   renameSync(tempPath, filePath);
 }
 
-/**
- * Load pipeline state from a JSON file.
- * Returns null if the file does not exist or is invalid.
- */
 export function loadState(filePath: string): PipelineState | null {
   if (!existsSync(filePath)) {
     return null;
@@ -50,13 +37,6 @@ export function loadState(filePath: string): PipelineState | null {
   }
 }
 
-/**
- * Determine whether a year+stage needs reprocessing.
- * Returns true if:
- * - The year has no state entry
- * - The source hash has changed
- * - The specified stage is not yet completed
- */
 export function shouldProcessYear(
   state: PipelineState,
   year: number,
@@ -66,17 +46,14 @@ export function shouldProcessYear(
   const yearKey = String(year);
   const yearState = state.years[yearKey];
 
-  // Year not in state → needs processing
   if (!yearState) {
     return true;
   }
 
-  // Source hash changed → downstream stages need reprocessing
   if (yearState.source && yearState.source.hash !== sourceHash) {
     return true;
   }
 
-  // Stage not yet completed → needs processing
   if (!yearState[stage]) {
     return true;
   }
@@ -101,9 +78,6 @@ export function updateYearState(
   }
 }
 
-/**
- * Invalidate all downstream stages for a year when source changes.
- */
 export function invalidateDownstream(
   state: PipelineState,
   year: number,
@@ -131,9 +105,6 @@ export function invalidateDownstream(
   }
 }
 
-/**
- * Get the state file path (with optional override for testing).
- */
 export function getStatePath(override?: string): string {
   return override ?? path.join(process.cwd(), '.cache', 'pipeline-state.json');
 }
