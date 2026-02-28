@@ -1,17 +1,9 @@
-/**
- * Fetch stage: git clone/pull historical-basemaps repository
- * Uses execFile (no shell) for safe git command execution
- */
 import { existsSync } from 'node:fs';
 import { readdir } from 'node:fs/promises';
 import { filenameToYear, PATHS, UPSTREAM } from '@/config.ts';
 import { execFileAsync } from '@/exec.ts';
 import type { PipelineLogger } from '@/stages/types.ts';
 
-/**
- * Execute the fetch stage: clone or pull the historical-basemaps repository.
- * Falls back to offline mode if pull fails and local cache exists.
- */
 export async function executeFetch(
   repoDir: string,
   repoUrl: string,
@@ -34,19 +26,11 @@ export async function executeFetch(
   }
 }
 
-/**
- * Get the git commit hash of the repository.
- */
 export async function getCommitHash(repoDir: string): Promise<string> {
   const { stdout } = await execFileAsync('git', ['-C', repoDir, 'rev-parse', 'HEAD']);
   return stdout.trim();
 }
 
-/**
- * Parse available years from GeoJSON filenames in a directory.
- * Detects both CE (world_1650.geojson) and BCE (world_bc1000.geojson) formats.
- * Returns sorted array of year numbers (BCE as negative).
- */
 export async function parseYearsFromDirectory(dir: string): Promise<number[]> {
   const files = await readdir(dir);
   const years: number[] = [];
@@ -61,9 +45,6 @@ export async function parseYearsFromDirectory(dir: string): Promise<number[]> {
   return years.sort((a, b) => a - b);
 }
 
-/**
- * Run the complete fetch stage using default configuration.
- */
 export async function runFetchStage(logger: PipelineLogger): Promise<number[]> {
   await executeFetch(PATHS.historicalBasemaps, UPSTREAM.repoUrl, logger);
 

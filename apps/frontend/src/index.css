@@ -3,9 +3,7 @@
 /* Class-based dark mode (toggle with .dark class on html element) */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Custom theme colors */
 @theme {
-  /* Primary - used for main UI elements */
   --color-primary-50: oklch(0.97 0.01 250);
   --color-primary-100: oklch(0.93 0.03 250);
   --color-primary-200: oklch(0.86 0.06 250);
@@ -37,9 +35,6 @@ body {
   overflow: hidden;
 }
 
-/*
- * Base layer styles - lower specificity than utilities
- */
 @layer base {
   /* Focus visible - only show focus ring for keyboard navigation */
   :focus {
@@ -51,7 +46,6 @@ body {
     outline-offset: 2px;
   }
 
-  /* Button reset - remove browser defaults */
   button {
     font: inherit;
     border: none;
@@ -64,7 +58,6 @@ body {
     opacity: 0.5;
   }
 
-  /* Anchor reset - remove browser defaults */
   a {
     text-decoration: none;
   }
@@ -87,7 +80,6 @@ body {
   }
 }
 
-/* Screen reader only utility */
 .sr-only {
   position: absolute;
   width: 1px;

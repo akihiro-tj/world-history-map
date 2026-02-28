@@ -4,7 +4,6 @@ import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { PipelineLogger } from '@/stages/types.ts';
 
-// Mock the exec wrapper module
 vi.mock('@/exec.ts', () => ({
   execFileAsync: vi.fn(),
 }));

@@ -1,7 +1,3 @@
-/**
- * Index generation stage: create index.json with year/territory mappings
- * Scans processed years and extracts territory names from merged GeoJSON
- */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { PATHS, yearToMergedFilename, yearToPmtilesFilename } from '@/config.ts';
@@ -16,9 +12,6 @@ interface MergedGeoJSON {
   features: MergedFeature[];
 }
 
-/**
- * Generate the year index from processed data.
- */
 export async function generateYearIndex(
   years: number[],
   mergedDir: string,
@@ -35,7 +28,6 @@ export async function generateYearIndex(
       continue;
     }
 
-    // Extract territory names from merged GeoJSON
     const mergedPath = path.join(mergedDir, yearToMergedFilename(year));
     let countries: string[] = [];
 
@@ -67,9 +59,6 @@ export async function generateYearIndex(
   return { years: entries };
 }
 
-/**
- * Run the index generation stage and write index.json.
- */
 export async function runIndexGenStage(
   years: number[],
   logger: PipelineLogger,

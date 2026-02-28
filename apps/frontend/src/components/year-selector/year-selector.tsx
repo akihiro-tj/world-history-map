@@ -5,9 +5,7 @@ import { useAppState } from '../../contexts/app-state-context';
 import type { YearEntry } from '../../types/year';
 
 interface YearSelectorProps {
-  /** Array of available year entries */
   years: YearEntry[];
-  /** Callback when a year is selected */
   onYearSelect?: (year: number) => void;
 }
 

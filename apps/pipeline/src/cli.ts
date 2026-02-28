@@ -1,8 +1,3 @@
-/**
- * CLI entry point for the map data pipeline
- * Usage: pnpm pipeline <command> [options]
- */
-
 import type { PipelineOptions } from '@/pipeline.ts';
 import { listYears, PipelineError, runPipeline, showStatus } from '@/pipeline.ts';
 import { createLogger } from '@/stages/types.ts';
@@ -14,7 +9,6 @@ function parseArgs(argv: string[]): { command: string; options: PipelineOptions 
   const options: PipelineOptions = {};
 
   let i = 0;
-  // First non-flag argument is the command
   if (args[0] && !args[0].startsWith('--')) {
     command = args[0];
     i = 1;
@@ -92,7 +86,6 @@ async function main(): Promise<void> {
     case 'convert':
     case 'prepare':
     case 'index':
-      // Individual stage execution - run pipeline with appropriate filtering
       logger.info('cli', `Running individual stage: ${command}`);
       await runPipeline(logger, options);
       break;

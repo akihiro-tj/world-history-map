@@ -3,15 +3,6 @@ import { type RefObject, useEffect } from 'react';
 const FOCUSABLE_SELECTOR =
   'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
-/**
- * Hook to trap keyboard focus within a container element
- *
- * When active, Tab and Shift+Tab cycle through focusable elements
- * inside the container without escaping.
- *
- * @param isActive Whether the focus trap should be active
- * @param containerRef Ref to the container element that traps focus
- */
 export function useFocusTrap(isActive: boolean, containerRef: RefObject<HTMLElement | null>): void {
   useEffect(() => {
     if (!isActive || !containerRef.current) return;

@@ -7,12 +7,6 @@ interface UseYearIndexReturn {
   isLoading: boolean;
 }
 
-/**
- * Hook to load the year index on mount
- *
- * Fetches available years from the index file and caches the result.
- * Returns an empty array while loading or on error.
- */
 export function useYearIndex(): UseYearIndexReturn {
   const [years, setYears] = useState<YearEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);

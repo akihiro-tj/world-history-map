@@ -2,13 +2,9 @@ import { type ComponentProps, forwardRef } from 'react';
 import { cn } from '@/lib/utils';
 
 interface CloseButtonProps extends Omit<ComponentProps<'button'>, 'children'> {
-  /** Size of the button */
   size?: 'sm' | 'md';
 }
 
-/**
- * Reusable close button component with X icon
- */
 export const CloseButton = forwardRef<HTMLButtonElement, CloseButtonProps>(
   ({ size = 'md', className, ...props }, ref) => {
     const iconSize = size === 'sm' ? 'h-4 w-4' : 'h-5 w-5';

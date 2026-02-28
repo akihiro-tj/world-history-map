@@ -5,7 +5,6 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 import { clearColorSchemeCache, loadColorScheme } from '../../utils/color-scheme';
 import { TerritoryLayer } from './territory-layer';
 
-// Mock react-map-gl/maplibre
 vi.mock('react-map-gl/maplibre', () => ({
   Layer: vi.fn((props) => (
     <div
@@ -64,9 +63,7 @@ describe('TerritoryLayer', () => {
     const fillLayer = screen.getByTestId('layer-territory-fill');
     const paint = JSON.parse(fillLayer.getAttribute('data-paint') || '{}');
 
-    // Fill color should use a match expression or case expression for SUBJECTO
     expect(paint['fill-color']).toBeDefined();
-    // The color expression should reference SUBJECTO property
     const colorExpr = JSON.stringify(paint['fill-color']);
     expect(colorExpr).toContain('SUBJECTO');
   });
@@ -77,7 +74,6 @@ describe('TerritoryLayer', () => {
     const fillLayer = screen.getByTestId('layer-territory-fill');
     const paint = JSON.parse(fillLayer.getAttribute('data-paint') || '{}');
 
-    // Fill opacity should be less than 1 for better visibility
     expect(paint['fill-opacity']).toBeDefined();
     expect(paint['fill-opacity']).toBeLessThan(1);
   });

@@ -59,7 +59,6 @@ describe('GeoJSON validation', () => {
 
       const result = validateGeoJSON(geojson, 1650);
 
-      // Should have attempted repairs on the self-intersecting polygon
       // (The Point geometry is rejected outright, no repair possible)
       if (result.repairs.length > 0) {
         expect(result.repairs[0]?.featureName).toBeTruthy();

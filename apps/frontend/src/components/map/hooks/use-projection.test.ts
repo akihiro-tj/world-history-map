@@ -63,14 +63,12 @@ describe('useProjection', () => {
     const { ref, mapInstance } = createMockMapRef();
     const { result } = renderHook(() => useProjection(ref as never, true));
 
-    // Switch to globe first
     act(() => {
       result.current.setProjection('globe');
     });
 
     vi.clearAllMocks();
 
-    // Then switch back to mercator
     act(() => {
       result.current.setProjection('mercator');
     });
@@ -81,7 +79,6 @@ describe('useProjection', () => {
       }),
     );
 
-    // After delay, projection is set
     act(() => {
       vi.advanceTimersByTime(200);
     });

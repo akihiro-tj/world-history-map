@@ -90,7 +90,6 @@ describe('validate stage', () => {
 
       const result = runValidateForYear(1650, geojsonPath, logger);
 
-      // Repair or warning should be recorded
       expect(result.repairs.length + result.warnings.length).toBeGreaterThanOrEqual(0);
     });
   });

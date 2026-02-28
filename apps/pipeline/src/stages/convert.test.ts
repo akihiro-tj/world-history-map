@@ -1,6 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
 
-// Mock the exec wrapper module
 vi.mock('@/exec.ts', () => ({
   execFileAsync: vi.fn(),
 }));
@@ -61,10 +60,8 @@ describe('convert stage', () => {
         logger,
       );
 
-      // 3 calls: tippecanoe for territories, tippecanoe for labels, tile-join
       expect(mockExecFileAsync).toHaveBeenCalledTimes(3);
 
-      // First call: tippecanoe for territories
       expect(mockExecFileAsync).toHaveBeenNthCalledWith(
         1,
         'tippecanoe',
@@ -72,7 +69,6 @@ describe('convert stage', () => {
         expect.anything(),
       );
 
-      // Second call: tippecanoe for labels
       expect(mockExecFileAsync).toHaveBeenNthCalledWith(
         2,
         'tippecanoe',
@@ -80,7 +76,6 @@ describe('convert stage', () => {
         expect.anything(),
       );
 
-      // Third call: tile-join
       expect(mockExecFileAsync).toHaveBeenNthCalledWith(
         3,
         'tile-join',

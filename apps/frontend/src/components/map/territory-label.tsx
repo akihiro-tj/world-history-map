@@ -1,33 +1,12 @@
 import { Layer } from 'react-map-gl/maplibre';
 
-/**
- * TerritoryLabel props
- */
 interface TerritoryLabelProps {
-  /** Source ID for the vector tiles */
   sourceId: string;
-  /** Source layer name within the vector tiles */
   sourceLayer: string;
 }
 
-/**
- * Layer ID for territory labels
- */
 export const TERRITORY_LABEL_ID = 'territory-label';
 
-/**
- * Territory label layer component
- *
- * Renders territory name labels on the map using the NAME property.
- * Labels are styled with halo for readability and sized based on zoom level.
- *
- * @example
- * ```tsx
- * <Source id="territories" type="vector" url={pmtilesUrl}>
- *   <TerritoryLabel sourceId="territories" sourceLayer="territories" />
- * </Source>
- * ```
- */
 export function TerritoryLabel({ sourceId, sourceLayer }: TerritoryLabelProps) {
   return (
     <Layer

@@ -1,15 +1,8 @@
-/**
- * Validate stage: run GeoJSON validation on merged data
- * Blocks pipeline on errors, continues with warnings
- */
 import { readFileSync } from 'node:fs';
 import type { PipelineLogger } from '@/stages/types.ts';
 import type { ValidationResult } from '@/types/pipeline.ts';
 import { validateGeoJSON } from '@/validation/geojson.ts';
 
-/**
- * Run validation for a single year's merged GeoJSON.
- */
 export function runValidateForYear(
   year: number,
   mergedGeojsonPath: string,

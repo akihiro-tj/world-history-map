@@ -1,14 +1,8 @@
 import type { YearEntry, YearIndex } from '../types/year';
 
-/** Path to PMTiles index file */
 const INDEX_PATH = '/pmtiles/index.json';
-
-/** Regular expression for filename validation */
 const FILENAME_PATTERN = /^world_-?\d+\.pmtiles$/;
 
-/**
- * Validate YearEntry
- */
 function validateYearEntry(entry: unknown): entry is YearEntry {
   if (typeof entry !== 'object' || entry === null) {
     return false;
@@ -38,9 +32,6 @@ function validateYearEntry(entry: unknown): entry is YearEntry {
   return true;
 }
 
-/**
- * Validate YearIndex
- */
 function validateYearIndex(data: unknown): data is YearIndex {
   if (typeof data !== 'object' || data === null) {
     return false;
@@ -56,23 +47,8 @@ function validateYearIndex(data: unknown): data is YearIndex {
   return years.every(validateYearEntry);
 }
 
-/** Cached year index */
 let cachedYearIndex: YearIndex | null = null;
 
-/**
- * Load year index
- *
- * Returns a cached result if already loaded.
- *
- * @returns Year index data
- * @throws When loading or validation fails
- *
- * @example
- * ```ts
- * const { years } = await loadYearIndex();
- * console.log(years[0].year); // 1650
- * ```
- */
 export async function loadYearIndex(): Promise<YearIndex> {
   if (cachedYearIndex) {
     return cachedYearIndex;
@@ -94,26 +70,10 @@ export async function loadYearIndex(): Promise<YearIndex> {
   return data;
 }
 
-/**
- * Clear the cached year index (for testing)
- */
 export function clearYearIndexCache(): void {
   cachedYearIndex = null;
 }
 
-/**
- * Get PMTiles file path for a specified year
- *
- * @param yearIndex Year index
- * @param year Target year
- * @returns PMTiles file URL, or null if not found
- *
- * @example
- * ```ts
- * const path = getYearFilePath(yearIndex, 1650);
- * // => "/pmtiles/world_1650.pmtiles"
- * ```
- */
 export function getYearFilePath(yearIndex: YearIndex, year: number): string | null {
   const entry = yearIndex.years.find((e) => e.year === year);
   if (!entry) {
@@ -122,19 +82,6 @@ export function getYearFilePath(yearIndex: YearIndex, year: number): string | nu
   return `/pmtiles/${entry.filename}`;
 }
 
-/**
- * Find the nearest available year
- *
- * @param yearIndex Year index
- * @param targetYear Year to search for
- * @returns Nearest year, or null if index is empty
- *
- * @example
- * ```ts
- * const nearest = findNearestYear(yearIndex, 1655);
- * // => 1650 (when 1650 and 1700 are available)
- * ```
- */
 export function findNearestYear(yearIndex: YearIndex, targetYear: number): number | null {
   if (yearIndex.years.length === 0) {
     return null;
@@ -158,12 +105,6 @@ export function findNearestYear(yearIndex: YearIndex, targetYear: number): numbe
   return nearest;
 }
 
-/**
- * Get sorted year list in ascending order
- *
- * @param yearIndex Year index
- * @returns Sorted array of years
- */
 export function getSortedYears(yearIndex: YearIndex): number[] {
   return yearIndex.years.map((e) => e.year).sort((a, b) => a - b);
 }

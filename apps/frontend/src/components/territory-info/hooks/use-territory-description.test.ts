@@ -11,16 +11,12 @@ import {
   useTerritoryDescription,
 } from './use-territory-description';
 
-/**
- * Helper to create mock headers
- */
 function createMockHeaders(contentType: string | null) {
   return {
     get: (name: string) => (name.toLowerCase() === 'content-type' ? contentType : null),
   };
 }
 
-/** Year bundle containing France and England descriptions */
 const mockBundle1650 = {
   france: {
     id: 'France_1650',
@@ -86,10 +82,8 @@ describe('useTerritoryDescription', () => {
 
     const { result } = renderHook(() => useTerritoryDescription('France', 1650));
 
-    // Initially loading
     expect(result.current.isLoading).toBe(true);
 
-    // Wait for fetch to complete
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
     });
@@ -182,7 +176,6 @@ describe('useTerritoryDescription', () => {
     expect(result1.current.description).toEqual(mockBundle1650.france);
     expect(mockFetch).toHaveBeenCalledTimes(1);
 
-    // Second territory in same year should use cache
     const { result: result2 } = renderHook(() => useTerritoryDescription('England', 1650));
 
     await waitFor(() => {
@@ -190,7 +183,6 @@ describe('useTerritoryDescription', () => {
     });
 
     expect(result2.current.description).toEqual(mockBundle1650.england);
-    // No additional fetch - used cache
     expect(mockFetch).toHaveBeenCalledTimes(1);
   });
 
@@ -207,7 +199,6 @@ describe('useTerritoryDescription', () => {
       expect(result.current.description?.year).toBe(1650);
     });
 
-    // Change year
     rerender({ territory: 'France', year: 1700 });
 
     await waitFor(() => {
@@ -245,15 +236,12 @@ describe('prefetchYearDescriptions', () => {
   it('prefetches year bundle so subsequent hook calls use cache', async () => {
     mockFetchBundle(mockBundle1650);
 
-    // Prefetch
     prefetchYearDescriptions(1650);
 
-    // Wait for prefetch to complete
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledTimes(1);
     });
 
-    // Now use the hook - should use cache, no additional fetch
     const { result } = renderHook(() => useTerritoryDescription('France', 1650));
 
     await waitFor(() => {
@@ -267,7 +255,6 @@ describe('prefetchYearDescriptions', () => {
   it('silently ignores prefetch errors', async () => {
     mockFetch.mockRejectedValueOnce(new Error('Network error'));
 
-    // Should not throw
     expect(() => prefetchYearDescriptions(1650)).not.toThrow();
   });
 });

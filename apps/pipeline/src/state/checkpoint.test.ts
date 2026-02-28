@@ -44,7 +44,6 @@ describe('checkpoint persistence', () => {
       // The file should exist at the final path, not a temp path
       expect(existsSync(statePath)).toBe(true);
 
-      // Verify content is valid JSON
       const content = readFileSync(statePath, 'utf-8');
       const parsed = JSON.parse(content) as PipelineState;
       expect(parsed.version).toBe(1);
@@ -100,7 +99,6 @@ describe('checkpoint persistence', () => {
 
     it('should respect --restart flag by returning true for all years', () => {
       const state = createInitialState();
-      // Fresh state = always process
       expect(shouldProcessYear(state, 1650, 'merge', 'any_hash')).toBe(true);
     });
   });

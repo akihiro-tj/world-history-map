@@ -14,7 +14,6 @@ beforeAll(() => {
   });
 });
 
-// Mock the app state context
 const mockSetInfoPanelOpen = vi.fn();
 const mockSetSelectedYear = vi.fn();
 const mockSetSelectedTerritory = vi.fn();
@@ -34,7 +33,6 @@ vi.mock('@/contexts/app-state-context', () => ({
   }),
 }));
 
-// Mock the territory description hook
 const mockDescription: TerritoryDescription = {
   id: 'France_1650',
   name: 'フランス王国',
@@ -83,11 +81,9 @@ describe('TerritoryInfoPanel', () => {
   it('renders key events list', () => {
     render(<TerritoryInfoPanel />);
 
-    // Events are rendered with year and event text separately
     expect(screen.getByText('ウェストファリア条約締結')).toBeInTheDocument();
     expect(screen.getByText('フロンドの乱')).toBeInTheDocument();
     expect(screen.getByText('マザランの宰相就任')).toBeInTheDocument();
-    // Years are displayed in timeline format (sorted by year)
     expect(screen.getByText('1643年')).toBeInTheDocument();
     expect(screen.getAllByText('1648年')).toHaveLength(2);
   });
@@ -136,7 +132,6 @@ describe('TerritoryInfoPanel - Loading state', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    // Reset mock to loading state
     vi.doMock('./hooks/use-territory-description', () => ({
       useTerritoryDescription: () => ({
         description: null,

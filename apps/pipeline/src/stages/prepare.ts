@@ -1,7 +1,3 @@
-/**
- * Prepare stage: SHA-256 hash + copy to dist with hashed filename
- * Generates deployment-ready PMTiles with content-based cache busting
- */
 import { copyFileSync, statSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
@@ -15,10 +11,6 @@ interface PrepareResult {
   size: number;
 }
 
-/**
- * Prepare a single PMTiles file for deployment.
- * Computes SHA-256, creates hashed filename, copies to dist directory.
- */
 export async function prepareTile(
   year: number,
   sourcePath: string,
@@ -40,9 +32,6 @@ export async function prepareTile(
   };
 }
 
-/**
- * Run the prepare stage for a single year using default paths.
- */
 export async function runPrepareForYear(
   year: number,
   pmtilesPath: string,

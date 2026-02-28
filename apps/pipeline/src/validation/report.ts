@@ -1,16 +1,9 @@
-/**
- * Validation report generation
- * Aggregates per-year validation results into a summary report
- */
 import type {
   ValidationReport,
   ValidationResult,
   YearValidationSummary,
 } from '@/types/pipeline.ts';
 
-/**
- * Generate a validation report from an array of per-year validation results.
- */
 export function generateReport(runId: string, results: ValidationResult[]): ValidationReport {
   const yearSummaries: YearValidationSummary[] = results.map((r) => ({
     year: r.year,

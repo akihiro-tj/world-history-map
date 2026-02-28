@@ -1,7 +1,3 @@
-/**
- * GeoJSON validation rules and auto-repair
- * Uses @turf/turf for geometry validation and repair operations
- */
 import * as turf from '@turf/turf';
 import type {
   RepairAction,
@@ -24,9 +20,6 @@ interface FeatureCollection {
   features: GeoJSONFeature[];
 }
 
-/**
- * Validate a GeoJSON FeatureCollection and attempt auto-repair on invalid geometries.
- */
 export function validateGeoJSON(geojson: FeatureCollection, year: number): ValidationResult {
   const errors: ValidationError[] = [];
   const warnings: ValidationWarning[] = [];
@@ -55,7 +48,6 @@ export function validateGeoJSON(geojson: FeatureCollection, year: number): Valid
     if (!feature) continue;
     const name = (feature.properties?.['NAME'] as string | undefined) ?? '';
 
-    // Check NAME property (warning: source data often has unnamed features)
     if (!name) {
       warnings.push({
         type: 'missing_name',
@@ -82,10 +74,8 @@ export function validateGeoJSON(geojson: FeatureCollection, year: number): Valid
       if (!isValid) {
         const repaired = attemptRepair(feature, i, name, repairs, warnings);
         if (repaired) {
-          // Replace geometry with repaired version
           feature.geometry = repaired.geometry as typeof feature.geometry;
         } else {
-          // Keep original geometry but warn (source data quality issue)
           warnings.push({
             type: 'unrepairable_geometry',
             featureIndex: i,
@@ -94,7 +84,6 @@ export function validateGeoJSON(geojson: FeatureCollection, year: number): Valid
         }
       }
     } catch {
-      // Geometry validation itself failed - continue with warning
       warnings.push({
         type: 'repaired_geometry',
         featureIndex: i,
@@ -113,10 +102,6 @@ export function validateGeoJSON(geojson: FeatureCollection, year: number): Valid
   };
 }
 
-/**
- * Attempt to repair an invalid geometry using the repair pipeline:
- * 1. clean-coords → 2. rewind → 3. buffer(0) → 4. unkink-polygon
- */
 function attemptRepair(
   feature: GeoJSONFeature,
   featureIndex: number,
@@ -126,7 +111,6 @@ function attemptRepair(
 ): GeoJSONFeature | null {
   let current = feature;
 
-  // Step 1: Clean coordinates
   try {
     const cleaned = turf.cleanCoords(current as unknown as Parameters<typeof turf.cleanCoords>[0]);
     if (turf.booleanValid(cleaned as unknown as Parameters<typeof turf.booleanValid>[0])) {
@@ -139,11 +123,8 @@ function attemptRepair(
       return cleaned as unknown as GeoJSONFeature;
     }
     current = cleaned as unknown as GeoJSONFeature;
-  } catch {
-    // Continue to next repair step
-  }
+  } catch {}
 
-  // Step 2: Rewind
   try {
     const rewound = turf.rewind(current as unknown as Parameters<typeof turf.rewind>[0]);
     if (turf.booleanValid(rewound as unknown as Parameters<typeof turf.booleanValid>[0])) {
@@ -156,11 +137,8 @@ function attemptRepair(
       return rewound as unknown as GeoJSONFeature;
     }
     current = rewound as unknown as GeoJSONFeature;
-  } catch {
-    // Continue to next repair step
-  }
+  } catch {}
 
-  // Step 3: buffer(0)
   try {
     const buffered = turf.buffer(
       current as unknown as Parameters<typeof turf.buffer>[0],
@@ -180,18 +158,14 @@ function attemptRepair(
       });
       return buffered as GeoJSONFeature;
     }
-  } catch {
-    // Continue to next repair step
-  }
+  } catch {}
 
-  // Step 4: Unkink polygon (for self-intersecting)
   try {
     if (current.geometry.type === 'Polygon') {
       const unkinked = turf.unkinkPolygon(
         current as unknown as Parameters<typeof turf.unkinkPolygon>[0],
       );
       if (unkinked.features.length > 0) {
-        // Merge unkinked polygons back into a MultiPolygon
         const coords = unkinked.features
           .map((f) => f.geometry.coordinates)
           .filter((c): c is number[][][] => c !== undefined);
@@ -211,9 +185,7 @@ function attemptRepair(
         }
       }
     }
-  } catch {
-    // All repair steps failed
-  }
+  } catch {}
 
   return null;
 }
