@@ -45,6 +45,9 @@ pnpm check
 - `apps/frontend/src/components/territory-info/hooks/use-territory-description.ts` -- 新スキーマへの適応
 
 #### UI コンポーネント
+
+> **実装ルール**: UI コンポーネントの新規作成・変更時は `/ui-ux-pro-max` スキルを使用すること。デザインシステム検索（`--design-system`）でスタイル・カラー・タイポグラフィの推奨を取得し、スタック検索（`--stack html-tailwind`）で Tailwind ベストプラクティスを確認する。UI モックアップは `plan.md` の「UI モックアップ」セクションを参照。
+
 - `apps/frontend/src/components/territory-info/territory-info-panel.tsx` -- パネルレイアウトの再設計
 - 新規: `apps/frontend/src/components/territory-info/territory-profile.tsx` -- プロフィールのキー・バリュー表示
 - 新規: `apps/frontend/src/components/territory-info/territory-timeline.tsx` -- 時間的分類付きタイムライン
