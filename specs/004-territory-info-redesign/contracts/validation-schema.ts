@@ -9,8 +9,8 @@ const territoryProfileSchema = z
   .object({
     capital: nonEmptyNoUnknown.optional(),
     regime: nonEmptyNoUnknown.optional(),
+    dynasty: nonEmptyNoUnknown.optional(),
     leader: nonEmptyNoUnknown.optional(),
-    population: nonEmptyNoUnknown.optional(),
     religion: nonEmptyNoUnknown.optional(),
   })
   .refine((p) => Object.values(p).some((v) => v !== undefined), {

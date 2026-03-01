@@ -41,7 +41,7 @@
 | capital | 首都 | string | オプション |
 | regime | 政体 | string | オプション |
 | leader | 指導者 | string | オプション |
-| population | 人口 | string | オプション |
+| dynasty | 王朝 | string | オプション、領土名≈王朝名の場合は空白 |
 | religion | 宗教 | string | オプション |
 | context | 文脈記述 | string | 2〜3 文、100〜200 字 |
 | key_events | タイムラインイベント | string | `年:説明` のペア、`\|` 区切り |
@@ -68,7 +68,7 @@
 | `aiGenerated` | `true`（リテラル） | 削除 | すべてのデータが AI 生成。UI は無条件に注意書きを表示 |
 | `keyEvents` | `KeyEvent[]` | `keyEvents?: KeyEvent[]` | オプション化。空の場合は省略 |
 
-**プロフィールフィールドの表示順序**（全領土で一貫）: 首都 → 政体 → 指導者 → 人口 → 宗教
+**プロフィールフィールドの表示順序**（全領土で一貫）: 首都 → 政体 → 王朝 → 指導者 → 宗教
 
 **時間的分類**: 表示時に `selectedYear` との比較で算出。データには保存しない。
 - `event.year < selectedYear` → `"past"`（過去）

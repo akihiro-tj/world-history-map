@@ -12,8 +12,8 @@ YearDescriptionBundle (ファイル: {year}.json)
         ├── profile?: TerritoryProfile
         │     ├── capital?: string
         │     ├── regime?: string
+        │     ├── dynasty?: string
         │     ├── leader?: string
-        │     ├── population?: string
         │     └── religion?: string
         ├── context?: string
         └── keyEvents?: KeyEvent[]
@@ -49,8 +49,8 @@ YearDescriptionBundle (ファイル: {year}.json)
 |-----------|------|------|---------|-----|
 | `capital` | `string` | いいえ | 1 | "パリ" |
 | `regime` | `string` | いいえ | 2 | "絶対王政" |
-| `leader` | `string` | いいえ | 3 | "ルイ14世" |
-| `population` | `string` | いいえ | 4 | "約2000万人" |
+| `dynasty` | `string` | いいえ | 3 | "ブルボン朝" |
+| `leader` | `string` | いいえ | 4 | "ルイ14世" |
 | `religion` | `string` | いいえ | 5 | "カトリック" |
 
 **不変条件**:
@@ -121,8 +121,8 @@ public/data/descriptions/
     "profile": {
       "capital": "パリ",
       "regime": "絶対王政",
+      "dynasty": "ブルボン朝",
       "leader": "ルイ14世",
-      "population": "約2000万人",
       "religion": "カトリック"
     },
     "context": "1700年のフランスはルイ14世の親政期にあり、ヨーロッパ最大の人口約2000万人を擁した。翌1701年にはスペイン継承戦争が勃発する。",

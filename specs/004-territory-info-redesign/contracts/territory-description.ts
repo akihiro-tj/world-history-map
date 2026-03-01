@@ -1,8 +1,8 @@
 export interface TerritoryProfile {
   capital?: string;
   regime?: string;
+  dynasty?: string;
   leader?: string;
-  population?: string;
   religion?: string;
 }
 
@@ -30,15 +30,15 @@ export interface ClassifiedKeyEvent extends KeyEvent {
 export const PROFILE_FIELD_ORDER = [
   'capital',
   'regime',
+  'dynasty',
   'leader',
-  'population',
   'religion',
 ] as const satisfies readonly (keyof TerritoryProfile)[];
 
 export const PROFILE_FIELD_LABELS: Record<keyof TerritoryProfile, string> = {
   capital: '首都',
   regime: '政体',
+  dynasty: '王朝',
   leader: '指導者',
-  population: '人口',
   religion: '宗教',
 };
