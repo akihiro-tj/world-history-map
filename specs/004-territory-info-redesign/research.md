@@ -2,53 +2,53 @@
 
 **ブランチ**: `004-territory-info-redesign` | **日付**: 2026-03-01
 
-## 1. Google スプレッドシートから JSON へのデータ同期パイプライン
+## 1. Notion から JSON へのデータ同期パイプライン
 
-### 決定: CSV エクスポート URL + csv-parse
+### 決定: Notion API (`@notionhq/client`) + Notion MCP（データ投入）
 
-**根拠**: 要件を満たす最もシンプルなアプローチ。GCP プロジェクト、API キー、OAuth のセットアップが不要。スプレッドシートには公開の歴史データ（秘密情報なし）が含まれるため、「リンクを知っている全員が閲覧可能」の共有設定で問題ない。
+**根拠**: マスターデータの読み書きを一貫した方法で行える。AI が Notion MCP でデータを直接投入し、人が Notion 上でレビュー・編集し、パイプラインが Notion API でデータを取得して JSON に変換する。
 
 **検討した代替案**:
 
 | アプローチ | セットアップコスト | 依存関係 | 判定 |
 |-----------|----------------|---------|------|
+| Google Sheets CSV エクスポート | ゼロ（読み取りのみ） | `csv-parse` | 書き込み方向が未解決（手動インポート必要） |
 | Google Sheets API v4 | 高（GCP プロジェクト必須） | `googleapis`（重い） | 開発ツールには過剰 |
-| Google Apps Script | 中（デプロイ必要） | なし | メンテナンス面が増える |
-| **CSV エクスポート URL** | **ゼロ** | **`csv-parse` のみ** | **採用** |
-| サービスアカウント | 中 | `googleapis` | プライベートシートにのみ必要 |
+| **Notion API + Notion MCP** | **低（Integration 作成のみ）** | **`@notionhq/client`** | **採用: 読み書き両方が自然なフロー** |
+| JSON 直接生成 | ゼロ | なし | 継続的メンテナンスの仕組みがない |
 
 **実装方針**:
-- `https://docs.google.com/spreadsheets/d/{ID}/export?format=csv&gid={GID}` で CSV を取得
-- `csv-parse`（軽量、型安全、ストリーミング対応）でパース
-- Node.js 22 の組み込み `fetch` により HTTP クライアント不要
+- `@notionhq/client` で Notion データベースからページを取得
+- Notion Integration トークンは 1Password（`op read` コマンド）で管理
 - 既存の `apps/pipeline/src/cli.ts` に `sync-descriptions` サブコマンドとして追加
-- スプレッドシート ID は `apps/pipeline/src/config.ts` に格納
+- Notion データベース ID は `apps/pipeline/src/config.ts` に定数として格納
+- AI によるデータ投入は Notion MCP 経由（パイプラインコードでは読み取りのみ）
 
-### スプレッドシート構造
+### Notion データベース構造
 
-**決定**: 単一シートに year 列を持つフラット構造
+**決定**: 単一データベースに year プロパティを持つフラット構造
 
-**根拠**: year ごとのシート分割はシート管理と動的 `gid` 解決が必要で管理コストが高い。単一シートなら CSV エクスポートが 1 回の fetch で完了し、パイプライン側で年ごとにグルーピングするだけで済む。
+**根拠**: 領土-年エントリごとに 1 ページ。パイプライン側で year プロパティに基づいてグルーピングし、年別 JSON ファイルに変換する。
 
-**シートレイアウト**（領土-年エントリごとに 1 行）:
+**データベースプロパティ**（領土-年エントリごとに 1 ページ）:
 
-| カラム | フィールド | 型 | 備考 |
-|--------|---------|------|------|
-| year | 年 | number | 負数は紀元前 |
-| territory_id | 領土キー | string | kebab-case、GeoJSON NAME と一致 |
-| name | 表示名 | string | 日本語 |
-| era | 時代ラベル | string | オプション、不明なら空白 |
-| capital | 首都 | string | オプション |
-| regime | 政体 | string | オプション |
-| leader | 指導者 | string | オプション |
-| dynasty | 王朝 | string | オプション、領土名≈王朝名の場合は空白 |
-| religion | 宗教 | string | オプション |
-| context | 文脈記述 | string | 2〜3 文、100〜200 字 |
-| key_events | タイムラインイベント | string | `年:説明` のペア、`\|` 区切り |
+| プロパティ | フィールド | 型 | 備考 |
+|-----------|---------|------|------|
+| year | 年 | Number | 負数は紀元前 |
+| territory_id | 領土キー | Rich text | kebab-case、GeoJSON NAME と一致 |
+| name | 表示名 | Title | 日本語 |
+| era | 時代ラベル | Rich text | オプション、不明なら空欄 |
+| capital | 首都 | Rich text | オプション |
+| regime | 政体 | Rich text | オプション |
+| leader | 指導者 | Rich text | オプション |
+| dynasty | 王朝 | Rich text | オプション、領土名≈王朝名の場合は空欄 |
+| religion | 宗教 | Rich text | オプション |
+| context | 文脈記述 | Rich text | 2〜3 文、100〜200 字 |
+| key_events | タイムラインイベント | Rich text | `年:説明` のペア、`\|` 区切り |
 
 **key_events のエンコード**: `1581:独立宣言の説明|1602:東インド会社設立の説明` -- `|` で分割後、最初の `:` で年とイベントテキストに分割。
 
-**同期時のバリデーション**: "不明" を含むセルはエラーとして拒否。代わりにフィールドを JSON から省略する。
+**同期時のバリデーション**: "不明" を含むプロパティはエラーとして拒否。代わりにフィールドを JSON から省略する。
 
 ## 2. データモデル設計
 
@@ -141,8 +141,8 @@
 
 ### 原則 II（シンプルさと型安全性）
 - `any` 型なし。すべての新規インターフェースは strict なオプションフィールドを使用
-- CSV エクスポート方式（ゼロ設定）を API SDK（過剰設計）より優先
-- 抽象化レイヤーなし -- 直接 fetch + parse + write
+- Notion API（公式 SDK `@notionhq/client`）による読み取り + Notion MCP による書き込み
+- 抽象化レイヤーなし -- 直接 query + transform + write
 
 ### 原則 III（コンポーネント駆動とアクセシビリティ）
 - タイムラインコンポーネントは `ClassifiedKeyEvent[]` 入力で再利用可能
@@ -151,7 +151,7 @@
 
 ### 原則 IV（歴史的正確性と出典明記）
 - `aiGenerated` はデータから削除するが、`<AiNotice>` コンポーネントは UI に維持
-- Google スプレッドシートを人的レビュー付き SSOT として使用
+- Notion データベースを人的レビュー付き SSOT として使用
 - 仕様書はデータ実装前の人的レビュー・承認を要求（US-6）
 
 ### 原則 V（パフォーマンスと継続的改善）

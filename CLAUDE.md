@@ -7,8 +7,8 @@ Auto-generated from all feature plans. Last updated: 2025-11-29
 - Local filesystem (.cache/, public/pmtiles/, dist/pmtiles/) + Cloudflare R2 (production) (002-improve-map-data-pipeline)
 - TypeScript 5.9.x (strict mode) + React 19.x, MapLibre GL JS 5.x, react-map-gl 8.x, Tailwind CSS v4, clsx, tailwind-merge (003-improve-frontend-ux)
 - localStorage (onboarding hint dismissal state only) (003-improve-frontend-ux)
-- TypeScript 5.9.x (strict mode) + React 19.x, Node.js 22.x LTS + React 19.x, MapLibre GL JS 5.x, react-map-gl 8.x, Tailwind CSS v4, clsx, tailwind-merge, csv-parse (new) (004-territory-info-redesign)
-- Local filesystem (`public/data/descriptions/`) + Google Sheets (master data) (004-territory-info-redesign)
+- TypeScript 5.9.x (strict mode) + React 19.x, Node.js 22.x LTS + React 19.x, MapLibre GL JS 5.x, react-map-gl 8.x, Tailwind CSS v4, clsx, tailwind-merge, @notionhq/client (new) (004-territory-info-redesign)
+- Local filesystem (`public/data/descriptions/`) + Notion database (master data) (004-territory-info-redesign)
 
 - TypeScript 5.9.x (strict mode) + React 19.x, MapLibre GL JS + react-map-gl v8 + PMTiles (001-interactive-history-map)
 - UI: Tailwind v4
@@ -38,7 +38,7 @@ pnpm test && pnpm check
 - Comments and log output: Write in English (JSDoc, inline comments, shell script logs)
 
 ## Recent Changes
-- 004-territory-info-redesign: Added TypeScript 5.9.x (strict mode) + React 19.x, Node.js 22.x LTS + React 19.x, MapLibre GL JS 5.x, react-map-gl 8.x, Tailwind CSS v4, clsx, tailwind-merge, csv-parse (new)
+- 004-territory-info-redesign: Added TypeScript 5.9.x (strict mode) + React 19.x, Node.js 22.x LTS + React 19.x, MapLibre GL JS 5.x, react-map-gl 8.x, Tailwind CSS v4, clsx, tailwind-merge, @notionhq/client (new)
 - 003-improve-frontend-ux: Added TypeScript 5.9.x (strict mode) + React 19.x, MapLibre GL JS 5.x, react-map-gl 8.x, Tailwind CSS v4, clsx, tailwind-merge
 - 002-improve-map-data-pipeline: Added TypeScript 5.9.x (strict mode) + Node.js 22.x LTS + @turf/turf (GeoJSON processing), tippecanoe + tile-join (PMTiles conversion, external CLI), wrangler (Cloudflare R2 upload)
 

@@ -5,13 +5,13 @@
 
 ## 概要
 
-領土情報パネルのデータモデルと UI を再設計する。非構造化の `facts: string[]` を構造化された `profile` フィールドに置き換え、`era`（時代ラベル）と `context`（時代文脈）フィールドを追加し、タイムラインイベントに選択年に対する時間的分類（過去/現在/未来）を導入する。データソースを静的な AI 生成 JSON から Google スプレッドシート（Single Source of Truth）に移行し、CLI 同期コマンドを作成する。既存の説明データをすべて削除し、教科書レベルの主要 50〜70 領土を新フォーマットで再作成する。
+領土情報パネルのデータモデルと UI を再設計する。非構造化の `facts: string[]` を構造化された `profile` フィールドに置き換え、`era`（時代ラベル）と `context`（時代文脈）フィールドを追加し、タイムラインイベントに選択年に対する時間的分類（過去/現在/未来）を導入する。データソースを静的な AI 生成 JSON から Notion データベース（Single Source of Truth）に移行し、CLI 同期コマンドを作成する。既存の説明データをすべて削除し、教科書レベルの主要 50〜70 領土を新フォーマットで再作成する。
 
 ## 技術コンテキスト
 
 **言語/バージョン**: TypeScript 5.9.x (strict mode) + React 19.x, Node.js 22.x LTS
-**主要依存関係**: React 19.x, MapLibre GL JS 5.x, react-map-gl 8.x, Tailwind CSS v4, clsx, tailwind-merge, csv-parse（新規）
-**ストレージ**: ローカルファイルシステム (`public/data/descriptions/`) + Google スプレッドシート（マスターデータ）
+**主要依存関係**: React 19.x, MapLibre GL JS 5.x, react-map-gl 8.x, Tailwind CSS v4, clsx, tailwind-merge, @notionhq/client（新規）
+**ストレージ**: ローカルファイルシステム (`public/data/descriptions/`) + Notion データベース（マスターデータ）
 **テスト**: Vitest 4.x + @testing-library/react + Playwright 1.57.x
 **対象プラットフォーム**: Web（デスクトップ + モバイルブラウザ）
 **プロジェクトタイプ**: web（モノレポ: apps/frontend + apps/pipeline + apps/worker）
@@ -29,9 +29,9 @@
 | 原則 | 状態 | 備考 |
 |------|------|------|
 | I. テストファースト | PASS | データバリデーションスキーマ、イベント分類ロジック、UI コンポーネントに TDD 適用 |
-| II. シンプルさと型安全性 | PASS | CSV エクスポート（ゼロ設定）を Sheets API より優先。strict なオプション型。`any` なし |
+| II. シンプルさと型安全性 | PASS | Notion API + MCP で読み書き一貫。strict なオプション型。`any` なし |
 | III. コンポーネント駆動とアクセシビリティ | PASS | 再利用可能なプロフィール/タイムライン/コンテキストコンポーネント。WCAG 2.1 AA。複合的な視覚的手がかり |
-| IV. 歴史的正確性と出典明記 | PASS | Google スプレッドシートを人的レビュー付き SSOT として使用。`<AiNotice>` を UI に維持。データ実装前に人的レビュー必須（US-6） |
+| IV. 歴史的正確性と出典明記 | PASS | Notion データベースを人的レビュー付き SSOT として使用。`<AiNotice>` を UI に維持。データ実装前に人的レビュー必須（US-6） |
 | V. パフォーマンスと継続的改善 | PASS | 仮想化不要（領土あたりイベント 20 件未満）。`useMemo` で分類計算。既存のプリフェッチ/キャッシュを維持 |
 
 ### Phase 1 後チェック
@@ -39,9 +39,9 @@
 | 原則 | 状態 | 備考 |
 |------|------|------|
 | I. テストファースト | PASS | バリデーションスキーマテスト、分類ユニットテスト、コンポーネントテスト、E2E テストを計画 |
-| II. シンプルさと型安全性 | PASS | 新規抽象化なし。新規依存は `csv-parse` のみ。Zod はパイプライン限定 |
+| II. シンプルさと型安全性 | PASS | 新規抽象化なし。新規依存は `@notionhq/client` のみ。Zod はパイプライン限定 |
 | III. コンポーネント駆動とアクセシビリティ | PASS | `TerritoryProfile`, `TerritoryTimeline`, `TerritoryContext` を再利用可能なコンポーネントとして設計。セマンティック HTML `<ol>` + `aria-current` |
-| IV. 歴史的正確性と出典明記 | PASS | 同期時にデータバリデーション（Zod スキーマが "不明" を拒否）。スプレッドシートデータに人的レビューゲート |
+| IV. 歴史的正確性と出典明記 | PASS | 同期時にデータバリデーション（Zod スキーマが "不明" を拒否）。Notion データに人的レビューゲート |
 | V. パフォーマンスと継続的改善 | PASS | バンドルサイズ不変（50 年ファイル）。分類は O(n) + useMemo。新規ネットワークリクエストなし |
 
 違反なし。Complexity Tracking セクションは該当なし。
@@ -91,9 +91,9 @@ apps/
 ├── pipeline/
 │   └── src/
 │       ├── cli.ts                                 # sync-descriptions コマンド追加
-│       ├── config.ts                              # スプレッドシート設定追加
+│       ├── config.ts                              # Notion 設定追加
 │       └── stages/
-│           ├── sync-descriptions.ts               # 新規: Sheets → JSON 同期
+│           ├── sync-descriptions.ts               # 新規: Notion → JSON 同期
 │           └── validate-descriptions.ts           # 新規: Zod バリデーション
 └── worker/                                        # 変更なし
 ```

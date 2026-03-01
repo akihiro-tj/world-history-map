@@ -6,14 +6,15 @@
 
 - Node.js 22.x LTS
 - pnpm
-- Google スプレッドシートに領土データ（「リンクを知っている全員が閲覧可能」に設定）
+- Notion Integration トークン（1Password に格納、`op read` コマンドで取得）
+- Notion データベースに領土データ（Integration と共有設定済み）
 
 ## 開発ワークフロー
 
 ### 1. データ同期（パイプライン）
 
 ```bash
-# Google スプレッドシートから領土説明データを JSON に同期
+# Notion データベースから領土説明データを JSON に同期
 pnpm pipeline sync-descriptions
 
 # 特定の年のみ同期
@@ -55,18 +56,17 @@ pnpm check
 
 #### データパイプライン
 - `apps/pipeline/src/cli.ts` -- `sync-descriptions` コマンド追加
-- 新規: `apps/pipeline/src/stages/sync-descriptions.ts` -- Google Sheets CSV 取得 + JSON 変換
+- 新規: `apps/pipeline/src/stages/sync-descriptions.ts` -- Notion API 取得 + JSON 変換
 - 新規: `apps/pipeline/src/stages/validate-descriptions.ts` -- Zod ベースのデータバリデーション
 
 #### データファイル
-- `apps/frontend/public/data/descriptions/*.json` -- すべて削除して、スプレッドシートから再作成
+- `apps/frontend/public/data/descriptions/*.json` -- すべて削除して、Notion から再作成
 
 ### 4. データフロー
 
 ```
-Google スプレッドシート（マスターデータ）
-  ↓ CSV エクスポート URL（公開、認証不要）
-  ↓ fetch + csv-parse
+Notion データベース（マスターデータ、SSOT）
+  ↓ @notionhq/client（認証: 1Password op read）
 パイプライン（sync-descriptions）
   ↓ バリデーション（Zod スキーマ）
   ↓ 年ごとにグルーピング
