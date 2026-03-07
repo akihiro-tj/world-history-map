@@ -100,14 +100,14 @@
 
 > **注意: テストを先に書き、実装前に FAIL することを確認する**
 
-- [ ] T014 [P] [US6] `apps/pipeline/src/stages/validate-descriptions.test.ts` に説明データバリデーションのテストを書く — `specs/004-territory-info-redesign/contracts/validation-schema.ts` の Zod スキーマを検証: (1) 完全な有効エントリが通過、(2) 最小限の有効エントリ（name のみ）が通過、(3) 任意のフィールドに "不明" を含むと拒否、(4) 空文字列を拒否、(5) context が 50〜200 字の範囲外で拒否、(6) 未ソートの keyEvents を拒否、(7) 空の profile オブジェクトを拒否、(8) 空の keyEvents 配列を拒否
-- [ ] T015 [P] [US6] `apps/pipeline/src/stages/sync-descriptions.test.ts` に sync-descriptions ステージのテストを書く — Notion API レスポンス変換の検証: (1) 単一ページが正しい TerritoryDescription を生成、(2) 同一年の複数ページが 1 つの YearDescriptionBundle にグループ化、(3) Notion のリレーション/リッチテキストプロパティが正しくプレーン文字列に変換される、(4) 空のプロパティが undefined になる（空文字列ではない）、(5) バリデーションエラーが領土名と年で報告される
+- [X] T014 [P] [US6] `apps/pipeline/src/stages/validate-descriptions.test.ts` に説明データバリデーションのテストを書く — `specs/004-territory-info-redesign/contracts/validation-schema.ts` の Zod スキーマを検証: (1) 完全な有効エントリが通過、(2) 最小限の有効エントリ（name のみ）が通過、(3) 任意のフィールドに "不明" を含むと拒否、(4) 空文字列を拒否、(5) context が 50〜200 字の範囲外で拒否、(6) 未ソートの keyEvents を拒否、(7) 空の profile オブジェクトを拒否、(8) 空の keyEvents 配列を拒否
+- [X] T015 [P] [US6] `apps/pipeline/src/stages/sync-descriptions.test.ts` に sync-descriptions ステージのテストを書く — Notion API レスポンス変換の検証: (1) 単一ページが正しい TerritoryDescription を生成、(2) 同一年の複数ページが 1 つの YearDescriptionBundle にグループ化、(3) Notion のリレーション/リッチテキストプロパティが正しくプレーン文字列に変換される、(4) 空のプロパティが undefined になる（空文字列ではない）、(5) バリデーションエラーが領土名と年で報告される
 
 ### US-6 実装
 
-- [ ] T016 [US6] `apps/pipeline/src/stages/validate-descriptions.ts` にバリデーションステージを作成する — `specs/004-territory-info-redesign/contracts/validation-schema.ts` に基づく Zod スキーマを実装、`validateDescriptionFile(filePath: string)` と `validateAllDescriptions(dir: string)` 関数をエクスポートし、構造化されたエラーレポートを返す
-- [ ] T017 [US6] `apps/pipeline/src/stages/sync-descriptions.ts` に sync-descriptions ステージを作成する — `@notionhq/client` で Notion データベースからページを取得、プロパティを `TerritoryDescription` に変換、年ごとに `YearDescriptionBundle` にグループ化、Zod スキーマでバリデーション、`apps/frontend/public/data/descriptions/` に `{year}.json` ファイルを書き出す
-- [ ] T018 [US6] `apps/pipeline/src/cli.ts` に `sync-descriptions` と `validate-descriptions` CLI コマンドを追加する — 既存の CLI パターンに従ってサブコマンドを登録。`sync-descriptions` はオプション `--year` フラグを受け付ける。`validate-descriptions` は descriptions ディレクトリの全 JSON ファイルをスキャンする
+- [X] T016 [US6] `apps/pipeline/src/stages/validate-descriptions.ts` にバリデーションステージを作成する — `specs/004-territory-info-redesign/contracts/validation-schema.ts` に基づく Zod スキーマを実装、`validateDescriptionFile(filePath: string)` と `validateAllDescriptions(dir: string)` 関数をエクスポートし、構造化されたエラーレポートを返す
+- [X] T017 [US6] `apps/pipeline/src/stages/sync-descriptions.ts` に sync-descriptions ステージを作成する — `@notionhq/client` で Notion データベースからページを取得、プロパティを `TerritoryDescription` に変換、年ごとに `YearDescriptionBundle` にグループ化、Zod スキーマでバリデーション、`apps/frontend/public/data/descriptions/` に `{year}.json` ファイルを書き出す
+- [X] T018 [US6] `apps/pipeline/src/cli.ts` に `sync-descriptions` と `validate-descriptions` CLI コマンドを追加する — 既存の CLI パターンに従ってサブコマンドを登録。`sync-descriptions` はオプション `--year` フラグを受け付ける。`validate-descriptions` は descriptions ディレクトリの全 JSON ファイルをスキャンする
 
 **チェックポイント**: US-6 パイプライン実装完了 — sync/validate コマンドが利用可能。本番データ作成は Phase 9 で実施
 

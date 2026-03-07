@@ -12,11 +12,9 @@ export const NOTION = {
     ).trim();
   },
   getToken: (): string => {
-    return execFileSync(
-      'op',
-      ['read', 'op://dev/world-history-map-pipeline/credential'],
-      { encoding: 'utf-8' },
-    ).trim();
+    return execFileSync('op', ['read', 'op://dev/world-history-map-pipeline/credential'], {
+      encoding: 'utf-8',
+    }).trim();
   },
 } as const;
 

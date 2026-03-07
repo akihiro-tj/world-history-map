@@ -1,7 +1,10 @@
+import path from 'node:path';
 import type { PipelineOptions } from '@/pipeline.ts';
 import { listYears, PipelineError, runPipeline, showStatus } from '@/pipeline.ts';
+import { syncDescriptions } from '@/stages/sync-descriptions.ts';
 import { createLogger } from '@/stages/types.ts';
 import { publishManifest, runStandaloneUpload } from '@/stages/upload.ts';
+import { validateAllDescriptions } from '@/stages/validate-descriptions.ts';
 
 function parseArgs(argv: string[]): { command: string; options: PipelineOptions } {
   const args = argv.slice(2);
@@ -80,6 +83,47 @@ async function main(): Promise<void> {
     case 'publish-manifest':
       await publishManifest(logger);
       break;
+    case 'sync-descriptions': {
+      const descriptionsDir = path.resolve(
+        import.meta.dirname,
+        '..',
+        '..',
+        'frontend',
+        'public',
+        'data',
+        'descriptions',
+      );
+      await syncDescriptions(descriptionsDir, logger, { year: options.year });
+      break;
+    }
+    case 'validate-descriptions': {
+      const descriptionsDir = path.resolve(
+        import.meta.dirname,
+        '..',
+        '..',
+        'frontend',
+        'public',
+        'data',
+        'descriptions',
+      );
+      const results = await validateAllDescriptions(descriptionsDir);
+      let hasErrors = false;
+      for (const result of results) {
+        if (result.valid) {
+          logger.info('validate-descriptions', `${path.basename(result.filePath)}: OK`);
+        } else {
+          hasErrors = true;
+          for (const err of result.errors) {
+            logger.error('validate-descriptions', `${path.basename(result.filePath)}: ${err}`);
+          }
+        }
+      }
+      if (hasErrors) {
+        throw new PipelineError('Validation failed', 1);
+      }
+      logger.info('validate-descriptions', `All ${results.length} files passed validation`);
+      break;
+    }
     case 'fetch':
     case 'merge':
     case 'validate':
@@ -91,7 +135,9 @@ async function main(): Promise<void> {
       break;
     default:
       console.error(`Unknown command: ${command}`);
-      console.error('Usage: pnpm pipeline <run|status|list|upload|publish-manifest> [options]');
+      console.error(
+        'Usage: pnpm pipeline <run|status|list|upload|publish-manifest|sync-descriptions|validate-descriptions> [options]',
+      );
       process.exit(3);
   }
 }
