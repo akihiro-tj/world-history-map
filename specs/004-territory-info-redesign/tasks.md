@@ -144,12 +144,12 @@
 
 > **注意: テストを先に書き、実装前に FAIL することを確認する**
 
-- [ ] T022 [US4] `apps/frontend/src/components/territory-info/territory-timeline.test.tsx` に `TerritoryTimeline` コンポーネントのテストを書く — テストケース: (1) past イベントに opacity/ミュートスタイリングクラスがある、(2) current イベントに aria-current="true" と太字スタイルがある、(3) future イベントに破線/ミュートスタイルがある、(4) 完全一致イベントがない場合に正しい位置に年マーカーが表示される、(5) keyEvents が undefined の場合に何もレンダリングしない、(6) セマンティック `<ol>` が aria-label 付きでレンダリングされる、(7) 全イベントが past — マーカーが末尾、(8) 全イベントが future — マーカーが先頭
+- [X] T022 [US4] `apps/frontend/src/components/territory-info/territory-timeline.test.tsx` に `TerritoryTimeline` コンポーネントのテストを書く — テストケース: (1) past イベントに opacity/ミュートスタイリングクラスがある、(2) current イベントに aria-current="true" と太字スタイルがある、(3) future イベントに破線/ミュートスタイルがある、(4) 完全一致イベントがない場合に正しい位置に年マーカーが表示される、(5) keyEvents が undefined の場合に何もレンダリングしない、(6) セマンティック `<ol>` が aria-label 付きでレンダリングされる、(7) 全イベントが past — マーカーが末尾、(8) 全イベントが future — マーカーが先頭
 
 ### US-4 実装
 
-- [ ] T023 [US4] `apps/frontend/src/components/territory-info/territory-timeline.tsx` に `TerritoryTimeline` コンポーネントを作成する — `keyEvents?: KeyEvent[]` と `selectedYear: number` プロップを受け取り、T004 の `classifyEvents()` を `useMemo` で使用。`<ol aria-label="主な出来事">` で縦型タイムラインをレンダリング。research.md に基づく視覚的区別を適用（past: 塗りつぶし円 + opacity-50、current: リング + 太字 + aria-current、future: 中空ダイヤモンド + 破線 + opacity-50）。選択年マーカーセパレーターを挿入。`/ui-ux-pro-max` スキルを使用。plan.md モックアップの「主な出来事」と「タイムライン: 時間的分類の視覚表現」セクションを参照
-- [ ] T024 [US4] `apps/frontend/src/components/territory-info/territory-info-panel.tsx` に `TerritoryTimeline` を統合する — context セクションの後に `<TerritoryTimeline keyEvents={description.keyEvents} selectedYear={selectedYear} />` を追加
+- [X] T023 [US4] `apps/frontend/src/components/territory-info/territory-timeline.tsx` に `TerritoryTimeline` コンポーネントを作成する — `keyEvents?: KeyEvent[]` と `selectedYear: number` プロップを受け取り、T004 の `classifyEvents()` を `useMemo` で使用。`<ol aria-label="主な出来事">` で縦型タイムラインをレンダリング。research.md に基づく視覚的区別を適用（past: 塗りつぶし円 + opacity-50、current: リング + 太字 + aria-current、future: 中空ダイヤモンド + 破線 + opacity-50）。選択年マーカーセパレーターを挿入。`/ui-ux-pro-max` スキルを使用。plan.md モックアップの「主な出来事」と「タイムライン: 時間的分類の視覚表現」セクションを参照
+- [X] T024 [US4] `apps/frontend/src/components/territory-info/territory-info-panel.tsx` に `TerritoryTimeline` を統合する — context セクションの後に `<TerritoryTimeline keyEvents={description.keyEvents} selectedYear={selectedYear} />` を追加
 
 **チェックポイント**: US-3 & US-4 完了 — 文脈 + 時間的タイムライン付きの完全な情報パネル
 

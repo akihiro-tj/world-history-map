@@ -3,14 +3,15 @@ import { useCallback } from 'react';
 import { useEscapeKey } from '@/hooks/use-escape-key';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { cn } from '@/lib/utils';
+import type { TerritoryProfile as TerritoryProfileType } from '@/types/territory';
 import { useAppState } from '../../contexts/app-state-context';
 import { BottomSheet } from '../ui/bottom-sheet';
 import { CloseButton } from '../ui/close-button';
-import type { TerritoryProfile as TerritoryProfileType } from '@/types/territory';
 import { AiNotice } from './ai-notice';
 import { useTerritoryDescription } from './hooks/use-territory-description';
 import { TerritoryContext } from './territory-context';
 import { TerritoryProfile } from './territory-profile';
+import { TerritoryTimeline } from './territory-timeline';
 
 function PanelWrapper({
   children,
@@ -49,7 +50,9 @@ function PanelHeader({
   className?: string;
 }) {
   return (
-    <div className={cn('flex items-start justify-between border-b border-gray-600 pb-3', className)}>
+    <div
+      className={cn('flex items-start justify-between border-b border-gray-600 pb-3', className)}
+    >
       <div className="min-w-0 flex-1">
         <h2 id="territory-info-title" className="text-lg font-semibold text-white">
           {name}
@@ -64,14 +67,19 @@ function PanelHeader({
 function DescriptionBody({
   profile,
   context,
+  keyEvents,
+  selectedYear,
 }: {
   profile?: TerritoryProfileType;
   context?: string;
+  keyEvents?: import('@/types/territory').KeyEvent[];
+  selectedYear: number;
 }) {
   return (
     <div data-testid="territory-description" className="space-y-4 p-4">
       <TerritoryProfile profile={profile} />
       <TerritoryContext context={context} />
+      <TerritoryTimeline keyEvents={keyEvents} selectedYear={selectedYear} />
       <AiNotice className="mt-4" />
     </div>
   );
@@ -137,7 +145,14 @@ export function TerritoryInfoPanel() {
         </div>
       );
     } else {
-      body = <DescriptionBody profile={description.profile} context={description.context} />;
+      body = (
+        <DescriptionBody
+          profile={description.profile}
+          context={description.context}
+          keyEvents={description.keyEvents}
+          selectedYear={selectedYear}
+        />
+      );
     }
 
     return (
@@ -197,14 +212,11 @@ export function TerritoryInfoPanel() {
 
   return (
     <PanelWrapper scrollable>
-      <PanelHeader
-        name={description.name}
-        era={description.era}
-        onClose={handleClose}
-      />
+      <PanelHeader name={description.name} era={description.era} onClose={handleClose} />
       <div data-testid="territory-description" className="mt-4 space-y-4">
         <TerritoryProfile profile={description.profile} />
         <TerritoryContext context={description.context} />
+        <TerritoryTimeline keyEvents={description.keyEvents} selectedYear={selectedYear} />
         <AiNotice className="mt-4" />
       </div>
     </PanelWrapper>
