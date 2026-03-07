@@ -123,12 +123,12 @@
 
 > **注意: テストを先に書き、実装前に FAIL することを確認する**
 
-- [ ] T019 [US3] `apps/frontend/src/components/territory-info/territory-context.test.tsx` に `TerritoryContext` コンポーネントのテストを書く — テストケース: (1) context が提供された場合にテキストが表示される、(2) context が undefined の場合に何もレンダリングしない、(3) テキストが段落要素として表示される
+- [X] T019 [US3] `apps/frontend/src/components/territory-info/territory-context.test.tsx` に `TerritoryContext` コンポーネントのテストを書く — テストケース: (1) context が提供された場合にテキストが表示される、(2) context が undefined の場合に何もレンダリングしない、(3) テキストが段落要素として表示される
 
 ### US-3 実装
 
-- [ ] T020 [US3] `apps/frontend/src/components/territory-info/territory-context.tsx` に `TerritoryContext` コンポーネントを作成する — `context?: string` プロップを受け取り、`<p>` 要素として表示。undefined の場合は null を返す。`/ui-ux-pro-max` スキルを使用。plan.md モックアップの「時代の文脈」セクションを参照
-- [ ] T021 [US3] `apps/frontend/src/components/territory-info/territory-info-panel.tsx` に `TerritoryContext` を統合する — プロフィールとタイムラインの間に `<TerritoryContext context={description.context} />` を追加
+- [X] T020 [US3] `apps/frontend/src/components/territory-info/territory-context.tsx` に `TerritoryContext` コンポーネントを作成する — `context?: string` プロップを受け取り、`<p>` 要素として表示。undefined の場合は null を返す。`/ui-ux-pro-max` スキルを使用。plan.md モックアップの「時代の文脈」セクションを参照
+- [X] T021 [US3] `apps/frontend/src/components/territory-info/territory-info-panel.tsx` に `TerritoryContext` を統合する — プロフィールとタイムラインの間に `<TerritoryContext context={description.context} />` を追加
 
 **チェックポイント**: US-3 完了 — 時間的文脈が年ごとの状況を説明する
 

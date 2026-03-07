@@ -9,6 +9,7 @@ import { CloseButton } from '../ui/close-button';
 import type { TerritoryProfile as TerritoryProfileType } from '@/types/territory';
 import { AiNotice } from './ai-notice';
 import { useTerritoryDescription } from './hooks/use-territory-description';
+import { TerritoryContext } from './territory-context';
 import { TerritoryProfile } from './territory-profile';
 
 function PanelWrapper({
@@ -60,10 +61,17 @@ function PanelHeader({
   );
 }
 
-function DescriptionBody({ profile }: { profile?: TerritoryProfileType }) {
+function DescriptionBody({
+  profile,
+  context,
+}: {
+  profile?: TerritoryProfileType;
+  context?: string;
+}) {
   return (
     <div data-testid="territory-description" className="space-y-4 p-4">
       <TerritoryProfile profile={profile} />
+      <TerritoryContext context={context} />
       <AiNotice className="mt-4" />
     </div>
   );
@@ -129,7 +137,7 @@ export function TerritoryInfoPanel() {
         </div>
       );
     } else {
-      body = <DescriptionBody profile={description.profile} />;
+      body = <DescriptionBody profile={description.profile} context={description.context} />;
     }
 
     return (
@@ -196,6 +204,7 @@ export function TerritoryInfoPanel() {
       />
       <div data-testid="territory-description" className="mt-4 space-y-4">
         <TerritoryProfile profile={description.profile} />
+        <TerritoryContext context={description.context} />
         <AiNotice className="mt-4" />
       </div>
     </PanelWrapper>
