@@ -163,8 +163,8 @@
 
 ### US-5 実装
 
-- [ ] T025 [US5] `apps/frontend/src/components/territory-info/territory-info-panel.tsx` のモバイルレスポンシブレイアウトを調整する — 情報優先度順（ヘッダー → プロフィール → 文脈 → タイムライン → AiNotice）がボトムシート制約内で動作することを確認。データスパース時にコンテンツが空白スペースなしで適応すること
-- [ ] T026 [US5] `apps/frontend/src/components/territory-info/territory-info-panel.tsx` と `apps/frontend/src/components/ui/bottom-sheet.tsx` でボトムシートの初期ピーク高さを検証する — 初期ピークでヘッダー + 少なくとも 2 つのプロフィールフィールドがスクロールなしで表示されることを確認（SC-005）、必要に応じてピーク高さを調整
+- [X] T025 [US5] `apps/frontend/src/components/territory-info/territory-info-panel.tsx` のモバイルレスポンシブレイアウトを調整する — 情報優先度順（ヘッダー → プロフィール → 文脈 → タイムライン → AiNotice）がボトムシート制約内で動作することを確認。データスパース時にコンテンツが空白スペースなしで適応すること
+- [X] T026 [US5] `apps/frontend/src/components/territory-info/territory-info-panel.tsx` と `apps/frontend/src/components/ui/bottom-sheet.tsx` でボトムシートの初期ピーク高さを検証する — 初期ピークでヘッダー + 少なくとも 2 つのプロフィールフィールドがスクロールなしで表示されることを確認（SC-005）、必要に応じてピーク高さを調整
 
 **チェックポイント**: 全ユーザーストーリー完了 — レスポンシブ対応の完全な領土情報パネル
 

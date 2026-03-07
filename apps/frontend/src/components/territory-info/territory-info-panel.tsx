@@ -76,7 +76,7 @@ function DescriptionBody({
   selectedYear: number;
 }) {
   return (
-    <div data-testid="territory-description" className="space-y-4 p-4">
+    <div data-testid="territory-description" className="space-y-3 px-4 pt-2 pb-4">
       <TerritoryProfile profile={profile} />
       <TerritoryContext context={context} />
       <TerritoryTimeline keyEvents={keyEvents} selectedYear={selectedYear} />
