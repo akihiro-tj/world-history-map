@@ -41,8 +41,6 @@ name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
 - `Aragón` → `aragn`（特殊文字は除去）
 - `Mughal Empire` → `mughal-empire`
 
-重要: territory_id は対象年の GeoJSON に存在する NAME と一致しなければならない。`apps/frontend/public/pmtiles/index.json` で検証すること。
-
 ## CSV フォーマット
 
 Notion にインポートするための CSV 形式。RFC 4180 準拠。
