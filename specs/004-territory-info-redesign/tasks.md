@@ -176,7 +176,7 @@
 
 **⚠️ 前提**: Phase 5（パイプライン実装）および Phase 3〜8（UI 実装）が完了していること。UI が完成した状態で本番データを投入することで、実際の表示でデータの問題に気付ける
 
-- [ ] T027 [US6] Notion MCP を使用して Notion データベースに教科書レベルの主要領土データを投入する — spec.md の選定基準に従い 50〜70 領土を選定（高校世界史教科書レベル、地域バランス、時代カバレッジ）。Notion DB のプロパティ（year, territory_id, name, era, capital, regime, leader, dynasty, religion, context, key_events）に従って全ページを作成。"不明" は使用しない。すべて日本語で記述（FR-015）
+- [ ] T027 [US6] Notion MCP を使用して Notion データベースに教科書レベルの主要領土データを投入する — spec.md の選定基準に従い 50〜70 領土を選定（高校世界史教科書レベル、地域バランス、時代カバレッジ）。Notion DB のプロパティ（year, territory_id, name, era, capital, regime, leader, dynasty, religion, context, key_events）に従って全ページを作成。"不明" は使用しない。`notion-territory-data` スキルを使用し、すべて日本語で記述（FR-015）
 - [ ] T028 [US6] 人的レビュー完了後に `pnpm pipeline sync-descriptions` を実行し、全 JSON ファイルを生成する — Notion 上のデータのレビュー・承認を経てからパイプラインを実行。`pnpm pipeline validate-descriptions` でバリデーションが全件通過することを確認。T008 で作成したサンプルデータは本番データで上書きされる
 
 **チェックポイント**: 本番データ完成 — 高品質な教科書レベルのデータが全 UI コンポーネントで表示される
