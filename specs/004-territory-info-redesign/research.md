@@ -4,9 +4,9 @@
 
 ## 1. Notion から JSON へのデータ同期パイプライン
 
-### 決定: Notion API (`@notionhq/client`) + Notion MCP（データ投入）
+### 決定: Notion API (`@notionhq/client`) + CSV インポート（データ投入）
 
-**根拠**: マスターデータの読み書きを一貫した方法で行える。AI が Notion MCP でデータを直接投入し、人が Notion 上でレビュー・編集し、パイプラインが Notion API でデータを取得して JSON に変換する。
+**根拠**: マスターデータの読み書きを一貫した方法で行える。AI が CSV を生成し、ユーザーが Notion UI から CSV インポートでデータを投入する。人が Notion 上でレビュー・編集し、パイプラインが Notion API でデータを取得して JSON に変換する。CSV インポートは Notion MCP のレート制限（3 req/s）を回避でき、大量データの投入が高速。
 
 **検討した代替案**:
 
@@ -14,7 +14,8 @@
 |-----------|----------------|---------|------|
 | Google Sheets CSV エクスポート | ゼロ（読み取りのみ） | `csv-parse` | 書き込み方向が未解決（手動インポート必要） |
 | Google Sheets API v4 | 高（GCP プロジェクト必須） | `googleapis`（重い） | 開発ツールには過剰 |
-| **Notion API + Notion MCP** | **低（Integration 作成のみ）** | **`@notionhq/client`** | **採用: 読み書き両方が自然なフロー** |
+| Notion API + Notion MCP | 低（Integration 作成のみ） | `@notionhq/client` | レート制限で大量データ投入が遅い |
+| **Notion API + CSV インポート** | **低（Integration 作成のみ）** | **`@notionhq/client`** | **採用: 読み取りは API、書き込みは CSV インポートで高速** |
 | JSON 直接生成 | ゼロ | なし | 継続的メンテナンスの仕組みがない |
 
 **実装方針**:
@@ -22,7 +23,7 @@
 - Notion Integration トークンは 1Password（`op read` コマンド）で管理
 - 既存の `apps/pipeline/src/cli.ts` に `sync-descriptions` サブコマンドとして追加
 - Notion データベース ID は `apps/pipeline/src/config.ts` に定数として格納
-- AI によるデータ投入は Notion MCP 経由（パイプラインコードでは読み取りのみ）
+- AI によるデータ投入は CSV 生成 → ユーザーが Notion UI からインポート（パイプラインコードでは読み取りのみ）
 
 ### Notion データベース構造
 
@@ -141,7 +142,7 @@
 
 ### 原則 II（シンプルさと型安全性）
 - `any` 型なし。すべての新規インターフェースは strict なオプションフィールドを使用
-- Notion API（公式 SDK `@notionhq/client`）による読み取り + Notion MCP による書き込み
+- Notion API（公式 SDK `@notionhq/client`）による読み取り + CSV インポートによるデータ投入
 - 抽象化レイヤーなし -- 直接 query + transform + write
 
 ### 原則 III（コンポーネント駆動とアクセシビリティ）

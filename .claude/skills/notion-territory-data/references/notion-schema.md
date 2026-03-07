@@ -10,7 +10,7 @@
 | `era` | rich_text | いいえ | 短い時代ラベル（例: "絶対王政期"） |
 | `capital` | rich_text | いいえ | 首都 |
 | `regime` | rich_text | いいえ | 政体 |
-| `dynasty` | rich_text | いいえ | 王朝（領土名 ≈ 王朝名の場合は省略） |
+| `dynasty` | rich_text | いいえ | 王朝（領土名 = 王朝名の場合は省略） |
 | `leader` | rich_text | いいえ | 指導者 |
 | `religion` | rich_text | いいえ | 宗教 |
 | `context` | rich_text | いいえ | 客観的事実による 2〜3 文（50〜200 字） |
@@ -43,31 +43,35 @@ name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
 
 重要: territory_id は対象年の GeoJSON に存在する NAME と一致しなければならない。`apps/frontend/public/pmtiles/index.json` で検証すること。
 
-## Notion MCP の使い方
+## CSV フォーマット
 
-`mcp__notion__notion-create-pages` でページを作成する:
+Notion にインポートするための CSV 形式。RFC 4180 準拠。
 
-```json
-{
-  "pages": [
-    {
-      "database_id": "<DB_ID>",
-      "properties": {
-        "name": { "title": [{ "text": { "content": "フランス王国" } }] },
-        "territory_id": { "rich_text": [{ "text": { "content": "france" } }] },
-        "year": { "number": 1700 },
-        "era": { "rich_text": [{ "text": { "content": "絶対王政期" } }] },
-        "capital": { "rich_text": [{ "text": { "content": "パリ" } }] },
-        "regime": { "rich_text": [{ "text": { "content": "絶対王政" } }] },
-        "dynasty": { "rich_text": [{ "text": { "content": "ブルボン朝" } }] },
-        "leader": { "rich_text": [{ "text": { "content": "ルイ14世" } }] },
-        "religion": { "rich_text": [{ "text": { "content": "カトリック" } }] },
-        "context": { "rich_text": [{ "text": { "content": "1700年のフランスは..." } }] },
-        "key_events": { "rich_text": [{ "text": { "content": "1643:ルイ14世即位|1661:ルイ14世の親政開始|1682:ヴェルサイユ宮殿に宮廷を移転|1789:フランス革命" } }] }
-      }
-    }
-  ]
-}
+### ヘッダー行
+
+```csv
+name,territory_id,year,era,capital,regime,dynasty,leader,religion,context,key_events
 ```
 
-データがないオプションプロパティはプロパティごと省略する — 空文字列や "不明" を設定してはならない。
+### データ行の例
+
+```csv
+フランス王国,france,1700,絶対王政期,パリ,絶対王政,ブルボン朝,ルイ14世,カトリック,"1700年のフランスはルイ14世の親政期にあり、ヨーロッパ最大の人口約2000万人を擁した。翌1701年にはスペイン継承戦争が勃発する。","1643:ルイ14世即位|1661:ルイ14世の親政開始|1682:ヴェルサイユ宮殿に宮廷を移転|1789:フランス革命"
+```
+
+### CSV ルール
+
+- エンコーディング: UTF-8（BOM なし）
+- 改行: LF
+- フィールドにカンマ、改行、ダブルクォートが含まれる場合はダブルクォートで囲む
+- ダブルクォート内のダブルクォートは `""` でエスケープする
+- データがないオプションフィールドは空セル（`,,`）にする — "不明" は使用しない
+- `name`, `territory_id`, `year` は必須。空にしてはならない
+
+### データスパースな領土の例
+
+```csv
+エチオピア帝国,ethiopia,1700,,ゴンダール,,,,,,"1270:ソロモン朝復興|1632:ファシリデス即位・ゴンダール遷都|1769:ゼメネ・メサフント（諸侯時代）開始"
+```
+
+era, regime, dynasty, leader, religion, context が空セルになっている。
