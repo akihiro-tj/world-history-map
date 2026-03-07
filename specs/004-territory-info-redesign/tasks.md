@@ -38,12 +38,12 @@
 
 **⚠️ 重要**: このフェーズが完了するまでユーザーストーリーの作業を開始できない
 
-- [ ] T003 [P] `apps/frontend/src/types/territory.ts` の TypeScript インターフェースを更新する — 旧 `TerritoryDescription`（`id`, `year`, `facts`, `aiGenerated` を持つ）を `specs/004-territory-info-redesign/contracts/territory-description.ts` の新インターフェース（`TerritoryDescription`, `TerritoryProfile`, `KeyEvent`, `ClassifiedKeyEvent`, `YearDescriptionBundle`, `PROFILE_FIELD_ORDER`, `PROFILE_FIELD_LABELS`）で置き換える
-- [ ] T004 [P] イベント分類ユーティリティとテストを作成する: `apps/frontend/src/utils/classify-events.ts` に `classifyEvents(events: KeyEvent[], selectedYear: number): ClassifiedKeyEvent[]` を実装し、`apps/frontend/src/utils/classify-events.test.ts` にユニットテストを書く。テストケース: past/current/future 分類、current の完全一致、空配列、全 past、全 future、負数年（紀元前）のエッジケース
-- [ ] T005 [P] `apps/pipeline/src/config.ts` に Notion 設定を追加する — Notion データベース ID（定数として格納）と Integration トークン（`op read` コマンドで 1Password から取得、例: `op read "op://dev/notion-integration/credential"`）の設定
-- [ ] T006 `apps/frontend/src/components/territory-info/hooks/use-territory-description.test.ts` の `use-territory-description` フックテストを新スキーマ用に更新する — テストフィクスチャを新 `TerritoryDescription` 形式に変更（`id`, `year`, `facts`, `aiGenerated` を削除、`era`, `profile`, `context`, オプション `keyEvents` を追加）。現在の実装に対してテストが FAIL することを確認
-- [ ] T007 `apps/frontend/src/components/territory-info/hooks/use-territory-description.ts` の `use-territory-description` フックを新スキーマに対応させる — 新 `TerritoryDescription` / `YearDescriptionBundle` 型に適応（旧フィールドへの参照を削除）、既存の fetch/キャッシュ/プリフェッチロジックは維持。T006 のテストが PASS することを確認
-- [ ] T008 UI 開発用のサンプル説明データ JSON ファイルを作成する — `apps/frontend/public/data/descriptions/1700.json` に data-model.md のデータ例に基づくサンプルデータを手動作成する。データリッチな領土（例: フランス — 全フィールドあり）とデータスパースな領土（例: エチオピア — name + capital のみ）の両方を含め、US-1〜US-4 の開発・テストに使用する
+- [X] T003 [P] `apps/frontend/src/types/territory.ts` の TypeScript インターフェースを更新する — 旧 `TerritoryDescription`（`id`, `year`, `facts`, `aiGenerated` を持つ）を `specs/004-territory-info-redesign/contracts/territory-description.ts` の新インターフェース（`TerritoryDescription`, `TerritoryProfile`, `KeyEvent`, `ClassifiedKeyEvent`, `YearDescriptionBundle`, `PROFILE_FIELD_ORDER`, `PROFILE_FIELD_LABELS`）で置き換える
+- [X] T004 [P] イベント分類ユーティリティとテストを作成する: `apps/frontend/src/utils/classify-events.ts` に `classifyEvents(events: KeyEvent[], selectedYear: number): ClassifiedKeyEvent[]` を実装し、`apps/frontend/src/utils/classify-events.test.ts` にユニットテストを書く。テストケース: past/current/future 分類、current の完全一致、空配列、全 past、全 future、負数年（紀元前）のエッジケース
+- [X] T005 [P] `apps/pipeline/src/config.ts` に Notion 設定を追加する — Notion データベース ID（定数として格納）と Integration トークン（`op read` コマンドで 1Password から取得、例: `op read "op://dev/notion-integration/credential"`）の設定
+- [X] T006 `apps/frontend/src/components/territory-info/hooks/use-territory-description.test.ts` の `use-territory-description` フックテストを新スキーマ用に更新する — テストフィクスチャを新 `TerritoryDescription` 形式に変更（`id`, `year`, `facts`, `aiGenerated` を削除、`era`, `profile`, `context`, オプション `keyEvents` を追加）。現在の実装に対してテストが FAIL することを確認
+- [X] T007 `apps/frontend/src/components/territory-info/hooks/use-territory-description.ts` の `use-territory-description` フックを新スキーマに対応させる — 新 `TerritoryDescription` / `YearDescriptionBundle` 型に適応（旧フィールドへの参照を削除）、既存の fetch/キャッシュ/プリフェッチロジックは維持。T006 のテストが PASS することを確認
+- [X] T008 UI 開発用のサンプル説明データ JSON ファイルを作成する — `apps/frontend/public/data/descriptions/1700.json` に data-model.md のデータ例に基づくサンプルデータを手動作成する。データリッチな領土（例: フランス — 全フィールドあり）とデータスパースな領土（例: エチオピア — name + capital のみ）の両方を含め、US-1〜US-4 の開発・テストに使用する
 
 **チェックポイント**: 基盤完了 — 型システム更新済み、分類ユーティリティはテスト済み、フック適応済み、サンプルデータあり。ユーザーストーリーの実装を開始できる。
 
