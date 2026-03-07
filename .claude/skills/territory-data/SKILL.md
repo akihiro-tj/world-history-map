@@ -1,20 +1,20 @@
 ---
-name: notion-territory-data
+name: territory-data
 description: >
-  Notion データベースにインポートする世界史領土データの CSV を生成するスキル。
-  Notion DB プロパティスキーマ、データ品質ガイドライン、領土選定基準、
+  世界史領土データの CSV を生成するスキル。
+  DB プロパティスキーマ、データ品質ガイドライン、領土選定基準、
   CSV フォーマットを提供する。
-  トリガー: "Notion DB にデータを投入", "領土データ作成", "領土データをNotionに登録",
-  "populate Notion", "create territory data", "sync-descriptions"
+  トリガー: "領土データ作成", "領土データを登録",
+  "create territory data", "sync-descriptions"
 ---
 
-# Notion 領土データ CSV 生成ガイド
+# 領土データ CSV 生成ガイド
 
-Notion データベースにインポートするための CSV ファイルを生成する。
+データベースにインポートするための CSV ファイルを生成する。
 
 ## ワークフロー
 
-### 1. Notion DB の既存データ確認
+### 1. DB の既存データ確認
 
 Notion MCP を使って既存エントリを取得する。
 
@@ -46,35 +46,35 @@ Notion MCP を使って既存エントリを取得する。
 各エージェントへのプロンプトには以下を含める:
 - 投入対象の領土リスト（GeoJSON NAME、territory_id、日本語名、対象年）
 - [data-quality.md](references/data-quality.md) の品質ルール
-- [notion-schema.md](references/notion-schema.md) の DB スキーマ・CSV フォーマット・territory_id 変換ルール
-- 出力先ファイルパス: `.cache/notion-batch-<region>.csv`
+- [csv-schema.md](references/csv-schema.md) の DB スキーマ・CSV フォーマット・territory_id 変換ルール
+- 出力先ファイルパス: `.cache/territory-batch-<region>.csv`
 
-エージェントは `.cache/notion-batch-<region>.csv` にデータを書き出し、ファイルパスと件数サマリのみを返す。
+エージェントは `.cache/territory-batch-<region>.csv` にデータを書き出し、ファイルパスと件数サマリのみを返す。
 
 ### 4. メインコンテキストでの CSV 統合
 
 エージェントが生成した CSV ファイルを統合して 1 つの CSV にまとめる。
 
 ```bash
-head -1 .cache/notion-batch-east-asia.csv > .cache/notion-territory-data.csv
-for f in .cache/notion-batch-*.csv; do tail -n +2 "$f" >> .cache/notion-territory-data.csv; done
+head -1 .cache/territory-batch-east-asia.csv > .cache/territory-data.csv
+for f in .cache/territory-batch-*.csv; do tail -n +2 "$f" >> .cache/territory-data.csv; done
 ```
 
 統合後、件数と地域バランスをユーザーに報告する。
 
-### 5. ユーザーによる Notion インポート
+### 5. ユーザーによるインポート
 
-統合 CSV ファイルをユーザーに渡し、Notion UI からインポートしてもらう。
+統合 CSV ファイルをユーザーに渡し、DB にインポートしてもらう。
 
-**手順**:
+**Notion の場合**:
 1. Notion で対象データベースを開く
 2. 右上の `...` メニュー → 「Merge with CSV」を選択
-3. `.cache/notion-territory-data.csv` をアップロード
+3. `.cache/territory-data.csv` をアップロード
 4. カラムマッピングを確認して実行
 
 ### 6. 投入後のバリデーション
 
-Notion データの人的レビュー完了後:
+人的レビュー完了後:
 
 ```bash
 pnpm pipeline sync-descriptions
@@ -83,6 +83,6 @@ pnpm pipeline validate-descriptions
 
 ## リファレンスファイル
 
-- [notion-schema.md](references/notion-schema.md) — DB スキーマ、territory_id 変換ルール、CSV フォーマット
+- [csv-schema.md](references/csv-schema.md) — DB スキーマ、territory_id 変換ルール、CSV フォーマット
 - [data-quality.md](references/data-quality.md) — コンテンツ執筆ガイドライン、バリデーションルール
 - [territory-selection.md](references/territory-selection.md) — 優先度定義、選定基準、除外カテゴリ
