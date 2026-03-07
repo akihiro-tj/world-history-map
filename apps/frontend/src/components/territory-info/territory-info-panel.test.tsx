@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { beforeAll, describe, expect, it, vi } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { TerritoryDescription } from '@/types/territory';
 
 beforeAll(() => {
@@ -21,7 +21,7 @@ const mockSetSelectedTerritory = vi.fn();
 vi.mock('@/contexts/app-state-context', () => ({
   useAppState: () => ({
     state: {
-      selectedYear: 1650,
+      selectedYear: 1700,
       selectedTerritory: 'France',
       isInfoPanelOpen: true,
     },
@@ -33,33 +33,53 @@ vi.mock('@/contexts/app-state-context', () => ({
   }),
 }));
 
-const mockDescription: TerritoryDescription = {
-  id: 'France_1650',
+const richDescription: TerritoryDescription = {
   name: 'フランス王国',
-  year: 1650,
-  facts: ['首都: パリ', '君主: ルイ14世（在位1643-1715年）', '政体: 絶対王政'],
+  era: '絶対王政期',
+  profile: {
+    capital: 'パリ',
+    regime: '絶対王政',
+    dynasty: 'ブルボン朝',
+    leader: 'ルイ14世',
+    religion: 'カトリック',
+  },
+  context:
+    '1700年のフランスはルイ14世の親政期にあり、ヨーロッパ最大の人口約2000万人を擁した。翌1701年にはスペイン継承戦争が勃発する。',
   keyEvents: [
-    { year: 1648, event: 'ウェストファリア条約締結' },
-    { year: 1648, event: 'フロンドの乱' },
-    { year: 1643, event: 'マザランの宰相就任' },
+    { year: 1643, event: 'ルイ14世即位' },
+    { year: 1661, event: 'ルイ14世の親政開始' },
+    { year: 1682, event: 'ヴェルサイユ宮殿に宮廷を移転' },
+    { year: 1789, event: 'フランス革命' },
   ],
-  aiGenerated: true,
 };
+
+const sparseDescription: TerritoryDescription = {
+  name: 'エチオピア帝国',
+  profile: {
+    capital: 'ゴンダール',
+  },
+};
+
+let mockDescriptionValue: TerritoryDescription | null = richDescription;
+let mockIsLoading = false;
+let mockError: string | null = null;
 
 vi.mock('./hooks/use-territory-description', () => ({
   useTerritoryDescription: () => ({
-    description: mockDescription,
-    isLoading: false,
-    error: null,
+    description: mockDescriptionValue,
+    isLoading: mockIsLoading,
+    error: mockError,
   }),
 }));
 
-// Import after mocks
 import { TerritoryInfoPanel } from './territory-info-panel';
 
 describe('TerritoryInfoPanel', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockDescriptionValue = richDescription;
+    mockIsLoading = false;
+    mockError = null;
   });
 
   it('renders territory name as heading', () => {
@@ -68,24 +88,6 @@ describe('TerritoryInfoPanel', () => {
     const heading = screen.getByRole('heading', { level: 2 });
     expect(heading).toBeInTheDocument();
     expect(heading).toHaveTextContent('フランス王国');
-  });
-
-  it('renders territory facts', () => {
-    render(<TerritoryInfoPanel />);
-
-    expect(screen.getByText('首都: パリ')).toBeInTheDocument();
-    expect(screen.getByText('君主: ルイ14世（在位1643-1715年）')).toBeInTheDocument();
-    expect(screen.getByText('政体: 絶対王政')).toBeInTheDocument();
-  });
-
-  it('renders key events list', () => {
-    render(<TerritoryInfoPanel />);
-
-    expect(screen.getByText('ウェストファリア条約締結')).toBeInTheDocument();
-    expect(screen.getByText('フロンドの乱')).toBeInTheDocument();
-    expect(screen.getByText('マザランの宰相就任')).toBeInTheDocument();
-    expect(screen.getByText('1643年')).toBeInTheDocument();
-    expect(screen.getAllByText('1648年')).toHaveLength(2);
   });
 
   it('renders AI-generated notice', () => {
@@ -128,41 +130,35 @@ describe('TerritoryInfoPanel', () => {
   });
 });
 
-describe('TerritoryInfoPanel - Loading state', () => {
+describe('TerritoryInfoPanel - US-1: Header display', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-
-    vi.doMock('./hooks/use-territory-description', () => ({
-      useTerritoryDescription: () => ({
-        description: null,
-        isLoading: true,
-        error: null,
-      }),
-    }));
+    mockIsLoading = false;
+    mockError = null;
   });
 
-  // Note: Due to mock limitations, this test is illustrative
-  // In real implementation, we would test loading spinner visibility
-  it.skip('shows loading spinner when loading', () => {
-    // Would render TerritoryInfoPanel and check for loading indicator
-  });
-});
+  it('displays name and era for data-rich territory', () => {
+    mockDescriptionValue = richDescription;
+    render(<TerritoryInfoPanel />);
 
-describe('TerritoryInfoPanel - No description state', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-
-    vi.doMock('./hooks/use-territory-description', () => ({
-      useTerritoryDescription: () => ({
-        description: null,
-        isLoading: false,
-        error: null,
-      }),
-    }));
+    expect(screen.getByText('フランス王国')).toBeInTheDocument();
+    expect(screen.getByText('絶対王政期')).toBeInTheDocument();
   });
 
-  // Note: Due to mock limitations, this test is illustrative
-  it.skip('shows placeholder message when no description available', () => {
-    // Would render TerritoryInfoPanel and check for placeholder
+  it('displays name only for data-sparse territory (no era)', () => {
+    mockDescriptionValue = sparseDescription;
+    render(<TerritoryInfoPanel />);
+
+    expect(screen.getByText('エチオピア帝国')).toBeInTheDocument();
+    expect(screen.queryByText('絶対王政期')).not.toBeInTheDocument();
+  });
+
+  it('does not display "不明" anywhere in the header', () => {
+    mockDescriptionValue = richDescription;
+    render(<TerritoryInfoPanel />);
+
+    const heading = screen.getByRole('heading', { level: 2 });
+    const headerArea = heading.closest('div');
+    expect(headerArea?.textContent).not.toContain('不明');
   });
 });

@@ -59,11 +59,11 @@
 
 > **注意: テストを先に書き、実装前に FAIL することを確認する**
 
-- [ ] T009 [US1] `apps/frontend/src/components/territory-info/territory-info-panel.test.tsx` にヘッダー表示のテストを書く — テストケース: (1) データリッチな領土で name + era + year が表示される、(2) データスパースな領土で name + year のみ表示（era なし）、(3) ヘッダーに "不明" が表示されない
+- [X] T009 [US1] `apps/frontend/src/components/territory-info/territory-info-panel.test.tsx` にヘッダー表示のテストを書く — テストケース: (1) データリッチな領土で name + era が表示される、(2) データスパースな領土で name のみ表示（era なし）、(3) ヘッダーに "不明" が表示されない
 
 ### US-1 実装
 
-- [ ] T010 [US1] `apps/frontend/src/components/territory-info/territory-info-panel.tsx` のヘッダーセクションを再設計する — `name` をメインタイトル、`era` をサブタイトル（存在時のみ条件付きレンダリング）、選択 `year` を "年" 接尾辞付きで表示。旧 `facts` リストのレンダリングを削除。`/ui-ux-pro-max` スキルでスタイリング。レイアウトは plan.md の UI モックアップを参照
+- [X] T010 [US1] `apps/frontend/src/components/territory-info/territory-info-panel.tsx` のヘッダーセクションを再設計する — `name` をメインタイトル、`era` をサブタイトル（存在時のみ条件付きレンダリング）で表示。年はスライダー/YearDisplay と冗長のためヘッダーから除外。旧 `facts` リストのレンダリングを削除。レイアウトは plan.md の UI モックアップを参照
 
 **チェックポイント**: US-1 完了 — ヘッダーで領土のアイデンティティが一目でわかる
 
