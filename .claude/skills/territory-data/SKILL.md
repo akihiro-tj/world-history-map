@@ -43,21 +43,25 @@ Notion MCP を使って既存エントリを取得する。
 
 **バッチ戦略**: 地域バッチ単位（東アジア、中東、ヨーロッパ等）でエージェントにデータ生成を委譲する。
 
-各エージェントへのプロンプトには以下を含める:
-- 投入対象の領土リスト（GeoJSON NAME、territory_id、日本語名、対象年）
-- [data-quality.md](references/data-quality.md) の品質ルール
-- [csv-schema.md](references/csv-schema.md) の DB スキーマ・CSV フォーマット・territory_id 変換ルール
-- 出力先ファイルパス: `.cache/territory-batch-<region>.csv`
+**プロンプト組み立て手順**:
+
+1. [csv-schema.md](references/csv-schema.md) と [data-quality.md](references/data-quality.md) を Read ツールで読み込む
+2. ステップ2で承認された領土リストを地域ごとにグループ化する
+3. [agent-prompt-template.md](references/agent-prompt-template.md) のテンプレートに従い、プレースホルダーを置換してプロンプトを組み立てる
+   - `{{CSV_SCHEMA}}`: csv-schema.md の**全文**を埋め込む
+   - `{{DATA_QUALITY}}`: data-quality.md の**全文**を埋め込む
+   - `{{TERRITORY_TABLE}}`: 対象領土の Markdown テーブル行
+   - `{{REGION_NAME}}` / `{{REGION_SLUG}}`: 地域名とスラッグ
+4. 各地域について Agent ツールに組み立てたプロンプトを渡して実行する
 
 エージェントは `.cache/territory-batch-<region>.csv` にデータを書き出し、ファイルパスと件数サマリのみを返す。
 
 ### 4. メインコンテキストでの CSV 統合
 
-エージェントが生成した CSV ファイルを統合して 1 つの CSV にまとめる。
+エージェントが生成した CSV ファイルを統合スクリプトで 1 つの CSV にまとめる。
 
 ```bash
-head -1 .cache/territory-batch-east-asia.csv > .cache/territory-data.csv
-for f in .cache/territory-batch-*.csv; do tail -n +2 "$f" >> .cache/territory-data.csv; done
+bash .claude/skills/territory-data/scripts/merge-csv.sh
 ```
 
 統合後、件数と地域バランスをユーザーに報告する。
@@ -86,3 +90,8 @@ pnpm pipeline validate-descriptions
 - [csv-schema.md](references/csv-schema.md) — DB スキーマ、territory_id 変換ルール、CSV フォーマット
 - [data-quality.md](references/data-quality.md) — コンテンツ執筆ガイドライン、バリデーションルール
 - [territory-selection.md](references/territory-selection.md) — 優先度定義、選定基準、除外カテゴリ
+- [agent-prompt-template.md](references/agent-prompt-template.md) — エージェント委譲時のプロンプトテンプレート
+
+## スクリプト
+
+- [merge-csv.sh](scripts/merge-csv.sh) — バッチ CSV を統合するスクリプト（ステップ4で使用）
