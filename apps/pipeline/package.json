@@ -9,6 +9,7 @@
     "test:coverage": "vitest run --coverage"
   },
   "devDependencies": {
+    "@notionhq/client": "^5.11.1",
     "@turf/turf": "^7.3.4",
     "@types/node": "^25.3.0",
     "@vitest/coverage-v8": "^4.0.18",

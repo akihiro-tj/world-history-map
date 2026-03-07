@@ -93,6 +93,9 @@ importers:
 
   apps/pipeline:
     devDependencies:
+      '@notionhq/client':
+        specifier: ^5.11.1
+        version: 5.11.1
       '@turf/turf':
         specifier: ^7.3.4
         version: 7.3.4
@@ -750,6 +753,10 @@ packages:
     peerDependencies:
       '@types/react': '>=16'
       react: '>=16'
+
+  '@notionhq/client@5.11.1':
+    resolution: {integrity: sha512-393XUAb4706eWKQx1xxg/tdn/rTY6+qj3PxTGyTr03D7ydO6e7B7tYyidxJCbKzNSSCVTUAth/bLoKNhm0VoUQ==}
+    engines: {node: '>=18'}
 
   '@poppinss/colors@4.1.6':
     resolution: {integrity: sha512-H9xkIdFswbS8n1d6vmRd8+c10t2Qe+rZITbbDHHkQixH5+2x1FDGmi/0K+WgWiqQFKPSlIYB7jlH6Kpfn6Fleg==}
@@ -3200,6 +3207,8 @@ snapshots:
       '@types/mdx': 2.0.13
       '@types/react': 19.2.14
       react: 19.2.4
+
+  '@notionhq/client@5.11.1': {}
 
   '@poppinss/colors@4.1.6':
     dependencies:

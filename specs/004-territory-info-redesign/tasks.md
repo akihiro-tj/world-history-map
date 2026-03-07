@@ -27,8 +27,8 @@
 
 **目的**: 新規依存関係のインストールと旧データファイルの削除
 
-- [ ] T001 `apps/pipeline/` に `@notionhq/client` 依存関係を追加する（`pnpm add @notionhq/client --filter pipeline`）
-- [ ] T002 [P] `apps/frontend/public/data/descriptions/*.json` の既存説明データファイルをすべて削除する（50 ファイル — FR-011: 完全な再作成が必要）
+- [X] T001 `apps/pipeline/` に `@notionhq/client` 依存関係を追加する（`pnpm add @notionhq/client --filter pipeline`）
+- [X] T002 [P] `apps/frontend/public/data/descriptions/*.json` の既存説明データファイルをすべて削除する（50 ファイル — FR-011: 完全な再作成が必要）
 
 ---
 
