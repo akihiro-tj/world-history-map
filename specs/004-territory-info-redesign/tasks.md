@@ -79,12 +79,12 @@
 
 > **注意: テストを先に書き、実装前に FAIL することを確認する**
 
-- [ ] T011 [P] [US2] `apps/frontend/src/components/territory-info/territory-profile.test.tsx` に `TerritoryProfile` コンポーネントのテストを書く — テストケース: (1) 全 5 フィールドが正しい順序で表示される（capital → regime → dynasty → leader → religion）、(2) 部分的なフィールドは存在するもののみ表示、(3) profile が undefined の場合何もレンダリングしない、(4) フィールドラベルが `PROFILE_FIELD_LABELS` と一致する
+- [X] T011 [P] [US2] `apps/frontend/src/components/territory-info/territory-profile.test.tsx` に `TerritoryProfile` コンポーネントのテストを書く — テストケース: (1) 全 5 フィールドが正しい順序で表示される（capital → regime → dynasty → leader → religion）、(2) 部分的なフィールドは存在するもののみ表示、(3) profile が undefined の場合何もレンダリングしない、(4) フィールドラベルが `PROFILE_FIELD_LABELS` と一致する
 
 ### US-2 実装
 
-- [ ] T012 [US2] `apps/frontend/src/components/territory-info/territory-profile.tsx` に `TerritoryProfile` コンポーネントを作成する — `profile?: TerritoryProfile` プロップを受け取り、`PROFILE_FIELD_ORDER` を反復して定義済みフィールドのみラベル・値ペアとして表示。profile が undefined の場合は null を返す。`/ui-ux-pro-max` スキルを使用。plan.md モックアップの「プロフィール」セクションを参照
-- [ ] T013 [US2] `apps/frontend/src/components/territory-info/territory-info-panel.tsx` に `TerritoryProfile` を統合する — 旧 facts リストを `<TerritoryProfile profile={description.profile} />` で置き換え
+- [X] T012 [US2] `apps/frontend/src/components/territory-info/territory-profile.tsx` に `TerritoryProfile` コンポーネントを作成する — `profile?: TerritoryProfile` プロップを受け取り、`PROFILE_FIELD_ORDER` を反復して定義済みフィールドのみラベル・値ペアとして表示。profile が undefined の場合は null を返す。`/ui-ux-pro-max` スキルを使用。plan.md モックアップの「プロフィール」セクションを参照
+- [X] T013 [US2] `apps/frontend/src/components/territory-info/territory-info-panel.tsx` に `TerritoryProfile` を統合する — 旧 facts リストを `<TerritoryProfile profile={description.profile} />` で置き換え
 
 **チェックポイント**: US-1 & US-2 完了 — ヘッダー + プロフィールで構造化概要を提供
 
