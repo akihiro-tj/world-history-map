@@ -1,9 +1,6 @@
 import type { ClassifiedKeyEvent, KeyEvent, KeyEventTemporal } from '../types/territory';
 
-export function classifyEvents(
-  events: KeyEvent[],
-  selectedYear: number,
-): ClassifiedKeyEvent[] {
+export function classifyEvents(events: KeyEvent[], selectedYear: number): ClassifiedKeyEvent[] {
   return events.map((e) => {
     let temporal: KeyEventTemporal;
     if (e.year < selectedYear) {

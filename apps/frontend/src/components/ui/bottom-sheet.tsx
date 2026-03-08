@@ -43,7 +43,7 @@ export function BottomSheet({ isOpen, onClose, header, children, ...props }: Bot
       el.removeEventListener('scroll', checkScroll);
       ro?.disconnect();
     };
-  }, [snap]);
+  }, []);
 
   useEscapeKey(isOpen, onClose);
   useFocusTrap(snap === 'expanded', sheetRef);
@@ -82,10 +82,7 @@ export function BottomSheet({ isOpen, onClose, header, children, ...props }: Bot
         <div className="relative min-h-0 flex-1">
           <div
             ref={scrollRef}
-            className={cn(
-              'h-full',
-              snap === 'collapsed' ? 'overflow-hidden' : 'overflow-y-auto',
-            )}
+            className={cn('h-full', snap === 'collapsed' ? 'overflow-hidden' : 'overflow-y-auto')}
           >
             {children}
           </div>

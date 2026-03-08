@@ -1,11 +1,7 @@
 import type { TerritoryProfile as TerritoryProfileType } from '@/types/territory';
 import { PROFILE_FIELD_LABELS, PROFILE_FIELD_ORDER } from '@/types/territory';
 
-export function TerritoryProfile({
-  profile,
-}: {
-  profile: TerritoryProfileType | undefined;
-}) {
+export function TerritoryProfile({ profile }: { profile: TerritoryProfileType | undefined }) {
   if (!profile) return null;
 
   const entries = PROFILE_FIELD_ORDER.filter((field) => profile[field] != null);

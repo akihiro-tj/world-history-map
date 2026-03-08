@@ -25,7 +25,9 @@ describe('TerritoryProfile', () => {
     for (let i = 0; i < PROFILE_FIELD_ORDER.length; i++) {
       const field = PROFILE_FIELD_ORDER[i];
       expect(terms[i]).toHaveTextContent(PROFILE_FIELD_LABELS[field]);
-      expect(definitions[i]).toHaveTextContent(fullProfile[field]!);
+      const value = fullProfile[field];
+      expect(value).toBeDefined();
+      expect(definitions[i]).toHaveTextContent(value as string);
     }
   });
 
