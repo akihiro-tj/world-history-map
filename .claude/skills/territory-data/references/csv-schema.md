@@ -4,6 +4,7 @@
 
 | プロパティ名 | 型 | 必須 | 説明 |
 |---|---|---|---|
+| `id` | rich_text | はい | 複合キー（`{territory_id}-{year}` / 紀元前: `{territory_id}-bc{abs(year)}`） |
 | `name` | title | はい | 日本語の表示名（例: "フランス王国"） |
 | `territory_id` | rich_text | はい | GeoJSON NAME と一致する kebab-case ID（例: "france"） |
 | `year` | number | はい | 歴史的な年（整数、紀元前は負数） |
@@ -33,6 +34,13 @@
 - イベントは年の昇順でソートしなければならない（紀元前は前500→前200→前100の順）
 - 1 領土あたり最低 3 件のイベント
 
+## id の生成ルール
+
+`territory_id` と `year` から一意の ID を生成する:
+
+- 紀元後（year ≥ 0）: `{territory_id}-{year}` → `france-1700`
+- 紀元前（year < 0）: `{territory_id}-bc{abs(year)}` → `egypt-bc4000`
+
 ## territory_id のルール
 
 GeoJSON の NAME プロパティから `toKebabCase()` で生成:
@@ -54,13 +62,13 @@ name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
 ### ヘッダー行
 
 ```csv
-name,territory_id,year,era,capital,regime,dynasty,leader,religion,context,key_events
+id,name,territory_id,year,era,capital,regime,dynasty,leader,religion,context,key_events
 ```
 
 ### データ行の例
 
 ```csv
-フランス王国,france,1700,絶対王政期,パリ,絶対王政,ブルボン朝,ルイ14世,カトリック,"1700年のフランスはルイ14世の親政期にあり、ヨーロッパ最大の人口約2000万人を擁した。翌1701年にはスペイン継承戦争が勃発する。","1643:ルイ14世即位|1661:ルイ14世の親政開始|1682:ヴェルサイユ宮殿に宮廷を移転|1789:フランス革命"
+france-1700,フランス王国,france,1700,絶対王政期,パリ,絶対王政,ブルボン朝,ルイ14世,カトリック,"1700年のフランスはルイ14世の親政期にあり、ヨーロッパ最大の人口約2000万人を擁した。翌1701年にはスペイン継承戦争が勃発する。","1643:ルイ14世即位|1661:ルイ14世の親政開始|1682:ヴェルサイユ宮殿に宮廷を移転|1789:フランス革命"
 ```
 
 ### CSV ルール
@@ -75,7 +83,7 @@ name,territory_id,year,era,capital,regime,dynasty,leader,religion,context,key_ev
 ### データスパースな領土の例
 
 ```csv
-エチオピア帝国,ethiopia,1700,,ゴンダール,,,,,,"1270:ソロモン朝復興|1632:ファシリデス即位・ゴンダール遷都|1769:ゼメネ・メサフント（諸侯時代）開始"
+ethiopia-1700,エチオピア帝国,ethiopia,1700,,ゴンダール,,,,,,"1270:ソロモン朝復興|1632:ファシリデス即位・ゴンダール遷都|1769:ゼメネ・メサフント（諸侯時代）開始"
 ```
 
 era, regime, dynasty, leader, religion, context が空セルになっている。

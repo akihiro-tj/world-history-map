@@ -3,7 +3,7 @@ import csv
 import sys
 import re
 
-EXPECTED_COLS = 11
+EXPECTED_COLS = 12
 CONTEXT_MIN = 50
 CONTEXT_MAX = 200
 KEY_EVENTS_MIN = 3
@@ -18,8 +18,13 @@ def validate(filepath: str) -> list[str]:
             errors.append(f"Header has {len(header)} columns, expected {EXPECTED_COLS}")
             return errors
 
+        id_idx = header.index("id")
+        territory_id_idx = header.index("territory_id")
+        year_idx = header.index("year")
         context_idx = header.index("context")
         key_events_idx = header.index("key_events")
+
+        seen_ids: set[str] = set()
 
         for i, row in enumerate(reader, start=2):
             name = row[0] if row else "?"
@@ -27,6 +32,20 @@ def validate(filepath: str) -> list[str]:
             if len(row) != EXPECTED_COLS:
                 errors.append(f"Line {i}: {name} has {len(row)} columns, expected {EXPECTED_COLS}")
                 continue
+
+            row_id = row[id_idx]
+            territory_id = row[territory_id_idx]
+            year_str = row[year_idx]
+
+            if year_str:
+                year_val = int(year_str)
+                expected_id = f"{territory_id}-bc{abs(year_val)}" if year_val < 0 else f"{territory_id}-{year_val}"
+                if row_id != expected_id:
+                    errors.append(f"Line {i}: {name} id '{row_id}' does not match expected '{expected_id}'")
+
+            if row_id in seen_ids:
+                errors.append(f"Line {i}: {name} duplicate id '{row_id}'")
+            seen_ids.add(row_id)
 
             ctx = row[context_idx]
             if ctx and len(ctx) < CONTEXT_MIN:
