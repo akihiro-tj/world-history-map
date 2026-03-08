@@ -17,7 +17,7 @@
     "typecheck": "tsc -b && pnpm --filter @world-history-map/worker exec tsc --noEmit"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.4",
+    "@biomejs/biome": "^2.4.6",
     "typescript": "~5.9.3"
   }
 }
