@@ -44,4 +44,8 @@ pnpm test && pnpm check
 
 
 <!-- MANUAL ADDITIONS START -->
+
+## Documentation Style
+
+- Specification documents (`specs/`): Write in Japanese
 <!-- MANUAL ADDITIONS END -->
