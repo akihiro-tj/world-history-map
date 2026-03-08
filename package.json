@@ -6,6 +6,7 @@
     "dev": "pnpm --filter @world-history-map/frontend run dev",
     "build": "pnpm --filter @world-history-map/frontend run build",
     "check": "biome check .",
+    "verify": "pnpm run typecheck && biome check .",
     "format": "biome format --write .",
     "lint": "biome lint .",
     "test": "pnpm -r run test",
