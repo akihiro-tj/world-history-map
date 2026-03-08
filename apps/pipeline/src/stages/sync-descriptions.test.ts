@@ -101,6 +101,16 @@ describe('sync-descriptions', () => {
 
       expect(result).toEqual([{ year: 1700, event: '説明:補足情報' }]);
     });
+
+    it('should parse BC years with 前 prefix as negative numbers', () => {
+      const result = parseKeyEvents('前202:劉邦が漢を建国|前141:武帝即位|8:王莽が新を建国');
+
+      expect(result).toEqual([
+        { year: -202, event: '劉邦が漢を建国' },
+        { year: -141, event: '武帝即位' },
+        { year: 8, event: '王莽が新を建国' },
+      ]);
+    });
   });
 
   describe('transformNotionPage', () => {

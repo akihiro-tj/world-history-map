@@ -61,6 +61,14 @@ function extractNumber(prop: PageObjectResponse['properties'][string] | undefine
   return null;
 }
 
+function parseYear(yearStr: string): number {
+  const trimmed = yearStr.trim();
+  if (trimmed.startsWith('前')) {
+    return -Number(trimmed.slice(1));
+  }
+  return Number(trimmed);
+}
+
 export function parseKeyEvents(raw: string): KeyEvent[] | undefined {
   if (!raw) return undefined;
 
@@ -69,7 +77,7 @@ export function parseKeyEvents(raw: string): KeyEvent[] | undefined {
     const colonIndex = pair.indexOf(':');
     const yearStr = pair.substring(0, colonIndex);
     const event = pair.substring(colonIndex + 1);
-    return { year: Number(yearStr), event };
+    return { year: parseYear(yearStr), event };
   });
 }
 
@@ -134,18 +142,18 @@ export async function syncDescriptions(
 ): Promise<void> {
   const { NOTION } = await import('@/config.ts');
   const token = NOTION.getToken();
-  const databaseId = NOTION.getDatabaseId();
+  const dataSourceId = NOTION.getDataSourceId();
 
   const notion = new Client({ auth: token });
 
-  logger.info('sync-descriptions', 'Fetching pages from Notion database...');
+  logger.info('sync-descriptions', 'Fetching pages from Notion data source...');
 
   const pages: PageObjectResponse[] = [];
   let cursor: string | undefined;
 
   do {
-    const response = await notion.databases.query({
-      database_id: databaseId,
+    const response = await notion.dataSources.query({
+      data_source_id: dataSourceId,
       start_cursor: cursor,
       filter: options?.year ? { property: 'year', number: { equals: options.year } } : undefined,
     });
