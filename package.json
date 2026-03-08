@@ -12,6 +12,7 @@
     "test:coverage": "pnpm -r run test:coverage",
     "storybook": "pnpm --filter @world-history-map/frontend run storybook",
     "pipeline": "pnpm --filter @world-history-map/pipeline run pipeline",
+    "territory-sync": "pnpm pipeline territory-sync && pnpm pipeline territory-validate",
     "typecheck": "tsc -b && pnpm --filter @world-history-map/worker exec tsc --noEmit"
   },
   "devDependencies": {

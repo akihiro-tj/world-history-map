@@ -5,7 +5,7 @@ description: >
   DB プロパティスキーマ、データ品質ガイドライン、領土選定基準、
   CSV フォーマットを提供する。
   トリガー: "領土データ作成", "領土データを登録",
-  "create territory data", "sync-descriptions"
+  "create territory data", "territory-sync"
 ---
 
 # 領土データ CSV 生成ガイド
@@ -81,8 +81,7 @@ bash .claude/skills/territory-data/scripts/merge-csv.sh
 人的レビュー完了後:
 
 ```bash
-pnpm pipeline sync-descriptions
-pnpm pipeline validate-descriptions
+pnpm territory-sync
 ```
 
 ## リファレンスファイル

@@ -14,14 +14,13 @@
 ### 1. データ同期（パイプライン）
 
 ```bash
-# Notion データベースから領土説明データを JSON に同期
-pnpm pipeline sync-descriptions
+# Notion から同期 + バリデーション（一括実行）
+pnpm territory-sync
 
-# 特定の年のみ同期
-pnpm pipeline sync-descriptions --year 1700
-
-# すべての説明データファイルをバリデーション
-pnpm pipeline validate-descriptions
+# 個別実行
+pnpm pipeline territory-sync
+pnpm pipeline territory-sync --year 1700
+pnpm pipeline territory-validate
 ```
 
 ### 2. フロントエンド開発

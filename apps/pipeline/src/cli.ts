@@ -83,7 +83,7 @@ async function main(): Promise<void> {
     case 'publish-manifest':
       await publishManifest(logger);
       break;
-    case 'sync-descriptions': {
+    case 'territory-sync': {
       const descriptionsDir = path.resolve(
         import.meta.dirname,
         '..',
@@ -96,7 +96,7 @@ async function main(): Promise<void> {
       await syncDescriptions(descriptionsDir, logger, { year: options.year });
       break;
     }
-    case 'validate-descriptions': {
+    case 'territory-validate': {
       const descriptionsDir = path.resolve(
         import.meta.dirname,
         '..',
@@ -110,18 +110,18 @@ async function main(): Promise<void> {
       let hasErrors = false;
       for (const result of results) {
         if (result.valid) {
-          logger.info('validate-descriptions', `${path.basename(result.filePath)}: OK`);
+          logger.info('territory-validate', `${path.basename(result.filePath)}: OK`);
         } else {
           hasErrors = true;
           for (const err of result.errors) {
-            logger.error('validate-descriptions', `${path.basename(result.filePath)}: ${err}`);
+            logger.error('territory-validate', `${path.basename(result.filePath)}: ${err}`);
           }
         }
       }
       if (hasErrors) {
         throw new PipelineError('Validation failed', 1);
       }
-      logger.info('validate-descriptions', `All ${results.length} files passed validation`);
+      logger.info('territory-validate', `All ${results.length} files passed validation`);
       break;
     }
     case 'fetch':
@@ -136,7 +136,7 @@ async function main(): Promise<void> {
     default:
       console.error(`Unknown command: ${command}`);
       console.error(
-        'Usage: pnpm pipeline <run|status|list|upload|publish-manifest|sync-descriptions|validate-descriptions> [options]',
+        'Usage: pnpm pipeline <run|status|list|upload|publish-manifest|territory-sync|territory-validate> [options]',
       );
       process.exit(3);
   }
