@@ -1,1 +1,160 @@
-{"byzantine-empire":{"id":"Byzantine_Empire_1400","name":"ビザンツ帝国","year":1400,"facts":["首都: コンスタンティノープル","時代: パレオロゴス朝","政体: 帝政","状況: オスマン帝国の圧迫、衰退期"],"keyEvents":[{"year":527,"event":"ユスティニアヌス1世が即位"},{"year":1054,"event":"東西教会分裂"},{"year":1453,"event":"コンスタンティノープル陥落"}],"aiGenerated":true},"chim-empire":{"id":"Chimú_Empire_1400","name":"Chimú Empire","year":1400,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"ethiopia":{"id":"Ethiopia_1400","name":"エチオピア","year":1400,"facts":["首都: アディスアベバ","政体: 帝政/共和制"],"keyEvents":[{"year":1896,"event":"アドワの戦いでイタリアに勝利"},{"year":1974,"event":"帝政廃止"}],"aiGenerated":true},"france":{"id":"France_1400","name":"フランス","year":1400,"facts":["首都: パリ","政体: 王政/共和制"],"keyEvents":[{"year":1643,"event":"ルイ14世即位"},{"year":1789,"event":"フランス革命"},{"year":1958,"event":"第五共和制成立"}],"aiGenerated":true},"hafsid-caliphate":{"id":"Hafsid_Caliphate_1400","name":"Hafsid Caliphate","year":1400,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"holy-roman-empire":{"id":"Holy_Roman_Empire_1400","name":"神聖ローマ帝国","year":1400,"facts":["首都: ウィーン","政体: 帝政（選挙王制）"],"keyEvents":[{"year":962,"event":"オットー1世が皇帝に戴冠"},{"year":1618,"event":"三十年戦争開始"},{"year":1806,"event":"解体"}],"aiGenerated":true},"khmer-empire":{"id":"Khmer_Empire_1400","name":"クメール帝国","year":1400,"facts":["首都: アンコール","政体: 神王制","文化: インド文化の影響"],"keyEvents":[{"year":802,"event":"ジャヤーヴァルマン2世が建国"},{"year":1113,"event":"アンコールワット建設開始"},{"year":1431,"event":"アユタヤに攻略される"}],"aiGenerated":true},"mixtec-empire":{"id":"Mixtec_Empire_1400","name":"Mixtec Empire","year":1400,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"ottoman-empire":{"id":"Ottoman_Empire_1400","name":"オスマン帝国","year":1400,"facts":["首都: イスタンブール","政体: スルタン制","宗教: イスラム教スンナ派"],"keyEvents":[{"year":1299,"event":"オスマン1世が建国"},{"year":1453,"event":"コンスタンティノープル征服"},{"year":1922,"event":"滅亡"}],"aiGenerated":true},"portugal":{"id":"Portugal_1400","name":"ポルトガル王国","year":1400,"facts":["首都: リスボン","政体: 王政"],"keyEvents":[{"year":1139,"event":"王国として独立"},{"year":1498,"event":"ヴァスコ・ダ・ガマがインド航路開拓"}],"aiGenerated":true},"shogun-japan-kamakura":{"id":"Shogun_Japan_(Kamakura)_1400","name":"日本（鎌倉幕府）","year":1400,"facts":["首都: 鎌倉","政体: 幕府制"],"keyEvents":[{"year":1185,"event":"壇ノ浦の戦い、平氏滅亡"},{"year":1274,"event":"文永の役（元寇）"},{"year":1333,"event":"鎌倉幕府滅亡"}],"aiGenerated":true},"srivijaya-empire":{"id":"Srivijaya_Empire_1400","name":"シュリーヴィジャヤ王国","year":1400,"facts":["首都: パレンバン","政体: 王政"],"keyEvents":[{"year":650,"event":"王国成立"},{"year":1025,"event":"チョーラ朝に攻撃される"}],"aiGenerated":true},"timurid-empire":{"id":"Timurid_Empire_1400","name":"ティムール帝国","year":1400,"facts":["首都: サマルカンド","政体: 帝政"],"keyEvents":[{"year":1370,"event":"ティムールが建国"},{"year":1402,"event":"アンカラの戦いでオスマン軍を破る"}],"aiGenerated":true},"tu-i-tonga-empire":{"id":"Tuʻi_Tonga_Empire_1400","name":"トンガ帝国","year":1400,"facts":["首都: トンガタプ","政体: 王政"],"keyEvents":[{"year":950,"event":"海上帝国として繁栄"}],"aiGenerated":true},"zapotec-empire":{"id":"Zapotec_Empire_1400","name":"Zapotec Empire","year":1400,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true}}
+{
+  "byzantine-empire": {
+    "name": "ビザンツ帝国",
+    "era": "末期",
+    "profile": {
+      "capital": "コンスタンティノープル",
+      "regime": "帝政",
+      "dynasty": "パレオロゴス朝",
+      "religion": "キリスト教(東方正教会)"
+    },
+    "context": "1400年のビザンツ帝国はオスマン帝国に包囲され、コンスタンティノープル周辺のみを保持する小国に縮小していた。1396年のニコポリスの戦いでオスマン帝国が十字軍を撃退し、帝国の滅亡は時間の問題であった。",
+    "keyEvents": [
+      {
+        "year": 726,
+        "event": "聖像禁止令（イコノクラスム開始）"
+      },
+      {
+        "year": 843,
+        "event": "聖像崇拝の復活"
+      },
+      {
+        "year": 1054,
+        "event": "東西教会の分裂"
+      },
+      {
+        "year": 1204,
+        "event": "第4回十字軍によるコンスタンティノープル陥落"
+      },
+      {
+        "year": 1261,
+        "event": "コンスタンティノープル奪還（パレオロゴス朝）"
+      },
+      {
+        "year": 1453,
+        "event": "オスマン帝国によるコンスタンティノープル陥落"
+      }
+    ]
+  },
+  "portugal": {
+    "name": "ポルトガル王国",
+    "era": "中世",
+    "profile": {
+      "capital": "リスボン",
+      "regime": "王政",
+      "dynasty": "アヴィス朝",
+      "religion": "カトリック"
+    },
+    "context": "アヴィス朝が成立し、新たな王朝のもとで海外進出の基盤が整えられつつあった。カスティーリャからの独立を維持した。",
+    "keyEvents": [
+      {
+        "year": 1385,
+        "event": "アルジュバロータの戦い、アヴィス朝成立"
+      },
+      {
+        "year": 1386,
+        "event": "英葡永久同盟"
+      },
+      {
+        "year": 1394,
+        "event": "エンリケ航海王子誕生"
+      }
+    ]
+  },
+  "france": {
+    "name": "フランス王国",
+    "era": "中世",
+    "profile": {
+      "capital": "パリ",
+      "regime": "王政",
+      "dynasty": "ヴァロワ朝",
+      "leader": "シャルル6世",
+      "religion": "カトリック"
+    },
+    "context": "百年戦争の最中にあり、国王シャルル6世の精神疾患により政治は混乱。ブルゴーニュ派とアルマニャック派の内紛が激化した。",
+    "keyEvents": [
+      {
+        "year": 1328,
+        "event": "ヴァロワ朝成立"
+      },
+      {
+        "year": 1337,
+        "event": "百年戦争開始"
+      },
+      {
+        "year": 1346,
+        "event": "クレシーの戦い"
+      },
+      {
+        "year": 1356,
+        "event": "ポワティエの戦い"
+      },
+      {
+        "year": 1392,
+        "event": "シャルル6世発狂"
+      }
+    ]
+  },
+  "ottoman-empire": {
+    "name": "オスマン帝国",
+    "era": "中世",
+    "profile": {
+      "capital": "エディルネ",
+      "regime": "スルタン制",
+      "leader": "バヤズィト1世",
+      "religion": "イスラーム教（スンナ派）"
+    },
+    "context": "オスマン帝国はバルカン半島への進出を続け、1396年のニコポリスの戦いでヨーロッパ連合軍を撃破した。しかし東方からティムールの脅威が迫り、帝国は危機的状況に直面しつつあった。",
+    "keyEvents": [
+      {
+        "year": 1326,
+        "event": "ブルサを征服し首都とする"
+      },
+      {
+        "year": 1362,
+        "event": "エディルネを征服"
+      },
+      {
+        "year": 1389,
+        "event": "コソヴォの戦いでセルビアを破る"
+      },
+      {
+        "year": 1396,
+        "event": "ニコポリスの戦いで十字軍を撃破"
+      },
+      {
+        "year": 1402,
+        "event": "アンカラの戦いでティムールに敗北"
+      }
+    ]
+  },
+  "holy-roman-empire": {
+    "name": "神聖ローマ帝国",
+    "era": "中世",
+    "profile": {
+      "capital": "プラハ",
+      "regime": "選挙王政",
+      "dynasty": "ルクセンブルク家",
+      "religion": "カトリック"
+    },
+    "context": "ルクセンブルク家が帝位を保持していた時期。1356年の金印勅書により選帝侯制度が確立され、帝国の分権化が制度化された。",
+    "keyEvents": [
+      {
+        "year": 1346,
+        "event": "カール4世即位"
+      },
+      {
+        "year": 1348,
+        "event": "プラハ大学創設"
+      },
+      {
+        "year": 1356,
+        "event": "金印勅書発布"
+      },
+      {
+        "year": 1378,
+        "event": "教会大分裂の開始"
+      }
+    ]
+  }
+}

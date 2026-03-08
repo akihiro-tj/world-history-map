@@ -1,1 +1,392 @@
-{"austrian-empire":{"id":"Austrian_Empire_1783","name":"オーストリア帝国","year":1783,"facts":["首都: ウィーン","政体: 帝政"],"keyEvents":[{"year":1804,"event":"フランツ2世がオーストリア皇帝に即位"},{"year":1867,"event":"オーストリア＝ハンガリー二重帝国成立"}],"aiGenerated":true},"austrian-netherlands":{"id":"Austrian_Netherlands_1783","name":"Austrian Netherlands","year":1783,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"british-guiana":{"id":"British_Guiana_1783","name":"British Guiana","year":1783,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"ceylon-dutch":{"id":"Ceylon_(Dutch)_1783","name":"Ceylon (Dutch)","year":1783,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"cochin-china":{"id":"Cochin_China_1783","name":"Cochin China","year":1783,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"dutch-east-indies":{"id":"Dutch_East_Indies_1783","name":"Dutch East Indies","year":1783,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"dutch-settlements":{"id":"Dutch_settlements_1783","name":"Dutch settlements","year":1783,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"ethiopia":{"id":"Ethiopia_1783","name":"エチオピア","year":1783,"facts":["首都: アディスアベバ","政体: 帝政/共和制"],"keyEvents":[{"year":1896,"event":"アドワの戦いでイタリアに勝利"},{"year":1974,"event":"帝政廃止"}],"aiGenerated":true},"france":{"id":"France_1783","name":"フランス","year":1783,"facts":["首都: パリ","政体: 王政/共和制"],"keyEvents":[{"year":1643,"event":"ルイ14世即位"},{"year":1789,"event":"フランス革命"},{"year":1958,"event":"第五共和制成立"}],"aiGenerated":true},"india":{"id":"India_1783","name":"インド","year":1783,"facts":["首都: ニューデリー","政体: 連邦共和制"],"keyEvents":[{"year":1947,"event":"イギリスから独立"},{"year":1950,"event":"インド共和国憲法施行"}],"aiGenerated":true},"japan":{"id":"Japan_1783","name":"日本","year":1783,"facts":["首都: 東京","政体: 立憲君主制"],"keyEvents":[{"year":1947,"event":"日本国憲法施行"},{"year":1964,"event":"東京オリンピック開催"}],"aiGenerated":true},"kong-empire":{"id":"Kong_Empire_1783","name":"Kong Empire","year":1783,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"korea":{"id":"Korea_1783","name":"朝鮮","year":1783,"facts":["首都: 漢城（ソウル）","王朝: 李氏朝鮮","政体: 王政","思想: 儒教（朱子学）"],"keyEvents":[{"year":1392,"event":"李成桂が朝鮮を建国"},{"year":1592,"event":"文禄の役（壬辰倭乱）"},{"year":1910,"event":"日本に併合"}],"aiGenerated":true},"ottoman-empire":{"id":"Ottoman_Empire_1783","name":"オスマン帝国","year":1783,"facts":["首都: イスタンブール","政体: スルタン制","宗教: イスラム教スンナ派"],"keyEvents":[{"year":1299,"event":"オスマン1世が建国"},{"year":1453,"event":"コンスタンティノープル征服"},{"year":1922,"event":"滅亡"}],"aiGenerated":true},"portugal":{"id":"Portugal_1783","name":"ポルトガル王国","year":1783,"facts":["首都: リスボン","政体: 王政"],"keyEvents":[{"year":1139,"event":"王国として独立"},{"year":1498,"event":"ヴァスコ・ダ・ガマがインド航路開拓"}],"aiGenerated":true},"prussia":{"id":"Prussia_1783","name":"プロイセン王国","year":1783,"facts":["首都: ベルリン","君主: フリードリヒ2世（大王）","政体: 啓蒙専制君主制","特徴: 軍事大国化、啓蒙思想","戦争: シュレジエン戦争、七年戦争"],"keyEvents":[{"year":1701,"event":"フリードリヒ1世が王に即位"},{"year":1740,"event":"フリードリヒ大王即位"},{"year":1871,"event":"ドイツ帝国統一の中心に"}],"aiGenerated":true},"qing-empire":{"id":"Qing_Empire_1783","name":"清","year":1783,"facts":["首都: 北京","政体: 帝政","民族: 満洲族支配"],"keyEvents":[{"year":1644,"event":"北京入城"},{"year":1839,"event":"アヘン戦争開始"},{"year":1912,"event":"辛亥革命により滅亡"}],"aiGenerated":true},"russian-empire":{"id":"Russian_Empire_1783","name":"ロシア帝国","year":1783,"facts":["首都: サンクトペテルブルク","皇帝: エカチェリーナ2世（大帝）","政体: 帝政","特徴: 啓蒙専制君主、領土拡大","領土: ポーランド分割、黒海進出"],"keyEvents":[{"year":1721,"event":"ピョートル1世が皇帝に即位"},{"year":1812,"event":"ナポレオンのロシア遠征撃退"},{"year":1917,"event":"ロシア革命で帝政廃止"}],"aiGenerated":true},"spain":{"id":"Spain_1783","name":"スペイン王国","year":1783,"facts":["首都: マドリード","政体: 王政"],"keyEvents":[{"year":1469,"event":"カスティーリャとアラゴンの統合"},{"year":1492,"event":"グラナダ陥落、新大陸発見"},{"year":1588,"event":"無敵艦隊の敗北"}],"aiGenerated":true},"sweden":{"id":"Sweden_1783","name":"スウェーデン王国","year":1783,"facts":["首都: ストックホルム","政体: 王政"],"keyEvents":[{"year":1523,"event":"グスタフ1世が独立を達成"},{"year":1630,"event":"三十年戦争参戦"}],"aiGenerated":true},"tu-i-tonga-empire":{"id":"Tuʻi_Tonga_Empire_1783","name":"トンガ帝国","year":1783,"facts":["首都: トンガタプ","政体: 王政"],"keyEvents":[{"year":950,"event":"海上帝国として繁栄"}],"aiGenerated":true},"united-states-of-america":{"id":"United_States_of_America_1783","name":"United States of America","year":1783,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"vice-royalty-of-new-spain":{"id":"Vice-Royalty_of_New_Spain_1783","name":"Vice-Royalty of New Spain","year":1783,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true}}
+{
+  "india": {
+    "name": "インド（イギリス東インド会社）",
+    "era": "近代",
+    "profile": {
+      "capital": "カルカッタ",
+      "regime": "植民地",
+      "religion": "ヒンドゥー教・イスラーム教"
+    },
+    "context": "イギリス東インド会社はベンガル・ビハールを中心に支配を拡大し、マイソール王国やマラーター同盟との戦争を繰り広げていた。1773年のレギュレイティング・アクトにより総督府が設置され、植民地統治の制度化が進んだ。",
+    "keyEvents": [
+      {
+        "year": 1757,
+        "event": "プラッシーの戦いでベンガル支配権を獲得"
+      },
+      {
+        "year": 1764,
+        "event": "ブクサールの戦い"
+      },
+      {
+        "year": 1767,
+        "event": "第一次マイソール戦争"
+      },
+      {
+        "year": 1773,
+        "event": "レギュレイティング・アクト"
+      },
+      {
+        "year": 1784,
+        "event": "ピット法制定"
+      }
+    ]
+  },
+  "ottoman-empire": {
+    "name": "オスマン帝国",
+    "era": "近世",
+    "profile": {
+      "capital": "イスタンブール",
+      "regime": "スルタン制",
+      "leader": "アブデュルハミト1世",
+      "religion": "イスラーム教（スンナ派）"
+    },
+    "context": "1774年のキュチュク・カイナルジ条約でロシアに黒海北岸を割譲し、ロシアの南下政策に直面していた。クリミア・ハン国がロシアに併合され、帝国の領土的後退が続いていた。",
+    "keyEvents": [
+      {
+        "year": 1718,
+        "event": "パッサロヴィッツ条約"
+      },
+      {
+        "year": 1739,
+        "event": "ベオグラード条約でベオグラード回復"
+      },
+      {
+        "year": 1768,
+        "event": "露土戦争開始"
+      },
+      {
+        "year": 1774,
+        "event": "キュチュク・カイナルジ条約でクリミア独立承認"
+      },
+      {
+        "year": 1783,
+        "event": "ロシアがクリミアを併合"
+      }
+    ]
+  },
+  "united-kingdom": {
+    "name": "イギリス",
+    "era": "近世",
+    "profile": {
+      "capital": "ロンドン",
+      "regime": "立憲王政",
+      "dynasty": "ハノーヴァー朝",
+      "leader": "ジョージ3世",
+      "religion": "プロテスタント"
+    },
+    "context": "パリ条約によりアメリカ独立戦争の敗北が確定し北米13植民地を喪失した。しかし国内では産業革命が本格化し、綿工業を中心に経済力の拡大が続いた。",
+    "keyEvents": [
+      {
+        "year": 1760,
+        "event": "産業革命本格化"
+      },
+      {
+        "year": 1775,
+        "event": "アメリカ独立戦争開始"
+      },
+      {
+        "year": 1783,
+        "event": "パリ条約でアメリカ独立承認"
+      }
+    ]
+  },
+  "france": {
+    "name": "フランス",
+    "era": "近世",
+    "profile": {
+      "capital": "パリ",
+      "regime": "王政",
+      "dynasty": "ブルボン朝",
+      "leader": "ルイ16世",
+      "religion": "カトリック"
+    },
+    "context": "アメリカ独立戦争への軍事・財政支援が国家財政の危機を深刻化させた。特権身分への課税をめぐる対立が激化し、革命前夜の社会的緊張が高まっていた。",
+    "keyEvents": [
+      {
+        "year": 1756,
+        "event": "七年戦争開始"
+      },
+      {
+        "year": 1774,
+        "event": "ルイ16世即位"
+      },
+      {
+        "year": 1778,
+        "event": "アメリカ独立戦争に参戦"
+      },
+      {
+        "year": 1783,
+        "event": "パリ条約でアメリカ独立承認"
+      }
+    ]
+  },
+  "united-states-of-america": {
+    "name": "アメリカ合衆国",
+    "era": "近代",
+    "profile": {
+      "capital": "フィラデルフィア",
+      "regime": "共和制",
+      "leader": "ワシントン",
+      "religion": "プロテスタント"
+    },
+    "context": "パリ条約によりイギリスから独立を達成した。連合規約の下で13州の緩やかな連合体として出発した。西部領土の帰属や各州間の利害調整が課題であった。",
+    "keyEvents": [
+      {
+        "year": 1776,
+        "event": "独立宣言"
+      },
+      {
+        "year": 1783,
+        "event": "パリ条約で独立承認"
+      },
+      {
+        "year": 1787,
+        "event": "合衆国憲法制定"
+      },
+      {
+        "year": 1789,
+        "event": "ワシントン初代大統領就任"
+      },
+      {
+        "year": 1803,
+        "event": "ルイジアナ買収"
+      },
+      {
+        "year": 1823,
+        "event": "モンロー宣言"
+      },
+      {
+        "year": 1861,
+        "event": "南北戦争開始"
+      },
+      {
+        "year": 1865,
+        "event": "南北戦争終結・奴隷制廃止"
+      },
+      {
+        "year": 1898,
+        "event": "米西戦争"
+      }
+    ]
+  },
+  "austrian-empire": {
+    "name": "オーストリア帝国",
+    "era": "近代",
+    "profile": {
+      "capital": "ウィーン",
+      "regime": "君主制",
+      "dynasty": "ハプスブルク家",
+      "leader": "ヨーゼフ2世",
+      "religion": "カトリック"
+    },
+    "context": "啓蒙専制君主ヨーゼフ2世による改革期。農奴解放令や宗教寛容令を発布し、中央集権化を推進した。マリア・テレジアの共同統治期を経て単独統治に移行し、近代的な行政改革を進めた。",
+    "keyEvents": [
+      {
+        "year": 1618,
+        "event": "三十年戦争開始"
+      },
+      {
+        "year": 1648,
+        "event": "ウェストファリア条約締結"
+      },
+      {
+        "year": 1683,
+        "event": "第二次ウィーン包囲"
+      },
+      {
+        "year": 1699,
+        "event": "カルロヴィッツ条約でハンガリー獲得"
+      },
+      {
+        "year": 1740,
+        "event": "オーストリア継承戦争開始"
+      },
+      {
+        "year": 1756,
+        "event": "七年戦争開始"
+      },
+      {
+        "year": 1804,
+        "event": "オーストリア帝国成立"
+      },
+      {
+        "year": 1867,
+        "event": "アウスグライヒによりオーストリア＝ハンガリー二重帝国成立"
+      }
+    ]
+  },
+  "spain": {
+    "name": "スペイン王国",
+    "era": "近世",
+    "profile": {
+      "capital": "マドリード",
+      "regime": "王政",
+      "dynasty": "ブルボン朝",
+      "leader": "カルロス3世",
+      "religion": "カトリック"
+    },
+    "context": "啓蒙専制君主カルロス3世のもとで近代化改革が進められた。アメリカ独立戦争ではフランスとともに参戦した。",
+    "keyEvents": [
+      {
+        "year": 1759,
+        "event": "カルロス3世即位"
+      },
+      {
+        "year": 1767,
+        "event": "イエズス会追放"
+      },
+      {
+        "year": 1779,
+        "event": "アメリカ独立戦争に参戦"
+      },
+      {
+        "year": 1783,
+        "event": "パリ条約"
+      }
+    ]
+  },
+  "russian-empire": {
+    "name": "ロシア帝国",
+    "era": "近代",
+    "profile": {
+      "capital": "サンクトペテルブルク",
+      "regime": "君主制",
+      "dynasty": "ロマノフ朝",
+      "leader": "エカチェリーナ2世",
+      "religion": "正教会"
+    },
+    "context": "エカチェリーナ2世の治世下で領土拡大が進んだ。クリミア半島を併合しオスマン帝国との黒海支配権争いで優位に立った。啓蒙専制君主としてヨーロッパ文化の導入を進めた。",
+    "keyEvents": [
+      {
+        "year": 1689,
+        "event": "ピョートル1世親政開始"
+      },
+      {
+        "year": 1703,
+        "event": "サンクトペテルブルク建設"
+      },
+      {
+        "year": 1721,
+        "event": "ニスタット条約・帝国宣言"
+      },
+      {
+        "year": 1762,
+        "event": "エカチェリーナ2世即位"
+      },
+      {
+        "year": 1783,
+        "event": "クリミア併合"
+      },
+      {
+        "year": 1812,
+        "event": "ナポレオンのロシア遠征"
+      },
+      {
+        "year": 1861,
+        "event": "農奴解放令"
+      },
+      {
+        "year": 1905,
+        "event": "第一次ロシア革命"
+      },
+      {
+        "year": 1917,
+        "event": "ロシア革命"
+      }
+    ]
+  },
+  "portugal": {
+    "name": "ポルトガル王国",
+    "era": "近世",
+    "profile": {
+      "capital": "リスボン",
+      "regime": "王政",
+      "dynasty": "ブラガンサ朝",
+      "leader": "マリア1世",
+      "religion": "カトリック"
+    },
+    "context": "ポンバル侯の改革の後、マリア1世のもとで保守的な政策への揺り戻しが起こった。ブラジル植民地の重要性が増していた。",
+    "keyEvents": [
+      {
+        "year": 1750,
+        "event": "ポンバル侯の改革開始"
+      },
+      {
+        "year": 1755,
+        "event": "リスボン大地震"
+      },
+      {
+        "year": 1777,
+        "event": "マリア1世即位、ポンバル侯失脚"
+      }
+    ]
+  },
+  "japan": {
+    "name": "日本",
+    "era": "江戸時代",
+    "profile": {
+      "capital": "江戸",
+      "regime": "幕府制",
+      "dynasty": "徳川氏",
+      "leader": "徳川家治",
+      "religion": "仏教"
+    },
+    "context": "1783年の日本は江戸時代中後期にあたり、田沼意次が老中として重商主義的政策を推進していた。この年、浅間山が大噴火し天明の大飢饉が深刻化した。",
+    "keyEvents": [
+      {
+        "year": 1603,
+        "event": "江戸幕府成立"
+      },
+      {
+        "year": 1639,
+        "event": "鎖国の完成"
+      },
+      {
+        "year": 1716,
+        "event": "享保の改革"
+      },
+      {
+        "year": 1783,
+        "event": "浅間山大噴火・天明の大飢饉"
+      },
+      {
+        "year": 1853,
+        "event": "ペリー来航"
+      }
+    ]
+  },
+  "korea": {
+    "name": "朝鮮",
+    "era": "朝鮮王朝後期",
+    "profile": {
+      "capital": "漢城(ソウル)",
+      "regime": "王政",
+      "dynasty": "李氏",
+      "leader": "正祖",
+      "religion": "儒教(朱子学)"
+    },
+    "context": "1783年の朝鮮は正祖の治世にあたり、文芸復興と実学の隆盛が見られた。正祖は規章閣を設置して学問を奨励し、蕩平策により党争の緩和を図った。",
+    "keyEvents": [
+      {
+        "year": 1776,
+        "event": "正祖即位"
+      },
+      {
+        "year": 1784,
+        "event": "李承薫がカトリックを伝来"
+      },
+      {
+        "year": 1800,
+        "event": "正祖崩御・純祖即位"
+      },
+      {
+        "year": 1863,
+        "event": "高宗即位"
+      },
+      {
+        "year": 1876,
+        "event": "日朝修好条規"
+      }
+    ]
+  }
+}

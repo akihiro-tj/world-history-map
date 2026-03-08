@@ -1,1 +1,192 @@
-{"angevin-empire":{"id":"Angevin_Empire_1200","name":"アンジュー帝国","year":1200,"facts":["首都: ロンドン/パリ","政体: 王政"],"keyEvents":[{"year":1154,"event":"ヘンリー2世即位"},{"year":1189,"event":"リチャード1世即位"}],"aiGenerated":true},"byzantine-empire":{"id":"Byzantine_Empire_1200","name":"ビザンツ帝国","year":1200,"facts":["首都: コンスタンティノープル","政体: 帝政","宗教: 東方正教会"],"keyEvents":[{"year":527,"event":"ユスティニアヌス1世が即位"},{"year":1054,"event":"東西教会分裂"},{"year":1453,"event":"コンスタンティノープル陥落"}],"aiGenerated":true},"chim-empire":{"id":"Chimú_Empire_1200","name":"Chimú Empire","year":1200,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"holy-roman-empire":{"id":"Holy_Roman_Empire_1200","name":"神聖ローマ帝国","year":1200,"facts":["首都: ウィーン","政体: 帝政（選挙王制）"],"keyEvents":[{"year":962,"event":"オットー1世が皇帝に戴冠"},{"year":1618,"event":"三十年戦争開始"},{"year":1806,"event":"解体"}],"aiGenerated":true},"huari-empire":{"id":"Huari_Empire_1200","name":"ワリ帝国","year":1200,"facts":["首都: ワリ","政体: 帝政"],"keyEvents":[{"year":500,"event":"帝国成立"},{"year":1000,"event":"崩壊"}],"aiGenerated":true},"imperial-japan-fujiwara":{"id":"Imperial_Japan_(Fujiwara)_1200","name":"日本（摂関時代）","year":1200,"facts":["首都: 平安京","政体: 摂関政治","実権: 藤原氏"],"keyEvents":[{"year":794,"event":"平安京遷都"},{"year":1016,"event":"藤原道長が摂政就任"},{"year":1086,"event":"院政開始"}],"aiGenerated":true},"khmer-empire":{"id":"Khmer_Empire_1200","name":"クメール帝国","year":1200,"facts":["首都: アンコール","君主: ジャヤーヴァルマン7世","政体: 神王制","建築: アンコール・トム、バイヨン寺院","宗教: 大乗仏教"],"keyEvents":[{"year":802,"event":"ジャヤーヴァルマン2世が建国"},{"year":1113,"event":"アンコールワット建設開始"},{"year":1431,"event":"アユタヤに攻略される"}],"aiGenerated":true},"kingdom-of-france":{"id":"Kingdom_of_France_1200","name":"フランス王国","year":1200,"facts":["首都: パリ","政体: 王政"],"keyEvents":[{"year":987,"event":"カペー朝成立"},{"year":1337,"event":"百年戦争開始"},{"year":1789,"event":"フランス革命で王政廃止"}],"aiGenerated":true},"mongol-empire":{"id":"Mongol_Empire_1200","name":"モンゴル帝国","year":1200,"facts":["首都: カラコルム","政体: ハーン制","特徴: 史上最大の陸上帝国"],"keyEvents":[{"year":1206,"event":"チンギス・ハーンが即位"},{"year":1258,"event":"バグダード攻略"},{"year":1279,"event":"南宋を滅ぼす"}],"aiGenerated":true},"portugal":{"id":"Portugal_1200","name":"ポルトガル王国","year":1200,"facts":["首都: リスボン","政体: 王政"],"keyEvents":[{"year":1139,"event":"王国として独立"},{"year":1498,"event":"ヴァスコ・ダ・ガマがインド航路開拓"}],"aiGenerated":true},"song-empire":{"id":"Song_Empire_1200","name":"宋","year":1200,"facts":["首都: 開封","政体: 帝政","特徴: 科学技術の黄金期"],"keyEvents":[{"year":960,"event":"趙匡胤が建国"},{"year":1127,"event":"靖康の変"}],"aiGenerated":true},"srivijaya-empire":{"id":"Srivijaya_Empire_1200","name":"シュリーヴィジャヤ王国","year":1200,"facts":["首都: パレンバン","政体: 王政"],"keyEvents":[{"year":650,"event":"王国成立"},{"year":1025,"event":"チョーラ朝に攻撃される"}],"aiGenerated":true},"sweden":{"id":"Sweden_1200","name":"スウェーデン王国","year":1200,"facts":["首都: ストックホルム","政体: 王政"],"keyEvents":[{"year":1523,"event":"グスタフ1世が独立を達成"},{"year":1630,"event":"三十年戦争参戦"}],"aiGenerated":true},"tiahuanaco-empire":{"id":"Tiahuanaco_Empire_1200","name":"ティワナク帝国","year":1200,"facts":["首都: ティワナク","政体: 帝政"],"keyEvents":[{"year":300,"event":"帝国成立"},{"year":1000,"event":"崩壊"}],"aiGenerated":true},"toltec-empire":{"id":"Toltec_Empire_1200","name":"Toltec Empire","year":1200,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true}}
+{
+  "portugal": {
+    "name": "ポルトガル王国",
+    "era": "中世",
+    "profile": {
+      "capital": "コインブラ",
+      "regime": "王政",
+      "dynasty": "ブルゴーニュ朝",
+      "leader": "サンシュ1世",
+      "religion": "カトリック"
+    },
+    "context": "レコンキスタを進めながら国土を南方に拡大していた。ポルトガルはイベリア半島で独立した王国としての地位を確立しつつあった。",
+    "keyEvents": [
+      {
+        "year": 1139,
+        "event": "アフォンソ1世が王を名乗る"
+      },
+      {
+        "year": 1143,
+        "event": "ポルトガル王国独立承認"
+      },
+      {
+        "year": 1147,
+        "event": "リスボン征服"
+      },
+      {
+        "year": 1179,
+        "event": "教皇による王国承認"
+      }
+    ]
+  },
+  "goryeo": {
+    "name": "高麗",
+    "era": "高麗後期",
+    "profile": {
+      "capital": "開城",
+      "regime": "武臣政権",
+      "dynasty": "王氏",
+      "religion": "仏教"
+    },
+    "context": "1200年の高麗は武臣政権期にあたり、崔氏政権が実権を掌握していた。国王は名目的な存在となり、武臣が政治を主導する時代であった。",
+    "keyEvents": [
+      {
+        "year": 918,
+        "event": "高麗建国"
+      },
+      {
+        "year": 1170,
+        "event": "武臣政変"
+      },
+      {
+        "year": 1231,
+        "event": "モンゴル軍の侵入開始"
+      },
+      {
+        "year": 1259,
+        "event": "モンゴルに服属"
+      },
+      {
+        "year": 1392,
+        "event": "高麗滅亡"
+      }
+    ]
+  },
+  "mongol-empire": {
+    "name": "モンゴル帝国",
+    "era": "モンゴル帝国初期",
+    "profile": {
+      "capital": "カラコルム",
+      "regime": "ハン制",
+      "religion": "テングリ信仰"
+    },
+    "context": "1200年のモンゴルはテムジン(後のチンギス・ハン)がモンゴル高原の諸部族を統一しつつある段階にあった。1206年にクリルタイでチンギス・ハンとして即位し、世界帝国建設が始まる。",
+    "keyEvents": [
+      {
+        "year": 1206,
+        "event": "チンギス・ハン即位"
+      },
+      {
+        "year": 1227,
+        "event": "チンギス・ハン死去"
+      },
+      {
+        "year": 1241,
+        "event": "ワールシュタットの戦い"
+      },
+      {
+        "year": 1260,
+        "event": "フビライが大ハーンに即位"
+      },
+      {
+        "year": 1271,
+        "event": "元の建国"
+      }
+    ]
+  },
+  "kingdom-of-france": {
+    "name": "フランス王国",
+    "era": "中世",
+    "profile": {
+      "capital": "パリ",
+      "regime": "王政",
+      "dynasty": "カペー朝",
+      "leader": "フィリップ2世",
+      "religion": "カトリック"
+    },
+    "context": "フィリップ2世は英仏の抗争でイングランドからノルマンディーなどの大陸領を奪取し、王権を大幅に拡大した。",
+    "keyEvents": [
+      {
+        "year": 1180,
+        "event": "フィリップ2世即位"
+      },
+      {
+        "year": 1189,
+        "event": "第3回十字軍参加"
+      },
+      {
+        "year": 1202,
+        "event": "第4回十字軍"
+      },
+      {
+        "year": 1204,
+        "event": "ノルマンディーをイングランドから奪取"
+      }
+    ]
+  },
+  "holy-roman-empire": {
+    "name": "神聖ローマ帝国",
+    "era": "中世",
+    "profile": {
+      "regime": "選挙王政",
+      "leader": "フィリップ",
+      "religion": "カトリック"
+    },
+    "context": "シュタウフェン朝の内紛により二重選挙が発生し、フィリップとオットー4世が帝位を争った混乱期。フリードリヒ1世以来の皇帝権の強大化は頓挫し、諸侯の自立が進んだ。",
+    "keyEvents": [
+      {
+        "year": 1122,
+        "event": "ヴォルムス協約"
+      },
+      {
+        "year": 1152,
+        "event": "フリードリヒ1世即位"
+      },
+      {
+        "year": 1189,
+        "event": "第3回十字軍参加"
+      },
+      {
+        "year": 1198,
+        "event": "二重選挙の発生"
+      }
+    ]
+  },
+  "byzantine-empire": {
+    "name": "ビザンツ帝国",
+    "era": "十字軍時代",
+    "profile": {
+      "capital": "コンスタンティノープル",
+      "regime": "帝政",
+      "dynasty": "アンゲロス朝",
+      "religion": "キリスト教(東方正教会)"
+    },
+    "context": "1200年のビザンツ帝国はアンゲロス朝のもとで衰退期にあり、帝国の統治力は著しく低下していた。1204年には第4回十字軍がコンスタンティノープルを占領し、ラテン帝国が建てられる。",
+    "keyEvents": [
+      {
+        "year": 726,
+        "event": "聖像禁止令（イコノクラスム開始）"
+      },
+      {
+        "year": 843,
+        "event": "聖像崇拝の復活"
+      },
+      {
+        "year": 1054,
+        "event": "東西教会の分裂"
+      },
+      {
+        "year": 1204,
+        "event": "第4回十字軍によるコンスタンティノープル陥落"
+      },
+      {
+        "year": 1261,
+        "event": "コンスタンティノープル奪還（パレオロゴス朝）"
+      },
+      {
+        "year": 1453,
+        "event": "オスマン帝国によるコンスタンティノープル陥落"
+      }
+    ]
+  }
+}

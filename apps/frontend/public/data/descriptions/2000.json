@@ -1,1 +1,412 @@
-{"austria":{"id":"Austria_2000","name":"オーストリア","year":2000,"facts":["首都: ウィーン","政体: 共和制"],"keyEvents":[{"year":1918,"event":"第一共和国成立"},{"year":1938,"event":"ナチス・ドイツに併合"},{"year":1955,"event":"主権回復"}],"aiGenerated":true},"china":{"id":"China_2000","name":"中国","year":2000,"facts":["首都: 北京","政体: 共和制"],"keyEvents":[{"year":1949,"event":"中華人民共和国成立"},{"year":1978,"event":"改革開放政策開始"}],"aiGenerated":true},"egypt":{"id":"Egypt_2000","name":"古代エジプト","year":2000,"facts":["首都: メンフィス/テーベ","政体: ファラオ制","文明: ナイル川流域"],"keyEvents":[{"year":-3100,"event":"上下エジプト統一（ナルメル王）"},{"year":-2686,"event":"古王国時代開始（第3王朝）"},{"year":-2560,"event":"ギザの大ピラミッド建設（クフ王）"},{"year":-2055,"event":"中王国時代開始（メンチュヘテプ2世）"},{"year":-1550,"event":"新王国時代開始（アフモス1世）"},{"year":-1479,"event":"トトメス3世即位、最大版図へ"},{"year":-1353,"event":"アマルナ改革（アメンホテプ4世）"},{"year":-1274,"event":"カデシュの戦い（対ヒッタイト）"},{"year":-1069,"event":"新王国崩壊、第三中間期開始"},{"year":-671,"event":"アッシリアによる征服"},{"year":-525,"event":"ペルシアによる征服（カンビュセス2世）"},{"year":-332,"event":"アレクサンドロス大王による征服"},{"year":-30,"event":"ローマに併合（クレオパトラ死去）"}],"aiGenerated":true},"ethiopia":{"id":"Ethiopia_2000","name":"エチオピア","year":2000,"facts":["首都: アディスアベバ","政体: 帝政/共和制"],"keyEvents":[{"year":1896,"event":"アドワの戦いでイタリアに勝利"},{"year":1974,"event":"帝政廃止"}],"aiGenerated":true},"france":{"id":"France_2000","name":"フランス","year":2000,"facts":["首都: パリ","政体: 共和制","大統領: 第五共和制（1958年〜）"],"keyEvents":[{"year":1643,"event":"ルイ14世即位"},{"year":1789,"event":"フランス革命"},{"year":1958,"event":"第五共和制成立"}],"aiGenerated":true},"germany":{"id":"Germany_2000","name":"ドイツ","year":2000,"facts":["首都: ベルリン","政体: 連邦共和制"],"keyEvents":[{"year":1949,"event":"東西分裂"},{"year":1990,"event":"東西ドイツ統一"}],"aiGenerated":true},"india":{"id":"India_2000","name":"インド","year":2000,"facts":["首都: ニューデリー","政体: 連邦共和制"],"keyEvents":[{"year":1947,"event":"イギリスから独立"},{"year":1950,"event":"インド共和国憲法施行"}],"aiGenerated":true},"japan":{"id":"Japan_2000","name":"日本","year":2000,"facts":["首都: 東京","天皇: 平成天皇/令和天皇","政体: 立憲君主制（象徴天皇制）","人口: 約1億2000万人"],"keyEvents":[{"year":1947,"event":"日本国憲法施行"},{"year":1964,"event":"東京オリンピック開催"}],"aiGenerated":true},"korea-democratic-peoples-republic-of":{"id":"Korea,_Democratic_Peoples_Republic_of_2000","name":"Korea, Democratic People's Republic of","year":2000,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"korea-republic-of":{"id":"Korea,_Republic_of_2000","name":"Korea, Republic of","year":2000,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"mongolia":{"id":"Mongolia_2000","name":"モンゴル","year":2000,"facts":["首都: ウランバートル","政体: 共和制"],"keyEvents":[{"year":1924,"event":"モンゴル人民共和国成立"},{"year":1990,"event":"民主化"}],"aiGenerated":true},"poland":{"id":"Poland_2000","name":"ポーランド","year":2000,"facts":["首都: ワルシャワ","政体: 共和制"],"keyEvents":[{"year":1918,"event":"独立回復"},{"year":1939,"event":"ナチス・ドイツに侵攻される"},{"year":1989,"event":"民主化"}],"aiGenerated":true},"portugal":{"id":"Portugal_2000","name":"ポルトガル王国","year":2000,"facts":["首都: リスボン","政体: 王政"],"keyEvents":[{"year":1139,"event":"王国として独立"},{"year":1498,"event":"ヴァスコ・ダ・ガマがインド航路開拓"}],"aiGenerated":true},"romania":{"id":"Romania_2000","name":"Romania","year":2000,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"russia":{"id":"Russia_2000","name":"ロシア","year":2000,"facts":["首都: モスクワ","政体: 連邦共和制"],"keyEvents":[{"year":1991,"event":"ソ連崩壊、ロシア連邦成立"},{"year":2000,"event":"プーチン大統領就任"}],"aiGenerated":true},"spain":{"id":"Spain_2000","name":"スペイン王国","year":2000,"facts":["首都: マドリード","政体: 王政"],"keyEvents":[{"year":1469,"event":"カスティーリャとアラゴンの統合"},{"year":1492,"event":"グラナダ陥落、新大陸発見"},{"year":1588,"event":"無敵艦隊の敗北"}],"aiGenerated":true},"sweden":{"id":"Sweden_2000","name":"スウェーデン王国","year":2000,"facts":["首都: ストックホルム","政体: 王政"],"keyEvents":[{"year":1523,"event":"グスタフ1世が独立を達成"},{"year":1630,"event":"三十年戦争参戦"}],"aiGenerated":true},"united-states-virgin-islands":{"id":"United_States_Virgin_Islands_2000","name":"United States Virgin Islands","year":2000,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"united-states":{"id":"United_States_2000","name":"アメリカ合衆国","year":2000,"facts":["首都: ワシントンD.C.","政体: 連邦共和制"],"keyEvents":[{"year":1776,"event":"独立宣言"},{"year":1861,"event":"南北戦争開始"},{"year":1945,"event":"第二次世界大戦勝利"}],"aiGenerated":true}}
+{
+  "united-states": {
+    "name": "アメリカ合衆国",
+    "era": "現代",
+    "profile": {
+      "capital": "ワシントンD.C.",
+      "regime": "共和制",
+      "leader": "クリントン",
+      "religion": "プロテスタント"
+    },
+    "context": "IT バブルの絶頂期にあり、経済的繁栄を享受していた。唯一の超大国として世界各地の紛争に関与した。大統領選挙ではブッシュ対ゴアの接戦がフロリダ州の票の再集計問題で混乱を招いた。",
+    "keyEvents": [
+      {
+        "year": 1969,
+        "event": "アポロ11号月面着陸"
+      },
+      {
+        "year": 1989,
+        "event": "冷戦終結"
+      },
+      {
+        "year": 1991,
+        "event": "湾岸戦争"
+      },
+      {
+        "year": 1994,
+        "event": "NAFTA発効"
+      },
+      {
+        "year": 2001,
+        "event": "同時多発テロ"
+      },
+      {
+        "year": 2003,
+        "event": "イラク戦争"
+      },
+      {
+        "year": 2008,
+        "event": "世界金融危機"
+      }
+    ]
+  },
+  "spain": {
+    "name": "スペイン",
+    "era": "現代",
+    "profile": {
+      "capital": "マドリード",
+      "regime": "立憲王政",
+      "dynasty": "ブルボン朝",
+      "leader": "フアン・カルロス1世",
+      "religion": "カトリック"
+    },
+    "context": "1999年にユーロを導入し、不動産ブームを背景に経済は好調であった。一方でバスク地方の分離主義組織ETAによるテロ問題は依然として深刻な課題であった。",
+    "keyEvents": [
+      {
+        "year": 1992,
+        "event": "バルセロナオリンピック"
+      },
+      {
+        "year": 1999,
+        "event": "ユーロ導入"
+      },
+      {
+        "year": 2000,
+        "event": "ETA停戦と破棄"
+      }
+    ]
+  },
+  "germany": {
+    "name": "ドイツ",
+    "era": "現代",
+    "profile": {
+      "capital": "ベルリン",
+      "regime": "共和制",
+      "leader": "シュレーダー"
+    },
+    "context": "EU統合の深化を推進し、ユーロ導入を控えていた。コソボ紛争でNATO軍事作戦に初めて参加し、戦後の平和主義路線からの転換が議論された。首都機能がボンからベルリンに完全移転した。",
+    "keyEvents": [
+      {
+        "year": 1945,
+        "event": "ドイツ無条件降伏・東西分割"
+      },
+      {
+        "year": 1949,
+        "event": "東西ドイツ成立"
+      },
+      {
+        "year": 1961,
+        "event": "ベルリンの壁建設"
+      },
+      {
+        "year": 1989,
+        "event": "ベルリンの壁崩壊"
+      },
+      {
+        "year": 1990,
+        "event": "ドイツ再統一"
+      },
+      {
+        "year": 2002,
+        "event": "ユーロ導入"
+      },
+      {
+        "year": 2005,
+        "event": "メルケル政権発足"
+      }
+    ]
+  },
+  "italy": {
+    "name": "イタリア共和国",
+    "era": "現代",
+    "profile": {
+      "capital": "ローマ",
+      "regime": "共和政",
+      "religion": "カトリック"
+    },
+    "context": "1999年にユーロを導入し、EU統合の深化に参加した。政治的にはベルルスコーニが首相に再登板し、経済改革や司法制度をめぐる論争が続いた。",
+    "keyEvents": [
+      {
+        "year": 1999,
+        "event": "ユーロ導入"
+      },
+      {
+        "year": 2001,
+        "event": "ベルルスコーニ再登板"
+      },
+      {
+        "year": 2001,
+        "event": "ジェノヴァG8サミット"
+      }
+    ]
+  },
+  "japan": {
+    "name": "日本",
+    "era": "平成時代",
+    "profile": {
+      "capital": "東京",
+      "regime": "議院内閣制(立憲君主制)",
+      "religion": "神道・仏教"
+    },
+    "context": "2000年の日本は「失われた10年」の終盤にあり、IT革命による景気回復への期待が高まっていた。沖縄サミットが開催され、国際的な存在感を示した。",
+    "keyEvents": [
+      {
+        "year": 1995,
+        "event": "阪神・淡路大震災"
+      },
+      {
+        "year": 1997,
+        "event": "アジア通貨危機"
+      },
+      {
+        "year": 2000,
+        "event": "九州・沖縄サミット"
+      },
+      {
+        "year": 2001,
+        "event": "小泉内閣発足"
+      },
+      {
+        "year": 2011,
+        "event": "東日本大震災"
+      }
+    ]
+  },
+  "france": {
+    "name": "フランス",
+    "era": "現代",
+    "profile": {
+      "capital": "パリ",
+      "regime": "共和政",
+      "leader": "シラク"
+    },
+    "context": "EU統合の深化とともに1999年にユーロを導入し、欧州の政治的統合を推進した。国際社会ではイラク戦争への反対など独自の外交姿勢を示した。",
+    "keyEvents": [
+      {
+        "year": 1995,
+        "event": "シラク大統領就任"
+      },
+      {
+        "year": 1999,
+        "event": "ユーロ導入"
+      },
+      {
+        "year": 2000,
+        "event": "大統領任期5年への短縮"
+      }
+    ]
+  },
+  "russia": {
+    "name": "ロシア",
+    "era": "現代",
+    "profile": {
+      "capital": "モスクワ",
+      "regime": "共和制",
+      "leader": "プーチン",
+      "religion": "正教会"
+    },
+    "context": "プーチンが大統領に就任し中央集権化を推進した。第二次チェチェン紛争を継続し、エネルギー資源を背景に国際的影響力の回復を図った。オリガルヒの政治的影響力を抑制する政策を進めた。",
+    "keyEvents": [
+      {
+        "year": 1991,
+        "event": "ソビエト連邦崩壊・ロシア連邦成立"
+      },
+      {
+        "year": 1993,
+        "event": "新憲法制定"
+      },
+      {
+        "year": 1994,
+        "event": "第一次チェチェン紛争"
+      },
+      {
+        "year": 1999,
+        "event": "第二次チェチェン紛争"
+      },
+      {
+        "year": 2000,
+        "event": "プーチン大統領就任"
+      },
+      {
+        "year": 2008,
+        "event": "ジョージア紛争"
+      },
+      {
+        "year": 2014,
+        "event": "クリミア併合"
+      }
+    ]
+  },
+  "egypt": {
+    "name": "エジプト",
+    "era": "共和政期",
+    "profile": {
+      "capital": "カイロ",
+      "regime": "共和政",
+      "leader": "ムバラク",
+      "religion": "イスラーム"
+    },
+    "context": "2000年のエジプトはムバラク大統領の長期政権が約20年に達し、経済自由化が進む一方で政治的自由は制限されていた。人口は約6800万人に達し、中東地域の大国としての地位を維持していた。",
+    "keyEvents": [
+      {
+        "year": 1798,
+        "event": "ナポレオンのエジプト遠征"
+      },
+      {
+        "year": 1805,
+        "event": "ムハンマド・アリーの権力掌握"
+      },
+      {
+        "year": 1869,
+        "event": "スエズ運河開通"
+      },
+      {
+        "year": 1882,
+        "event": "イギリスによる軍事占領"
+      },
+      {
+        "year": 1922,
+        "event": "エジプト王国独立"
+      },
+      {
+        "year": 1952,
+        "event": "エジプト革命"
+      },
+      {
+        "year": 1956,
+        "event": "スエズ危機"
+      }
+    ]
+  },
+  "portugal": {
+    "name": "ポルトガル共和国",
+    "era": "現代",
+    "profile": {
+      "capital": "リスボン",
+      "regime": "共和政",
+      "leader": "グテーレス"
+    },
+    "context": "1999年にユーロを導入してEU統合の深化に参加した。同年マカオを中国に返還し、15世紀以来の海外植民地帝国の歴史に最終的な区切りをつけた。",
+    "keyEvents": [
+      {
+        "year": 1999,
+        "event": "マカオ返還、ユーロ導入"
+      },
+      {
+        "year": 2000,
+        "event": "東ティモール独立支援"
+      },
+      {
+        "year": 2001,
+        "event": "ポルト欧州文化首都"
+      }
+    ]
+  },
+  "macedonia": {
+    "name": "マケドニア共和国",
+    "profile": {
+      "capital": "スコピエ",
+      "regime": "共和政",
+      "religion": "キリスト教(東方正教会)"
+    },
+    "context": "2000年のマケドニア共和国はギリシアとの国名問題が未解決のまま、民族間の緊張が高まりつつあった。翌2001年にはアルバニア系住民との武力衝突が発生する。",
+    "keyEvents": [
+      {
+        "year": 1991,
+        "event": "ユーゴスラビアから独立"
+      },
+      {
+        "year": 1993,
+        "event": "国連加盟（旧ユーゴスラビア・マケドニア共和国として）"
+      },
+      {
+        "year": 2001,
+        "event": "アルバニア系住民との武力衝突"
+      },
+      {
+        "year": 2018,
+        "event": "プレスパ協定（北マケドニアへの改名合意）"
+      }
+    ]
+  },
+  "united-kingdom": {
+    "name": "イギリス",
+    "era": "現代",
+    "profile": {
+      "capital": "ロンドン",
+      "regime": "立憲王政",
+      "dynasty": "ウィンザー朝",
+      "leader": "エリザベス2世",
+      "religion": "プロテスタント"
+    },
+    "context": "ブレア政権のもとで1998年のベルファスト合意により北アイルランド和平が大きく進展した。スコットランド・ウェールズへの権限移譲も実施され、地方分権が進んだ。",
+    "keyEvents": [
+      {
+        "year": 1997,
+        "event": "ブレア首相就任、香港返還"
+      },
+      {
+        "year": 1998,
+        "event": "ベルファスト合意"
+      },
+      {
+        "year": 1999,
+        "event": "スコットランド・ウェールズ議会設立"
+      }
+    ]
+  },
+  "india": {
+    "name": "インド",
+    "era": "現代",
+    "profile": {
+      "capital": "ニューデリー",
+      "regime": "共和制",
+      "religion": "ヒンドゥー教・イスラーム教"
+    },
+    "context": "インドはIT産業を中心とした経済成長を遂げ、バンガロールなどが世界的なIT拠点として注目されていた。1998年の核実験により核保有国となり、パキスタンとのカシミール問題は依然として緊張が続いていた。",
+    "keyEvents": [
+      {
+        "year": 1991,
+        "event": "経済自由化政策開始"
+      },
+      {
+        "year": 1998,
+        "event": "核実験実施、国際社会から制裁"
+      },
+      {
+        "year": 1999,
+        "event": "カルギル紛争"
+      },
+      {
+        "year": 2000,
+        "event": "IT産業の急成長"
+      },
+      {
+        "year": 2001,
+        "event": "インド西部大地震"
+      }
+    ]
+  },
+  "china": {
+    "name": "中華人民共和国",
+    "era": "改革開放期",
+    "profile": {
+      "capital": "北京",
+      "regime": "社会主義共和制(一党制)",
+      "leader": "江沢民"
+    },
+    "context": "2000年の中国は急速な経済成長を続けており、WTO加盟を翌年に控えていた。西部大開発が開始され、沿海部と内陸部の格差是正が課題となっていた。",
+    "keyEvents": [
+      {
+        "year": 1989,
+        "event": "天安門事件"
+      },
+      {
+        "year": 1997,
+        "event": "香港返還"
+      },
+      {
+        "year": 1999,
+        "event": "マカオ返還"
+      },
+      {
+        "year": 2001,
+        "event": "WTO加盟"
+      },
+      {
+        "year": 2008,
+        "event": "北京オリンピック"
+      }
+    ]
+  }
+}

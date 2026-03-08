@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useEscapeKey } from '@/hooks/use-escape-key';
 import { useFocusTrap } from '@/hooks/use-focus-trap';
@@ -16,6 +16,8 @@ interface BottomSheetProps {
 export function BottomSheet({ isOpen, onClose, header, children, ...props }: BottomSheetProps) {
   const sheetRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollDown, setCanScrollDown] = useState(false);
 
   const { snap, sheetStyle, isDragging } = useBottomSheetSnap({
     isActive: isOpen,
@@ -24,10 +26,31 @@ export function BottomSheet({ isOpen, onClose, header, children, ...props }: Bot
     onClose,
   });
 
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const checkScroll = () => {
+      setCanScrollDown(el.scrollHeight - el.scrollTop - el.clientHeight > 1);
+    };
+
+    checkScroll();
+    el.addEventListener('scroll', checkScroll, { passive: true });
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(checkScroll) : null;
+    ro?.observe(el);
+
+    return () => {
+      el.removeEventListener('scroll', checkScroll);
+      ro?.disconnect();
+    };
+  }, []);
+
   useEscapeKey(isOpen, onClose);
   useFocusTrap(snap === 'expanded', sheetRef);
 
   if (!isOpen) return null;
+
+  const showFade = canScrollDown && snap !== 'collapsed';
 
   return createPortal(
     <>
@@ -56,13 +79,20 @@ export function BottomSheet({ isOpen, onClose, header, children, ...props }: Bot
           </div>
           {header}
         </div>
-        <div
-          className={cn(
-            'min-h-0 flex-1',
-            snap === 'collapsed' ? 'overflow-hidden' : 'overflow-y-auto',
-          )}
-        >
-          {children}
+        <div className="relative min-h-0 flex-1">
+          <div
+            ref={scrollRef}
+            className={cn('h-full', snap === 'collapsed' ? 'overflow-hidden' : 'overflow-y-auto')}
+          >
+            {children}
+          </div>
+          <div
+            aria-hidden="true"
+            className={cn(
+              'pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-gray-800 to-transparent transition-opacity duration-200',
+              showFade ? 'opacity-100' : 'opacity-0',
+            )}
+          />
         </div>
       </div>
     </>,

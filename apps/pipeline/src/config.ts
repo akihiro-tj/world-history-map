@@ -1,6 +1,22 @@
+import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 
 const ROOT_DIR = path.resolve(import.meta.dirname, '..');
+
+export const NOTION = {
+  getDataSourceId: (): string => {
+    return execFileSync(
+      'op',
+      ['read', 'op://dev/world-history-map-pipeline/territory-descriptions-datasource-id'],
+      { encoding: 'utf-8' },
+    ).trim();
+  },
+  getToken: (): string => {
+    return execFileSync('op', ['read', 'op://dev/world-history-map-pipeline/credential'], {
+      encoding: 'utf-8',
+    }).trim();
+  },
+} as const;
 
 export const PATHS = {
   cache: path.join(ROOT_DIR, '.cache'),

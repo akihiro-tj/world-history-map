@@ -1,1 +1,162 @@
-{"byzantine-empire":{"id":"Byzantine_Empire_1100","name":"ビザンツ帝国","year":1100,"facts":["首都: コンスタンティノープル","政体: 帝政","宗教: 東方正教会"],"keyEvents":[{"year":527,"event":"ユスティニアヌス1世が即位"},{"year":1054,"event":"東西教会分裂"},{"year":1453,"event":"コンスタンティノープル陥落"}],"aiGenerated":true},"chim-empire":{"id":"Chimú_Empire_1100","name":"Chimú Empire","year":1100,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"england":{"id":"England_1100","name":"イングランド王国","year":1100,"facts":["首都: ロンドン","政体: 王政"],"keyEvents":[{"year":1066,"event":"ノルマン征服"},{"year":1215,"event":"マグナカルタ制定"},{"year":1707,"event":"スコットランドと合併"}],"aiGenerated":true},"holy-roman-empire":{"id":"Holy_Roman_Empire_1100","name":"神聖ローマ帝国","year":1100,"facts":["首都: ウィーン","政体: 帝政（選挙王制）"],"keyEvents":[{"year":962,"event":"オットー1世が皇帝に戴冠"},{"year":1618,"event":"三十年戦争開始"},{"year":1806,"event":"解体"}],"aiGenerated":true},"huari-empire":{"id":"Huari_Empire_1100","name":"ワリ帝国","year":1100,"facts":["首都: ワリ","政体: 帝政"],"keyEvents":[{"year":500,"event":"帝国成立"},{"year":1000,"event":"崩壊"}],"aiGenerated":true},"imperial-japan-fujiwara":{"id":"Imperial_Japan_(Fujiwara)_1100","name":"日本（摂関時代）","year":1100,"facts":["首都: 平安京","政体: 摂関政治","実権: 藤原氏"],"keyEvents":[{"year":794,"event":"平安京遷都"},{"year":1016,"event":"藤原道長が摂政就任"},{"year":1086,"event":"院政開始"}],"aiGenerated":true},"khmer-empire":{"id":"Khmer_Empire_1100","name":"クメール帝国","year":1100,"facts":["首都: アンコール","政体: 神王制","文化: インド文化の影響"],"keyEvents":[{"year":802,"event":"ジャヤーヴァルマン2世が建国"},{"year":1113,"event":"アンコールワット建設開始"},{"year":1431,"event":"アユタヤに攻略される"}],"aiGenerated":true},"kingdom-of-france":{"id":"Kingdom_of_France_1100","name":"フランス王国","year":1100,"facts":["首都: パリ","政体: 王政"],"keyEvents":[{"year":987,"event":"カペー朝成立"},{"year":1337,"event":"百年戦争開始"},{"year":1789,"event":"フランス革命で王政廃止"}],"aiGenerated":true},"korea":{"id":"Korea_1100","name":"朝鮮","year":1100,"facts":["首都: 漢城","政体: 王政"],"keyEvents":[{"year":1392,"event":"李成桂が朝鮮を建国"},{"year":1592,"event":"文禄の役（壬辰倭乱）"},{"year":1910,"event":"日本に併合"}],"aiGenerated":true},"prussians":{"id":"Prussians_1100","name":"Prussians","year":1100,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"seljuk-empire":{"id":"Seljuk_Empire_1100","name":"セルジューク朝","year":1100,"facts":["首都: イスファハーン","政体: スルタン制"],"keyEvents":[{"year":1037,"event":"トゥグリル・ベクが建国"},{"year":1071,"event":"マンジケルトの戦いでビザンツに勝利"}],"aiGenerated":true},"song-empire":{"id":"Song_Empire_1100","name":"宋","year":1100,"facts":["首都: 開封","時代: 北宋","政体: 帝政（文治主義）","発明: 火薬・印刷術・羅針盤","人口: 約1億人"],"keyEvents":[{"year":960,"event":"趙匡胤が建国"},{"year":1127,"event":"靖康の変"}],"aiGenerated":true},"srivijaya-empire":{"id":"Srivijaya_Empire_1100","name":"シュリーヴィジャヤ王国","year":1100,"facts":["首都: パレンバン","政体: 王政"],"keyEvents":[{"year":650,"event":"王国成立"},{"year":1025,"event":"チョーラ朝に攻撃される"}],"aiGenerated":true},"sweden":{"id":"Sweden_1100","name":"スウェーデン王国","year":1100,"facts":["首都: ストックホルム","政体: 王政"],"keyEvents":[{"year":1523,"event":"グスタフ1世が独立を達成"},{"year":1630,"event":"三十年戦争参戦"}],"aiGenerated":true},"tiahuanaco-empire":{"id":"Tiahuanaco_Empire_1100","name":"ティワナク帝国","year":1100,"facts":["首都: ティワナク","政体: 帝政"],"keyEvents":[{"year":300,"event":"帝国成立"},{"year":1000,"event":"崩壊"}],"aiGenerated":true},"toltec-empire":{"id":"Toltec_Empire_1100","name":"Toltec Empire","year":1100,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"tu-i-tonga-empire":{"id":"Tuʻi_Tonga_Empire_1100","name":"トンガ帝国","year":1100,"facts":["首都: トンガタプ","政体: 王政"],"keyEvents":[{"year":950,"event":"海上帝国として繁栄"}],"aiGenerated":true}}
+{
+  "kingdom-of-france": {
+    "name": "フランス王国",
+    "era": "中世",
+    "profile": {
+      "capital": "パリ",
+      "regime": "王政",
+      "dynasty": "カペー朝",
+      "leader": "ルイ6世",
+      "religion": "カトリック"
+    },
+    "context": "ルイ6世は王領地内の秩序回復に努め、カペー朝の王権強化の基礎を築いた。第1回十字軍の成功がフランスの威信を高めた。",
+    "keyEvents": [
+      {
+        "year": 987,
+        "event": "カペー朝成立"
+      },
+      {
+        "year": 1095,
+        "event": "クレルモン教会会議で十字軍提唱"
+      },
+      {
+        "year": 1098,
+        "event": "シトー修道会創設"
+      },
+      {
+        "year": 1108,
+        "event": "ルイ6世即位"
+      }
+    ]
+  },
+  "korea": {
+    "name": "高麗",
+    "era": "高麗中期",
+    "profile": {
+      "capital": "開城",
+      "regime": "王政",
+      "dynasty": "王氏",
+      "religion": "仏教"
+    },
+    "context": "1100年の高麗は文宗以降の文治政治が続いた後、宮廷内の権力闘争が激化していた。仏教が国教として栄え、大蔵経の彫版事業が進められていた。",
+    "keyEvents": [
+      {
+        "year": 918,
+        "event": "高麗建国"
+      },
+      {
+        "year": 1019,
+        "event": "契丹の撃退"
+      },
+      {
+        "year": 1145,
+        "event": "三国史記の編纂"
+      },
+      {
+        "year": 1170,
+        "event": "武臣政変"
+      },
+      {
+        "year": 1231,
+        "event": "モンゴルの侵入開始"
+      }
+    ]
+  },
+  "holy-roman-empire": {
+    "name": "神聖ローマ帝国",
+    "era": "中世",
+    "profile": {
+      "regime": "選挙王政",
+      "dynasty": "ザリエル朝",
+      "leader": "ハインリヒ5世",
+      "religion": "カトリック"
+    },
+    "context": "叙任権闘争の渦中にあり、皇帝権と教皇権の対立が続いていた。1122年のヴォルムス協約に向かう過渡期。",
+    "keyEvents": [
+      {
+        "year": 1056,
+        "event": "ハインリヒ4世即位"
+      },
+      {
+        "year": 1077,
+        "event": "カノッサの屈辱"
+      },
+      {
+        "year": 1096,
+        "event": "第1回十字軍"
+      },
+      {
+        "year": 1099,
+        "event": "エルサレム王国建設"
+      }
+    ]
+  },
+  "england": {
+    "name": "イングランド",
+    "era": "中世",
+    "profile": {
+      "capital": "ロンドン",
+      "regime": "王政",
+      "dynasty": "ノルマン朝",
+      "leader": "ヘンリー1世",
+      "religion": "カトリック"
+    },
+    "context": "ノルマン征服後のイングランドはノルマン朝のもとで封建制が確立された。ヘンリー1世は行政機構の整備を進めた。",
+    "keyEvents": [
+      {
+        "year": 1066,
+        "event": "ノルマン征服、ウィリアム1世即位"
+      },
+      {
+        "year": 1086,
+        "event": "ドゥームズデイ・ブック作成"
+      },
+      {
+        "year": 1096,
+        "event": "第1回十字軍に参加"
+      },
+      {
+        "year": 1100,
+        "event": "ヘンリー1世即位"
+      }
+    ]
+  },
+  "byzantine-empire": {
+    "name": "ビザンツ帝国",
+    "era": "十字軍時代",
+    "profile": {
+      "capital": "コンスタンティノープル",
+      "regime": "帝政",
+      "dynasty": "コムネノス朝",
+      "leader": "アレクシオス1世",
+      "religion": "キリスト教(東方正教会)"
+    },
+    "context": "1100年のビザンツ帝国はコムネノス朝のアレクシオス1世のもとで再建期にあった。1071年のマンツィケルトの戦い以降失った小アジアの回復を目指し、第1回十字軍の通過に対処していた。",
+    "keyEvents": [
+      {
+        "year": 726,
+        "event": "聖像禁止令（イコノクラスム開始）"
+      },
+      {
+        "year": 843,
+        "event": "聖像崇拝の復活"
+      },
+      {
+        "year": 1054,
+        "event": "東西教会の分裂"
+      },
+      {
+        "year": 1204,
+        "event": "第4回十字軍によるコンスタンティノープル陥落"
+      },
+      {
+        "year": 1261,
+        "event": "コンスタンティノープル奪還（パレオロゴス朝）"
+      },
+      {
+        "year": 1453,
+        "event": "オスマン帝国によるコンスタンティノープル陥落"
+      }
+    ]
+  }
+}

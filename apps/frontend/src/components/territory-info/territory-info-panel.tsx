@@ -1,13 +1,17 @@
 import type { ReactNode } from 'react';
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { useEscapeKey } from '@/hooks/use-escape-key';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { cn } from '@/lib/utils';
+import type { TerritoryProfile as TerritoryProfileType } from '@/types/territory';
 import { useAppState } from '../../contexts/app-state-context';
 import { BottomSheet } from '../ui/bottom-sheet';
 import { CloseButton } from '../ui/close-button';
 import { AiNotice } from './ai-notice';
 import { useTerritoryDescription } from './hooks/use-territory-description';
+import { TerritoryContext } from './territory-context';
+import { TerritoryProfile } from './territory-profile';
+import { TerritoryTimeline } from './territory-timeline';
 
 function PanelWrapper({
   children,
@@ -34,87 +38,48 @@ function PanelWrapper({
   );
 }
 
-function PanelContent({
-  title,
+function PanelHeader({
+  name,
+  era,
   onClose,
-  children,
+  className,
 }: {
-  title: string;
+  name: string;
+  era?: string | undefined;
   onClose: () => void;
-  children?: ReactNode;
+  className?: string;
 }) {
   return (
-    <>
-      <div className="flex items-center justify-between border-b border-gray-600 pb-3">
+    <div
+      className={cn('flex items-start justify-between border-b border-gray-600 pb-3', className)}
+    >
+      <div className="min-w-0 flex-1">
         <h2 id="territory-info-title" className="text-lg font-semibold text-white">
-          {title}
+          {name}
         </h2>
-        <CloseButton onClick={onClose} aria-label="閉じる" />
+        {era && <p className="mt-0.5 text-sm text-gray-300">{era}</p>}
       </div>
-      {children}
-    </>
-  );
-}
-
-function PanelHeader({ title, onClose }: { title: string; onClose: () => void }) {
-  return (
-    <div className="flex items-center justify-between border-b border-gray-600 px-4 pb-3">
-      <h2 id="territory-info-title" className="text-lg font-semibold text-white">
-        {title}
-      </h2>
       <CloseButton onClick={onClose} aria-label="閉じる" />
     </div>
   );
 }
 
 function DescriptionBody({
-  description,
-  sortedKeyEvents,
+  profile,
+  context,
+  keyEvents,
+  selectedYear,
 }: {
-  description: NonNullable<ReturnType<typeof useTerritoryDescription>['description']>;
-  sortedKeyEvents: { year: number; event: string }[];
+  profile?: TerritoryProfileType;
+  context?: string;
+  keyEvents?: import('@/types/territory').KeyEvent[];
+  selectedYear: number;
 }) {
   return (
-    <div data-testid="territory-description" className="space-y-4 p-4">
-      <div className="flex items-center gap-2">
-        <span className="rounded-full bg-blue-600 px-3 py-1 text-sm font-medium text-white">
-          {description.year}年
-        </span>
-      </div>
-
-      {description.facts.length > 0 && (
-        <div>
-          <h3 className="mb-2 text-sm font-semibold text-white">基本情報</h3>
-          <ul className="space-y-1 text-sm text-gray-300">
-            {description.facts.map((fact) => (
-              <li key={fact}>{fact}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {sortedKeyEvents.length > 0 && (
-        <div>
-          <h3 className="mb-2 text-sm font-semibold text-white">主な出来事</h3>
-          <ul className="relative space-y-2.5 border-l-2 border-blue-600 pl-4">
-            {sortedKeyEvents.map((keyEvent) => (
-              <li
-                key={`${keyEvent.year}-${keyEvent.event}`}
-                className="relative text-sm text-gray-300"
-              >
-                <span
-                  className="absolute -left-[1.3rem] top-1.5 h-2 w-2 rounded-full bg-blue-400"
-                  aria-hidden="true"
-                />
-                <span className="font-medium text-gray-100">{keyEvent.year}年</span>
-                <span className="mx-1.5 text-gray-400">—</span>
-                {keyEvent.event}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
+    <div data-testid="territory-description" className="space-y-3 px-4 pt-2 pb-4">
+      <TerritoryProfile profile={profile} />
+      <TerritoryContext context={context} />
+      <TerritoryTimeline keyEvents={keyEvents} selectedYear={selectedYear} />
       <AiNotice className="mt-4" />
     </div>
   );
@@ -137,12 +102,6 @@ export function TerritoryInfoPanel() {
 
   useEscapeKey(isInfoPanelOpen && !isMobile, handleClose);
 
-  const sortedKeyEvents = useMemo(
-    () =>
-      description?.keyEvents ? [...description.keyEvents].sort((a, b) => a.year - b.year) : [],
-    [description?.keyEvents],
-  );
-
   if (!isInfoPanelOpen) {
     return null;
   }
@@ -154,7 +113,21 @@ export function TerritoryInfoPanel() {
       : (description?.name ?? selectedTerritory ?? '領土情報');
 
   if (isMobile) {
-    const header = <PanelHeader title={title} onClose={handleClose} />;
+    const header = description ? (
+      <PanelHeader
+        name={description.name}
+        era={description.era}
+        onClose={handleClose}
+        className="px-4"
+      />
+    ) : (
+      <div className="flex items-center justify-between border-b border-gray-600 px-4 pb-3">
+        <h2 id="territory-info-title" className="text-lg font-semibold text-white">
+          {title}
+        </h2>
+        <CloseButton onClick={handleClose} aria-label="閉じる" />
+      </div>
+    );
 
     let body: ReactNode;
     if (isLoading) {
@@ -172,7 +145,14 @@ export function TerritoryInfoPanel() {
         </div>
       );
     } else {
-      body = <DescriptionBody description={description} sortedKeyEvents={sortedKeyEvents} />;
+      body = (
+        <DescriptionBody
+          {...(description.profile !== undefined && { profile: description.profile })}
+          {...(description.context !== undefined && { context: description.context })}
+          {...(description.keyEvents !== undefined && { keyEvents: description.keyEvents })}
+          selectedYear={selectedYear}
+        />
+      );
     }
 
     return (
@@ -188,83 +168,57 @@ export function TerritoryInfoPanel() {
   }
 
   const loadingContent = (
-    <div className="flex items-center justify-center py-8">
-      <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
-    </div>
+    <PanelWrapper busy>
+      <div className="flex items-start justify-between border-b border-gray-600 pb-3">
+        <h2 id="territory-info-title" className="text-lg font-semibold text-white">
+          {title}
+        </h2>
+      </div>
+      <div className="flex items-center justify-center py-8">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
+      </div>
+    </PanelWrapper>
   );
 
   const errorContent = (
-    <PanelContent title="エラー" onClose={handleClose}>
+    <PanelWrapper>
+      <div className="flex items-start justify-between border-b border-gray-600 pb-3">
+        <h2 id="territory-info-title" className="text-lg font-semibold text-white">
+          エラー
+        </h2>
+        <CloseButton onClick={handleClose} aria-label="閉じる" />
+      </div>
       <p className="mt-4 text-red-400">{error}</p>
-    </PanelContent>
+    </PanelWrapper>
   );
 
   const noDescriptionContent = (
-    <PanelContent title={selectedTerritory ?? '領土情報'} onClose={handleClose}>
+    <PanelWrapper>
+      <div className="flex items-start justify-between border-b border-gray-600 pb-3">
+        <h2 id="territory-info-title" className="text-lg font-semibold text-white">
+          {selectedTerritory ?? '領土情報'}
+        </h2>
+        <CloseButton onClick={handleClose} aria-label="閉じる" />
+      </div>
       <div data-testid="no-description-message" className="mt-4 text-center text-gray-300">
         <p>この領土の詳細情報は準備中です。</p>
       </div>
-    </PanelContent>
+    </PanelWrapper>
   );
 
-  const descriptionContent = description ? (
-    <PanelContent title={description.name} onClose={handleClose}>
-      <div data-testid="territory-description" className="mt-4 space-y-4">
-        <div className="flex items-center gap-2">
-          <span className="rounded-full bg-blue-600 px-3 py-1 text-sm font-medium text-white">
-            {description.year}年
-          </span>
-        </div>
-
-        {description.facts.length > 0 && (
-          <div>
-            <h3 className="mb-2 text-sm font-semibold text-white">基本情報</h3>
-            <ul className="space-y-1 text-sm text-gray-300">
-              {description.facts.map((fact) => (
-                <li key={fact}>{fact}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {sortedKeyEvents.length > 0 && (
-          <div>
-            <h3 className="mb-2 text-sm font-semibold text-white">主な出来事</h3>
-            <ul className="relative space-y-2.5 border-l-2 border-blue-600 pl-4">
-              {sortedKeyEvents.map((keyEvent) => (
-                <li
-                  key={`${keyEvent.year}-${keyEvent.event}`}
-                  className="relative text-sm text-gray-300"
-                >
-                  <span
-                    className="absolute -left-[1.3rem] top-1.5 h-2 w-2 rounded-full bg-blue-400"
-                    aria-hidden="true"
-                  />
-                  <span className="font-medium text-gray-100">{keyEvent.year}年</span>
-                  <span className="mx-1.5 text-gray-400">—</span>
-                  {keyEvent.event}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        <AiNotice className="mt-4" />
-      </div>
-    </PanelContent>
-  ) : null;
-
-  const content = isLoading
-    ? loadingContent
-    : error
-      ? errorContent
-      : !description
-        ? noDescriptionContent
-        : descriptionContent;
+  if (isLoading) return loadingContent;
+  if (error) return errorContent;
+  if (!description) return noDescriptionContent;
 
   return (
-    <PanelWrapper scrollable={!!description} busy={isLoading}>
-      {content}
+    <PanelWrapper scrollable>
+      <PanelHeader name={description.name} era={description.era} onClose={handleClose} />
+      <div data-testid="territory-description" className="mt-4 space-y-4">
+        <TerritoryProfile profile={description.profile} />
+        <TerritoryContext context={description.context} />
+        <TerritoryTimeline keyEvents={description.keyEvents} selectedYear={selectedYear} />
+        <AiNotice className="mt-4" />
+      </div>
     </PanelWrapper>
   );
 }

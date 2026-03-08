@@ -1,1 +1,319 @@
-{"algeria-france":{"id":"Algeria_(France)_1938","name":"Algeria (France)","year":1938,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"angola-portugal":{"id":"Angola_(Portugal)_1938","name":"Angola (Portugal)","year":1938,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"british-raj":{"id":"British_Raj_1938","name":"英領インド","year":1938,"facts":["首都: カルカッタ/デリー","政体: 植民地"],"keyEvents":[{"year":1858,"event":"イギリス直轄統治開始"},{"year":1947,"event":"インド・パキスタン分離独立"}],"aiGenerated":true},"british-somaliland":{"id":"British_Somaliland_1938","name":"British Somaliland","year":1938,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"cochin-china":{"id":"Cochin_China_1938","name":"Cochin China","year":1938,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"congo-france":{"id":"Congo_(France)_1938","name":"Congo (France)","year":1938,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"dutch-east-indies":{"id":"Dutch_East_Indies_1938","name":"Dutch East Indies","year":1938,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"egypt":{"id":"Egypt_1938","name":"古代エジプト","year":1938,"facts":["首都: メンフィス/テーベ","政体: ファラオ制","文明: ナイル川流域"],"keyEvents":[{"year":-3100,"event":"上下エジプト統一（ナルメル王）"},{"year":-2686,"event":"古王国時代開始（第3王朝）"},{"year":-2560,"event":"ギザの大ピラミッド建設（クフ王）"},{"year":-2055,"event":"中王国時代開始（メンチュヘテプ2世）"},{"year":-1550,"event":"新王国時代開始（アフモス1世）"},{"year":-1479,"event":"トトメス3世即位、最大版図へ"},{"year":-1353,"event":"アマルナ改革（アメンホテプ4世）"},{"year":-1274,"event":"カデシュの戦い（対ヒッタイト）"},{"year":-1069,"event":"新王国崩壊、第三中間期開始"},{"year":-671,"event":"アッシリアによる征服"},{"year":-525,"event":"ペルシアによる征服（カンビュセス2世）"},{"year":-332,"event":"アレクサンドロス大王による征服"},{"year":-30,"event":"ローマに併合（クレオパトラ死去）"}],"aiGenerated":true},"empire-of-japan":{"id":"Empire_of_Japan_1938","name":"大日本帝国","year":1938,"facts":["首都: 東京","天皇: 昭和天皇（在位1926-1989年）","政体: 立憲君主制","状況: 軍国主義・太平洋戦争"],"keyEvents":[{"year":1868,"event":"明治維新"},{"year":1889,"event":"大日本帝国憲法発布"},{"year":1945,"event":"敗戦、連合国占領開始"}],"aiGenerated":true},"ethiopia-italy":{"id":"Ethiopia_(Italy)_1938","name":"Ethiopia (Italy)","year":1938,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"france":{"id":"France_1938","name":"フランス","year":1938,"facts":["首都: パリ","政体: 王政/共和制"],"keyEvents":[{"year":1643,"event":"ルイ14世即位"},{"year":1789,"event":"フランス革命"},{"year":1958,"event":"第五共和制成立"}],"aiGenerated":true},"french-indo-china":{"id":"French_Indo-China_1938","name":"French Indo-China","year":1938,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"germany":{"id":"Germany_1938","name":"ドイツ","year":1938,"facts":["首都: ベルリン","政体: 連邦共和制"],"keyEvents":[{"year":1949,"event":"東西分裂"},{"year":1990,"event":"東西ドイツ統一"}],"aiGenerated":true},"india":{"id":"India_1938","name":"インド","year":1938,"facts":["首都: ニューデリー","政体: 連邦共和制"],"keyEvents":[{"year":1947,"event":"イギリスから独立"},{"year":1950,"event":"インド共和国憲法施行"}],"aiGenerated":true},"madagascar-france":{"id":"Madagascar_(France)_1938","name":"Madagascar (France)","year":1938,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"morocco-france":{"id":"Morocco_(France)_1938","name":"Morocco (France)","year":1938,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"mozambique-portugal":{"id":"Mozambique_(Portugal)_1938","name":"Mozambique (Portugal)","year":1938,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"portugal":{"id":"Portugal_1938","name":"ポルトガル王国","year":1938,"facts":["首都: リスボン","政体: 王政"],"keyEvents":[{"year":1139,"event":"王国として独立"},{"year":1498,"event":"ヴァスコ・ダ・ガマがインド航路開拓"}],"aiGenerated":true},"spain":{"id":"Spain_1938","name":"スペイン王国","year":1938,"facts":["首都: マドリード","政体: 王政"],"keyEvents":[{"year":1469,"event":"カスティーリャとアラゴンの統合"},{"year":1492,"event":"グラナダ陥落、新大陸発見"},{"year":1588,"event":"無敵艦隊の敗北"}],"aiGenerated":true},"sweden":{"id":"Sweden_1938","name":"スウェーデン王国","year":1938,"facts":["首都: ストックホルム","政体: 王政"],"keyEvents":[{"year":1523,"event":"グスタフ1世が独立を達成"},{"year":1630,"event":"三十年戦争参戦"}],"aiGenerated":true},"syria-france":{"id":"Syria_(France)_1938","name":"Syria (France)","year":1938,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"united-states-virgin-islands":{"id":"United_States_Virgin_Islands_1938","name":"United States Virgin Islands","year":1938,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"united-states":{"id":"United_States_1938","name":"アメリカ合衆国","year":1938,"facts":["首都: ワシントンD.C.","政体: 連邦共和制"],"keyEvents":[{"year":1776,"event":"独立宣言"},{"year":1861,"event":"南北戦争開始"},{"year":1945,"event":"第二次世界大戦勝利"}],"aiGenerated":true}}
+{
+  "india": {
+    "name": "イギリス領インド",
+    "era": "近代",
+    "profile": {
+      "capital": "ニューデリー",
+      "regime": "植民地(イギリス領)",
+      "religion": "ヒンドゥー教・イスラーム教"
+    },
+    "context": "1935年のインド統治法により州レベルでの自治が拡大し、国民会議派が各州の選挙で勝利を収めた。ガンディーの非暴力運動とネルーの指導のもと、完全独立を求める民族運動が高揚していた。",
+    "keyEvents": [
+      {
+        "year": 1919,
+        "event": "ローラット法とアムリットサル事件"
+      },
+      {
+        "year": 1920,
+        "event": "ガンディーの非暴力・不服従運動開始"
+      },
+      {
+        "year": 1930,
+        "event": "塩の行進"
+      },
+      {
+        "year": 1935,
+        "event": "インド統治法"
+      },
+      {
+        "year": 1937,
+        "event": "州選挙で国民会議派が勝利"
+      }
+    ]
+  },
+  "germany": {
+    "name": "ドイツ",
+    "era": "近代",
+    "profile": {
+      "capital": "ベルリン",
+      "regime": "独裁制",
+      "leader": "ヒトラー"
+    },
+    "context": "ナチス・ドイツの拡張期。オーストリア併合とミュンヘン会談によるズデーテン地方獲得を実現した。イギリスのチェンバレンによる宥和政策がこれを容認し、翌年のポーランド侵攻への道が開かれた。",
+    "keyEvents": [
+      {
+        "year": 1933,
+        "event": "ヒトラー政権成立"
+      },
+      {
+        "year": 1935,
+        "event": "再軍備宣言・ニュルンベルク法"
+      },
+      {
+        "year": 1936,
+        "event": "ラインラント進駐"
+      },
+      {
+        "year": 1938,
+        "event": "オーストリア併合・ズデーテン地方併合"
+      },
+      {
+        "year": 1939,
+        "event": "第二次世界大戦開戦"
+      },
+      {
+        "year": 1945,
+        "event": "ドイツ無条件降伏"
+      }
+    ]
+  },
+  "united-states": {
+    "name": "アメリカ合衆国",
+    "era": "近代",
+    "profile": {
+      "capital": "ワシントンD.C.",
+      "regime": "共和制",
+      "leader": "フランクリン・ローズヴェルト",
+      "religion": "プロテスタント"
+    },
+    "context": "ニューディール政策により経済回復を図っていたが、景気後退にも直面した。ヨーロッパと東アジアの緊張が高まる中、中立法により参戦を回避する方針を取っていた。",
+    "keyEvents": [
+      {
+        "year": 1929,
+        "event": "世界恐慌"
+      },
+      {
+        "year": 1933,
+        "event": "ニューディール政策開始"
+      },
+      {
+        "year": 1941,
+        "event": "真珠湾攻撃・第二次世界大戦参戦"
+      },
+      {
+        "year": 1944,
+        "event": "ブレトンウッズ協定"
+      },
+      {
+        "year": 1945,
+        "event": "国際連合設立・広島長崎原爆投下"
+      }
+    ]
+  },
+  "united-kingdom": {
+    "name": "イギリス",
+    "era": "近代",
+    "profile": {
+      "capital": "ロンドン",
+      "regime": "立憲王政",
+      "dynasty": "ウィンザー朝",
+      "leader": "ジョージ6世",
+      "religion": "プロテスタント"
+    },
+    "context": "チェンバレン首相の宥和政策のもとミュンヘン会談でドイツにズデーテン地方の割譲を容認したが、ナチスの脅威は増大し続け、翌年の開戦に向けて再軍備が急がれた。",
+    "keyEvents": [
+      {
+        "year": 1919,
+        "event": "ヴェルサイユ条約"
+      },
+      {
+        "year": 1931,
+        "event": "ウェストミンスター憲章"
+      },
+      {
+        "year": 1936,
+        "event": "エドワード8世退位"
+      },
+      {
+        "year": 1938,
+        "event": "ミュンヘン会談"
+      }
+    ]
+  },
+  "ussr": {
+    "name": "ソビエト連邦",
+    "era": "近代",
+    "profile": {
+      "capital": "モスクワ",
+      "regime": "社会主義共和制",
+      "leader": "スターリン"
+    },
+    "context": "スターリンによる大粛清が猛威を振るった時期。五カ年計画による急速な工業化と農業集団化が進められた。独ソ不可侵条約の締結が翌年に控え、ナチス・ドイツとの関係が緊迫していた。",
+    "keyEvents": [
+      {
+        "year": 1922,
+        "event": "ソビエト連邦成立"
+      },
+      {
+        "year": 1924,
+        "event": "レーニン死去"
+      },
+      {
+        "year": 1928,
+        "event": "第一次五カ年計画"
+      },
+      {
+        "year": 1936,
+        "event": "スターリン憲法"
+      },
+      {
+        "year": 1939,
+        "event": "独ソ不可侵条約"
+      },
+      {
+        "year": 1941,
+        "event": "独ソ戦開始"
+      },
+      {
+        "year": 1945,
+        "event": "第二次世界大戦終結"
+      }
+    ]
+  },
+  "portugal": {
+    "name": "ポルトガル共和国",
+    "era": "近代",
+    "profile": {
+      "capital": "リスボン",
+      "regime": "権威主義体制",
+      "leader": "サラザール",
+      "religion": "カトリック"
+    },
+    "context": "サラザールのエスタド・ノヴォ体制のもとで権威主義的統治が行われていた。スペイン内戦ではフランコ側を支持した。",
+    "keyEvents": [
+      {
+        "year": 1933,
+        "event": "エスタド・ノヴォ体制確立"
+      },
+      {
+        "year": 1936,
+        "event": "スペイン内戦でフランコ支持"
+      },
+      {
+        "year": 1938,
+        "event": "ポルトガル青年団組織化"
+      }
+    ]
+  },
+  "egypt": {
+    "name": "エジプト王国",
+    "era": "立憲君主制期",
+    "profile": {
+      "capital": "カイロ",
+      "regime": "立憲君主制",
+      "dynasty": "ムハンマド・アリー朝",
+      "leader": "ファールーク1世",
+      "religion": "イスラーム"
+    },
+    "context": "1938年のエジプト王国はファールーク1世のもとで英エジプト条約（1936年）に基づく形式的独立を得ていた。しかしスエズ運河地帯のイギリス駐留は継続し、第二次世界大戦が迫っていた。",
+    "keyEvents": [
+      {
+        "year": 1798,
+        "event": "ナポレオンのエジプト遠征"
+      },
+      {
+        "year": 1805,
+        "event": "ムハンマド・アリーの権力掌握"
+      },
+      {
+        "year": 1869,
+        "event": "スエズ運河開通"
+      },
+      {
+        "year": 1882,
+        "event": "イギリスによる軍事占領"
+      },
+      {
+        "year": 1922,
+        "event": "エジプト王国独立"
+      },
+      {
+        "year": 1952,
+        "event": "エジプト革命"
+      },
+      {
+        "year": 1956,
+        "event": "スエズ危機"
+      }
+    ]
+  },
+  "spain": {
+    "name": "スペイン",
+    "era": "近代",
+    "profile": {
+      "capital": "マドリード",
+      "regime": "内戦中",
+      "leader": "フランコ",
+      "religion": "カトリック"
+    },
+    "context": "スペイン内戦の最中にあり、フランコ率いる国民戦線派が優勢となりつつあった。国際社会の介入も行われた。",
+    "keyEvents": [
+      {
+        "year": 1936,
+        "event": "スペイン内戦勃発"
+      },
+      {
+        "year": 1937,
+        "event": "ゲルニカ爆撃"
+      },
+      {
+        "year": 1938,
+        "event": "エブロ川の戦い"
+      }
+    ]
+  },
+  "italy": {
+    "name": "イタリア王国",
+    "era": "近代",
+    "profile": {
+      "capital": "ローマ",
+      "regime": "ファシスト体制",
+      "dynasty": "サヴォイア朝",
+      "leader": "ムッソリーニ",
+      "religion": "カトリック"
+    },
+    "context": "1935年のエチオピア侵攻と征服後、国際連盟の経済制裁を受けてドイツに接近しローマ・ベルリン枢軸を形成した。人種法を制定しナチスに追随する姿勢を強めた。",
+    "keyEvents": [
+      {
+        "year": 1935,
+        "event": "エチオピア侵攻"
+      },
+      {
+        "year": 1936,
+        "event": "ローマ・ベルリン枢軸成立"
+      },
+      {
+        "year": 1937,
+        "event": "日独伊防共協定"
+      },
+      {
+        "year": 1938,
+        "event": "人種法制定"
+      }
+    ]
+  },
+  "france": {
+    "name": "フランス",
+    "era": "近代",
+    "profile": {
+      "capital": "パリ",
+      "regime": "共和政",
+      "religion": "カトリック"
+    },
+    "context": "ナチス・ドイツの台頭に対してイギリスとともに宥和政策をとり、ミュンヘン会談でチェコスロヴァキアのズデーテン地方割譲を容認した。翌年の第二次世界大戦勃発が迫っていた。",
+    "keyEvents": [
+      {
+        "year": 1936,
+        "event": "人民戦線内閣成立"
+      },
+      {
+        "year": 1938,
+        "event": "ミュンヘン会談"
+      },
+      {
+        "year": 1939,
+        "event": "第二次世界大戦勃発"
+      }
+    ]
+  }
+}

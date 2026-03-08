@@ -1,1 +1,158 @@
-{"byzantine-empire":{"id":"Byzantine_Empire_1000","name":"ビザンツ帝国","year":1000,"facts":["首都: コンスタンティノープル","時代: マケドニア朝","政体: 帝政","特徴: ビザンツ黄金期、バルカン支配"],"keyEvents":[{"year":527,"event":"ユスティニアヌス1世が即位"},{"year":1054,"event":"東西教会分裂"},{"year":1453,"event":"コンスタンティノープル陥落"}],"aiGenerated":true},"chalukya-empire":{"id":"Chalukya_Empire_1000","name":"Chalukya Empire","year":1000,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"chim-empire":{"id":"Chimú_Empire_1000","name":"Chimú Empire","year":1000,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"england":{"id":"England_1000","name":"イングランド王国","year":1000,"facts":["首都: ロンドン","政体: 王政"],"keyEvents":[{"year":1066,"event":"ノルマン征服"},{"year":1215,"event":"マグナカルタ制定"},{"year":1707,"event":"スコットランドと合併"}],"aiGenerated":true},"holy-roman-empire":{"id":"Holy_Roman_Empire_1000","name":"神聖ローマ帝国","year":1000,"facts":["首都: ウィーン","政体: 帝政（選挙王制）"],"keyEvents":[{"year":962,"event":"オットー1世が皇帝に戴冠"},{"year":1618,"event":"三十年戦争開始"},{"year":1806,"event":"解体"}],"aiGenerated":true},"huari-empire":{"id":"Huari_Empire_1000","name":"ワリ帝国","year":1000,"facts":["首都: ワリ","政体: 帝政"],"keyEvents":[{"year":500,"event":"帝国成立"},{"year":1000,"event":"崩壊"}],"aiGenerated":true},"imperial-japan-fujiwara":{"id":"Imperial_Japan_(Fujiwara)_1000","name":"日本（摂関時代）","year":1000,"facts":["首都: 平安京（京都）","政体: 摂関政治","摂政/関白: 藤原氏","特徴: 藤原氏全盛期、国風文化","文化: 源氏物語、枕草子"],"keyEvents":[{"year":794,"event":"平安京遷都"},{"year":1016,"event":"藤原道長が摂政就任"},{"year":1086,"event":"院政開始"}],"aiGenerated":true},"khmer-empire":{"id":"Khmer_Empire_1000","name":"クメール帝国","year":1000,"facts":["首都: アンコール","政体: 神王制","文化: インド文化の影響"],"keyEvents":[{"year":802,"event":"ジャヤーヴァルマン2世が建国"},{"year":1113,"event":"アンコールワット建設開始"},{"year":1431,"event":"アユタヤに攻略される"}],"aiGenerated":true},"kingdom-of-france":{"id":"Kingdom_of_France_1000","name":"フランス王国","year":1000,"facts":["首都: パリ","政体: 王政"],"keyEvents":[{"year":987,"event":"カペー朝成立"},{"year":1337,"event":"百年戦争開始"},{"year":1789,"event":"フランス革命で王政廃止"}],"aiGenerated":true},"korea":{"id":"Korea_1000","name":"朝鮮","year":1000,"facts":["首都: 漢城","政体: 王政"],"keyEvents":[{"year":1392,"event":"李成桂が朝鮮を建国"},{"year":1592,"event":"文禄の役（壬辰倭乱）"},{"year":1910,"event":"日本に併合"}],"aiGenerated":true},"prussians":{"id":"Prussians_1000","name":"Prussians","year":1000,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"song-empire":{"id":"Song_Empire_1000","name":"宋","year":1000,"facts":["首都: 開封","時代: 北宋","政体: 帝政（文治主義）","発明: 火薬・印刷術・羅針盤","人口: 約1億人"],"keyEvents":[{"year":960,"event":"趙匡胤が建国"},{"year":1127,"event":"靖康の変"}],"aiGenerated":true},"srivijaya-empire":{"id":"Srivijaya_Empire_1000","name":"シュリーヴィジャヤ王国","year":1000,"facts":["首都: パレンバン","政体: 王政"],"keyEvents":[{"year":650,"event":"王国成立"},{"year":1025,"event":"チョーラ朝に攻撃される"}],"aiGenerated":true},"sweden":{"id":"Sweden_1000","name":"スウェーデン王国","year":1000,"facts":["首都: ストックホルム","政体: 王政"],"keyEvents":[{"year":1523,"event":"グスタフ1世が独立を達成"},{"year":1630,"event":"三十年戦争参戦"}],"aiGenerated":true},"tiahuanaco-empire":{"id":"Tiahuanaco_Empire_1000","name":"ティワナク帝国","year":1000,"facts":["首都: ティワナク","政体: 帝政"],"keyEvents":[{"year":300,"event":"帝国成立"},{"year":1000,"event":"崩壊"}],"aiGenerated":true},"toltec-empire":{"id":"Toltec_Empire_1000","name":"Toltec Empire","year":1000,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"tu-i-tonga-empire":{"id":"Tuʻi_Tonga_Empire_1000","name":"トンガ帝国","year":1000,"facts":["首都: トンガタプ","政体: 王政"],"keyEvents":[{"year":950,"event":"海上帝国として繁栄"}],"aiGenerated":true}}
+{
+  "korea": {
+    "name": "高麗",
+    "era": "高麗中期",
+    "profile": {
+      "capital": "開城",
+      "regime": "王政",
+      "dynasty": "王氏",
+      "religion": "仏教"
+    },
+    "context": "1000年の高麗は成宗・穆宗の治世を経た時期にあたり、契丹(遼)の侵攻に直面していた。科挙制度が導入され、中央集権体制の整備が進められていた。",
+    "keyEvents": [
+      {
+        "year": 918,
+        "event": "王建が高麗を建国"
+      },
+      {
+        "year": 958,
+        "event": "科挙制度の導入"
+      },
+      {
+        "year": 993,
+        "event": "契丹の第1次侵入"
+      },
+      {
+        "year": 1019,
+        "event": "契丹の第3次侵入を撃退"
+      },
+      {
+        "year": 1170,
+        "event": "武臣政変"
+      }
+    ]
+  },
+  "holy-roman-empire": {
+    "name": "神聖ローマ帝国",
+    "era": "中世",
+    "profile": {
+      "capital": "アーヘン",
+      "regime": "選挙王政",
+      "dynasty": "ザクセン朝",
+      "leader": "オットー3世",
+      "religion": "カトリック"
+    },
+    "context": "オットー朝のもとで帝国は最盛期にあった。皇帝と教皇の協調関係が維持され、帝国教会政策が展開されていた。",
+    "keyEvents": [
+      {
+        "year": 800,
+        "event": "カール大帝の戴冠"
+      },
+      {
+        "year": 843,
+        "event": "ヴェルダン条約による分裂"
+      },
+      {
+        "year": 962,
+        "event": "オットー1世の帝冠、神聖ローマ帝国成立"
+      },
+      {
+        "year": 996,
+        "event": "オットー3世のローマ遠征"
+      }
+    ]
+  },
+  "byzantine-empire": {
+    "name": "ビザンツ帝国",
+    "era": "マケドニア朝最盛期",
+    "profile": {
+      "capital": "コンスタンティノープル",
+      "regime": "帝政",
+      "dynasty": "マケドニア朝",
+      "leader": "バシレイオス2世",
+      "religion": "キリスト教(東方正教会)"
+    },
+    "context": "1000年のビザンツ帝国はバシレイオス2世のもとでマケドニア朝の最盛期にあった。ブルガリア帝国との戦争に勝利し、バルカン半島の支配を確立した。",
+    "keyEvents": [
+      {
+        "year": 726,
+        "event": "聖像禁止令（イコノクラスム開始）"
+      },
+      {
+        "year": 843,
+        "event": "聖像崇拝の復活"
+      },
+      {
+        "year": 1054,
+        "event": "東西教会の分裂"
+      },
+      {
+        "year": 1204,
+        "event": "第4回十字軍によるコンスタンティノープル陥落"
+      },
+      {
+        "year": 1261,
+        "event": "コンスタンティノープル奪還（パレオロゴス朝）"
+      },
+      {
+        "year": 1453,
+        "event": "オスマン帝国によるコンスタンティノープル陥落"
+      }
+    ]
+  },
+  "kingdom-of-france": {
+    "name": "フランス王国",
+    "era": "中世",
+    "profile": {
+      "capital": "パリ",
+      "regime": "王政",
+      "dynasty": "カペー朝",
+      "religion": "カトリック"
+    },
+    "context": "カペー朝初期のフランス王権は弱く、実効支配はイル・ド・フランス周辺に限られていた。各地の諸侯が強大な力を持っていた。",
+    "keyEvents": [
+      {
+        "year": 843,
+        "event": "ヴェルダン条約によるフランク王国分裂"
+      },
+      {
+        "year": 911,
+        "event": "ノルマンディー公国成立"
+      },
+      {
+        "year": 987,
+        "event": "ユーグ・カペー即位、カペー朝成立"
+      }
+    ]
+  },
+  "england": {
+    "name": "イングランド",
+    "era": "中世",
+    "profile": {
+      "capital": "ロンドン",
+      "regime": "王政",
+      "dynasty": "ウェセックス朝",
+      "leader": "エセルレッド2世",
+      "religion": "カトリック"
+    },
+    "context": "デーン人の侵攻に苦しみ、デーンゲルドを支払って和平を図った時代。エセルレッド2世の治世は混乱が続いた。",
+    "keyEvents": [
+      {
+        "year": 829,
+        "event": "エグバートによるイングランド統一"
+      },
+      {
+        "year": 871,
+        "event": "アルフレッド大王即位"
+      },
+      {
+        "year": 1016,
+        "event": "クヌートによるデーン朝成立"
+      },
+      {
+        "year": 1042,
+        "event": "エドワード懺悔王即位によるウェセックス朝復活"
+      }
+    ]
+  }
+}

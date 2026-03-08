@@ -1,1 +1,204 @@
-{"aztec-empire":{"id":"Aztec_Empire_1500","name":"アステカ帝国","year":1500,"facts":["首都: テノチティトラン","政体: 帝政"],"keyEvents":[{"year":1428,"event":"アステカ三国同盟成立"},{"year":1521,"event":"コルテスにより滅亡"}],"aiGenerated":true},"england":{"id":"England_1500","name":"イングランド王国","year":1500,"facts":["首都: ロンドン","政体: 王政"],"keyEvents":[{"year":1066,"event":"ノルマン征服"},{"year":1215,"event":"マグナカルタ制定"},{"year":1707,"event":"スコットランドと合併"}],"aiGenerated":true},"ethiopia":{"id":"Ethiopia_1500","name":"エチオピア","year":1500,"facts":["首都: アディスアベバ","政体: 帝政/共和制"],"keyEvents":[{"year":1896,"event":"アドワの戦いでイタリアに勝利"},{"year":1974,"event":"帝政廃止"}],"aiGenerated":true},"france":{"id":"France_1500","name":"フランス","year":1500,"facts":["首都: パリ","政体: 王政/共和制"],"keyEvents":[{"year":1643,"event":"ルイ14世即位"},{"year":1789,"event":"フランス革命"},{"year":1958,"event":"第五共和制成立"}],"aiGenerated":true},"hafsid-caliphate":{"id":"Hafsid_Caliphate_1500","name":"Hafsid Caliphate","year":1500,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"holy-roman-empire":{"id":"Holy_Roman_Empire_1500","name":"神聖ローマ帝国","year":1500,"facts":["首都: ウィーン","政体: 帝政（選挙王制）"],"keyEvents":[{"year":962,"event":"オットー1世が皇帝に戴冠"},{"year":1618,"event":"三十年戦争開始"},{"year":1806,"event":"解体"}],"aiGenerated":true},"inca-empire":{"id":"Inca_Empire_1500","name":"インカ帝国","year":1500,"facts":["首都: クスコ","政体: 帝政"],"keyEvents":[{"year":1438,"event":"パチャクティ即位、帝国拡大"},{"year":1533,"event":"ピサロにより滅亡"}],"aiGenerated":true},"japan":{"id":"Japan_1500","name":"日本","year":1500,"facts":["首都: 東京","政体: 立憲君主制"],"keyEvents":[{"year":1947,"event":"日本国憲法施行"},{"year":1964,"event":"東京オリンピック開催"}],"aiGenerated":true},"korea":{"id":"Korea_1500","name":"朝鮮","year":1500,"facts":["首都: 漢城（ソウル）","王朝: 李氏朝鮮","政体: 王政","思想: 儒教（朱子学）"],"keyEvents":[{"year":1392,"event":"李成桂が朝鮮を建国"},{"year":1592,"event":"文禄の役（壬辰倭乱）"},{"year":1910,"event":"日本に併合"}],"aiGenerated":true},"ming-chinese-empire":{"id":"Ming_Chinese_Empire_1500","name":"明","year":1500,"facts":["首都: 北京","政体: 帝政"],"keyEvents":[{"year":1368,"event":"朱元璋が建国"},{"year":1405,"event":"鄭和の大航海開始"}],"aiGenerated":true},"mixtec-empire":{"id":"Mixtec_Empire_1500","name":"Mixtec Empire","year":1500,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"ottoman-empire":{"id":"Ottoman_Empire_1500","name":"オスマン帝国","year":1500,"facts":["首都: イスタンブール","政体: スルタン制","宗教: イスラム教スンナ派"],"keyEvents":[{"year":1299,"event":"オスマン1世が建国"},{"year":1453,"event":"コンスタンティノープル征服"},{"year":1922,"event":"滅亡"}],"aiGenerated":true},"poland-lithuania":{"id":"Poland-Lithuania_1500","name":"Poland-Lithuania","year":1500,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"portugal":{"id":"Portugal_1500","name":"ポルトガル王国","year":1500,"facts":["首都: リスボン","政体: 王政"],"keyEvents":[{"year":1139,"event":"王国として独立"},{"year":1498,"event":"ヴァスコ・ダ・ガマがインド航路開拓"}],"aiGenerated":true},"tu-i-tonga-empire":{"id":"Tuʻi_Tonga_Empire_1500","name":"トンガ帝国","year":1500,"facts":["首都: トンガタプ","政体: 王政"],"keyEvents":[{"year":950,"event":"海上帝国として繁栄"}],"aiGenerated":true}}
+{
+  "japan": {
+    "name": "日本",
+    "era": "室町時代(戦国期)",
+    "profile": {
+      "capital": "京都",
+      "regime": "幕府制",
+      "religion": "仏教"
+    },
+    "context": "1500年の日本は戦国時代の初期にあたり、室町幕府の権威は有名無実化していた。各地で下剋上が進み、守護大名に代わって戦国大名が台頭しつつあった。",
+    "keyEvents": [
+      {
+        "year": 1467,
+        "event": "応仁の乱"
+      },
+      {
+        "year": 1543,
+        "event": "鉄砲伝来"
+      },
+      {
+        "year": 1549,
+        "event": "フランシスコ・ザビエル来日"
+      },
+      {
+        "year": 1573,
+        "event": "室町幕府滅亡"
+      },
+      {
+        "year": 1590,
+        "event": "豊臣秀吉が全国統一"
+      }
+    ]
+  },
+  "korea": {
+    "name": "朝鮮",
+    "era": "朝鮮王朝前期",
+    "profile": {
+      "capital": "漢城(ソウル)",
+      "regime": "王政",
+      "dynasty": "李氏",
+      "leader": "燕山君",
+      "religion": "儒教(朱子学)"
+    },
+    "context": "1500年の朝鮮は燕山君の治世にあたり、士禍(士林派への弾圧)が発生していた。儒教的統治が揺らぎ、暴政により1506年に中宗反正で廃位される。",
+    "keyEvents": [
+      {
+        "year": 1392,
+        "event": "朝鮮建国"
+      },
+      {
+        "year": 1443,
+        "event": "訓民正音の創製"
+      },
+      {
+        "year": 1498,
+        "event": "戊午士禍"
+      },
+      {
+        "year": 1506,
+        "event": "中宗反正"
+      },
+      {
+        "year": 1592,
+        "event": "文禄の役"
+      }
+    ]
+  },
+  "france": {
+    "name": "フランス王国",
+    "era": "近世",
+    "profile": {
+      "capital": "パリ",
+      "regime": "王政",
+      "dynasty": "ヴァロワ朝",
+      "leader": "ルイ12世",
+      "religion": "カトリック"
+    },
+    "context": "イタリア戦争が継続し、フランスはイタリア半島への領土拡大を目指していた。国内では王権がさらに強化されていた。",
+    "keyEvents": [
+      {
+        "year": 1494,
+        "event": "イタリア戦争開始"
+      },
+      {
+        "year": 1498,
+        "event": "ルイ12世即位"
+      },
+      {
+        "year": 1500,
+        "event": "ミラノ公国征服"
+      }
+    ]
+  },
+  "portugal": {
+    "name": "ポルトガル王国",
+    "era": "近世",
+    "profile": {
+      "capital": "リスボン",
+      "regime": "王政",
+      "dynasty": "アヴィス朝",
+      "leader": "マヌエル1世",
+      "religion": "カトリック"
+    },
+    "context": "ヴァスコ・ダ・ガマのインド航路発見とカブラルのブラジル到達により、海洋帝国としての基盤が確立された。",
+    "keyEvents": [
+      {
+        "year": 1494,
+        "event": "トルデシリャス条約"
+      },
+      {
+        "year": 1498,
+        "event": "ヴァスコ・ダ・ガマのインド到達"
+      },
+      {
+        "year": 1500,
+        "event": "カブラルのブラジル到達"
+      }
+    ]
+  },
+  "ottoman-empire": {
+    "name": "オスマン帝国",
+    "era": "近世",
+    "profile": {
+      "capital": "イスタンブール",
+      "regime": "スルタン制",
+      "leader": "バヤズィト2世",
+      "religion": "イスラーム教（スンナ派）"
+    },
+    "context": "オスマン帝国は東地中海からバルカン半島、アナトリアにかけて広大な領土を支配していた。サファヴィー朝の台頭により東方国境の緊張が高まり、帝国内のシーア派問題が政治課題となっていた。",
+    "keyEvents": [
+      {
+        "year": 1453,
+        "event": "コンスタンティノープル征服"
+      },
+      {
+        "year": 1475,
+        "event": "クリミア・ハン国を従属化"
+      },
+      {
+        "year": 1497,
+        "event": "ポーランドとの戦争"
+      },
+      {
+        "year": 1499,
+        "event": "ヴェネツィアとの海戦で勝利"
+      },
+      {
+        "year": 1501,
+        "event": "サファヴィー朝の成立による東方の脅威"
+      }
+    ]
+  },
+  "holy-roman-empire": {
+    "name": "神聖ローマ帝国",
+    "era": "近世",
+    "profile": {
+      "regime": "選挙王政",
+      "dynasty": "ハプスブルク家",
+      "leader": "マクシミリアン1世",
+      "religion": "カトリック"
+    },
+    "context": "マクシミリアン1世のもとで帝国改革が進行中で、帝国議会や帝国裁判所の整備など統治機構の近代化が図られた。イタリア戦争への介入により対外的な負担も増大した。",
+    "keyEvents": [
+      {
+        "year": 1495,
+        "event": "ヴォルムス帝国議会、永久ラント平和令"
+      },
+      {
+        "year": 1499,
+        "event": "シュヴァーベン戦争でスイス事実上独立"
+      },
+      {
+        "year": 1500,
+        "event": "帝国統治院の設置"
+      }
+    ]
+  },
+  "england": {
+    "name": "イングランド",
+    "era": "中世",
+    "profile": {
+      "capital": "ロンドン",
+      "regime": "王政",
+      "dynasty": "テューダー朝",
+      "leader": "ヘンリー7世",
+      "religion": "カトリック"
+    },
+    "context": "テューダー朝の安定期にあり、ヘンリー7世のもとで王権強化と商業の発展が進んだ。毛織物貿易が拡大し、大航海時代の影響を受けて海外探検にも乗り出し始めた。",
+    "keyEvents": [
+      {
+        "year": 1485,
+        "event": "ヘンリー7世即位、テューダー朝成立"
+      },
+      {
+        "year": 1497,
+        "event": "ジョン・カボットの北米探検"
+      },
+      {
+        "year": 1499,
+        "event": "パーキン・ウォーベックの反乱鎮圧"
+      }
+    ]
+  }
+}

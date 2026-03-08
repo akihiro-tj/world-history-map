@@ -1,1 +1,279 @@
-{"anglo-egyption-sudan":{"id":"Anglo-Egyption_Sudan_1914","name":"Anglo-Egyption Sudan","year":1914,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"austro-hungarian-empire":{"id":"Austro-Hungarian_Empire_1914","name":"オーストリア＝ハンガリー帝国","year":1914,"facts":["首都: ウィーン","政体: 帝政"],"keyEvents":[{"year":1867,"event":"二重帝国成立"},{"year":1914,"event":"第一次世界大戦開戦"}],"aiGenerated":true},"british-east-africa":{"id":"British_East_Africa_1914","name":"British East Africa","year":1914,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"british-protectorate":{"id":"British_Protectorate_1914","name":"British Protectorate","year":1914,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"british-raj":{"id":"British_Raj_1914","name":"英領インド","year":1914,"facts":["首都: カルカッタ/デリー","政体: 植民地"],"keyEvents":[{"year":1858,"event":"イギリス直轄統治開始"},{"year":1947,"event":"インド・パキスタン分離独立"}],"aiGenerated":true},"british-somaliland":{"id":"British_Somaliland_1914","name":"British Somaliland","year":1914,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"egypt":{"id":"Egypt_1914","name":"古代エジプト","year":1914,"facts":["首都: メンフィス/テーベ","政体: ファラオ制","文明: ナイル川流域"],"keyEvents":[{"year":-3100,"event":"上下エジプト統一（ナルメル王）"},{"year":-2686,"event":"古王国時代開始（第3王朝）"},{"year":-2560,"event":"ギザの大ピラミッド建設（クフ王）"},{"year":-2055,"event":"中王国時代開始（メンチュヘテプ2世）"},{"year":-1550,"event":"新王国時代開始（アフモス1世）"},{"year":-1479,"event":"トトメス3世即位、最大版図へ"},{"year":-1353,"event":"アマルナ改革（アメンホテプ4世）"},{"year":-1274,"event":"カデシュの戦い（対ヒッタイト）"},{"year":-1069,"event":"新王国崩壊、第三中間期開始"},{"year":-671,"event":"アッシリアによる征服"},{"year":-525,"event":"ペルシアによる征服（カンビュセス2世）"},{"year":-332,"event":"アレクサンドロス大王による征服"},{"year":-30,"event":"ローマに併合（クレオパトラ死去）"}],"aiGenerated":true},"empire-of-japan":{"id":"Empire_of_Japan_1914","name":"大日本帝国","year":1914,"facts":["首都: 東京","天皇: 昭和天皇","政体: 立憲君主制"],"keyEvents":[{"year":1868,"event":"明治維新"},{"year":1889,"event":"大日本帝国憲法発布"},{"year":1945,"event":"敗戦、連合国占領開始"}],"aiGenerated":true},"france":{"id":"France_1914","name":"フランス","year":1914,"facts":["首都: パリ","政体: 王政/共和制"],"keyEvents":[{"year":1643,"event":"ルイ14世即位"},{"year":1789,"event":"フランス革命"},{"year":1958,"event":"第五共和制成立"}],"aiGenerated":true},"german-empire":{"id":"German_Empire_1914","name":"ドイツ帝国","year":1914,"facts":["首都: ベルリン","皇帝: ヴィルヘルム2世（在位1888-1918年）","政体: 立憲君主制","政策: 世界政策、海軍拡張","危機: 第一次世界大戦（1914-1918年）"],"keyEvents":[{"year":1871,"event":"ヴィルヘルム1世が皇帝に即位"},{"year":1914,"event":"第一次世界大戦開戦"},{"year":1918,"event":"帝政廃止"}],"aiGenerated":true},"madagascar-france":{"id":"Madagascar_(France)_1914","name":"Madagascar (France)","year":1914,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"manchu-empire":{"id":"Manchu_Empire_1914","name":"清","year":1914,"facts":["首都: 北京","政体: 帝政（満洲族王朝）","民族: 満洲族支配"],"keyEvents":[{"year":1644,"event":"北京入城、中国支配開始"},{"year":1661,"event":"康熙帝即位"},{"year":1912,"event":"滅亡"}],"aiGenerated":true},"ottoman-empire":{"id":"Ottoman_Empire_1914","name":"オスマン帝国","year":1914,"facts":["首都: イスタンブール","政体: スルタン制","宗教: イスラム教スンナ派"],"keyEvents":[{"year":1299,"event":"オスマン1世が建国"},{"year":1453,"event":"コンスタンティノープル征服"},{"year":1922,"event":"滅亡"}],"aiGenerated":true},"portugal":{"id":"Portugal_1914","name":"ポルトガル王国","year":1914,"facts":["首都: リスボン","政体: 王政"],"keyEvents":[{"year":1139,"event":"王国として独立"},{"year":1498,"event":"ヴァスコ・ダ・ガマがインド航路開拓"}],"aiGenerated":true},"russian-empire":{"id":"Russian_Empire_1914","name":"ロシア帝国","year":1914,"facts":["首都: サンクトペテルブルク","皇帝: ニコライ2世（最後の皇帝）","政体: 帝政","危機: 日露戦争敗北、第一次大革命","人口: 約1億7000万人"],"keyEvents":[{"year":1721,"event":"ピョートル1世が皇帝に即位"},{"year":1812,"event":"ナポレオンのロシア遠征撃退"},{"year":1917,"event":"ロシア革命で帝政廃止"}],"aiGenerated":true},"spain":{"id":"Spain_1914","name":"スペイン王国","year":1914,"facts":["首都: マドリード","政体: 王政"],"keyEvents":[{"year":1469,"event":"カスティーリャとアラゴンの統合"},{"year":1492,"event":"グラナダ陥落、新大陸発見"},{"year":1588,"event":"無敵艦隊の敗北"}],"aiGenerated":true},"sweden":{"id":"Sweden_1914","name":"スウェーデン王国","year":1914,"facts":["首都: ストックホルム","政体: 王政"],"keyEvents":[{"year":1523,"event":"グスタフ1世が独立を達成"},{"year":1630,"event":"三十年戦争参戦"}],"aiGenerated":true},"united-kingdom-of-great-britain-and-ireland":{"id":"United_Kingdom_of_Great_Britain_and_Ireland_1914","name":"グレートブリテン及びアイルランド連合王国","year":1914,"facts":["首都: ロンドン","政体: 立憲君主制"],"keyEvents":[{"year":1801,"event":"連合王国成立"},{"year":1837,"event":"ヴィクトリア女王即位"},{"year":1922,"event":"アイルランド自由国独立"}],"aiGenerated":true},"united-states-virgin-islands":{"id":"United_States_Virgin_Islands_1914","name":"United States Virgin Islands","year":1914,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"united-states":{"id":"United_States_1914","name":"アメリカ合衆国","year":1914,"facts":["首都: ワシントンD.C.","政体: 連邦共和制"],"keyEvents":[{"year":1776,"event":"独立宣言"},{"year":1861,"event":"南北戦争開始"},{"year":1945,"event":"第二次世界大戦勝利"}],"aiGenerated":true}}
+{
+  "spain": {
+    "name": "スペイン王国",
+    "era": "近代",
+    "profile": {
+      "capital": "マドリード",
+      "regime": "立憲王政",
+      "dynasty": "ブルボン朝",
+      "leader": "アルフォンソ13世",
+      "religion": "カトリック"
+    },
+    "context": "第一次世界大戦では中立を維持し、交戦国への物資供給による戦争特需で経済は一時的に潤った。しかしインフレや労働争議が頻発し、社会的不安定は続いた。",
+    "keyEvents": [
+      {
+        "year": 1909,
+        "event": "悲劇の一週間"
+      },
+      {
+        "year": 1912,
+        "event": "モロッコ保護領化"
+      },
+      {
+        "year": 1914,
+        "event": "中立宣言"
+      }
+    ]
+  },
+  "united-states": {
+    "name": "アメリカ合衆国",
+    "era": "近代",
+    "profile": {
+      "capital": "ワシントンD.C.",
+      "regime": "共和制",
+      "leader": "ウィルソン",
+      "religion": "プロテスタント"
+    },
+    "context": "第一次世界大戦の開戦に際して中立を宣言した。経済的にはすでに世界最大の工業国であり、連合国への物資供給で経済的利益を得ていた。ウィルソン大統領は国際協調主義を掲げていた。",
+    "keyEvents": [
+      {
+        "year": 1865,
+        "event": "南北戦争終結・奴隷制廃止"
+      },
+      {
+        "year": 1898,
+        "event": "米西戦争"
+      },
+      {
+        "year": 1914,
+        "event": "パナマ運河開通"
+      },
+      {
+        "year": 1917,
+        "event": "第一次世界大戦参戦"
+      },
+      {
+        "year": 1918,
+        "event": "ウィルソンの十四カ条"
+      },
+      {
+        "year": 1920,
+        "event": "国際連盟不参加"
+      },
+      {
+        "year": 1929,
+        "event": "世界恐慌"
+      },
+      {
+        "year": 1941,
+        "event": "第二次世界大戦参戦"
+      }
+    ]
+  },
+  "ottoman-empire": {
+    "name": "オスマン帝国",
+    "era": "近代",
+    "profile": {
+      "capital": "イスタンブール",
+      "regime": "立憲君主制",
+      "leader": "メフメト5世",
+      "religion": "イスラーム教（スンナ派）"
+    },
+    "context": "青年トルコ人革命後の統一と進歩委員会が実権を握り、帝国は第一次世界大戦にドイツ・オーストリア側で参戦した。バルカン戦争でヨーロッパ側の領土の大半を失い、帝国は崩壊の危機に瀕していた。",
+    "keyEvents": [
+      {
+        "year": 1908,
+        "event": "青年トルコ人革命"
+      },
+      {
+        "year": 1911,
+        "event": "伊土戦争でリビア喪失"
+      },
+      {
+        "year": 1912,
+        "event": "第一次バルカン戦争"
+      },
+      {
+        "year": 1913,
+        "event": "第二次バルカン戦争"
+      },
+      {
+        "year": 1914,
+        "event": "第一次世界大戦に参戦"
+      }
+    ]
+  },
+  "russian-empire": {
+    "name": "ロシア帝国",
+    "era": "近代",
+    "profile": {
+      "capital": "サンクトペテルブルク",
+      "regime": "君主制",
+      "dynasty": "ロマノフ朝",
+      "leader": "ニコライ2世",
+      "religion": "正教会"
+    },
+    "context": "第一次世界大戦に三国協商側として参戦した。汎スラヴ主義に基づきセルビアを支援し、ドイツ・オーストリアと開戦した。戦争長期化による物資不足と厭戦感情が革命の遠因となった。",
+    "keyEvents": [
+      {
+        "year": 1861,
+        "event": "農奴解放令"
+      },
+      {
+        "year": 1904,
+        "event": "日露戦争開戦"
+      },
+      {
+        "year": 1905,
+        "event": "第一次ロシア革命"
+      },
+      {
+        "year": 1914,
+        "event": "第一次世界大戦参戦"
+      },
+      {
+        "year": 1917,
+        "event": "二月革命・十月革命"
+      },
+      {
+        "year": 1918,
+        "event": "ブレスト＝リトフスク条約"
+      }
+    ]
+  },
+  "egypt": {
+    "name": "エジプト",
+    "era": "イギリス保護国期",
+    "profile": {
+      "capital": "カイロ",
+      "regime": "イギリス保護国",
+      "dynasty": "ムハンマド・アリー朝",
+      "religion": "イスラーム"
+    },
+    "context": "1914年のエジプトは第一次世界大戦の勃発に伴い、イギリスが正式に保護国化を宣言した。オスマン帝国との宗主関係が断絶され、イギリスの直接支配が強化された。",
+    "keyEvents": [
+      {
+        "year": 1798,
+        "event": "ナポレオンのエジプト遠征"
+      },
+      {
+        "year": 1805,
+        "event": "ムハンマド・アリーの権力掌握"
+      },
+      {
+        "year": 1869,
+        "event": "スエズ運河開通"
+      },
+      {
+        "year": 1882,
+        "event": "イギリスによる軍事占領"
+      },
+      {
+        "year": 1922,
+        "event": "エジプト王国独立"
+      },
+      {
+        "year": 1952,
+        "event": "エジプト革命"
+      },
+      {
+        "year": 1956,
+        "event": "スエズ危機"
+      }
+    ]
+  },
+  "portugal": {
+    "name": "ポルトガル共和国",
+    "era": "近代",
+    "profile": {
+      "capital": "リスボン",
+      "regime": "共和政",
+      "religion": "カトリック"
+    },
+    "context": "1910年の革命で王政が倒され共和政が成立したが、政権交代が頻発し政情は不安定だった。第一次世界大戦では1916年から連合国側で参戦し、西部戦線に兵力を送った。",
+    "keyEvents": [
+      {
+        "year": 1908,
+        "event": "カルロス1世暗殺"
+      },
+      {
+        "year": 1910,
+        "event": "共和政革命"
+      },
+      {
+        "year": 1911,
+        "event": "共和国憲法制定"
+      },
+      {
+        "year": 1916,
+        "event": "第一次世界大戦に参戦"
+      }
+    ]
+  },
+  "france": {
+    "name": "フランス",
+    "era": "近代",
+    "profile": {
+      "capital": "パリ",
+      "regime": "共和政",
+      "religion": "カトリック"
+    },
+    "context": "第一次世界大戦が勃発し、フランスは西部戦線の主戦場となった。マルヌの戦いでドイツ軍の進撃を食い止めたものの、塹壕戦が長期化し甚大な人的・物的被害を受けた。",
+    "keyEvents": [
+      {
+        "year": 1905,
+        "event": "政教分離法制定"
+      },
+      {
+        "year": 1907,
+        "event": "三国協商成立"
+      },
+      {
+        "year": 1914,
+        "event": "第一次世界大戦勃発、マルヌの戦い"
+      }
+    ]
+  },
+  "german-empire": {
+    "name": "ドイツ帝国",
+    "era": "近代",
+    "profile": {
+      "capital": "ベルリン",
+      "regime": "君主制",
+      "dynasty": "ホーエンツォレルン家",
+      "leader": "ヴィルヘルム2世",
+      "religion": "プロテスタント"
+    },
+    "context": "第一次世界大戦の開戦年。三国同盟の中心としてロシア・フランス・イギリスの三国協商と対立した。サラエボ事件を契機に開戦し、シュリーフェン計画に基づく西部戦線での速攻は失敗に終わった。",
+    "keyEvents": [
+      {
+        "year": 1871,
+        "event": "ドイツ帝国成立"
+      },
+      {
+        "year": 1882,
+        "event": "三国同盟結成"
+      },
+      {
+        "year": 1890,
+        "event": "ビスマルク辞任"
+      },
+      {
+        "year": 1905,
+        "event": "第一次モロッコ事件"
+      },
+      {
+        "year": 1914,
+        "event": "第一次世界大戦開戦"
+      },
+      {
+        "year": 1916,
+        "event": "ヴェルダンの戦い"
+      },
+      {
+        "year": 1918,
+        "event": "ドイツ革命・帝政崩壊"
+      }
+    ]
+  }
+}

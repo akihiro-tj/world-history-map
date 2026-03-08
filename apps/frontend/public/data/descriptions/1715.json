@@ -1,1 +1,324 @@
-{"arakan-indian-princely-state":{"id":"Arakan_(Indian_princely_state)_1715","name":"Arakan (Indian princely state)","year":1715,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"austrian-empire":{"id":"Austrian_Empire_1715","name":"オーストリア帝国","year":1715,"facts":["首都: ウィーン","政体: 帝政"],"keyEvents":[{"year":1804,"event":"フランツ2世がオーストリア皇帝に即位"},{"year":1867,"event":"オーストリア＝ハンガリー二重帝国成立"}],"aiGenerated":true},"austrian-netherlands":{"id":"Austrian_Netherlands_1715","name":"Austrian Netherlands","year":1715,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"british-american-colonies":{"id":"British_American_colonies_1715","name":"British American colonies","year":1715,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"ceylon-dutch":{"id":"Ceylon_(Dutch)_1715","name":"Ceylon (Dutch)","year":1715,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"cuba-spain":{"id":"Cuba_(Spain)_1715","name":"Cuba (Spain)","year":1715,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"dutch-republic":{"id":"Dutch_Republic_1715","name":"ネーデルラント連邦共和国","year":1715,"facts":["首都: アムステルダム","政体: 連邦共和制","経済: 海上貿易大国"],"keyEvents":[{"year":1581,"event":"スペインから独立宣言"},{"year":1602,"event":"オランダ東インド会社設立"},{"year":1648,"event":"ウェストファリア条約で独立承認"}],"aiGenerated":true},"egypt":{"id":"Egypt_1715","name":"古代エジプト","year":1715,"facts":["首都: メンフィス/テーベ","政体: ファラオ制","文明: ナイル川流域"],"keyEvents":[{"year":-3100,"event":"上下エジプト統一（ナルメル王）"},{"year":-2686,"event":"古王国時代開始（第3王朝）"},{"year":-2560,"event":"ギザの大ピラミッド建設（クフ王）"},{"year":-2055,"event":"中王国時代開始（メンチュヘテプ2世）"},{"year":-1550,"event":"新王国時代開始（アフモス1世）"},{"year":-1479,"event":"トトメス3世即位、最大版図へ"},{"year":-1353,"event":"アマルナ改革（アメンホテプ4世）"},{"year":-1274,"event":"カデシュの戦い（対ヒッタイト）"},{"year":-1069,"event":"新王国崩壊、第三中間期開始"},{"year":-671,"event":"アッシリアによる征服"},{"year":-525,"event":"ペルシアによる征服（カンビュセス2世）"},{"year":-332,"event":"アレクサンドロス大王による征服"},{"year":-30,"event":"ローマに併合（クレオパトラ死去）"}],"aiGenerated":true},"ethiopia":{"id":"Ethiopia_1715","name":"エチオピア","year":1715,"facts":["首都: アディスアベバ","政体: 帝政/共和制"],"keyEvents":[{"year":1896,"event":"アドワの戦いでイタリアに勝利"},{"year":1974,"event":"帝政廃止"}],"aiGenerated":true},"florida-spain":{"id":"Florida_(Spain)_1715","name":"Florida (Spain)","year":1715,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"france":{"id":"France_1715","name":"フランス","year":1715,"facts":["首都: パリ","君主: ルイ14世（在位1643-1715年）","政体: 絶対王政","宰相: マザラン枢機卿（〜1661年）","人口: 約2000万人"],"keyEvents":[{"year":1643,"event":"ルイ14世即位"},{"year":1789,"event":"フランス革命"},{"year":1958,"event":"第五共和制成立"}],"aiGenerated":true},"holy-roman-empire":{"id":"Holy_Roman_Empire_1715","name":"神聖ローマ帝国","year":1715,"facts":["首都: ウィーン","政体: 帝政（選挙王制）"],"keyEvents":[{"year":962,"event":"オットー1世が皇帝に戴冠"},{"year":1618,"event":"三十年戦争開始"},{"year":1806,"event":"解体"}],"aiGenerated":true},"korea":{"id":"Korea_1715","name":"朝鮮","year":1715,"facts":["首都: 漢城（ソウル）","王朝: 李氏朝鮮","政体: 王政","思想: 儒教（朱子学）"],"keyEvents":[{"year":1392,"event":"李成桂が朝鮮を建国"},{"year":1592,"event":"文禄の役（壬辰倭乱）"},{"year":1910,"event":"日本に併合"}],"aiGenerated":true},"manchu-empire":{"id":"Manchu_Empire_1715","name":"清","year":1715,"facts":["首都: 北京","皇帝: 康熙帝（在位1661-1722年）","政体: 帝政（満洲族王朝）","特徴: 清朝最盛期、三藩の乱鎮圧","人口: 約1億5000万人"],"keyEvents":[{"year":1644,"event":"北京入城、中国支配開始"},{"year":1661,"event":"康熙帝即位"},{"year":1912,"event":"滅亡"}],"aiGenerated":true},"mughal-empire":{"id":"Mughal_Empire_1715","name":"ムガル帝国","year":1715,"facts":["首都: デリー/アーグラ","政体: 帝政","宗教: イスラム教"],"keyEvents":[{"year":1526,"event":"バーブルが建国"},{"year":1556,"event":"アクバル即位"},{"year":1658,"event":"アウラングゼーブ即位、最大版図へ"}],"aiGenerated":true},"ottoman-empire":{"id":"Ottoman_Empire_1715","name":"オスマン帝国","year":1715,"facts":["首都: イスタンブール","政体: スルタン制","宗教: イスラム教スンナ派"],"keyEvents":[{"year":1299,"event":"オスマン1世が建国"},{"year":1453,"event":"コンスタンティノープル征服"},{"year":1922,"event":"滅亡"}],"aiGenerated":true},"portugal":{"id":"Portugal_1715","name":"ポルトガル王国","year":1715,"facts":["首都: リスボン","政体: 王政"],"keyEvents":[{"year":1139,"event":"王国として独立"},{"year":1498,"event":"ヴァスコ・ダ・ガマがインド航路開拓"}],"aiGenerated":true},"prussia":{"id":"Prussia_1715","name":"プロイセン王国","year":1715,"facts":["首都: ベルリン","政体: 王政","特徴: 軍事大国"],"keyEvents":[{"year":1701,"event":"フリードリヒ1世が王に即位"},{"year":1740,"event":"フリードリヒ大王即位"},{"year":1871,"event":"ドイツ帝国統一の中心に"}],"aiGenerated":true},"safavid-empire":{"id":"Safavid_Empire_1715","name":"サファヴィー朝","year":1715,"facts":["首都: イスファハーン","政体: シャー制（王政）","宗教: シーア派イスラム教"],"keyEvents":[{"year":1501,"event":"イスマーイール1世が建国"},{"year":1588,"event":"アッバース1世即位、最盛期へ"},{"year":1736,"event":"滅亡"}],"aiGenerated":true},"santo-domingo-spain":{"id":"Santo_Domingo_(Spain)_1715","name":"Santo Domingo (Spain)","year":1715,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"spain":{"id":"Spain_1715","name":"スペイン王国","year":1715,"facts":["首都: マドリード","政体: 王政"],"keyEvents":[{"year":1469,"event":"カスティーリャとアラゴンの統合"},{"year":1492,"event":"グラナダ陥落、新大陸発見"},{"year":1588,"event":"無敵艦隊の敗北"}],"aiGenerated":true},"sweden":{"id":"Sweden_1715","name":"スウェーデン王国","year":1715,"facts":["首都: ストックホルム","政体: 王政"],"keyEvents":[{"year":1523,"event":"グスタフ1世が独立を達成"},{"year":1630,"event":"三十年戦争参戦"}],"aiGenerated":true},"tu-i-tonga-empire":{"id":"Tuʻi_Tonga_Empire_1715","name":"トンガ帝国","year":1715,"facts":["首都: トンガタプ","政体: 王政"],"keyEvents":[{"year":950,"event":"海上帝国として繁栄"}],"aiGenerated":true}}
+{
+  "france": {
+    "name": "フランス王国",
+    "era": "近世",
+    "profile": {
+      "capital": "パリ",
+      "regime": "王政",
+      "dynasty": "ブルボン朝",
+      "leader": "ルイ15世",
+      "religion": "カトリック"
+    },
+    "context": "ルイ14世の死去によりルイ15世が幼少で即位。スペイン継承戦争の終結で国力は疲弊していたが、依然としてヨーロッパの大国であった。",
+    "keyEvents": [
+      {
+        "year": 1713,
+        "event": "ユトレヒト条約"
+      },
+      {
+        "year": 1715,
+        "event": "ルイ14世死去、ルイ15世即位"
+      },
+      {
+        "year": 1716,
+        "event": "オルレアン公フィリップの摂政開始"
+      }
+    ]
+  },
+  "mughal-empire": {
+    "name": "ムガル帝国",
+    "era": "近世",
+    "profile": {
+      "capital": "デリー",
+      "regime": "スルタン制",
+      "religion": "イスラーム教（スンナ派）"
+    },
+    "context": "アウラングゼーブ死後のムガル帝国は急速に衰退し、各地の太守が事実上独立した。マラーター同盟やシク教徒勢力が台頭し、帝国の実効支配は首都デリー周辺に縮小しつつあった。",
+    "keyEvents": [
+      {
+        "year": 1707,
+        "event": "アウラングゼーブ死去"
+      },
+      {
+        "year": 1708,
+        "event": "シク教徒の反乱激化"
+      },
+      {
+        "year": 1712,
+        "event": "後継争いで帝位が不安定化"
+      },
+      {
+        "year": 1717,
+        "event": "イギリス東インド会社にベンガル自由通商権を付与"
+      },
+      {
+        "year": 1724,
+        "event": "ニザーム・アル・ムルクがハイデラバード太守として独立"
+      }
+    ]
+  },
+  "ottoman-empire": {
+    "name": "オスマン帝国",
+    "era": "近世",
+    "profile": {
+      "capital": "イスタンブール",
+      "regime": "スルタン制",
+      "leader": "アフメト3世",
+      "religion": "イスラーム教（スンナ派）"
+    },
+    "context": "オスマン帝国はカルロヴィッツ条約後の領土回復を目指し、ヴェネツィアからモレア半島を奪還した。チューリップ時代と呼ばれる西欧文化の受容期が始まろうとしていた。",
+    "keyEvents": [
+      {
+        "year": 1699,
+        "event": "カルロヴィッツ条約"
+      },
+      {
+        "year": 1710,
+        "event": "プルト川の戦いでロシアに勝利"
+      },
+      {
+        "year": 1714,
+        "event": "モレア半島をヴェネツィアから奪還"
+      },
+      {
+        "year": 1718,
+        "event": "パッサロヴィッツ条約でベオグラード喪失"
+      },
+      {
+        "year": 1727,
+        "event": "イブラヒム・ミュテフェッリカが印刷所を設立"
+      }
+    ]
+  },
+  "korea": {
+    "name": "朝鮮",
+    "era": "朝鮮王朝後期",
+    "profile": {
+      "capital": "漢城(ソウル)",
+      "regime": "王政",
+      "dynasty": "李氏",
+      "leader": "粛宗",
+      "religion": "儒教(朱子学)"
+    },
+    "context": "1715年の朝鮮は粛宗の治世後半にあたり、党争が続く中でも社会的安定が保たれていた。実学が萌芽し始め、清からの学問・文化の影響も増大していた。",
+    "keyEvents": [
+      {
+        "year": 1392,
+        "event": "朝鮮建国"
+      },
+      {
+        "year": 1636,
+        "event": "丙子の役"
+      },
+      {
+        "year": 1694,
+        "event": "甲戌換局"
+      },
+      {
+        "year": 1776,
+        "event": "正祖即位"
+      },
+      {
+        "year": 1863,
+        "event": "高宗即位"
+      }
+    ]
+  },
+  "united-kingdom": {
+    "name": "イギリス",
+    "era": "近世",
+    "profile": {
+      "capital": "ロンドン",
+      "regime": "立憲王政",
+      "dynasty": "ハノーヴァー朝",
+      "leader": "ジョージ1世",
+      "religion": "プロテスタント"
+    },
+    "context": "スペイン継承戦争の勝利でジブラルタルを獲得し海洋覇権を確立した。1714年のハノーヴァー朝成立後、国王が英語を解さなかったことも一因となり議院内閣制が発展し始めた。",
+    "keyEvents": [
+      {
+        "year": 1688,
+        "event": "名誉革命"
+      },
+      {
+        "year": 1689,
+        "event": "権利章典"
+      },
+      {
+        "year": 1707,
+        "event": "イングランドとスコットランドの合同"
+      },
+      {
+        "year": 1714,
+        "event": "ハノーヴァー朝成立"
+      }
+    ]
+  },
+  "holy-roman-empire": {
+    "name": "神聖ローマ帝国",
+    "era": "近世",
+    "profile": {
+      "capital": "ウィーン",
+      "regime": "選挙王政",
+      "dynasty": "ハプスブルク家",
+      "leader": "カール6世",
+      "religion": "カトリック"
+    },
+    "context": "スペイン継承戦争が終結し、ハプスブルク家はスペイン領ネーデルラントやイタリア領土を獲得したが、帝国自体の統合力はさらに弱まった。",
+    "keyEvents": [
+      {
+        "year": 1713,
+        "event": "ユトレヒト条約"
+      },
+      {
+        "year": 1713,
+        "event": "国事詔書の発布"
+      },
+      {
+        "year": 1714,
+        "event": "ラシュタット条約でスペイン継承戦争終結"
+      }
+    ]
+  },
+  "austrian-empire": {
+    "name": "オーストリア帝国",
+    "era": "近世",
+    "profile": {
+      "capital": "ウィーン",
+      "regime": "君主制",
+      "dynasty": "ハプスブルク家",
+      "leader": "カール6世",
+      "religion": "カトリック"
+    },
+    "context": "スペイン継承戦争が終結しユトレヒト条約・ラシュタット条約で南ネーデルラント・ナポリ・サルデーニャなどを獲得した。カール6世はプラグマティッシェ・ザンクツィオンにより女子相続を認めさせ、領土の一体性維持を図った。",
+    "keyEvents": [
+      {
+        "year": 1618,
+        "event": "三十年戦争開始"
+      },
+      {
+        "year": 1648,
+        "event": "ウェストファリア条約締結"
+      },
+      {
+        "year": 1683,
+        "event": "第二次ウィーン包囲"
+      },
+      {
+        "year": 1699,
+        "event": "カルロヴィッツ条約でハンガリー獲得"
+      },
+      {
+        "year": 1713,
+        "event": "プラグマティッシェ・ザンクツィオン発布"
+      },
+      {
+        "year": 1740,
+        "event": "オーストリア継承戦争開始"
+      },
+      {
+        "year": 1804,
+        "event": "オーストリア帝国成立"
+      },
+      {
+        "year": 1867,
+        "event": "アウスグライヒによりオーストリア＝ハンガリー二重帝国成立"
+      }
+    ]
+  },
+  "portugal": {
+    "name": "ポルトガル王国",
+    "era": "近世",
+    "profile": {
+      "capital": "リスボン",
+      "regime": "王政",
+      "dynasty": "ブラガンサ朝",
+      "leader": "ジョアン5世",
+      "religion": "カトリック"
+    },
+    "context": "ブラジルの金によって王権が強化され、議会を召集せずに絶対王政的な統治が行われた。ジョアン5世はマフラ修道院の建設など豪華な文化事業に投資した。",
+    "keyEvents": [
+      {
+        "year": 1703,
+        "event": "メシュエン条約"
+      },
+      {
+        "year": 1706,
+        "event": "ジョアン5世即位"
+      },
+      {
+        "year": 1713,
+        "event": "ユトレヒト条約"
+      },
+      {
+        "year": 1717,
+        "event": "マフラ修道院建設開始"
+      }
+    ]
+  },
+  "egypt": {
+    "name": "エジプト",
+    "era": "オスマン帝国属州期",
+    "profile": {
+      "capital": "カイロ",
+      "regime": "属州"
+    },
+    "context": "1715年のエジプトはオスマン帝国の属州として統治されていたが、実権はマムルーク軍人層が握っていた。オスマン中央政府の影響力は弱まりつつあった。",
+    "keyEvents": [
+      {
+        "year": 1798,
+        "event": "ナポレオンのエジプト遠征"
+      },
+      {
+        "year": 1805,
+        "event": "ムハンマド・アリーの権力掌握"
+      },
+      {
+        "year": 1869,
+        "event": "スエズ運河開通"
+      },
+      {
+        "year": 1882,
+        "event": "イギリスによる軍事占領"
+      },
+      {
+        "year": 1922,
+        "event": "エジプト王国独立"
+      },
+      {
+        "year": 1952,
+        "event": "エジプト革命"
+      },
+      {
+        "year": 1956,
+        "event": "スエズ危機"
+      }
+    ]
+  },
+  "spain": {
+    "name": "スペイン王国",
+    "era": "近世",
+    "profile": {
+      "capital": "マドリード",
+      "regime": "王政",
+      "dynasty": "ブルボン朝",
+      "leader": "フェリペ5世",
+      "religion": "カトリック"
+    },
+    "context": "スペイン継承戦争がユトレヒト条約で終結し、スペインはネーデルラントやイタリアなどヨーロッパにおける領土の大部分を失った。ブルボン朝のもとで中央集権化が進められた。",
+    "keyEvents": [
+      {
+        "year": 1713,
+        "event": "ユトレヒト条約"
+      },
+      {
+        "year": 1714,
+        "event": "バルセロナ陥落"
+      },
+      {
+        "year": 1715,
+        "event": "ヌエバ・プランタ勅令による中央集権化"
+      }
+    ]
+  }
+}

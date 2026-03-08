@@ -1,1 +1,397 @@
-{"austrian-empire":{"id":"Austrian_Empire_1815","name":"オーストリア帝国","year":1815,"facts":["首都: ウィーン","政体: 帝政"],"keyEvents":[{"year":1804,"event":"フランツ2世がオーストリア皇帝に即位"},{"year":1867,"event":"オーストリア＝ハンガリー二重帝国成立"}],"aiGenerated":true},"british-east-india-company":{"id":"British_East_India_Company_1815","name":"British East India Company","year":1815,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"cochin-china":{"id":"Cochin_China_1815","name":"Cochin China","year":1815,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"dutch-east-indies":{"id":"Dutch_East_Indies_1815","name":"Dutch East Indies","year":1815,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"egypt":{"id":"Egypt_1815","name":"古代エジプト","year":1815,"facts":["首都: メンフィス/テーベ","政体: ファラオ制","文明: ナイル川流域"],"keyEvents":[{"year":-3100,"event":"上下エジプト統一（ナルメル王）"},{"year":-2686,"event":"古王国時代開始（第3王朝）"},{"year":-2560,"event":"ギザの大ピラミッド建設（クフ王）"},{"year":-2055,"event":"中王国時代開始（メンチュヘテプ2世）"},{"year":-1550,"event":"新王国時代開始（アフモス1世）"},{"year":-1479,"event":"トトメス3世即位、最大版図へ"},{"year":-1353,"event":"アマルナ改革（アメンホテプ4世）"},{"year":-1274,"event":"カデシュの戦い（対ヒッタイト）"},{"year":-1069,"event":"新王国崩壊、第三中間期開始"},{"year":-671,"event":"アッシリアによる征服"},{"year":-525,"event":"ペルシアによる征服（カンビュセス2世）"},{"year":-332,"event":"アレクサンドロス大王による征服"},{"year":-30,"event":"ローマに併合（クレオパトラ死去）"}],"aiGenerated":true},"ethiopia":{"id":"Ethiopia_1815","name":"エチオピア","year":1815,"facts":["首都: アディスアベバ","政体: 帝政/共和制"],"keyEvents":[{"year":1896,"event":"アドワの戦いでイタリアに勝利"},{"year":1974,"event":"帝政廃止"}],"aiGenerated":true},"france":{"id":"France_1815","name":"フランス","year":1815,"facts":["首都: パリ","政体: 王政/共和制"],"keyEvents":[{"year":1643,"event":"ルイ14世即位"},{"year":1789,"event":"フランス革命"},{"year":1958,"event":"第五共和制成立"}],"aiGenerated":true},"fulani-empire":{"id":"Fulani_Empire_1815","name":"Fulani Empire","year":1815,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"hanover":{"id":"Hanover_1815","name":"Hanover","year":1815,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"japan":{"id":"Japan_1815","name":"日本","year":1815,"facts":["首都: 東京","政体: 立憲君主制"],"keyEvents":[{"year":1947,"event":"日本国憲法施行"},{"year":1964,"event":"東京オリンピック開催"}],"aiGenerated":true},"korea":{"id":"Korea_1815","name":"朝鮮","year":1815,"facts":["首都: 漢城（ソウル）","王朝: 李氏朝鮮","政体: 王政","思想: 儒教（朱子学）"],"keyEvents":[{"year":1392,"event":"李成桂が朝鮮を建国"},{"year":1592,"event":"文禄の役（壬辰倭乱）"},{"year":1910,"event":"日本に併合"}],"aiGenerated":true},"manchu-empire":{"id":"Manchu_Empire_1815","name":"清","year":1815,"facts":["首都: 北京","政体: 帝政（満洲族王朝）","民族: 満洲族支配"],"keyEvents":[{"year":1644,"event":"北京入城、中国支配開始"},{"year":1661,"event":"康熙帝即位"},{"year":1912,"event":"滅亡"}],"aiGenerated":true},"mysore-indian-princely-state":{"id":"Mysore_(Indian_princely_state)_1815","name":"Mysore (Indian princely state)","year":1815,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"ottoman-empire":{"id":"Ottoman_Empire_1815","name":"オスマン帝国","year":1815,"facts":["首都: イスタンブール","政体: スルタン制","宗教: イスラム教スンナ派"],"keyEvents":[{"year":1299,"event":"オスマン1世が建国"},{"year":1453,"event":"コンスタンティノープル征服"},{"year":1922,"event":"滅亡"}],"aiGenerated":true},"portugal":{"id":"Portugal_1815","name":"ポルトガル王国","year":1815,"facts":["首都: リスボン","政体: 王政"],"keyEvents":[{"year":1139,"event":"王国として独立"},{"year":1498,"event":"ヴァスコ・ダ・ガマがインド航路開拓"}],"aiGenerated":true},"prussia":{"id":"Prussia_1815","name":"プロイセン王国","year":1815,"facts":["首都: ベルリン","君主: フリードリヒ・ヴィルヘルム3世","政体: 王政","危機: ナポレオン戦争、屈辱と復興","改革: シュタイン・ハルデンベルク改革"],"keyEvents":[{"year":1701,"event":"フリードリヒ1世が王に即位"},{"year":1740,"event":"フリードリヒ大王即位"},{"year":1871,"event":"ドイツ帝国統一の中心に"}],"aiGenerated":true},"russian-empire":{"id":"Russian_Empire_1815","name":"ロシア帝国","year":1815,"facts":["首都: サンクトペテルブルク","政体: 帝政","領土: ユーラシア最大"],"keyEvents":[{"year":1721,"event":"ピョートル1世が皇帝に即位"},{"year":1812,"event":"ナポレオンのロシア遠征撃退"},{"year":1917,"event":"ロシア革命で帝政廃止"}],"aiGenerated":true},"sikkim-indian-princely-state":{"id":"Sikkim_(Indian_princely_state)_1815","name":"Sikkim (Indian princely state)","year":1815,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"spain":{"id":"Spain_1815","name":"スペイン王国","year":1815,"facts":["首都: マドリード","政体: 王政"],"keyEvents":[{"year":1469,"event":"カスティーリャとアラゴンの統合"},{"year":1492,"event":"グラナダ陥落、新大陸発見"},{"year":1588,"event":"無敵艦隊の敗北"}],"aiGenerated":true},"sweden-norway":{"id":"Sweden–Norway_1815","name":"Sweden–Norway","year":1815,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"tu-i-tonga-empire":{"id":"Tuʻi_Tonga_Empire_1815","name":"トンガ帝国","year":1815,"facts":["首都: トンガタプ","政体: 王政"],"keyEvents":[{"year":950,"event":"海上帝国として繁栄"}],"aiGenerated":true},"united-kingdom-of-great-britain-and-ireland":{"id":"United_Kingdom_of_Great_Britain_and_Ireland_1815","name":"グレートブリテン及びアイルランド連合王国","year":1815,"facts":["首都: ロンドン","政体: 立憲君主制"],"keyEvents":[{"year":1801,"event":"連合王国成立"},{"year":1837,"event":"ヴィクトリア女王即位"},{"year":1922,"event":"アイルランド自由国独立"}],"aiGenerated":true},"united-states":{"id":"United_States_1815","name":"アメリカ合衆国","year":1815,"facts":["首都: ワシントンD.C.","政体: 連邦共和制"],"keyEvents":[{"year":1776,"event":"独立宣言"},{"year":1861,"event":"南北戦争開始"},{"year":1945,"event":"第二次世界大戦勝利"}],"aiGenerated":true},"vice-royalty-of-new-spain":{"id":"Vice-Royalty_of_New_Spain_1815","name":"Vice-Royalty of New Spain","year":1815,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true}}
+{
+  "united-kingdom": {
+    "name": "イギリス",
+    "era": "近代",
+    "profile": {
+      "capital": "ロンドン",
+      "regime": "立憲王政",
+      "dynasty": "ハノーヴァー朝",
+      "leader": "ジョージ3世",
+      "religion": "プロテスタント"
+    },
+    "context": "ナポレオン戦争の勝利により世界最大の海洋帝国としての地位を確立。ウィーン体制の形成に主導的役割を果たした。",
+    "keyEvents": [
+      {
+        "year": 1805,
+        "event": "トラファルガーの海戦"
+      },
+      {
+        "year": 1815,
+        "event": "ワーテルローの戦い"
+      },
+      {
+        "year": 1815,
+        "event": "ウィーン議定書"
+      }
+    ]
+  },
+  "united-states": {
+    "name": "アメリカ合衆国",
+    "era": "近代",
+    "profile": {
+      "capital": "ワシントンD.C.",
+      "regime": "共和制",
+      "leader": "マディソン",
+      "religion": "プロテスタント"
+    },
+    "context": "米英戦争が終結し国家としての自立を確認した。ラテンアメリカ諸国の独立運動が進行する中、モンロー主義の基盤が形成されつつあった。国内では好感情の時代と呼ばれる政治的安定期に入った。",
+    "keyEvents": [
+      {
+        "year": 1776,
+        "event": "独立宣言"
+      },
+      {
+        "year": 1783,
+        "event": "パリ条約で独立承認"
+      },
+      {
+        "year": 1803,
+        "event": "ルイジアナ買収"
+      },
+      {
+        "year": 1812,
+        "event": "米英戦争"
+      },
+      {
+        "year": 1823,
+        "event": "モンロー宣言"
+      },
+      {
+        "year": 1861,
+        "event": "南北戦争開始"
+      },
+      {
+        "year": 1865,
+        "event": "南北戦争終結・奴隷制廃止"
+      },
+      {
+        "year": 1898,
+        "event": "米西戦争"
+      },
+      {
+        "year": 1917,
+        "event": "第一次世界大戦参戦"
+      }
+    ]
+  },
+  "spain": {
+    "name": "スペイン王国",
+    "era": "近代",
+    "profile": {
+      "capital": "マドリード",
+      "regime": "王政",
+      "dynasty": "ブルボン朝",
+      "leader": "フェルナンド7世",
+      "religion": "カトリック"
+    },
+    "context": "ナポレオン戦争後にフェルナンド7世が復位し、絶対王政を復活させた。中南米の植民地では独立運動が激化した。",
+    "keyEvents": [
+      {
+        "year": 1808,
+        "event": "スペイン独立戦争開始"
+      },
+      {
+        "year": 1812,
+        "event": "カディス憲法制定"
+      },
+      {
+        "year": 1814,
+        "event": "フェルナンド7世復位"
+      },
+      {
+        "year": 1815,
+        "event": "ウィーン体制"
+      }
+    ]
+  },
+  "france": {
+    "name": "フランス王国",
+    "era": "近代",
+    "profile": {
+      "capital": "パリ",
+      "regime": "王政",
+      "dynasty": "ブルボン朝",
+      "leader": "ルイ18世",
+      "religion": "カトリック"
+    },
+    "context": "ナポレオン戦争後のウィーン体制のもとで王政復古が実現。ルイ18世が即位し、立憲君主制的な統治が行われた。",
+    "keyEvents": [
+      {
+        "year": 1804,
+        "event": "ナポレオン皇帝即位"
+      },
+      {
+        "year": 1812,
+        "event": "ロシア遠征失敗"
+      },
+      {
+        "year": 1814,
+        "event": "ナポレオン退位、王政復古"
+      },
+      {
+        "year": 1815,
+        "event": "ワーテルローの戦い、ウィーン議定書"
+      }
+    ]
+  },
+  "austrian-empire": {
+    "name": "オーストリア帝国",
+    "era": "近代",
+    "profile": {
+      "capital": "ウィーン",
+      "regime": "君主制",
+      "dynasty": "ハプスブルク家",
+      "leader": "フランツ1世",
+      "religion": "カトリック"
+    },
+    "context": "ウィーン会議の主催国としてヨーロッパの秩序再建を主導した。メッテルニヒが外交を指揮し、正統主義と勢力均衡に基づくウィーン体制が成立した。ドイツ連邦の議長国として中欧に大きな影響力を持った。",
+    "keyEvents": [
+      {
+        "year": 1804,
+        "event": "オーストリア帝国成立"
+      },
+      {
+        "year": 1806,
+        "event": "神聖ローマ帝国解体"
+      },
+      {
+        "year": 1814,
+        "event": "ウィーン会議開催"
+      },
+      {
+        "year": 1848,
+        "event": "三月革命"
+      },
+      {
+        "year": 1859,
+        "event": "イタリア統一戦争でロンバルディア喪失"
+      },
+      {
+        "year": 1866,
+        "event": "普墺戦争敗北"
+      },
+      {
+        "year": 1867,
+        "event": "アウスグライヒによりオーストリア＝ハンガリー二重帝国成立"
+      }
+    ]
+  },
+  "ottoman-empire": {
+    "name": "オスマン帝国",
+    "era": "近代",
+    "profile": {
+      "capital": "イスタンブール",
+      "regime": "スルタン制",
+      "leader": "マフムト2世",
+      "religion": "イスラーム教（スンナ派）"
+    },
+    "context": "ナポレオン戦争後のウィーン体制のもと、オスマン帝国は近代化の必要性に迫られていた。バルカン半島ではギリシャ独立運動の萌芽がみられ、エジプトではムハンマド・アリーが実質的な独立勢力を築いていた。",
+    "keyEvents": [
+      {
+        "year": 1805,
+        "event": "ムハンマド・アリーがエジプト総督に就任"
+      },
+      {
+        "year": 1808,
+        "event": "マフムト2世即位"
+      },
+      {
+        "year": 1821,
+        "event": "ギリシャ独立戦争開始"
+      },
+      {
+        "year": 1826,
+        "event": "イェニチェリ軍団の廃止"
+      },
+      {
+        "year": 1829,
+        "event": "アドリアノープル条約でギリシャ独立承認"
+      }
+    ]
+  },
+  "portugal": {
+    "name": "ポルトガル王国",
+    "era": "近代",
+    "profile": {
+      "capital": "リオデジャネイロ",
+      "regime": "王政",
+      "dynasty": "ブラガンサ朝",
+      "leader": "ジョアン6世",
+      "religion": "カトリック"
+    },
+    "context": "ナポレオン戦争中に王室がブラジルに移転し、ブラジルを王国に昇格させた。ウィーン体制下で立憲主義の要求が高まった。",
+    "keyEvents": [
+      {
+        "year": 1807,
+        "event": "王室のブラジル移転"
+      },
+      {
+        "year": 1815,
+        "event": "ブラジルを王国に昇格"
+      },
+      {
+        "year": 1820,
+        "event": "立憲革命"
+      }
+    ]
+  },
+  "korea": {
+    "name": "朝鮮",
+    "era": "朝鮮王朝後期",
+    "profile": {
+      "capital": "漢城(ソウル)",
+      "regime": "王政",
+      "dynasty": "李氏",
+      "leader": "純祖",
+      "religion": "儒教(朱子学)"
+    },
+    "context": "1815年の朝鮮は純祖の治世にあたり、安東金氏による勢道政治が続いていた。農村の疲弊が進み、各地で民乱の兆候が現れ始めていた。",
+    "keyEvents": [
+      {
+        "year": 1800,
+        "event": "純祖即位"
+      },
+      {
+        "year": 1811,
+        "event": "洪景来の乱"
+      },
+      {
+        "year": 1863,
+        "event": "高宗即位・大院君の摂政"
+      },
+      {
+        "year": 1876,
+        "event": "日朝修好条規"
+      },
+      {
+        "year": 1897,
+        "event": "大韓帝国の成立"
+      }
+    ]
+  },
+  "russian-empire": {
+    "name": "ロシア帝国",
+    "era": "近代",
+    "profile": {
+      "capital": "サンクトペテルブルク",
+      "regime": "君主制",
+      "dynasty": "ロマノフ朝",
+      "leader": "アレクサンドル1世",
+      "religion": "正教会"
+    },
+    "context": "ナポレオン戦争の戦勝国としてウィーン会議で主導的役割を果たした。神聖同盟を提唱しヨーロッパの保守的秩序維持を図った。ポーランド立憲王国を獲得し領土を西方に拡大した。",
+    "keyEvents": [
+      {
+        "year": 1762,
+        "event": "エカチェリーナ2世即位"
+      },
+      {
+        "year": 1783,
+        "event": "クリミア併合"
+      },
+      {
+        "year": 1812,
+        "event": "ナポレオンのロシア遠征"
+      },
+      {
+        "year": 1814,
+        "event": "ウィーン会議参加"
+      },
+      {
+        "year": 1825,
+        "event": "デカブリストの乱"
+      },
+      {
+        "year": 1853,
+        "event": "クリミア戦争開始"
+      },
+      {
+        "year": 1861,
+        "event": "農奴解放令"
+      },
+      {
+        "year": 1905,
+        "event": "第一次ロシア革命"
+      },
+      {
+        "year": 1917,
+        "event": "ロシア革命"
+      }
+    ]
+  },
+  "egypt": {
+    "name": "エジプト",
+    "era": "オスマン帝国属州期",
+    "profile": {
+      "capital": "カイロ",
+      "regime": "属州",
+      "leader": "ムハンマド・アリー",
+      "religion": "イスラーム"
+    },
+    "context": "1815年のエジプトはムハンマド・アリーが総督として実権を握り、近代化改革を推進していた。1798年のナポレオン遠征を契機にマムルーク勢力を排除し、事実上の独立政権を樹立した。",
+    "keyEvents": [
+      {
+        "year": 1798,
+        "event": "ナポレオンのエジプト遠征"
+      },
+      {
+        "year": 1805,
+        "event": "ムハンマド・アリーの権力掌握"
+      },
+      {
+        "year": 1869,
+        "event": "スエズ運河開通"
+      },
+      {
+        "year": 1882,
+        "event": "イギリスによる軍事占領"
+      },
+      {
+        "year": 1922,
+        "event": "エジプト王国独立"
+      },
+      {
+        "year": 1952,
+        "event": "エジプト革命"
+      },
+      {
+        "year": 1956,
+        "event": "スエズ危機"
+      }
+    ]
+  },
+  "japan": {
+    "name": "日本",
+    "era": "江戸時代",
+    "profile": {
+      "capital": "江戸",
+      "regime": "幕府制",
+      "dynasty": "徳川氏",
+      "leader": "徳川家斉",
+      "religion": "仏教"
+    },
+    "context": "1815年の日本は江戸時代後期の文化年間にあたり、化政文化が隆盛していた。対外的には鎖国体制を維持しつつも、異国船の出没が増加しつつあった。",
+    "keyEvents": [
+      {
+        "year": 1787,
+        "event": "寛政の改革"
+      },
+      {
+        "year": 1804,
+        "event": "レザノフ来航"
+      },
+      {
+        "year": 1825,
+        "event": "異国船打払令"
+      },
+      {
+        "year": 1841,
+        "event": "天保の改革"
+      },
+      {
+        "year": 1853,
+        "event": "ペリー来航"
+      }
+    ]
+  }
+}

@@ -1,7 +1,6 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-// Mock fetch before importing the hook
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
@@ -19,39 +18,38 @@ function createMockHeaders(contentType: string | null) {
 
 const mockBundle1650 = {
   france: {
-    id: 'France_1650',
     name: 'フランス王国',
-    year: 1650,
-    facts: ['首都: パリ', '君主: ルイ14世'],
+    era: 'フロンドの乱後',
+    profile: {
+      capital: 'パリ',
+      regime: '絶対王政',
+      leader: 'ルイ14世',
+    },
+    context:
+      '1650年のフランスはフロンドの乱の直後であり、幼少のルイ14世のもとマザラン枢機卿が実権を握っていた。',
     keyEvents: [{ year: 1643, event: 'ルイ14世の即位' }],
-    aiGenerated: true,
   },
   england: {
-    id: 'England_1650',
     name: 'イングランド',
-    year: 1650,
-    facts: ['首都: ロンドン'],
-    keyEvents: [],
-    aiGenerated: true,
+    profile: {
+      capital: 'ロンドン',
+    },
   },
   'england-and-ireland': {
-    id: 'England_and_Ireland_1650',
     name: 'イングランドとアイルランド',
-    year: 1650,
-    facts: ['首都: ロンドン'],
-    keyEvents: [],
-    aiGenerated: true,
+    profile: {
+      capital: 'ロンドン',
+    },
   },
 };
 
 const mockBundle1700 = {
   france: {
-    id: 'France_1700',
     name: 'フランス王国',
-    year: 1700,
-    facts: ['首都: パリ'],
-    keyEvents: [],
-    aiGenerated: true,
+    era: '絶対王政期',
+    profile: {
+      capital: 'パリ',
+    },
   },
 };
 
@@ -196,20 +194,19 @@ describe('useTerritoryDescription', () => {
     );
 
     await waitFor(() => {
-      expect(result.current.description?.year).toBe(1650);
+      expect(result.current.description?.name).toBe('フランス王国');
     });
 
     rerender({ territory: 'France', year: 1700 });
 
     await waitFor(() => {
-      expect(result.current.description?.year).toBe(1700);
+      expect(result.current.description?.era).toBe('絶対王政期');
     });
 
     expect(mockFetch).toHaveBeenCalledTimes(2);
   });
 
   it('handles HTML response as no description (Vite SPA fallback)', async () => {
-    // Vite dev server returns HTML for 404s as SPA fallback
     mockFetch.mockResolvedValueOnce({
       ok: true,
       headers: createMockHeaders('text/html'),
@@ -221,7 +218,6 @@ describe('useTerritoryDescription', () => {
       expect(result.current.isLoading).toBe(false);
     });
 
-    // Should treat as "no description available", not an error
     expect(result.current.description).toBeNull();
     expect(result.current.error).toBeNull();
   });

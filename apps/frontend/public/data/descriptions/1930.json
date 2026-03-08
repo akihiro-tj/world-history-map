@@ -1,1 +1,224 @@
-{"austria":{"id":"Austria_1930","name":"オーストリア","year":1930,"facts":["首都: ウィーン","政体: 共和制"],"keyEvents":[{"year":1918,"event":"第一共和国成立"},{"year":1938,"event":"ナチス・ドイツに併合"},{"year":1955,"event":"主権回復"}],"aiGenerated":true},"british-raj":{"id":"British_Raj_1930","name":"英領インド","year":1930,"facts":["首都: カルカッタ/デリー","政体: 植民地"],"keyEvents":[{"year":1858,"event":"イギリス直轄統治開始"},{"year":1947,"event":"インド・パキスタン分離独立"}],"aiGenerated":true},"british-somaliland":{"id":"British_Somaliland_1930","name":"British Somaliland","year":1930,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"cochin-china":{"id":"Cochin_China_1930","name":"Cochin China","year":1930,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"dutch-east-indies":{"id":"Dutch_East_Indies_1930","name":"Dutch East Indies","year":1930,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"east-prussia":{"id":"East_Prussia_1930","name":"East Prussia","year":1930,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"egypt":{"id":"Egypt_1930","name":"古代エジプト","year":1930,"facts":["首都: メンフィス/テーベ","政体: ファラオ制","文明: ナイル川流域"],"keyEvents":[{"year":-3100,"event":"上下エジプト統一（ナルメル王）"},{"year":-2686,"event":"古王国時代開始（第3王朝）"},{"year":-2560,"event":"ギザの大ピラミッド建設（クフ王）"},{"year":-2055,"event":"中王国時代開始（メンチュヘテプ2世）"},{"year":-1550,"event":"新王国時代開始（アフモス1世）"},{"year":-1479,"event":"トトメス3世即位、最大版図へ"},{"year":-1353,"event":"アマルナ改革（アメンホテプ4世）"},{"year":-1274,"event":"カデシュの戦い（対ヒッタイト）"},{"year":-1069,"event":"新王国崩壊、第三中間期開始"},{"year":-671,"event":"アッシリアによる征服"},{"year":-525,"event":"ペルシアによる征服（カンビュセス2世）"},{"year":-332,"event":"アレクサンドロス大王による征服"},{"year":-30,"event":"ローマに併合（クレオパトラ死去）"}],"aiGenerated":true},"empire-of-japan":{"id":"Empire_of_Japan_1930","name":"大日本帝国","year":1930,"facts":["首都: 東京","天皇: 昭和天皇（在位1926-1989年）","政体: 立憲君主制","状況: 軍国主義・太平洋戦争"],"keyEvents":[{"year":1868,"event":"明治維新"},{"year":1889,"event":"大日本帝国憲法発布"},{"year":1945,"event":"敗戦、連合国占領開始"}],"aiGenerated":true},"ethiopia":{"id":"Ethiopia_1930","name":"エチオピア","year":1930,"facts":["首都: アディスアベバ","政体: 帝政/共和制"],"keyEvents":[{"year":1896,"event":"アドワの戦いでイタリアに勝利"},{"year":1974,"event":"帝政廃止"}],"aiGenerated":true},"france":{"id":"France_1930","name":"フランス","year":1930,"facts":["首都: パリ","政体: 王政/共和制"],"keyEvents":[{"year":1643,"event":"ルイ14世即位"},{"year":1789,"event":"フランス革命"},{"year":1958,"event":"第五共和制成立"}],"aiGenerated":true},"french-indo-china":{"id":"French_Indo-China_1930","name":"French Indo-China","year":1930,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"germany":{"id":"Germany_1930","name":"ドイツ","year":1930,"facts":["首都: ベルリン","政体: 連邦共和制"],"keyEvents":[{"year":1949,"event":"東西分裂"},{"year":1990,"event":"東西ドイツ統一"}],"aiGenerated":true},"madagascar-france":{"id":"Madagascar_(France)_1930","name":"Madagascar (France)","year":1930,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"portugal":{"id":"Portugal_1930","name":"ポルトガル王国","year":1930,"facts":["首都: リスボン","政体: 王政"],"keyEvents":[{"year":1139,"event":"王国として独立"},{"year":1498,"event":"ヴァスコ・ダ・ガマがインド航路開拓"}],"aiGenerated":true},"spain":{"id":"Spain_1930","name":"スペイン王国","year":1930,"facts":["首都: マドリード","政体: 王政"],"keyEvents":[{"year":1469,"event":"カスティーリャとアラゴンの統合"},{"year":1492,"event":"グラナダ陥落、新大陸発見"},{"year":1588,"event":"無敵艦隊の敗北"}],"aiGenerated":true},"sweden":{"id":"Sweden_1930","name":"スウェーデン王国","year":1930,"facts":["首都: ストックホルム","政体: 王政"],"keyEvents":[{"year":1523,"event":"グスタフ1世が独立を達成"},{"year":1630,"event":"三十年戦争参戦"}],"aiGenerated":true},"syria-france":{"id":"Syria_(France)_1930","name":"Syria (France)","year":1930,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"united-kingdom-of-great-britain-and-ireland":{"id":"United_Kingdom_of_Great_Britain_and_Ireland_1930","name":"グレートブリテン及びアイルランド連合王国","year":1930,"facts":["首都: ロンドン","政体: 立憲君主制"],"keyEvents":[{"year":1801,"event":"連合王国成立"},{"year":1837,"event":"ヴィクトリア女王即位"},{"year":1922,"event":"アイルランド自由国独立"}],"aiGenerated":true},"united-states-virgin-islands":{"id":"United_States_Virgin_Islands_1930","name":"United States Virgin Islands","year":1930,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true},"united-states":{"id":"United_States_1930","name":"アメリカ合衆国","year":1930,"facts":["首都: ワシントンD.C.","政体: 連邦共和制"],"keyEvents":[{"year":1776,"event":"独立宣言"},{"year":1861,"event":"南北戦争開始"},{"year":1945,"event":"第二次世界大戦勝利"}],"aiGenerated":true},"white-russia":{"id":"White_Russia_1930","name":"White Russia","year":1930,"facts":["首都: 不明","政体: 不明"],"keyEvents":[],"aiGenerated":true}}
+{
+  "portugal": {
+    "name": "ポルトガル共和国",
+    "era": "近代",
+    "profile": {
+      "capital": "リスボン",
+      "regime": "権威主義体制",
+      "leader": "サラザール",
+      "religion": "カトリック"
+    },
+    "context": "1926年の軍事クーデター後、財務大臣サラザールが財政再建を主導して政治的実権を掌握した。1933年にはエスタド・ノヴォ体制を正式に確立し、権威主義的統治が始まった。",
+    "keyEvents": [
+      {
+        "year": 1926,
+        "event": "軍事クーデター"
+      },
+      {
+        "year": 1928,
+        "event": "サラザール財務大臣就任"
+      },
+      {
+        "year": 1930,
+        "event": "植民地法制定"
+      },
+      {
+        "year": 1933,
+        "event": "エスタド・ノヴォ体制確立"
+      }
+    ]
+  },
+  "france": {
+    "name": "フランス",
+    "era": "近代",
+    "profile": {
+      "capital": "パリ",
+      "regime": "共和政",
+      "religion": "カトリック"
+    },
+    "context": "世界恐慌の影響を受け経済が悪化し、失業が増大した。政治的にも左右の対立が激化して極右勢力が台頭し、1934年には右翼団体による暴動が発生するなど社会不安が広がった。",
+    "keyEvents": [
+      {
+        "year": 1924,
+        "event": "左翼連合政権成立"
+      },
+      {
+        "year": 1929,
+        "event": "世界恐慌の波及"
+      },
+      {
+        "year": 1930,
+        "event": "マジノ線建設開始"
+      }
+    ]
+  },
+  "italy": {
+    "name": "イタリア王国",
+    "era": "近代",
+    "profile": {
+      "capital": "ローマ",
+      "regime": "ファシスト体制",
+      "dynasty": "サヴォイア朝",
+      "leader": "ムッソリーニ",
+      "religion": "カトリック"
+    },
+    "context": "1922年のローマ進軍以降ムッソリーニのファシスト独裁体制が確立され、一党制のもとで統治が行われた。1929年のラテラノ条約でバチカンとの関係を正常化した。",
+    "keyEvents": [
+      {
+        "year": 1922,
+        "event": "ローマ進軍、ムッソリーニ首相就任"
+      },
+      {
+        "year": 1924,
+        "event": "マッテオッティ事件"
+      },
+      {
+        "year": 1929,
+        "event": "ラテラノ条約"
+      }
+    ]
+  },
+  "spain": {
+    "name": "スペイン共和国",
+    "era": "近代",
+    "profile": {
+      "capital": "マドリード",
+      "regime": "共和政",
+      "religion": "カトリック"
+    },
+    "context": "1930年にプリモ・デ・リベラの独裁が終わり、翌年の選挙で王政が否定されて第二共和政が成立した。農地改革や教育改革が試みられたが、左右の政治的分極化が同時に進んだ。",
+    "keyEvents": [
+      {
+        "year": 1930,
+        "event": "プリモ・デ・リベラ辞任"
+      },
+      {
+        "year": 1931,
+        "event": "第二共和政成立"
+      },
+      {
+        "year": 1933,
+        "event": "右派政権成立"
+      }
+    ]
+  },
+  "germany": {
+    "name": "ドイツ",
+    "era": "近代",
+    "profile": {
+      "capital": "ベルリン",
+      "regime": "共和制",
+      "leader": "ブリューニング"
+    },
+    "context": "世界恐慌の影響で大量失業が発生し、ヴァイマル共和国の危機が深刻化した。ナチ党が急速に議席を拡大し、議会政治が機能不全に陥った。大統領緊急令による統治が常態化していた。",
+    "keyEvents": [
+      {
+        "year": 1919,
+        "event": "ヴァイマル憲法制定・ヴェルサイユ条約調印"
+      },
+      {
+        "year": 1923,
+        "event": "ハイパーインフレーション"
+      },
+      {
+        "year": 1925,
+        "event": "ロカルノ条約"
+      },
+      {
+        "year": 1929,
+        "event": "世界恐慌"
+      },
+      {
+        "year": 1933,
+        "event": "ヒトラー政権成立"
+      },
+      {
+        "year": 1935,
+        "event": "再軍備宣言"
+      },
+      {
+        "year": 1938,
+        "event": "オーストリア併合・ズデーテン地方併合"
+      }
+    ]
+  },
+  "united-states": {
+    "name": "アメリカ合衆国",
+    "era": "近代",
+    "profile": {
+      "capital": "ワシントンD.C.",
+      "regime": "共和制",
+      "leader": "フーヴァー",
+      "religion": "プロテスタント"
+    },
+    "context": "世界恐慌の直後で深刻な経済危機に見舞われていた。失業率が急上昇し、フーヴァー大統領の対応は不十分とみなされた。スムート＝ホーリー関税法により保護主義が強まり世界貿易が縮小した。",
+    "keyEvents": [
+      {
+        "year": 1917,
+        "event": "第一次世界大戦参戦"
+      },
+      {
+        "year": 1920,
+        "event": "国際連盟不参加"
+      },
+      {
+        "year": 1929,
+        "event": "世界恐慌"
+      },
+      {
+        "year": 1933,
+        "event": "ニューディール政策開始"
+      },
+      {
+        "year": 1941,
+        "event": "第二次世界大戦参戦"
+      },
+      {
+        "year": 1945,
+        "event": "国際連合設立・広島長崎原爆投下"
+      }
+    ]
+  },
+  "egypt": {
+    "name": "エジプト王国",
+    "era": "立憲君主制期",
+    "profile": {
+      "capital": "カイロ",
+      "regime": "立憲君主制",
+      "dynasty": "ムハンマド・アリー朝",
+      "leader": "フアード1世",
+      "religion": "イスラーム"
+    },
+    "context": "1930年のエジプト王国はフアード1世のもとで立憲君主制を採っていたが、国王とワフド党との対立が続いていた。イギリスはスエズ運河地帯に駐留を続け、実質的な影響力を保持していた。",
+    "keyEvents": [
+      {
+        "year": 1798,
+        "event": "ナポレオンのエジプト遠征"
+      },
+      {
+        "year": 1805,
+        "event": "ムハンマド・アリーの権力掌握"
+      },
+      {
+        "year": 1869,
+        "event": "スエズ運河開通"
+      },
+      {
+        "year": 1882,
+        "event": "イギリスによる軍事占領"
+      },
+      {
+        "year": 1922,
+        "event": "エジプト王国独立"
+      },
+      {
+        "year": 1952,
+        "event": "エジプト革命"
+      },
+      {
+        "year": 1956,
+        "event": "スエズ危機"
+      }
+    ]
+  }
+}
