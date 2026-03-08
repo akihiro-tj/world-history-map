@@ -154,8 +154,10 @@ export async function syncDescriptions(
   do {
     const response = await notion.dataSources.query({
       data_source_id: dataSourceId,
-      start_cursor: cursor,
-      filter: options?.year ? { property: 'year', number: { equals: options.year } } : undefined,
+      ...(cursor !== undefined && { start_cursor: cursor }),
+      ...(options?.year !== undefined && {
+        filter: { property: 'year', number: { equals: options.year } },
+      }),
     });
 
     for (const page of response.results) {

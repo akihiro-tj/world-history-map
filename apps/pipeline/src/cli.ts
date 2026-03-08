@@ -93,7 +93,11 @@ async function main(): Promise<void> {
         'data',
         'descriptions',
       );
-      await syncDescriptions(descriptionsDir, logger, { year: options.year });
+      await syncDescriptions(
+        descriptionsDir,
+        logger,
+        options.year !== undefined ? { year: options.year } : undefined,
+      );
       break;
     }
     case 'territory-validate': {

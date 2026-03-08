@@ -147,9 +147,9 @@ export function TerritoryInfoPanel() {
     } else {
       body = (
         <DescriptionBody
-          profile={description.profile}
-          context={description.context}
-          keyEvents={description.keyEvents}
+          {...(description.profile !== undefined && { profile: description.profile })}
+          {...(description.context !== undefined && { context: description.context })}
+          {...(description.keyEvents !== undefined && { keyEvents: description.keyEvents })}
           selectedYear={selectedYear}
         />
       );
