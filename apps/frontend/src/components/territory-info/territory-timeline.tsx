@@ -42,7 +42,7 @@ export function TerritoryTimeline({
         const isFuture = event.temporal === 'future';
 
         return (
-          <Fragment key={`${event.year}-${i}`}>
+          <Fragment key={`${event.year}-${event.event}`}>
             {resolvedMarkerIndex === i && yearMarker}
             <li
               aria-current={isCurrent ? 'true' : undefined}
