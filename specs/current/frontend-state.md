@@ -12,11 +12,11 @@
 graph TD
     subgraph AppStateContext["AppStateContext (useReducer)"]
         selectedYear[selectedYear: number]
-        selectedTerritory[selectedTerritory: string | null]
+        selectedTerritory["selectedTerritory: string #124; null"]
         isInfoPanelOpen[isInfoPanelOpen: boolean]
         mapView[mapView: MapViewState]
         isLoading[isLoading: boolean]
-        error[error: string | null]
+        error["error: string #124; null"]
     end
 
     subgraph LocalHooks["ローカル hooks"]
