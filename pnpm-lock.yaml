@@ -92,10 +92,6 @@ importers:
         version: 4.0.18(@types/node@25.3.0)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(tsx@4.21.0)
 
   apps/pipeline:
-    dependencies:
-      zod:
-        specifier: ^4.3.6
-        version: 4.3.6
     devDependencies:
       '@notionhq/client':
         specifier: ^5.11.1
@@ -115,6 +111,9 @@ importers:
       vitest:
         specifier: ^4.0.18
         version: 4.0.18(@types/node@25.3.0)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.31.1)(tsx@4.21.0)
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
 
   apps/worker:
     dependencies:

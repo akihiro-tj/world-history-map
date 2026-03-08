@@ -4,10 +4,10 @@ import path from 'node:path';
 const ROOT_DIR = path.resolve(import.meta.dirname, '..');
 
 export const NOTION = {
-  getDatabaseId: (): string => {
+  getDataSourceId: (): string => {
     return execFileSync(
       'op',
-      ['read', 'op://dev/world-history-map-pipeline/territory-descriptions-database-id'],
+      ['read', 'op://dev/world-history-map-pipeline/territory-descriptions-datasource-id'],
       { encoding: 'utf-8' },
     ).trim();
   },
