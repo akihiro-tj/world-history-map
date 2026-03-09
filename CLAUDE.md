@@ -44,6 +44,19 @@ pnpm test && pnpm check
 
 <!-- MANUAL ADDITIONS START -->
 
+## Product Vision
+
+### Target Users
+World history learners (high school students, university students, self-learners)
+
+### Problems to Solve
+1. **Vertical connections (縦のつながり)**: Textbooks split history by era (ancient/medieval/modern), fragmenting a country's continuous narrative across chapters. This app lets users track a specific territory's history as a continuous timeline.
+2. **Horizontal connections (横のつながり)**: Understanding what was happening simultaneously across the world requires cross-referencing textbooks with atlases, which is tedious. This app shows the entire world at any given year on a single interactive map.
+3. **Geographic knowledge (地理的知識)**: Memorizing locations of mountains, rivers, and cities from text alone is difficult. This app aims to make geographic learning natural through visual, interactive exploration.
+
+### Core Value
+An interactive world history map that makes spatial and temporal understanding of history intuitive — replacing the tedious textbook-atlas cross-referencing workflow with a single, explorable interface.
+
 ## Language Rules
 
 - Code (comments, log messages, variable names): English
