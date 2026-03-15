@@ -33,9 +33,7 @@ const meta = {
           selectedYear: 1650,
           selectedTerritory: null,
           mapView: { longitude: 0, latitude: 30, zoom: 2 },
-          isLoading: false,
           isInfoPanelOpen: false,
-          error: null,
         }}
       >
         <div className="bg-gray-700 p-4">
@@ -75,9 +73,7 @@ export const ManyYears: Story = {
           selectedYear: -500,
           selectedTerritory: null,
           mapView: { longitude: 0, latitude: 30, zoom: 2 },
-          isLoading: false,
           isInfoPanelOpen: false,
-          error: null,
         }}
       >
         <div className="bg-gray-700 p-4">

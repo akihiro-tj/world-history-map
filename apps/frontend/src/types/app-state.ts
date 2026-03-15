@@ -11,8 +11,6 @@ export interface AppState {
   selectedTerritory: string | null;
   isInfoPanelOpen: boolean;
   mapView: MapViewState;
-  isLoading: boolean;
-  error: string | null;
 }
 
 export const initialAppState: AppState = {
@@ -24,8 +22,6 @@ export const initialAppState: AppState = {
     latitude: MAP_CONFIG.initialLatitude,
     zoom: MAP_CONFIG.initialZoom,
   },
-  isLoading: false,
-  error: null,
 };
 
 export interface AppStateActions {
@@ -33,6 +29,4 @@ export interface AppStateActions {
   selectTerritory: (territory: string) => void;
   clearSelection: () => void;
   setMapView: (view: MapViewState) => void;
-  setLoading: (loading: boolean) => void;
-  setError: (error: string | null) => void;
 }
