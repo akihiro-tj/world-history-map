@@ -62,8 +62,7 @@ export function MapView({ onProjectionReady }: MapViewProps = {}) {
     (event: MapLayerMouseEvent) => {
       const features = event.features;
       if (!features || features.length === 0) {
-        actions.setInfoPanelOpen(false);
-        actions.setSelectedTerritory(null);
+        actions.clearSelection();
         return;
       }
 
@@ -74,8 +73,7 @@ export function MapView({ onProjectionReady }: MapViewProps = {}) {
       const territoryName = properties.NAME || properties.SUBJECTO;
 
       if (territoryName) {
-        actions.setSelectedTerritory(territoryName);
-        actions.setInfoPanelOpen(true);
+        actions.selectTerritory(territoryName);
       }
     },
     [actions],
@@ -93,11 +91,11 @@ export function MapView({ onProjectionReady }: MapViewProps = {}) {
           id: 'background',
           type: 'background' as const,
           paint: {
-            'background-color': '#1a2a3a',
+            'background-color': MAP_CONFIG.backgroundColor,
           },
         },
       ],
-      glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
+      glyphs: MAP_CONFIG.glyphsUrl,
     }),
     [],
   );
@@ -128,7 +126,7 @@ export function MapView({ onProjectionReady }: MapViewProps = {}) {
       {(isLoading || !mapLoaded) && (
         <output
           className="absolute inset-0 z-20 flex items-center justify-center"
-          style={{ backgroundColor: '#1a2a3a' }}
+          style={{ backgroundColor: MAP_CONFIG.backgroundColor }}
           data-testid="loading-overlay"
           aria-label="Loading map data"
         >

@@ -14,9 +14,9 @@ beforeAll(() => {
   });
 });
 
-const mockSetInfoPanelOpen = vi.fn();
+const mockClearSelection = vi.fn();
+const mockSelectTerritory = vi.fn();
 const mockSetSelectedYear = vi.fn();
-const mockSetSelectedTerritory = vi.fn();
 
 vi.mock('@/contexts/app-state-context', () => ({
   useAppState: () => ({
@@ -26,9 +26,9 @@ vi.mock('@/contexts/app-state-context', () => ({
       isInfoPanelOpen: true,
     },
     actions: {
-      setInfoPanelOpen: mockSetInfoPanelOpen,
+      clearSelection: mockClearSelection,
+      selectTerritory: mockSelectTerritory,
       setSelectedYear: mockSetSelectedYear,
-      setSelectedTerritory: mockSetSelectedTerritory,
     },
   }),
 }));
@@ -110,7 +110,7 @@ describe('TerritoryInfoPanel', () => {
     const closeButton = screen.getByRole('button', { name: /close|閉じる/i });
     fireEvent.click(closeButton);
 
-    expect(mockSetInfoPanelOpen).toHaveBeenCalledWith(false);
+    expect(mockClearSelection).toHaveBeenCalled();
   });
 
   it('closes panel when Escape key is pressed', () => {
@@ -118,7 +118,7 @@ describe('TerritoryInfoPanel', () => {
 
     fireEvent.keyDown(document, { key: 'Escape' });
 
-    expect(mockSetInfoPanelOpen).toHaveBeenCalledWith(false);
+    expect(mockClearSelection).toHaveBeenCalled();
   });
 
   it('has proper accessibility attributes', () => {

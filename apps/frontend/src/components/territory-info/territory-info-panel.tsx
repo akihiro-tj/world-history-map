@@ -85,6 +85,74 @@ function DescriptionBody({
   );
 }
 
+function LoadingSpinner() {
+  return (
+    <div className="flex items-center justify-center py-8">
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
+    </div>
+  );
+}
+
+function buildPanelContent(
+  description: import('@/types/territory').TerritoryDescription | null,
+  isLoading: boolean,
+  error: string | null,
+  selectedTerritory: string | null,
+  selectedYear: number,
+  onClose: () => void,
+): { header: ReactNode; body: ReactNode; busy: boolean; scrollable: boolean } {
+  const title = isLoading
+    ? (selectedTerritory ?? '読み込み中…')
+    : error
+      ? 'エラー'
+      : (description?.name ?? selectedTerritory ?? '領土情報');
+
+  if (isLoading) {
+    return {
+      header: <PanelHeader name={title} onClose={onClose} />,
+      body: <LoadingSpinner />,
+      busy: true,
+      scrollable: false,
+    };
+  }
+
+  if (error) {
+    return {
+      header: <PanelHeader name="エラー" onClose={onClose} />,
+      body: <p className="p-4 text-red-400">{error}</p>,
+      busy: false,
+      scrollable: false,
+    };
+  }
+
+  if (!description) {
+    return {
+      header: <PanelHeader name={selectedTerritory ?? '領土情報'} onClose={onClose} />,
+      body: (
+        <div data-testid="no-description-message" className="p-4 text-center text-gray-300">
+          <p>この領土の詳細情報は準備中です。</p>
+        </div>
+      ),
+      busy: false,
+      scrollable: false,
+    };
+  }
+
+  return {
+    header: <PanelHeader name={description.name} era={description.era} onClose={onClose} />,
+    body: (
+      <DescriptionBody
+        {...(description.profile !== undefined && { profile: description.profile })}
+        {...(description.context !== undefined && { context: description.context })}
+        {...(description.keyEvents !== undefined && { keyEvents: description.keyEvents })}
+        selectedYear={selectedYear}
+      />
+    ),
+    busy: false,
+    scrollable: true,
+  };
+}
+
 export function TerritoryInfoPanel() {
   const { state, actions } = useAppState();
   const { selectedTerritory, selectedYear, isInfoPanelOpen } = state;
@@ -96,8 +164,7 @@ export function TerritoryInfoPanel() {
   );
 
   const handleClose = useCallback(() => {
-    actions.setInfoPanelOpen(false);
-    actions.setSelectedTerritory(null);
+    actions.clearSelection();
   }, [actions]);
 
   useEscapeKey(isInfoPanelOpen && !isMobile, handleClose);
@@ -106,60 +173,21 @@ export function TerritoryInfoPanel() {
     return null;
   }
 
-  const title = isLoading
-    ? (selectedTerritory ?? '読み込み中…')
-    : error
-      ? 'エラー'
-      : (description?.name ?? selectedTerritory ?? '領土情報');
+  const { header, body, busy, scrollable } = buildPanelContent(
+    description,
+    isLoading,
+    error,
+    selectedTerritory,
+    selectedYear,
+    handleClose,
+  );
 
   if (isMobile) {
-    const header = description ? (
-      <PanelHeader
-        name={description.name}
-        era={description.era}
-        onClose={handleClose}
-        className="px-4"
-      />
-    ) : (
-      <div className="flex items-center justify-between border-b border-gray-600 px-4 pb-3">
-        <h2 id="territory-info-title" className="text-lg font-semibold text-white">
-          {title}
-        </h2>
-        <CloseButton onClick={handleClose} aria-label="閉じる" />
-      </div>
-    );
-
-    let body: ReactNode;
-    if (isLoading) {
-      body = (
-        <div className="flex items-center justify-center py-8">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
-        </div>
-      );
-    } else if (error) {
-      body = <p className="p-4 text-red-400">{error}</p>;
-    } else if (!description) {
-      body = (
-        <div data-testid="no-description-message" className="p-4 text-center text-gray-300">
-          <p>この領土の詳細情報は準備中です。</p>
-        </div>
-      );
-    } else {
-      body = (
-        <DescriptionBody
-          {...(description.profile !== undefined && { profile: description.profile })}
-          {...(description.context !== undefined && { context: description.context })}
-          {...(description.keyEvents !== undefined && { keyEvents: description.keyEvents })}
-          selectedYear={selectedYear}
-        />
-      );
-    }
-
     return (
       <BottomSheet
         isOpen={isInfoPanelOpen}
         onClose={handleClose}
-        header={header}
+        header={<div className="px-4">{header}</div>}
         aria-labelledby="territory-info-title"
       >
         {body}
@@ -167,58 +195,10 @@ export function TerritoryInfoPanel() {
     );
   }
 
-  const loadingContent = (
-    <PanelWrapper busy>
-      <div className="flex items-start justify-between border-b border-gray-600 pb-3">
-        <h2 id="territory-info-title" className="text-lg font-semibold text-white">
-          {title}
-        </h2>
-      </div>
-      <div className="flex items-center justify-center py-8">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
-      </div>
-    </PanelWrapper>
-  );
-
-  const errorContent = (
-    <PanelWrapper>
-      <div className="flex items-start justify-between border-b border-gray-600 pb-3">
-        <h2 id="territory-info-title" className="text-lg font-semibold text-white">
-          エラー
-        </h2>
-        <CloseButton onClick={handleClose} aria-label="閉じる" />
-      </div>
-      <p className="mt-4 text-red-400">{error}</p>
-    </PanelWrapper>
-  );
-
-  const noDescriptionContent = (
-    <PanelWrapper>
-      <div className="flex items-start justify-between border-b border-gray-600 pb-3">
-        <h2 id="territory-info-title" className="text-lg font-semibold text-white">
-          {selectedTerritory ?? '領土情報'}
-        </h2>
-        <CloseButton onClick={handleClose} aria-label="閉じる" />
-      </div>
-      <div data-testid="no-description-message" className="mt-4 text-center text-gray-300">
-        <p>この領土の詳細情報は準備中です。</p>
-      </div>
-    </PanelWrapper>
-  );
-
-  if (isLoading) return loadingContent;
-  if (error) return errorContent;
-  if (!description) return noDescriptionContent;
-
   return (
-    <PanelWrapper scrollable>
-      <PanelHeader name={description.name} era={description.era} onClose={handleClose} />
-      <div data-testid="territory-description" className="mt-4 space-y-4">
-        <TerritoryProfile profile={description.profile} />
-        <TerritoryContext context={description.context} />
-        <TerritoryTimeline keyEvents={description.keyEvents} selectedYear={selectedYear} />
-        <AiNotice className="mt-4" />
-      </div>
+    <PanelWrapper scrollable={scrollable} busy={busy}>
+      {header}
+      {body}
     </PanelWrapper>
   );
 }
