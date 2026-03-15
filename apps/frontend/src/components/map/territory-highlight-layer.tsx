@@ -1,6 +1,9 @@
 import { Layer } from 'react-map-gl/maplibre';
 import { TERRITORY_LABEL_ID } from './territory-label';
 
+const HIGHLIGHT_FILL_OPACITY = 0.15;
+const HIGHLIGHT_LINE_WIDTH = 3.5;
+
 interface TerritoryHighlightLayerProps {
   sourceId: string;
   sourceLayer: string;
@@ -25,7 +28,7 @@ export function TerritoryHighlightLayer({
         filter={filter}
         paint={{
           'fill-color': '#ffffff',
-          'fill-opacity': 0.15,
+          'fill-opacity': HIGHLIGHT_FILL_OPACITY,
         }}
       />
       <Layer
@@ -37,7 +40,7 @@ export function TerritoryHighlightLayer({
         filter={filter}
         paint={{
           'line-color': '#ffffff',
-          'line-width': 3.5,
+          'line-width': HIGHLIGHT_LINE_WIDTH,
         }}
       />
     </>

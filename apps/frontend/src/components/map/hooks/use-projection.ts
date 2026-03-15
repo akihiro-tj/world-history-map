@@ -2,6 +2,14 @@ import { type RefObject, useEffect, useRef, useState } from 'react';
 import type { MapRef } from 'react-map-gl/maplibre';
 import type { ProjectionType } from '../projection-toggle';
 
+const GLOBE_MAX_ZOOM = 2;
+const GLOBE_FLY_DURATION_MS = 1200;
+const GLOBE_FLY_CURVE = 1.8;
+const MERCATOR_MIN_ZOOM = 3;
+const MERCATOR_FLY_DURATION_MS = 800;
+const MERCATOR_FLY_CURVE = 1.5;
+const PROJECTION_SWITCH_DELAY_MS = 200;
+
 export function useProjection(
   mapRef: RefObject<MapRef | null>,
   mapLoaded: boolean,
@@ -36,27 +44,26 @@ export function useProjection(
       mapInstance.setProjection({ type: 'globe' });
       mapInstance.flyTo({
         center: currentCenter,
-        zoom: Math.min(currentZoom, 2),
+        zoom: Math.min(currentZoom, GLOBE_MAX_ZOOM),
         pitch: 0,
         bearing: 0,
-        duration: 1200,
-        curve: 1.8,
+        duration: GLOBE_FLY_DURATION_MS,
+        curve: GLOBE_FLY_CURVE,
         essential: true,
       });
     } else {
       mapInstance.flyTo({
         center: currentCenter,
-        zoom: Math.max(currentZoom, 3),
+        zoom: Math.max(currentZoom, MERCATOR_MIN_ZOOM),
         pitch: 0,
         bearing: 0,
-        duration: 800,
-        curve: 1.5,
+        duration: MERCATOR_FLY_DURATION_MS,
+        curve: MERCATOR_FLY_CURVE,
         essential: true,
       });
-      // Set projection during animation for smooth blend
       setTimeout(() => {
         mapInstance.setProjection({ type: 'mercator' });
-      }, 200);
+      }, PROJECTION_SWITCH_DELAY_MS);
     }
   }, [projection, mapLoaded, mapRef]);
 
