@@ -73,38 +73,3 @@ export async function loadYearIndex(): Promise<YearIndex> {
 export function clearYearIndexCache(): void {
   cachedYearIndex = null;
 }
-
-export function getYearFilePath(yearIndex: YearIndex, year: number): string | null {
-  const entry = yearIndex.years.find((yearEntry) => yearEntry.year === year);
-  if (!entry) {
-    return null;
-  }
-  return `/pmtiles/${entry.filename}`;
-}
-
-export function findNearestYear(yearIndex: YearIndex, targetYear: number): number | null {
-  if (yearIndex.years.length === 0) {
-    return null;
-  }
-
-  const firstEntry = yearIndex.years[0];
-  if (!firstEntry) {
-    return null;
-  }
-  let nearest = firstEntry.year;
-  let minDiff = Math.abs(targetYear - nearest);
-
-  for (const entry of yearIndex.years) {
-    const diff = Math.abs(targetYear - entry.year);
-    if (diff < minDiff) {
-      minDiff = diff;
-      nearest = entry.year;
-    }
-  }
-
-  return nearest;
-}
-
-export function getSortedYears(yearIndex: YearIndex): number[] {
-  return yearIndex.years.map((yearEntry) => yearEntry.year).sort((a, b) => a - b);
-}
