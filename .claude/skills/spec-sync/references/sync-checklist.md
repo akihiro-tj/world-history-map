@@ -1,46 +1,75 @@
 # 同期チェックリスト
 
-トピックごとに「探索戦略」とチェック項目を定義する。
-ソースファイルは固定パスではなく glob パターンで指定し、実行時に動的に解決する。
+overview.md の各セクションに対応するチェック項目。
 
-## data-flow
-
-探索戦略:
-- `apps/pipeline/src/**/*.ts` でパイプラインのステージと入出力を把握
-- `apps/worker/src/**/*.ts` + `apps/worker/wrangler.toml` で Worker の処理内容を把握
-- `apps/frontend/src/**/*.ts{,x}` でデータ取得・表示のエントリポイントを把握
-- `apps/pipeline/package.json` の scripts で CLI エントリポイントを確認
-
-チェック項目:
-- データの起点（Notion DB など外部ソース）と終点（ブラウザ描画）
-- 各境界でのデータ形式変換（例: Notion Page → GeoJSON Feature → PMTiles）
-- アプリ間の通信方法（ファイル I/O, HTTP, R2 バインディング等）
-- パイプラインのステージ順序と各ステージの入出力
-- 外部ツール依存（tippecanoe, wrangler 等）の役割
-
-## data-model
+## アプリ構成
 
 探索戦略:
-- `apps/**/types/**/*.ts` で全アプリの型定義を検索
-- `export (type|interface|enum)` を grep で横断検索
-- `apps/**/public/data/**/*.json` でランタイムデータの形状を確認
+- `apps/` 直下のディレクトリ一覧
+- 各アプリの `package.json` の name / description
 
 チェック項目:
-- ドメインの中核モデル（Territory, Period 等）の型定義
-- 同じ概念の各アプリでの型表現（変換チェーン）
-- 共有型 vs アプリ固有型の境界
-- ランタイムデータスキーマ（JSON ファイル）の形状
+- アプリの追加・削除・名称変更がないか
+- アプリ間の依存関係に変化がないか
 
-## frontend-state
+## pipeline: データの流れ
+
+探索戦略:
+- `apps/pipeline/src/stages/*.ts` でステージ一覧と入出力を把握
+- `apps/pipeline/src/cli.ts` でコマンド一覧を確認
+
+チェック項目:
+- ステージの追加・削除・順序変更
+- 外部データソースの変更（GitHub リポジトリ、Notion DB 等）
+- 出力先の変更（R2, public/data/ 等）
+- 外部ツール依存の変更（tippecanoe, wrangler 等）
+
+## frontend: 状態設計
 
 探索戦略:
 - `apps/frontend/src/**/*context*.tsx` で Context を検索
 - `apps/frontend/src/**/use-*.ts` でカスタム hooks を検索
-- `apps/frontend/src/**/*.tsx` で状態を消費するコンポーネントを把握
-- URL パラメータ管理を grep（`useSearchParams`, `URLSearchParams` 等）
+- `apps/frontend/src/components/**/*.tsx` で主要コンポーネントを把握
 
 チェック項目:
-- 状態の管理手法（URL params, React Context, MapLibre 内部状態）と役割分担
-- 主要なユーザー操作フロー（年代選択 → レイヤー更新等）
-- 状態間の同期ポイント（例: URL ↔ Context ↔ MapLibre state）
-- Context プロバイダーの構成と提供する状態の概要
+- AppState のフィールド追加・削除
+- 新しい Context や hooks の追加
+- 状態管理手法の変更（Context → URL params 等）
+- コンポーネント構成の大きな変更
+
+## 中核の型
+
+探索戦略:
+- `apps/**/types/**/*.ts` で型定義を検索
+- `export (type|interface)` を grep で横断検索
+
+チェック項目:
+- TerritoryDescription, YearEntry 等の中核型のフィールド変更
+- 新しい中核型の追加
+- 型の重複・共有パッケージ化の変化
+
+## データファイル
+
+探索戦略:
+- `apps/frontend/public/data/**/*.json` で JSON ファイルを確認
+- `apps/frontend/public/pmtiles/` でタイル関連ファイルを確認
+
+チェック項目:
+- JSON ファイルの追加・削除・形状変更
+- ファイルパスの変更
+
+## worker: タイル配信
+
+探索戦略:
+- `apps/worker/src/**/*.ts` で Worker の処理を把握
+
+チェック項目:
+- エンドポイントの追加・削除
+- キャッシュ戦略の変更
+- R2 バインディングの変更
+
+## よくある問い
+
+チェック項目:
+- 記載されている操作手順がコードの実態と合っているか
+- 新しいよくある開発シナリオがないか
