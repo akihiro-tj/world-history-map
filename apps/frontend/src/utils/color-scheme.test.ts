@@ -1,12 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import {
-  clearColorSchemeCache,
-  createMatchColorExpression,
-  getColorForSubjecto,
-  loadColorScheme,
-} from './color-scheme';
+import { clearColorSchemeCache, createMatchColorExpression, loadColorScheme } from './color-scheme';
 
 const colorSchemeJson = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, '../../public/data/color-scheme.json'), 'utf8'),
@@ -35,31 +30,6 @@ describe('color-scheme', () => {
   afterEach(() => {
     clearColorSchemeCache();
     mockFetch.mockReset();
-  });
-
-  describe('getColorForSubjecto', () => {
-    it('should return predefined color for major powers', () => {
-      expect(getColorForSubjecto('France')).toBe('#377eb8');
-      expect(getColorForSubjecto('England')).toBe('#e41a1c');
-      expect(getColorForSubjecto('Spanish Habsburg')).toBe('#e6c74c');
-      expect(getColorForSubjecto('Ottoman Empire')).toBe('#b22222');
-    });
-
-    it('should return hash-based color for other territories', () => {
-      const color = getColorForSubjecto('Cree');
-      expect(color).toMatch(/^hsl\(\d+,\s*\d+%,\s*\d+%\)$/);
-    });
-
-    it('should return consistent color for same SUBJECTO', () => {
-      const color1 = getColorForSubjecto('Cree');
-      const color2 = getColorForSubjecto('Cree');
-      expect(color1).toBe(color2);
-    });
-
-    it('should return default color for unknown SUBJECTO', () => {
-      const color = getColorForSubjecto('NonExistentTerritory12345');
-      expect(color).toBe('#cccccc');
-    });
   });
 
   describe('createMatchColorExpression', () => {

@@ -22,13 +22,6 @@ export function clearColorSchemeCache(): void {
   cachedColorScheme = null;
 }
 
-export function getColorForSubjecto(subjecto: string): string {
-  if (!cachedColorScheme) {
-    return DEFAULT_COLOR;
-  }
-  return cachedColorScheme[subjecto] ?? DEFAULT_COLOR;
-}
-
 export function createMatchColorExpression(): ExpressionSpecification {
   if (!cachedColorScheme) {
     return ['literal', DEFAULT_COLOR] as unknown as ExpressionSpecification;
