@@ -33,8 +33,6 @@ describe('YearSelector', () => {
           selectedTerritory: null,
           isInfoPanelOpen: false,
           mapView: { longitude: 0, latitude: 30, zoom: 2 },
-          isLoading: false,
-          error: null,
         }}
       >
         {ui}

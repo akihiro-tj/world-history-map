@@ -22,9 +22,7 @@ type AppStateAction =
   | { type: 'SET_SELECTED_YEAR'; year: number }
   | { type: 'SELECT_TERRITORY'; territory: string }
   | { type: 'CLEAR_SELECTION' }
-  | { type: 'SET_MAP_VIEW'; view: MapViewState }
-  | { type: 'SET_LOADING'; loading: boolean }
-  | { type: 'SET_ERROR'; error: string | null };
+  | { type: 'SET_MAP_VIEW'; view: MapViewState };
 
 function appStateReducer(state: AppState, action: AppStateAction): AppState {
   switch (action.type) {
@@ -36,10 +34,6 @@ function appStateReducer(state: AppState, action: AppStateAction): AppState {
       return { ...state, selectedTerritory: null, isInfoPanelOpen: false };
     case 'SET_MAP_VIEW':
       return { ...state, mapView: action.view };
-    case 'SET_LOADING':
-      return { ...state, isLoading: action.loading };
-    case 'SET_ERROR':
-      return { ...state, error: action.error };
   }
 }
 
@@ -55,8 +49,6 @@ export function AppStateProvider({
       selectTerritory: (territory: string) => dispatch({ type: 'SELECT_TERRITORY', territory }),
       clearSelection: () => dispatch({ type: 'CLEAR_SELECTION' }),
       setMapView: (view: MapViewState) => dispatch({ type: 'SET_MAP_VIEW', view }),
-      setLoading: (loading: boolean) => dispatch({ type: 'SET_LOADING', loading }),
-      setError: (error: string | null) => dispatch({ type: 'SET_ERROR', error }),
     }),
     [],
   );
