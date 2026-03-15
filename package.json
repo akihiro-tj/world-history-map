@@ -14,10 +14,16 @@
     "storybook": "pnpm --filter @world-history-map/frontend run storybook",
     "pipeline": "pnpm --filter @world-history-map/pipeline run pipeline",
     "territory-sync": "pnpm pipeline territory-sync && pnpm pipeline territory-validate",
-    "typecheck": "tsc -b && pnpm --filter @world-history-map/worker exec tsc --noEmit"
+    "typecheck": "tsc -b && pnpm --filter @world-history-map/worker exec tsc --noEmit",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json,css}": "biome check --no-errors-on-unmatched"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.6",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "typescript": "~5.9.3"
   }
 }
