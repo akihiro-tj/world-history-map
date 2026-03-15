@@ -53,7 +53,7 @@ describe('useBottomSheetSnap', () => {
   let sheetEl: HTMLDivElement;
   let headerRef: RefObject<HTMLDivElement>;
   let sheetRef: RefObject<HTMLDivElement>;
-  let onClose: ReturnType<typeof vi.fn>;
+  let onClose: ReturnType<typeof vi.fn<() => void>>;
 
   beforeEach(() => {
     vi.spyOn(window, 'innerHeight', 'get').mockReturnValue(VIEWPORT_HEIGHT);
@@ -77,15 +77,14 @@ describe('useBottomSheetSnap', () => {
   });
 
   function renderSnap(overrides?: { initialSnap?: SnapPoint; isActive?: boolean }) {
-    return renderHook(() =>
-      useBottomSheetSnap({
-        isActive: overrides?.isActive ?? true,
-        headerRef,
-        sheetRef,
-        onClose,
-        initialSnap: overrides?.initialSnap,
-      }),
-    );
+    const options = {
+      isActive: overrides?.isActive ?? true,
+      headerRef,
+      sheetRef,
+      onClose,
+      ...(overrides?.initialSnap !== undefined && { initialSnap: overrides.initialSnap }),
+    };
+    return renderHook(() => useBottomSheetSnap(options));
   }
 
   it('defaults to half snap with 40vh height', () => {

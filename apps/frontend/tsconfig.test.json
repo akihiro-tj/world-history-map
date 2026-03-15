@@ -36,5 +36,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.test.*", "src/**/*.spec.*", "tests/**/*"]
+  "include": ["src/**/*.test.*", "src/**/*.spec.*", "src/vite-env.d.ts", "tests/**/*"]
 }
