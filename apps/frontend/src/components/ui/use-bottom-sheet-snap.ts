@@ -18,6 +18,9 @@ interface UseBottomSheetSnapReturn {
 }
 
 const SNAP_ORDER: SnapPoint[] = ['collapsed', 'half', 'expanded'];
+const HALF_VIEWPORT_RATIO = 0.4;
+const EXPANDED_VIEWPORT_RATIO = 0.9;
+const DEFAULT_HEADER_HEIGHT = 76;
 const VELOCITY_THRESHOLD = 0.5;
 const TRANSITION = 'height 300ms cubic-bezier(0.32, 0.72, 0, 1)';
 
@@ -26,9 +29,9 @@ function getSnapHeight(snap: SnapPoint, headerHeight: number, viewportHeight: nu
     case 'collapsed':
       return headerHeight;
     case 'half':
-      return viewportHeight * 0.4;
+      return viewportHeight * HALF_VIEWPORT_RATIO;
     case 'expanded':
-      return viewportHeight * 0.9;
+      return viewportHeight * EXPANDED_VIEWPORT_RATIO;
   }
 }
 
@@ -50,16 +53,16 @@ export function useBottomSheetSnap({
       return;
     }
     setIsEntering(true);
-    let id1: number;
-    let id2: number;
-    id1 = requestAnimationFrame(() => {
-      id2 = requestAnimationFrame(() => {
+    let outerFrameId: number;
+    let innerFrameId: number;
+    outerFrameId = requestAnimationFrame(() => {
+      innerFrameId = requestAnimationFrame(() => {
         setIsEntering(false);
       });
     });
     return () => {
-      cancelAnimationFrame(id1);
-      cancelAnimationFrame(id2);
+      cancelAnimationFrame(outerFrameId);
+      cancelAnimationFrame(innerFrameId);
     };
   }, [isActive]);
 
@@ -73,7 +76,7 @@ export function useBottomSheetSnap({
   });
 
   const getHeaderHeight = useCallback((): number => {
-    return headerRef.current?.getBoundingClientRect().height ?? 76;
+    return headerRef.current?.getBoundingClientRect().height ?? DEFAULT_HEADER_HEIGHT;
   }, [headerRef]);
 
   const getHeight = useCallback(

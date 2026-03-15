@@ -1,15 +1,15 @@
 import type { ClassifiedKeyEvent, KeyEvent, KeyEventTemporal } from '../types/territory';
 
 export function classifyEvents(events: KeyEvent[], selectedYear: number): ClassifiedKeyEvent[] {
-  return events.map((e) => {
+  return events.map((event) => {
     let temporal: KeyEventTemporal;
-    if (e.year < selectedYear) {
+    if (event.year < selectedYear) {
       temporal = 'past';
-    } else if (e.year === selectedYear) {
+    } else if (event.year === selectedYear) {
       temporal = 'current';
     } else {
       temporal = 'future';
     }
-    return { ...e, temporal };
+    return { ...event, temporal };
   });
 }

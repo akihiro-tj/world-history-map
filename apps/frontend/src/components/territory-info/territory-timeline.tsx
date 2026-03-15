@@ -17,9 +17,11 @@ export function TerritoryTimeline({
 
   if (!keyEvents || keyEvents.length === 0) return null;
 
-  const hasCurrent = classified.some((e) => e.temporal === 'current');
+  const hasCurrent = classified.some((event) => event.temporal === 'current');
 
-  const markerIndex = hasCurrent ? -1 : classified.findIndex((e) => e.temporal === 'future');
+  const markerIndex = hasCurrent
+    ? -1
+    : classified.findIndex((event) => event.temporal === 'future');
 
   const resolvedMarkerIndex = markerIndex === -1 && !hasCurrent ? classified.length : markerIndex;
 

@@ -8,10 +8,10 @@ function validateYearEntry(entry: unknown): entry is YearEntry {
     return false;
   }
 
-  const e = entry as Record<string, unknown>;
-  const year = e['year'];
-  const filename = e['filename'];
-  const countries = e['countries'];
+  const record = entry as Record<string, unknown>;
+  const year = record['year'];
+  const filename = record['filename'];
+  const countries = record['countries'];
 
   if (typeof year !== 'number' || !Number.isInteger(year)) {
     return false;
@@ -37,8 +37,8 @@ function validateYearIndex(data: unknown): data is YearIndex {
     return false;
   }
 
-  const d = data as Record<string, unknown>;
-  const years = d['years'];
+  const record = data as Record<string, unknown>;
+  const years = record['years'];
 
   if (!Array.isArray(years)) {
     return false;
@@ -75,7 +75,7 @@ export function clearYearIndexCache(): void {
 }
 
 export function getYearFilePath(yearIndex: YearIndex, year: number): string | null {
-  const entry = yearIndex.years.find((e) => e.year === year);
+  const entry = yearIndex.years.find((yearEntry) => yearEntry.year === year);
   if (!entry) {
     return null;
   }
@@ -106,5 +106,5 @@ export function findNearestYear(yearIndex: YearIndex, targetYear: number): numbe
 }
 
 export function getSortedYears(yearIndex: YearIndex): number[] {
-  return yearIndex.years.map((e) => e.year).sort((a, b) => a - b);
+  return yearIndex.years.map((yearEntry) => yearEntry.year).sort((a, b) => a - b);
 }

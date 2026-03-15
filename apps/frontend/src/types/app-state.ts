@@ -1,3 +1,5 @@
+import { MAP_CONFIG } from '../styles/map-style';
+
 export interface MapViewState {
   longitude: number;
   latitude: number;
@@ -14,13 +16,13 @@ export interface AppState {
 }
 
 export const initialAppState: AppState = {
-  selectedYear: 1650,
+  selectedYear: MAP_CONFIG.initialYear,
   selectedTerritory: null,
   isInfoPanelOpen: false,
   mapView: {
-    longitude: 40,
-    latitude: 30,
-    zoom: 2,
+    longitude: MAP_CONFIG.initialLongitude,
+    latitude: MAP_CONFIG.initialLatitude,
+    zoom: MAP_CONFIG.initialZoom,
   },
   isLoading: false,
   error: null,
@@ -28,8 +30,8 @@ export const initialAppState: AppState = {
 
 export interface AppStateActions {
   setSelectedYear: (year: number) => void;
-  setSelectedTerritory: (territory: string | null) => void;
-  setInfoPanelOpen: (open: boolean) => void;
+  selectTerritory: (territory: string) => void;
+  clearSelection: () => void;
   setMapView: (view: MapViewState) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;

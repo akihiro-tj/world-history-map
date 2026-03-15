@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { formatYear } from '@/utils/format-year';
 
+const FADE_DURATION_MS = 150;
+
 interface YearDisplayProps {
   year: number;
 }
@@ -16,7 +18,7 @@ export function YearDisplay({ year }: YearDisplayProps) {
     const id = setTimeout(() => {
       setDisplayYear(year);
       setVisible(true);
-    }, 150);
+    }, FADE_DURATION_MS);
     return () => clearTimeout(id);
   }, [year, displayYear]);
 

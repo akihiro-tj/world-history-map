@@ -3,6 +3,7 @@ import { type RefObject, useCallback } from 'react';
 import type { MapRef } from 'react-map-gl/maplibre';
 
 const PAN_AMOUNT = 100;
+const ANIMATION_DURATION_MS = 200;
 
 export function useMapKeyboard(
   mapRef: RefObject<MapRef | null>,
@@ -15,28 +16,28 @@ export function useMapKeyboard(
       switch (event.key) {
         case 'ArrowUp':
           event.preventDefault();
-          map.panBy([0, -PAN_AMOUNT], { duration: 200 });
+          map.panBy([0, -PAN_AMOUNT], { duration: ANIMATION_DURATION_MS });
           break;
         case 'ArrowDown':
           event.preventDefault();
-          map.panBy([0, PAN_AMOUNT], { duration: 200 });
+          map.panBy([0, PAN_AMOUNT], { duration: ANIMATION_DURATION_MS });
           break;
         case 'ArrowLeft':
           event.preventDefault();
-          map.panBy([-PAN_AMOUNT, 0], { duration: 200 });
+          map.panBy([-PAN_AMOUNT, 0], { duration: ANIMATION_DURATION_MS });
           break;
         case 'ArrowRight':
           event.preventDefault();
-          map.panBy([PAN_AMOUNT, 0], { duration: 200 });
+          map.panBy([PAN_AMOUNT, 0], { duration: ANIMATION_DURATION_MS });
           break;
         case '=':
         case '+':
           event.preventDefault();
-          map.zoomIn({ duration: 200 });
+          map.zoomIn({ duration: ANIMATION_DURATION_MS });
           break;
         case '-':
           event.preventDefault();
-          map.zoomOut({ duration: 200 });
+          map.zoomOut({ duration: ANIMATION_DURATION_MS });
           break;
         default:
           break;
