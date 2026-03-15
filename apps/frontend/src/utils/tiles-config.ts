@@ -10,13 +10,13 @@ const DEV_MANIFEST: TilesManifest = {
 
 let cachedManifest: TilesManifest | null = null;
 
-export function getTilesBaseUrl(): string {
+function getTilesBaseUrl(): string {
   const url = import.meta.env.VITE_TILES_BASE_URL || '';
   // Remove trailing slash to avoid double slashes in URLs
   return url.replace(/\/+$/, '');
 }
 
-export function isProductionTiles(): boolean {
+function isProductionTiles(): boolean {
   return !!import.meta.env.VITE_TILES_BASE_URL;
 }
 
@@ -41,7 +41,7 @@ export async function loadTilesManifest(): Promise<TilesManifest> {
   return cachedManifest;
 }
 
-export function getTilesFilename(year: number, manifest: TilesManifest): string | null {
+function getTilesFilename(year: number, manifest: TilesManifest): string | null {
   if (!isProductionTiles()) {
     return `world_${year}.pmtiles`;
   }
