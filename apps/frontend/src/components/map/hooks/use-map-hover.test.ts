@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react';
 import type { MapLayerMouseEvent } from 'react-map-gl/maplibre';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useMapHover } from './use-map-hover';
 
 function createMouseEvent(subjecto?: string): MapLayerMouseEvent {

@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react';
 import { createRef, type RefObject } from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { useFocusTrap } from './use-focus-trap';
 
 function createContainer(...focusableElements: HTMLElement[]): HTMLDivElement {

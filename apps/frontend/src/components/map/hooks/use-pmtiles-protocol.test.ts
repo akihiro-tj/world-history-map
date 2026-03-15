@@ -1,6 +1,6 @@
 import { renderHook } from '@testing-library/react';
 import maplibregl from 'maplibre-gl';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('pmtiles', () => {
   return {
