@@ -5,11 +5,10 @@ import { useIsMobile } from '@/hooks/use-is-mobile';
 import { cn } from '@/lib/utils';
 import type { TerritoryProfile as TerritoryProfileType } from '@/types/territory';
 import { useAppState } from '../../contexts/app-state-context';
-import { BottomSheet } from '../ui/bottom-sheet';
-import { CloseButton } from '../ui/close-button';
+import { BottomSheet } from '../bottom-sheet/bottom-sheet';
+import { CloseButton } from '../close-button/close-button';
 import { AiNotice } from './ai-notice';
 import { useTerritoryDescription } from './hooks/use-territory-description';
-import { TerritoryContext } from './territory-context';
 import { TerritoryProfile } from './territory-profile';
 import { TerritoryTimeline } from './territory-timeline';
 
@@ -78,7 +77,7 @@ function DescriptionBody({
   return (
     <div data-testid="territory-description" className="space-y-3 px-4 pt-2 pb-4">
       <TerritoryProfile profile={profile} />
-      <TerritoryContext context={context} />
+      {context && <p className="text-sm leading-relaxed text-gray-300">{context}</p>}
       <TerritoryTimeline keyEvents={keyEvents} selectedYear={selectedYear} />
       <AiNotice className="mt-4" />
     </div>

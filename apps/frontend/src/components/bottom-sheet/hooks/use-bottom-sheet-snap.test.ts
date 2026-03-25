@@ -249,4 +249,28 @@ describe('useBottomSheetSnap', () => {
     expect(result.current.snap).toBe('expanded');
     expect(result.current.sheetStyle.height).toBe(EXPANDED_HEIGHT);
   });
+
+  it('calls onClose when slowly dragged below half of collapsed height', () => {
+    vi.spyOn(sheetEl, 'getBoundingClientRect').mockReturnValue({
+      height: COLLAPSED_HEIGHT,
+      width: 375,
+      top: 0,
+      left: 0,
+      bottom: COLLAPSED_HEIGHT,
+      right: 375,
+      x: 0,
+      y: 0,
+      toJSON: () => {},
+    });
+
+    renderSnap({ initialSnap: 'collapsed' });
+
+    act(() => {
+      touchStart(headerEl, 300, 0);
+      touchMove(headerEl, 300 + COLLAPSED_HEIGHT, 2000);
+      touchEnd(headerEl, 300 + COLLAPSED_HEIGHT, 4000);
+    });
+
+    expect(onClose).toHaveBeenCalledOnce();
+  });
 });

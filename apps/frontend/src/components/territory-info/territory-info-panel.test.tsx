@@ -162,3 +162,71 @@ describe('TerritoryInfoPanel - US-1: Header display', () => {
     expect(headerArea?.textContent).not.toContain('不明');
   });
 });
+
+describe('TerritoryInfoPanel - US-2: buildPanelContent states', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('displays loading spinner and territory name while loading', () => {
+    mockIsLoading = true;
+    mockDescriptionValue = null;
+    mockError = null;
+    render(<TerritoryInfoPanel />);
+
+    const panel = screen.getByTestId('territory-info-panel');
+    expect(panel).toHaveAttribute('aria-busy', 'true');
+    expect(screen.getByText('France')).toBeInTheDocument();
+  });
+
+  it('displays error message when error occurs', () => {
+    mockIsLoading = false;
+    mockError = 'ネットワークエラーが発生しました';
+    mockDescriptionValue = null;
+    render(<TerritoryInfoPanel />);
+
+    expect(screen.getByText('エラー')).toBeInTheDocument();
+    expect(screen.getByText('ネットワークエラーが発生しました')).toBeInTheDocument();
+  });
+
+  it('displays no-description message when description is null', () => {
+    mockIsLoading = false;
+    mockError = null;
+    mockDescriptionValue = null;
+    render(<TerritoryInfoPanel />);
+
+    expect(screen.getByTestId('no-description-message')).toBeInTheDocument();
+    expect(screen.getByText('この領土の詳細情報は準備中です。')).toBeInTheDocument();
+  });
+
+  it('displays full description body on success', () => {
+    mockIsLoading = false;
+    mockError = null;
+    mockDescriptionValue = richDescription;
+    render(<TerritoryInfoPanel />);
+
+    expect(screen.getByTestId('territory-description')).toBeInTheDocument();
+    expect(screen.getByText('フランス王国')).toBeInTheDocument();
+    expect(screen.getByText('絶対王政期')).toBeInTheDocument();
+  });
+
+  it('renders scrollable panel wrapper for successful description', () => {
+    mockIsLoading = false;
+    mockError = null;
+    mockDescriptionValue = richDescription;
+    render(<TerritoryInfoPanel />);
+
+    const panel = screen.getByTestId('territory-info-panel');
+    expect(panel.className).toContain('overflow-y-auto');
+  });
+
+  it('does not render scrollable panel for loading state', () => {
+    mockIsLoading = true;
+    mockDescriptionValue = null;
+    mockError = null;
+    render(<TerritoryInfoPanel />);
+
+    const panel = screen.getByTestId('territory-info-panel');
+    expect(panel.className).not.toContain('overflow-y-auto');
+  });
+});
