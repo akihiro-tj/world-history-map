@@ -203,4 +203,91 @@ describe('YearSelector', () => {
     expect(button500BCE).toBeInTheDocument();
     expect(button500BCE).toHaveTextContent('前500');
   });
+
+  it('should navigate to first year on Home key', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(<YearSelector years={mockYears} />, { initialYear: 1700 });
+
+    const year1700Button = screen.getByTestId('year-button-1700');
+    year1700Button.focus();
+
+    await user.keyboard('{Home}');
+
+    await waitFor(() => {
+      expect(screen.getByTestId('year-button-1600')).toHaveFocus();
+    });
+  });
+
+  it('should navigate to last year on End key', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(<YearSelector years={mockYears} />, { initialYear: 1700 });
+
+    const year1700Button = screen.getByTestId('year-button-1700');
+    year1700Button.focus();
+
+    await user.keyboard('{End}');
+
+    await waitFor(() => {
+      expect(screen.getByTestId('year-button-1800')).toHaveFocus();
+    });
+  });
+
+  it('should navigate to next year via next button', async () => {
+    const user = userEvent.setup();
+    const onYearSelect = vi.fn();
+
+    renderWithProvider(<YearSelector years={mockYears} onYearSelect={onYearSelect} />, {
+      initialYear: 1650,
+    });
+
+    const nextButton = screen.getByRole('button', { name: '次の年代を選択' });
+    await user.click(nextButton);
+
+    expect(onYearSelect).toHaveBeenCalledWith(1700);
+  });
+
+  it('should navigate to previous year via prev button', async () => {
+    const user = userEvent.setup();
+    const onYearSelect = vi.fn();
+
+    renderWithProvider(<YearSelector years={mockYears} onYearSelect={onYearSelect} />, {
+      initialYear: 1650,
+    });
+
+    const prevButton = screen.getByRole('button', { name: '前の年代を選択' });
+    await user.click(prevButton);
+
+    expect(onYearSelect).toHaveBeenCalledWith(1600);
+  });
+
+  it('should disable prev button at first year', () => {
+    renderWithProvider(<YearSelector years={mockYears} />, { initialYear: 1600 });
+
+    const prevButton = screen.getByRole('button', { name: '前の年代を選択' });
+    expect(prevButton).toBeDisabled();
+  });
+
+  it('should disable next button at last year', () => {
+    renderWithProvider(<YearSelector years={mockYears} />, { initialYear: 1800 });
+
+    const nextButton = screen.getByRole('button', { name: '次の年代を選択' });
+    expect(nextButton).toBeDisabled();
+  });
+
+  it('should wrap around when navigating past the beginning', async () => {
+    const user = userEvent.setup();
+
+    renderWithProvider(<YearSelector years={mockYears} />, { initialYear: 1600 });
+
+    const year1600Button = screen.getByTestId('year-button-1600');
+    year1600Button.focus();
+
+    await user.keyboard('{ArrowLeft}');
+
+    await waitFor(() => {
+      expect(screen.getByTestId('year-button-1800')).toHaveFocus();
+    });
+  });
 });

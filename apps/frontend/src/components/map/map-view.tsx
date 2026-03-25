@@ -43,17 +43,6 @@ export function MapView({ onProjectionReady }: MapViewProps = {}) {
 
   usePMTilesProtocol();
 
-  // Expose map ref to window for E2E tests
-  useEffect(() => {
-    const map = mapRef.current;
-    if (map) {
-      (window as unknown as { __mapRef: MapRef | null }).__mapRef = map;
-    }
-    return () => {
-      (window as unknown as { __mapRef: MapRef | null }).__mapRef = null;
-    };
-  });
-
   const handleLoad = useCallback(() => {
     setMapLoaded(true);
   }, []);

@@ -63,4 +63,39 @@ describe('color-scheme', () => {
       expect(lastElement).toBe('#cccccc');
     });
   });
+
+  describe('loadColorScheme', () => {
+    it('throws on fetch failure', async () => {
+      clearColorSchemeCache();
+      mockFetch.mockReset();
+      mockFetch.mockResolvedValueOnce({
+        ok: false,
+        status: 500,
+        statusText: 'Internal Server Error',
+      });
+
+      await expect(loadColorScheme()).rejects.toThrow(
+        'Failed to load color scheme: 500 Internal Server Error',
+      );
+    });
+
+    it('returns cached data on second call without re-fetching', async () => {
+      mockFetch.mockReset();
+
+      const result = await loadColorScheme();
+
+      expect(result).toEqual(colorSchemeJson);
+      expect(mockFetch).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('createMatchColorExpression without cache', () => {
+    it('returns literal default color when cache is null', () => {
+      clearColorSchemeCache();
+
+      const expr = createMatchColorExpression();
+
+      expect(expr).toEqual(['literal', '#cccccc']);
+    });
+  });
 });
