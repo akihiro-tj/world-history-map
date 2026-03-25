@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CloseButton } from './close-button';
 
 const meta = {
-  title: 'UI/CloseButton',
+  title: 'CloseButton/CloseButton',
   component: CloseButton,
   parameters: {
     layout: 'centered',

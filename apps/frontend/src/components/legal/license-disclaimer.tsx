@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useEscapeKey } from '@/hooks/use-escape-key';
 import { useFocusTrap } from '@/hooks/use-focus-trap';
-import { CloseButton } from '../ui/close-button';
+import { CloseButton } from '../close-button/close-button';
 
 export interface LicenseDisclaimerProps {
   isOpen: boolean;

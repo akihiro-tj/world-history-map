@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { useEscapeKey } from '@/hooks/use-escape-key';
 import { useFocusTrap } from '@/hooks/use-focus-trap';
 import { cn } from '@/lib/utils';
-import { useBottomSheetSnap } from './use-bottom-sheet-snap';
+import { useBottomSheetSnap } from './hooks/use-bottom-sheet-snap';
 
 interface BottomSheetProps {
   isOpen: boolean;
