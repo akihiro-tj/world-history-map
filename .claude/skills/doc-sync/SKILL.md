@@ -1,16 +1,16 @@
 ---
-name: spec-sync
+name: doc-sync
 description: >
-  仕様書（specs/current/overview.md）とコードの同期管理スキル。
+  ドキュメント（docs/overview.md）とコードの同期管理スキル。
   コードを走査し、overview.md の乖離を検出・更新する。
-  トリガー: "spec sync", "仕様を更新", "スペック同期",
-  "spec overview", "仕様概要"
+  トリガー: "doc sync", "ドキュメント同期", "docs sync",
+  "overview 更新", "ドキュメント更新"
 ---
 
-# 仕様書同期
+# ドキュメント同期
 
-`specs/current/overview.md` をコードと同期する。
-仕様書の目的は「コードベースのガイドツアー」— AI 生成コードの全体像を人間が素早く把握するためのもの。
+`docs/overview.md` をコードと同期する。
+このドキュメントの目的は「コードベースのガイドツアー」— AI 生成コードの全体像を人間が素早く把握するためのもの。
 
 原則:
 - コードを見ればわかる情報（バージョン、コマンド一覧、ファイルの網羅的リスト）は書かない
@@ -26,7 +26,7 @@ description: >
 
 ### 2. 乖離検出
 
-走査結果と `specs/current/overview.md` を比較し、乖離を箇条書きで報告する。
+走査結果と `docs/overview.md` を比較し、乖離を箇条書きで報告する。
 
 ```
 ## 乖離レポート
