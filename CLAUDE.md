@@ -11,7 +11,7 @@ apps/
 
 ## Commands
 
-pnpm test && pnpm check
+pnpm test && pnpm check && pnpm typecheck
 
 ## Code Style
 
