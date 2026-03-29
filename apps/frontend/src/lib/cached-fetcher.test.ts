@@ -2,10 +2,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CachedFetcher } from './cached-fetcher';
 
 describe('CachedFetcher', () => {
-  let fetchFn: ReturnType<typeof vi.fn>;
+  let fetchFn: ReturnType<typeof vi.fn<() => Promise<unknown>>>;
 
   beforeEach(() => {
-    fetchFn = vi.fn();
+    fetchFn = vi.fn<() => Promise<unknown>>();
   });
 
   afterEach(() => {

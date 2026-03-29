@@ -8,7 +8,7 @@ export class CachedFetcher<T> {
   private cache: T | null = null;
   private pending: Promise<T> | null = null;
   private readonly fetchFn: () => Promise<T>;
-  private readonly validateFn?: (data: T) => boolean;
+  private readonly validateFn: ((data: T) => boolean) | undefined;
   private readonly validationError: string;
 
   constructor(options: CachedFetcherOptions<T>) {
