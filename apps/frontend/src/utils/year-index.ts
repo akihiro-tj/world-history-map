@@ -1,3 +1,4 @@
+import { CachedFetcher } from '../lib/cached-fetcher';
 import type { YearEntry, YearIndex } from '../types/year';
 
 const INDEX_PATH = '/pmtiles/index.json';
@@ -47,29 +48,27 @@ function validateYearIndex(data: unknown): data is YearIndex {
   return years.every(validateYearEntry);
 }
 
-let cachedYearIndex: YearIndex | null = null;
+const yearIndexFetcher = new CachedFetcher<YearIndex>({
+  async fetch() {
+    const response = await fetch(INDEX_PATH);
+
+    if (!response.ok) {
+      throw new Error(`Failed to load year index: ${response.status} ${response.statusText}`);
+    }
+
+    const data: unknown = await response.json();
+    return data as YearIndex;
+  },
+  validate(data) {
+    return validateYearIndex(data);
+  },
+  validationError: 'Invalid year index format',
+});
 
 export async function loadYearIndex(): Promise<YearIndex> {
-  if (cachedYearIndex) {
-    return cachedYearIndex;
-  }
-
-  const response = await fetch(INDEX_PATH);
-
-  if (!response.ok) {
-    throw new Error(`Failed to load year index: ${response.status} ${response.statusText}`);
-  }
-
-  const data: unknown = await response.json();
-
-  if (!validateYearIndex(data)) {
-    throw new Error('Invalid year index format');
-  }
-
-  cachedYearIndex = data;
-  return data;
+  return yearIndexFetcher.load();
 }
 
 export function clearYearIndexCache(): void {
-  cachedYearIndex = null;
+  yearIndexFetcher.clear();
 }

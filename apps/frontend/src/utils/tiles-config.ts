@@ -1,3 +1,5 @@
+import { CachedFetcher } from '../lib/cached-fetcher';
+
 export interface TilesManifest {
   version: string;
   files: Record<string, string>;
@@ -7,8 +9,6 @@ const DEV_MANIFEST: TilesManifest = {
   version: 'development',
   files: {},
 };
-
-let cachedManifest: TilesManifest | null = null;
 
 function getTilesBaseUrl(): string {
   const url = import.meta.env.VITE_TILES_BASE_URL || '';
@@ -20,25 +20,25 @@ function isProductionTiles(): boolean {
   return !!import.meta.env.VITE_TILES_BASE_URL;
 }
 
+const tilesManifestFetcher = new CachedFetcher<TilesManifest>({
+  async fetch() {
+    if (!isProductionTiles()) {
+      return DEV_MANIFEST;
+    }
+
+    const baseUrl = getTilesBaseUrl();
+    const response = await fetch(`${baseUrl}/manifest.json`);
+
+    if (!response.ok) {
+      throw new Error(`Failed to load tiles manifest: ${response.status}`);
+    }
+
+    return (await response.json()) as TilesManifest;
+  },
+});
+
 export async function loadTilesManifest(): Promise<TilesManifest> {
-  if (cachedManifest) {
-    return cachedManifest;
-  }
-
-  if (!isProductionTiles()) {
-    cachedManifest = DEV_MANIFEST;
-    return cachedManifest;
-  }
-
-  const baseUrl = getTilesBaseUrl();
-  const response = await fetch(`${baseUrl}/manifest.json`);
-
-  if (!response.ok) {
-    throw new Error(`Failed to load tiles manifest: ${response.status}`);
-  }
-
-  cachedManifest = (await response.json()) as TilesManifest;
-  return cachedManifest;
+  return tilesManifestFetcher.load();
 }
 
 function getTilesFilename(year: number, manifest: TilesManifest): string | null {

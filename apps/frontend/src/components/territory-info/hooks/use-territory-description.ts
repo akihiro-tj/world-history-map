@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { CachedFetcher } from '../../../lib/cached-fetcher';
 import type { TerritoryDescription, YearDescriptionBundle } from '../../../types/territory';
 
 interface UseTerritoryDescriptionResult {
@@ -7,8 +8,31 @@ interface UseTerritoryDescriptionResult {
   error: string | null;
 }
 
-const yearCache = new Map<number, YearDescriptionBundle>();
-const pendingFetches = new Map<number, Promise<YearDescriptionBundle | null>>();
+const yearFetchers = new Map<number, CachedFetcher<YearDescriptionBundle | null>>();
+
+function getYearFetcher(year: number): CachedFetcher<YearDescriptionBundle | null> {
+  let fetcher = yearFetchers.get(year);
+  if (fetcher) return fetcher;
+
+  fetcher = new CachedFetcher<YearDescriptionBundle | null>({
+    async fetch() {
+      const response = await fetch(`/data/descriptions/${year}.json`);
+
+      if (!response.ok) {
+        if (response.status === 404) return null;
+        throw new Error(`Failed to fetch description bundle: ${response.status}`);
+      }
+
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) return null;
+
+      return response.json() as Promise<YearDescriptionBundle>;
+    },
+  });
+
+  yearFetchers.set(year, fetcher);
+  return fetcher;
+}
 
 function toKebabCase(name: string): string {
   return name
@@ -17,45 +41,14 @@ function toKebabCase(name: string): string {
     .replace(/[^a-z0-9-]/g, '');
 }
 
-async function fetchYearBundle(year: number): Promise<YearDescriptionBundle | null> {
-  const cached = yearCache.get(year);
-  if (cached) return cached;
-
-  const pending = pendingFetches.get(year);
-  if (pending) return pending;
-
-  const promise = (async () => {
-    try {
-      const response = await fetch(`/data/descriptions/${year}.json`);
-
-      if (!response.ok) {
-        if (response.status === 404) return null;
-        throw new Error(`Failed to fetch description bundle: ${response.status}`);
-      }
-
-      // Check content-type to ensure we got JSON (Vite dev server returns HTML for 404s as SPA fallback)
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) return null;
-
-      const data: YearDescriptionBundle = await response.json();
-      yearCache.set(year, data);
-      return data;
-    } finally {
-      pendingFetches.delete(year);
-    }
-  })();
-
-  pendingFetches.set(year, promise);
-  return promise;
-}
-
 export function prefetchYearDescriptions(year: number): void {
-  fetchYearBundle(year).catch(() => {});
+  getYearFetcher(year)
+    .load()
+    .catch(() => {});
 }
 
 export function clearDescriptionCache(): void {
-  yearCache.clear();
-  pendingFetches.clear();
+  yearFetchers.clear();
 }
 
 export function useTerritoryDescription(
@@ -81,7 +74,7 @@ export function useTerritoryDescription(
       setError(null);
 
       try {
-        const bundle = await fetchYearBundle(year);
+        const bundle = await getYearFetcher(year).load();
 
         if (cancelled) return;
 
