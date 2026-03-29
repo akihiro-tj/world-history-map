@@ -1,7 +1,7 @@
 import { type RefObject, useEffect, useRef } from 'react';
 import type { MapRef } from 'react-map-gl/maplibre';
 import { useProjectionContext } from '../../../contexts/projection-context';
-import type { ProjectionType } from '../projection-toggle';
+import type { ProjectionType } from '../../../types/projection';
 
 const GLOBE_MAX_ZOOM = 2;
 const GLOBE_FLY_DURATION_MS = 1200;

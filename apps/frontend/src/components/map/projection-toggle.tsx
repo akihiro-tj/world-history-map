@@ -1,7 +1,6 @@
 import { type ComponentProps, forwardRef } from 'react';
 import { cn } from '@/lib/utils';
-
-export type ProjectionType = 'mercator' | 'globe';
+import type { ProjectionType } from '../../types/projection';
 
 interface ProjectionToggleProps
   extends Omit<ComponentProps<'button'>, 'children' | 'onClick' | 'onToggle'> {

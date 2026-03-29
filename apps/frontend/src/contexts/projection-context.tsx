@@ -1,5 +1,5 @@
 import { createContext, type ReactNode, useContext, useMemo, useState } from 'react';
-import type { ProjectionType } from '../components/map/projection-toggle';
+import type { ProjectionType } from '../types/projection';
 
 interface ProjectionContextValue {
   projection: ProjectionType;
