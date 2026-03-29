@@ -1,0 +1,30 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "FILE=$(echo \"$TOOL_INPUT\" | jq -r '.file_path // empty'); if [ -n \"$FILE\" ] && [[ \"$FILE\" =~ \\.(ts|tsx|js|jsx|css)$ ]]; then pnpm exec biome check \"$FILE\" 2>&1; fi",
+            "timeout": 10000,
+            "statusMessage": "Running Biome check..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pnpm test && pnpm check && pnpm typecheck",
+            "timeout": 120000,
+            "statusMessage": "Running final checks (test + check + typecheck)..."
+          }
+        ]
+      }
+    ]
+  }
+}
