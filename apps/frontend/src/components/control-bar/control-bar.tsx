@@ -1,18 +1,18 @@
-import type { ProjectionType } from '../map/projection-toggle';
+import { useProjectionContext } from '../../contexts/projection-context';
 import { ProjectionToggle } from '../map/projection-toggle';
 
 interface ControlBarProps {
-  projection: ProjectionType;
-  onToggleProjection: (projection: ProjectionType) => void;
   onOpenLicense: () => void;
 }
 
-export function ControlBar({ projection, onToggleProjection, onOpenLicense }: ControlBarProps) {
+export function ControlBar({ onOpenLicense }: ControlBarProps) {
+  const { projection, setProjection } = useProjectionContext();
+
   return (
     <div className="absolute right-4 top-4 z-20 flex flex-col gap-2">
       <ProjectionToggle
         projection={projection}
-        onToggle={onToggleProjection}
+        onToggle={setProjection}
         className="bg-gray-700/95 p-3 text-white/60 shadow-lg backdrop-blur-sm transition-colors hover:text-white"
         data-testid="projection-toggle"
       />
