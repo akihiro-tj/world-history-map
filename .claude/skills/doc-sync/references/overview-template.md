@@ -1,6 +1,6 @@
 # overview.md テンプレート
 
-`specs/current/overview.md` は以下の構成に従う。
+`docs/overview.md` は以下の構成に従う。
 
 ## 共通ルール
 
