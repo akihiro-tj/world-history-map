@@ -41,10 +41,10 @@ function resolveByVelocity(velocity: number, currentSnapIndex: number): SnapPoin
 
   if (velocity > 0) {
     if (currentSnapIndex === 0) return 'close';
-    return SNAP_ORDER[currentSnapIndex - 1] ?? SNAP_ORDER[0];
+    return SNAP_ORDER[currentSnapIndex - 1] ?? null;
   }
 
-  return SNAP_ORDER[Math.min(currentSnapIndex + 1, SNAP_ORDER.length - 1)] ?? SNAP_ORDER[0];
+  return SNAP_ORDER[Math.min(currentSnapIndex + 1, SNAP_ORDER.length - 1)] ?? null;
 }
 
 function resolveByDistance(
@@ -52,7 +52,7 @@ function resolveByDistance(
   headerHeight: number,
   viewportHeight: number,
 ): SnapPoint {
-  let closest: SnapPoint = SNAP_ORDER[0];
+  let closest: SnapPoint = 'collapsed';
   let minimumDistance = Number.POSITIVE_INFINITY;
 
   for (const snapPoint of SNAP_ORDER) {
