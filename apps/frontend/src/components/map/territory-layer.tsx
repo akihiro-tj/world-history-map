@@ -1,5 +1,6 @@
 import { Layer } from 'react-map-gl/maplibre';
 import { createMatchColorExpression } from '../../utils/color-scheme';
+import { TERRITORY_FILL_OPACITY } from './territory-style-constants';
 
 interface TerritoryLayerProps {
   sourceId: string;
@@ -19,7 +20,7 @@ export function TerritoryLayer({ sourceId, sourceLayer }: TerritoryLayerProps) {
       source-layer={sourceLayer}
       paint={{
         'fill-color': createMatchColorExpression(),
-        'fill-opacity': 0.7,
+        'fill-opacity': TERRITORY_FILL_OPACITY,
       }}
     />
   );
