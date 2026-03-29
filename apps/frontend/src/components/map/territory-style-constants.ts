@@ -45,3 +45,5 @@ export const LABEL_ANCHOR: ('center' | 'top' | 'bottom' | 'left' | 'right')[] = 
 export const TERRITORY_FILL_OPACITY = 0.7;
 
 export const HIGHLIGHT_COLOR = '#ffffff';
+export const HIGHLIGHT_FILL_OPACITY = 0.15;
+export const HIGHLIGHT_LINE_WIDTH = 3.5;

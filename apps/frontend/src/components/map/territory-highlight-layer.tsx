@@ -1,9 +1,10 @@
 import { Layer } from 'react-map-gl/maplibre';
 import { TERRITORY_LABEL_ID } from './territory-label';
-import { HIGHLIGHT_COLOR } from './territory-style-constants';
-
-const HIGHLIGHT_FILL_OPACITY = 0.15;
-const HIGHLIGHT_LINE_WIDTH = 3.5;
+import {
+  HIGHLIGHT_COLOR,
+  HIGHLIGHT_FILL_OPACITY,
+  HIGHLIGHT_LINE_WIDTH,
+} from './territory-style-constants';
 
 interface TerritoryHighlightLayerProps {
   sourceId: string;
