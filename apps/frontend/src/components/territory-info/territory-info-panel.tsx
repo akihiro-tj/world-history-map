@@ -1,9 +1,8 @@
-import type { ReactNode } from 'react';
 import { useCallback } from 'react';
 import { useEscapeKey } from '@/hooks/use-escape-key';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { cn } from '@/lib/utils';
-import type { TerritoryProfile as TerritoryProfileType } from '@/types/territory';
+import type { TerritoryDescription } from '@/types/territory';
 import { useAppState } from '../../contexts/app-state-context';
 import { BottomSheet } from '../bottom-sheet/bottom-sheet';
 import { CloseButton } from '../close-button/close-button';
@@ -12,12 +11,21 @@ import { useTerritoryDescription } from './hooks/use-territory-description';
 import { TerritoryProfile } from './territory-profile';
 import { TerritoryTimeline } from './territory-timeline';
 
+interface PanelContentInput {
+  description: TerritoryDescription | null;
+  isLoading: boolean;
+  error: string | null;
+  selectedTerritory: string | null;
+  selectedYear: number;
+  onClose: () => void;
+}
+
 function PanelWrapper({
   children,
   scrollable,
   busy,
 }: {
-  children: ReactNode;
+  children: React.ReactNode;
   scrollable?: boolean;
   busy?: boolean;
 }) {
@@ -63,93 +71,136 @@ function PanelHeader({
   );
 }
 
-function DescriptionBody({
-  profile,
-  context,
-  keyEvents,
-  selectedYear,
-}: {
-  profile?: TerritoryProfileType;
-  context?: string;
-  keyEvents?: import('@/types/territory').KeyEvent[];
-  selectedYear: number;
-}) {
+function LoadingContent({ input }: { input: PanelContentInput }) {
+  const title = input.selectedTerritory ?? '読み込み中…';
   return (
-    <div data-testid="territory-description" className="space-y-3 px-4 pt-2 pb-4">
-      <TerritoryProfile profile={profile} />
-      {context && <p className="text-sm leading-relaxed text-gray-300">{context}</p>}
-      <TerritoryTimeline keyEvents={keyEvents} selectedYear={selectedYear} />
-      <AiNotice className="mt-4" />
-    </div>
+    <PanelWrapper busy>
+      <PanelHeader name={title} onClose={input.onClose} />
+      <div className="flex items-center justify-center py-8">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
+      </div>
+    </PanelWrapper>
   );
 }
 
-function LoadingSpinner() {
+function ErrorContent({ input }: { input: PanelContentInput }) {
   return (
-    <div className="flex items-center justify-center py-8">
-      <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
-    </div>
+    <PanelWrapper>
+      <PanelHeader name="エラー" onClose={input.onClose} />
+      <p className="p-4 text-red-400">{input.error}</p>
+    </PanelWrapper>
   );
 }
 
-function buildPanelContent(
-  description: import('@/types/territory').TerritoryDescription | null,
-  isLoading: boolean,
-  error: string | null,
-  selectedTerritory: string | null,
-  selectedYear: number,
-  onClose: () => void,
-): { header: ReactNode; body: ReactNode; busy: boolean; scrollable: boolean } {
-  const title = isLoading
-    ? (selectedTerritory ?? '読み込み中…')
-    : error
-      ? 'エラー'
-      : (description?.name ?? selectedTerritory ?? '領土情報');
+function NoDescriptionContent({ input }: { input: PanelContentInput }) {
+  return (
+    <PanelWrapper>
+      <PanelHeader name={input.selectedTerritory ?? '領土情報'} onClose={input.onClose} />
+      <div data-testid="no-description-message" className="p-4 text-center text-gray-300">
+        <p>この領土の詳細情報は準備中です。</p>
+      </div>
+    </PanelWrapper>
+  );
+}
 
-  if (isLoading) {
-    return {
-      header: <PanelHeader name={title} onClose={onClose} />,
-      body: <LoadingSpinner />,
-      busy: true,
-      scrollable: false,
-    };
-  }
+function DescriptionContent({ input }: { input: PanelContentInput }) {
+  const { description } = input;
+  if (!description) return null;
+  return (
+    <PanelWrapper scrollable>
+      <PanelHeader name={description.name} era={description.era} onClose={input.onClose} />
+      <div data-testid="territory-description" className="space-y-3 px-4 pt-2 pb-4">
+        <TerritoryProfile profile={description.profile} />
+        {description.context && (
+          <p className="text-sm leading-relaxed text-gray-300">{description.context}</p>
+        )}
+        <TerritoryTimeline keyEvents={description.keyEvents} selectedYear={input.selectedYear} />
+        <AiNotice className="mt-4" />
+      </div>
+    </PanelWrapper>
+  );
+}
 
-  if (error) {
-    return {
-      header: <PanelHeader name="エラー" onClose={onClose} />,
-      body: <p className="p-4 text-red-400">{error}</p>,
-      busy: false,
-      scrollable: false,
-    };
-  }
-
-  if (!description) {
-    return {
-      header: <PanelHeader name={selectedTerritory ?? '領土情報'} onClose={onClose} />,
-      body: (
-        <div data-testid="no-description-message" className="p-4 text-center text-gray-300">
-          <p>この領土の詳細情報は準備中です。</p>
+function MobileLoadingContent({ input }: { input: PanelContentInput }) {
+  const title = input.selectedTerritory ?? '読み込み中…';
+  return (
+    <BottomSheet
+      isOpen
+      onClose={input.onClose}
+      header={
+        <div className="px-4">
+          <PanelHeader name={title} onClose={input.onClose} />
         </div>
-      ),
-      busy: false,
-      scrollable: false,
-    };
-  }
+      }
+      aria-labelledby="territory-info-title"
+    >
+      <div className="flex items-center justify-center py-8">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
+      </div>
+    </BottomSheet>
+  );
+}
 
-  return {
-    header: <PanelHeader name={description.name} era={description.era} onClose={onClose} />,
-    body: (
-      <DescriptionBody
-        {...(description.profile !== undefined && { profile: description.profile })}
-        {...(description.context !== undefined && { context: description.context })}
-        {...(description.keyEvents !== undefined && { keyEvents: description.keyEvents })}
-        selectedYear={selectedYear}
-      />
-    ),
-    busy: false,
-    scrollable: true,
-  };
+function MobileErrorContent({ input }: { input: PanelContentInput }) {
+  return (
+    <BottomSheet
+      isOpen
+      onClose={input.onClose}
+      header={
+        <div className="px-4">
+          <PanelHeader name="エラー" onClose={input.onClose} />
+        </div>
+      }
+      aria-labelledby="territory-info-title"
+    >
+      <p className="p-4 text-red-400">{input.error}</p>
+    </BottomSheet>
+  );
+}
+
+function MobileNoDescriptionContent({ input }: { input: PanelContentInput }) {
+  return (
+    <BottomSheet
+      isOpen
+      onClose={input.onClose}
+      header={
+        <div className="px-4">
+          <PanelHeader name={input.selectedTerritory ?? '領土情報'} onClose={input.onClose} />
+        </div>
+      }
+      aria-labelledby="territory-info-title"
+    >
+      <div data-testid="no-description-message" className="p-4 text-center text-gray-300">
+        <p>この領土の詳細情報は準備中です。</p>
+      </div>
+    </BottomSheet>
+  );
+}
+
+function MobileDescriptionContent({ input }: { input: PanelContentInput }) {
+  const { description } = input;
+  if (!description) return null;
+  return (
+    <BottomSheet
+      isOpen
+      onClose={input.onClose}
+      header={
+        <div className="px-4">
+          <PanelHeader name={description.name} era={description.era} onClose={input.onClose} />
+        </div>
+      }
+      aria-labelledby="territory-info-title"
+    >
+      <div data-testid="territory-description" className="space-y-3 px-4 pt-2 pb-4">
+        <TerritoryProfile profile={description.profile} />
+        {description.context && (
+          <p className="text-sm leading-relaxed text-gray-300">{description.context}</p>
+        )}
+        <TerritoryTimeline keyEvents={description.keyEvents} selectedYear={input.selectedYear} />
+        <AiNotice className="mt-4" />
+      </div>
+    </BottomSheet>
+  );
 }
 
 export function TerritoryInfoPanel() {
@@ -172,32 +223,24 @@ export function TerritoryInfoPanel() {
     return null;
   }
 
-  const { header, body, busy, scrollable } = buildPanelContent(
+  const input: PanelContentInput = {
     description,
     isLoading,
     error,
     selectedTerritory,
     selectedYear,
-    handleClose,
-  );
+    onClose: handleClose,
+  };
 
   if (isMobile) {
-    return (
-      <BottomSheet
-        isOpen={isInfoPanelOpen}
-        onClose={handleClose}
-        header={<div className="px-4">{header}</div>}
-        aria-labelledby="territory-info-title"
-      >
-        {body}
-      </BottomSheet>
-    );
+    if (isLoading) return <MobileLoadingContent input={input} />;
+    if (error) return <MobileErrorContent input={input} />;
+    if (!description) return <MobileNoDescriptionContent input={input} />;
+    return <MobileDescriptionContent input={input} />;
   }
 
-  return (
-    <PanelWrapper scrollable={scrollable} busy={busy}>
-      {header}
-      {body}
-    </PanelWrapper>
-  );
+  if (isLoading) return <LoadingContent input={input} />;
+  if (error) return <ErrorContent input={input} />;
+  if (!description) return <NoDescriptionContent input={input} />;
+  return <DescriptionContent input={input} />;
 }
