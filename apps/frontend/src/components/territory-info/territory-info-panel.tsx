@@ -11,15 +11,6 @@ import { useTerritoryDescription } from './hooks/use-territory-description';
 import { TerritoryProfile } from './territory-profile';
 import { TerritoryTimeline } from './territory-timeline';
 
-interface PanelContentInput {
-  description: TerritoryDescription | null;
-  isLoading: boolean;
-  error: string | null;
-  selectedTerritory: string | null;
-  selectedYear: number;
-  onClose: () => void;
-}
-
 function PanelWrapper({
   children,
   scrollable,
@@ -71,134 +62,131 @@ function PanelHeader({
   );
 }
 
-function LoadingContent({ input }: { input: PanelContentInput }) {
-  const title = input.selectedTerritory ?? '読み込み中…';
+function LoadingBody() {
   return (
-    <PanelWrapper busy>
-      <PanelHeader name={title} onClose={input.onClose} />
-      <div className="flex items-center justify-center py-8">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
-      </div>
-    </PanelWrapper>
+    <div className="flex items-center justify-center py-8">
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
+    </div>
   );
 }
 
-function ErrorContent({ input }: { input: PanelContentInput }) {
+function ErrorBody({ error }: { error: string | null }) {
+  return <p className="p-4 text-red-400">{error}</p>;
+}
+
+function NoDescriptionBody() {
   return (
-    <PanelWrapper>
-      <PanelHeader name="エラー" onClose={input.onClose} />
-      <p className="p-4 text-red-400">{input.error}</p>
-    </PanelWrapper>
+    <div data-testid="no-description-message" className="p-4 text-center text-gray-300">
+      <p>この領土の詳細情報は準備中です。</p>
+    </div>
   );
 }
 
-function NoDescriptionContent({ input }: { input: PanelContentInput }) {
+function DescriptionBody({
+  description,
+  selectedYear,
+}: {
+  description: TerritoryDescription;
+  selectedYear: number;
+}) {
   return (
-    <PanelWrapper>
-      <PanelHeader name={input.selectedTerritory ?? '領土情報'} onClose={input.onClose} />
-      <div data-testid="no-description-message" className="p-4 text-center text-gray-300">
-        <p>この領土の詳細情報は準備中です。</p>
-      </div>
-    </PanelWrapper>
+    <div data-testid="territory-description" className="space-y-3 px-4 pt-2 pb-4">
+      <TerritoryProfile profile={description.profile} />
+      {description.context && (
+        <p className="text-sm leading-relaxed text-gray-300">{description.context}</p>
+      )}
+      <TerritoryTimeline keyEvents={description.keyEvents} selectedYear={selectedYear} />
+      <AiNotice className="mt-4" />
+    </div>
   );
 }
 
-function DescriptionContent({ input }: { input: PanelContentInput }) {
-  const { description } = input;
-  if (!description) return null;
+interface ContentProps {
+  description: TerritoryDescription | null;
+  isLoading: boolean;
+  error: string | null;
+  selectedTerritory: string | null;
+  selectedYear: number;
+  onClose: () => void;
+}
+
+function DesktopContent({
+  description,
+  isLoading,
+  error,
+  selectedTerritory,
+  selectedYear,
+  onClose,
+}: ContentProps) {
+  if (isLoading) {
+    return (
+      <PanelWrapper busy>
+        <PanelHeader name={selectedTerritory ?? '読み込み中…'} onClose={onClose} />
+        <LoadingBody />
+      </PanelWrapper>
+    );
+  }
+  if (error) {
+    return (
+      <PanelWrapper>
+        <PanelHeader name="エラー" onClose={onClose} />
+        <ErrorBody error={error} />
+      </PanelWrapper>
+    );
+  }
+  if (!description) {
+    return (
+      <PanelWrapper>
+        <PanelHeader name={selectedTerritory ?? '領土情報'} onClose={onClose} />
+        <NoDescriptionBody />
+      </PanelWrapper>
+    );
+  }
   return (
     <PanelWrapper scrollable>
-      <PanelHeader name={description.name} era={description.era} onClose={input.onClose} />
-      <div data-testid="territory-description" className="space-y-3 px-4 pt-2 pb-4">
-        <TerritoryProfile profile={description.profile} />
-        {description.context && (
-          <p className="text-sm leading-relaxed text-gray-300">{description.context}</p>
-        )}
-        <TerritoryTimeline keyEvents={description.keyEvents} selectedYear={input.selectedYear} />
-        <AiNotice className="mt-4" />
-      </div>
+      <PanelHeader name={description.name} era={description.era} onClose={onClose} />
+      <DescriptionBody description={description} selectedYear={selectedYear} />
     </PanelWrapper>
   );
 }
 
-function MobileLoadingContent({ input }: { input: PanelContentInput }) {
-  const title = input.selectedTerritory ?? '読み込み中…';
-  return (
-    <BottomSheet
-      isOpen
-      onClose={input.onClose}
-      header={
-        <div className="px-4">
-          <PanelHeader name={title} onClose={input.onClose} />
-        </div>
-      }
-      aria-labelledby="territory-info-title"
-    >
-      <div className="flex items-center justify-center py-8">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
-      </div>
-    </BottomSheet>
-  );
-}
+function MobileContent({
+  description,
+  isLoading,
+  error,
+  selectedTerritory,
+  selectedYear,
+  onClose,
+}: ContentProps) {
+  const headerName = isLoading
+    ? (selectedTerritory ?? '読み込み中…')
+    : error
+      ? 'エラー'
+      : description
+        ? description.name
+        : (selectedTerritory ?? '領土情報');
+  const headerEra = description && !isLoading && !error ? description.era : undefined;
 
-function MobileErrorContent({ input }: { input: PanelContentInput }) {
   return (
     <BottomSheet
       isOpen
-      onClose={input.onClose}
+      onClose={onClose}
       header={
         <div className="px-4">
-          <PanelHeader name="エラー" onClose={input.onClose} />
+          <PanelHeader name={headerName} era={headerEra} onClose={onClose} />
         </div>
       }
       aria-labelledby="territory-info-title"
     >
-      <p className="p-4 text-red-400">{input.error}</p>
-    </BottomSheet>
-  );
-}
-
-function MobileNoDescriptionContent({ input }: { input: PanelContentInput }) {
-  return (
-    <BottomSheet
-      isOpen
-      onClose={input.onClose}
-      header={
-        <div className="px-4">
-          <PanelHeader name={input.selectedTerritory ?? '領土情報'} onClose={input.onClose} />
-        </div>
-      }
-      aria-labelledby="territory-info-title"
-    >
-      <div data-testid="no-description-message" className="p-4 text-center text-gray-300">
-        <p>この領土の詳細情報は準備中です。</p>
-      </div>
-    </BottomSheet>
-  );
-}
-
-function MobileDescriptionContent({ input }: { input: PanelContentInput }) {
-  const { description } = input;
-  if (!description) return null;
-  return (
-    <BottomSheet
-      isOpen
-      onClose={input.onClose}
-      header={
-        <div className="px-4">
-          <PanelHeader name={description.name} era={description.era} onClose={input.onClose} />
-        </div>
-      }
-      aria-labelledby="territory-info-title"
-    >
-      <div data-testid="territory-description" className="space-y-3 px-4 pt-2 pb-4">
-        <TerritoryProfile profile={description.profile} />
-        {description.context && (
-          <p className="text-sm leading-relaxed text-gray-300">{description.context}</p>
-        )}
-        <TerritoryTimeline keyEvents={description.keyEvents} selectedYear={input.selectedYear} />
-        <AiNotice className="mt-4" />
-      </div>
+      {isLoading ? (
+        <LoadingBody />
+      ) : error ? (
+        <ErrorBody error={error} />
+      ) : !description ? (
+        <NoDescriptionBody />
+      ) : (
+        <DescriptionBody description={description} selectedYear={selectedYear} />
+      )}
     </BottomSheet>
   );
 }
@@ -223,7 +211,7 @@ export function TerritoryInfoPanel() {
     return null;
   }
 
-  const input: PanelContentInput = {
+  const contentProps: ContentProps = {
     description,
     isLoading,
     error,
@@ -233,14 +221,8 @@ export function TerritoryInfoPanel() {
   };
 
   if (isMobile) {
-    if (isLoading) return <MobileLoadingContent input={input} />;
-    if (error) return <MobileErrorContent input={input} />;
-    if (!description) return <MobileNoDescriptionContent input={input} />;
-    return <MobileDescriptionContent input={input} />;
+    return <MobileContent {...contentProps} />;
   }
 
-  if (isLoading) return <LoadingContent input={input} />;
-  if (error) return <ErrorContent input={input} />;
-  if (!description) return <NoDescriptionContent input={input} />;
-  return <DescriptionContent input={input} />;
+  return <DesktopContent {...contentProps} />;
 }
