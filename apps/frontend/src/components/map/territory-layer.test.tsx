@@ -31,6 +31,7 @@ describe('TerritoryLayer', () => {
   const defaultProps = {
     sourceId: 'territories',
     sourceLayer: 'territories',
+    colorScheme: null as Record<string, string> | null,
   };
 
   beforeEach(async () => {
@@ -58,7 +59,7 @@ describe('TerritoryLayer', () => {
   });
 
   it('should apply color scheme based on SUBJECTO property', () => {
-    render(<TerritoryLayer {...defaultProps} />);
+    render(<TerritoryLayer {...defaultProps} colorScheme={colorSchemeJson} />);
 
     const fillLayer = screen.getByTestId('layer-territory-fill');
     const paint = JSON.parse(fillLayer.getAttribute('data-paint') || '{}');

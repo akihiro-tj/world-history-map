@@ -34,7 +34,7 @@ describe('color-scheme', () => {
 
   describe('createMatchColorExpression', () => {
     it('should return a valid MapLibre match expression', () => {
-      const expr = createMatchColorExpression();
+      const expr = createMatchColorExpression(colorSchemeJson);
 
       expect(Array.isArray(expr)).toBe(true);
       expect(expr[0]).toBe('match');
@@ -48,7 +48,7 @@ describe('color-scheme', () => {
     });
 
     it('should include major powers in the expression', () => {
-      const expr = createMatchColorExpression();
+      const expr = createMatchColorExpression(colorSchemeJson);
       const exprString = JSON.stringify(expr);
 
       expect(exprString).toContain('France');
@@ -57,7 +57,7 @@ describe('color-scheme', () => {
     });
 
     it('should have default color as last element', () => {
-      const expr = createMatchColorExpression();
+      const expr = createMatchColorExpression(colorSchemeJson);
       const lastElement = expr[expr.length - 1];
 
       expect(lastElement).toBe('#cccccc');
@@ -90,10 +90,8 @@ describe('color-scheme', () => {
   });
 
   describe('createMatchColorExpression without cache', () => {
-    it('returns literal default color when cache is null', () => {
-      clearColorSchemeCache();
-
-      const expr = createMatchColorExpression();
+    it('returns literal default color when colorScheme is null', () => {
+      const expr = createMatchColorExpression(null);
 
       expect(expr).toEqual(['literal', '#cccccc']);
     });

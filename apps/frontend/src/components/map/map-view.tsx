@@ -32,7 +32,7 @@ interface MapViewProps {
 export function MapView({ onProjectionReady }: MapViewProps = {}) {
   const mapRef = useRef<MapRef>(null);
   const { state, actions } = useAppState();
-  const { pmtilesUrl, isLoading, error } = useMapData(state.selectedYear);
+  const { pmtilesUrl, colorScheme, isLoading, error } = useMapData(state.selectedYear);
   const [mapLoaded, setMapLoaded] = useState(false);
   const { isHoveringTerritory, handleMouseMove } = useMapHover();
   const { projection, setProjection } = useProjection(mapRef, mapLoaded);
@@ -161,7 +161,11 @@ export function MapView({ onProjectionReady }: MapViewProps = {}) {
           cursor={isHoveringTerritory ? 'pointer' : 'grab'}
         >
           <Source id={SOURCE_ID} type="vector" url={pmtilesUrl}>
-            <TerritoryLayer sourceId={SOURCE_ID} sourceLayer={SOURCE_LAYER_TERRITORIES} />
+            <TerritoryLayer
+              sourceId={SOURCE_ID}
+              sourceLayer={SOURCE_LAYER_TERRITORIES}
+              colorScheme={colorScheme}
+            />
             {state.selectedTerritory && (
               <TerritoryHighlightLayer
                 sourceId={SOURCE_ID}

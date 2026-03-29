@@ -24,9 +24,9 @@ export function clearColorSchemeCache(): void {
 }
 
 export function createMatchColorExpression(
-  colorScheme?: Record<string, string> | null,
+  colorScheme: Record<string, string> | null,
 ): ExpressionSpecification {
-  const scheme = colorScheme ?? colorSchemeFetcher.get();
+  const scheme = colorScheme;
 
   if (!scheme) {
     return ['literal', DEFAULT_COLOR] as unknown as ExpressionSpecification;

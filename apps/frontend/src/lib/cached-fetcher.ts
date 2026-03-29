@@ -6,7 +6,9 @@ interface CachedFetcherOptions<T> {
 
 export class CachedFetcher<T> {
   private cache: T | null = null;
+  private hasCache = false;
   private pending: Promise<T> | null = null;
+  private generation = 0;
   private readonly fetchFn: () => Promise<T>;
   private readonly validateFn: ((data: T) => boolean) | undefined;
   private readonly validationError: string;
@@ -18,19 +20,24 @@ export class CachedFetcher<T> {
   }
 
   async load(): Promise<T> {
-    if (this.cache !== null) {
-      return this.cache;
+    if (this.hasCache) {
+      return this.cache as T;
     }
 
     if (this.pending) {
       return this.pending;
     }
 
+    const currentGeneration = this.generation;
     this.pending = this.fetchFn().then((data) => {
+      if (this.generation !== currentGeneration) {
+        throw new Error('Cache was cleared during fetch');
+      }
       if (this.validateFn && !this.validateFn(data)) {
         throw new Error(this.validationError);
       }
       this.cache = data;
+      this.hasCache = true;
       this.pending = null;
       return data;
     });
@@ -48,6 +55,8 @@ export class CachedFetcher<T> {
 
   clear(): void {
     this.cache = null;
+    this.hasCache = false;
     this.pending = null;
+    this.generation++;
   }
 }

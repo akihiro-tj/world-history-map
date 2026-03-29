@@ -9,6 +9,7 @@ interface MapDataState {
   yearIndex: YearIndex | null;
   tilesManifest: TilesManifest | null;
   pmtilesUrl: string | null;
+  colorScheme: Record<string, string> | null;
   isLoading: boolean;
   error: string | null;
 }
@@ -20,6 +21,7 @@ export function useMapData(initialYear: number = MAP_CONFIG.initialYear): UseMap
     yearIndex: null,
     tilesManifest: null,
     pmtilesUrl: null,
+    colorScheme: null,
     isLoading: true,
     error: null,
   });
@@ -29,7 +31,7 @@ export function useMapData(initialYear: number = MAP_CONFIG.initialYear): UseMap
 
     async function loadData() {
       try {
-        const [index, manifest] = await Promise.all([
+        const [index, manifest, colors] = await Promise.all([
           loadYearIndex(),
           loadTilesManifest(),
           loadColorScheme(),
@@ -42,6 +44,7 @@ export function useMapData(initialYear: number = MAP_CONFIG.initialYear): UseMap
             yearIndex: index,
             tilesManifest: manifest,
             pmtilesUrl: null,
+            colorScheme: colors,
             isLoading: false,
             error: `Year ${initialYear} not found`,
           });
@@ -52,6 +55,7 @@ export function useMapData(initialYear: number = MAP_CONFIG.initialYear): UseMap
           yearIndex: index,
           tilesManifest: manifest,
           pmtilesUrl,
+          colorScheme: colors,
           isLoading: false,
           error: null,
         });
