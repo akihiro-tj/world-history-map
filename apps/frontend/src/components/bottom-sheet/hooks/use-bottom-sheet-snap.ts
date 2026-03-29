@@ -101,104 +101,6 @@ function resolveSnap(
   return closest;
 }
 
-function handleTouchStart(
-  event: Event,
-  sheetRef: RefObject<HTMLElement | null>,
-  currentSnapHeight: number,
-  dragState: React.RefObject<{
-    startY: number;
-    startHeight: number;
-    startTime: number;
-    lastY: number;
-    lastTime: number;
-    rafId: number;
-  }>,
-): void {
-  const touch = (event as TouchEvent).touches?.[0];
-  if (!touch) return;
-
-  const currentHeight = sheetRef.current?.getBoundingClientRect().height ?? currentSnapHeight;
-  dragState.current = {
-    startY: touch.clientY,
-    startHeight: currentHeight,
-    startTime: event.timeStamp,
-    lastY: touch.clientY,
-    lastTime: event.timeStamp,
-    rafId: 0,
-  };
-}
-
-function handleTouchMove(
-  event: Event,
-  dragState: React.RefObject<{
-    startY: number;
-    startHeight: number;
-    startTime: number;
-    lastY: number;
-    lastTime: number;
-    rafId: number;
-  }>,
-  setIsDragging: (value: boolean) => void,
-  setDragHeight: (value: number | null) => void,
-): void {
-  const touch = (event as TouchEvent).touches?.[0];
-  if (!touch) return;
-
-  const state = dragState.current;
-  const deltaY = touch.clientY - state.startY;
-  const newHeight = Math.max(0, state.startHeight - deltaY);
-
-  state.lastY = touch.clientY;
-  state.lastTime = event.timeStamp;
-
-  cancelAnimationFrame(state.rafId);
-  state.rafId = requestAnimationFrame(() => {
-    setIsDragging(true);
-    setDragHeight(newHeight);
-  });
-}
-
-function handleTouchEnd(
-  event: Event,
-  dragState: React.RefObject<{
-    startY: number;
-    startHeight: number;
-    startTime: number;
-    lastY: number;
-    lastTime: number;
-    rafId: number;
-  }>,
-  snap: SnapPoint,
-  headerHeight: number,
-  viewportHeight: number,
-  setIsDragging: (value: boolean) => void,
-  setDragHeight: (value: number | null) => void,
-  setSnap: (snap: SnapPoint) => void,
-  onClose: () => void,
-): void {
-  const touch = (event as TouchEvent).changedTouches?.[0];
-  if (!touch) return;
-
-  cancelAnimationFrame(dragState.current.rafId);
-
-  const state = dragState.current;
-  const deltaY = touch.clientY - state.startY;
-  const elapsed = event.timeStamp - state.startTime;
-  const velocity = elapsed > 0 ? deltaY / elapsed : 0;
-  const currentHeight = Math.max(0, state.startHeight - deltaY);
-
-  const resolved = resolveSnap(currentHeight, velocity, snap, headerHeight, viewportHeight);
-
-  setIsDragging(false);
-  setDragHeight(null);
-
-  if (resolved === 'close') {
-    onClose();
-  } else {
-    setSnap(resolved);
-  }
-}
-
 export function useBottomSheetSnap({
   isActive,
   headerRef,
@@ -254,24 +156,68 @@ export function useBottomSheetSnap({
     if (!isActive || !headerRef.current) return;
     const header = headerRef.current;
 
-    const onTouchStart = (event: Event) =>
-      handleTouchStart(event, sheetRef, getHeight(snap), dragState);
+    const onTouchStart = (event: Event) => {
+      const touch = (event as TouchEvent).touches?.[0];
+      if (!touch) return;
 
-    const onTouchMove = (event: Event) =>
-      handleTouchMove(event, dragState, setIsDragging, setDragHeight);
+      const currentHeight = sheetRef.current?.getBoundingClientRect().height ?? getHeight(snap);
+      dragState.current = {
+        startY: touch.clientY,
+        startHeight: currentHeight,
+        startTime: event.timeStamp,
+        lastY: touch.clientY,
+        lastTime: event.timeStamp,
+        rafId: 0,
+      };
+    };
 
-    const onTouchEnd = (event: Event) =>
-      handleTouchEnd(
-        event,
-        dragState,
+    const onTouchMove = (event: Event) => {
+      const touch = (event as TouchEvent).touches?.[0];
+      if (!touch) return;
+
+      const state = dragState.current;
+      const deltaY = touch.clientY - state.startY;
+      const newHeight = Math.max(0, state.startHeight - deltaY);
+
+      state.lastY = touch.clientY;
+      state.lastTime = event.timeStamp;
+
+      cancelAnimationFrame(state.rafId);
+      state.rafId = requestAnimationFrame(() => {
+        setIsDragging(true);
+        setDragHeight(newHeight);
+      });
+    };
+
+    const onTouchEnd = (event: Event) => {
+      const touch = (event as TouchEvent).changedTouches?.[0];
+      if (!touch) return;
+
+      cancelAnimationFrame(dragState.current.rafId);
+
+      const state = dragState.current;
+      const deltaY = touch.clientY - state.startY;
+      const elapsed = event.timeStamp - state.startTime;
+      const velocity = elapsed > 0 ? deltaY / elapsed : 0;
+      const currentHeight = Math.max(0, state.startHeight - deltaY);
+
+      const resolved = resolveSnap(
+        currentHeight,
+        velocity,
         snap,
         getHeaderHeight(),
         window.innerHeight,
-        setIsDragging,
-        setDragHeight,
-        setSnap,
-        onClose,
       );
+
+      setIsDragging(false);
+      setDragHeight(null);
+
+      if (resolved === 'close') {
+        onClose();
+      } else {
+        setSnap(resolved);
+      }
+    };
 
     header.style.touchAction = 'none';
     header.addEventListener('touchstart', onTouchStart);
