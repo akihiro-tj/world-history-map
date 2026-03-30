@@ -1,3 +1,5 @@
+export const INITIAL_YEAR = 1650;
+
 export type HistoricalYear = number & { readonly __brand: 'HistoricalYear' };
 
 export function createHistoricalYear(year: number): HistoricalYear {

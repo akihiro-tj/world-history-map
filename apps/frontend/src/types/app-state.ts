@@ -1,9 +1,11 @@
-import { createHistoricalYear, type HistoricalYear } from '../domain/year/historical-year';
+import {
+  createHistoricalYear,
+  type HistoricalYear,
+  INITIAL_YEAR,
+} from '../domain/year/historical-year';
 import { MAP_CONFIG } from '../styles/map-style';
 
-export const INITIAL_YEAR = 1650;
-
-export interface InitialMapView {
+export interface MapView {
   longitude: number;
   latitude: number;
   zoom: number;
@@ -13,7 +15,7 @@ export interface AppState {
   selectedYear: HistoricalYear;
   selectedTerritory: string | null;
   isInfoPanelOpen: boolean;
-  mapView: InitialMapView;
+  mapView: MapView;
 }
 
 export const initialAppState: AppState = {
@@ -31,5 +33,5 @@ export interface AppStateActions {
   setSelectedYear: (year: HistoricalYear) => void;
   selectTerritory: (territory: string) => void;
   clearSelection: () => void;
-  setMapView: (view: InitialMapView) => void;
+  setMapView: (view: MapView) => void;
 }
