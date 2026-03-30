@@ -1,6 +1,8 @@
 import { act, renderHook } from '@testing-library/react';
-import { createRef } from 'react';
+import type { ReactNode } from 'react';
+import { createElement, createRef } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { ProjectionProvider, useProjectionContext } from '../../../contexts/projection-context';
 import { useProjection } from './use-projection';
 
 function createMockMapRef() {
@@ -18,6 +20,10 @@ function createMockMapRef() {
   return { ref, mapInstance };
 }
 
+function wrapper({ children }: { children: ReactNode }) {
+  return createElement(ProjectionProvider, null, children);
+}
+
 describe('useProjection', () => {
   beforeEach(() => {
     vi.useFakeTimers();
@@ -29,14 +35,15 @@ describe('useProjection', () => {
 
   it('defaults to mercator projection', () => {
     const { ref } = createMockMapRef();
-    const { result } = renderHook(() => useProjection(ref as never, false));
+    renderHook(() => useProjection(ref as never, false), { wrapper });
 
+    const { result } = renderHook(() => useProjectionContext(), { wrapper });
     expect(result.current.projection).toBe('mercator');
   });
 
   it('sets projection without animation on initial load', () => {
     const { ref, mapInstance } = createMockMapRef();
-    renderHook(() => useProjection(ref as never, true));
+    renderHook(() => useProjection(ref as never, true), { wrapper });
 
     expect(mapInstance.setProjection).toHaveBeenCalledWith({ type: 'mercator' });
     expect(mapInstance.flyTo).not.toHaveBeenCalled();
@@ -44,10 +51,17 @@ describe('useProjection', () => {
 
   it('animates flyTo when switching to globe', () => {
     const { ref, mapInstance } = createMockMapRef();
-    const { result } = renderHook(() => useProjection(ref as never, true));
+
+    const { result: projResult } = renderHook(
+      () => {
+        useProjection(ref as never, true);
+        return useProjectionContext();
+      },
+      { wrapper },
+    );
 
     act(() => {
-      result.current.setProjection('globe');
+      projResult.current.setProjection('globe');
     });
 
     expect(mapInstance.setProjection).toHaveBeenCalledWith({ type: 'globe' });
@@ -61,16 +75,23 @@ describe('useProjection', () => {
 
   it('animates flyTo when switching to mercator', () => {
     const { ref, mapInstance } = createMockMapRef();
-    const { result } = renderHook(() => useProjection(ref as never, true));
+
+    const { result: projResult } = renderHook(
+      () => {
+        useProjection(ref as never, true);
+        return useProjectionContext();
+      },
+      { wrapper },
+    );
 
     act(() => {
-      result.current.setProjection('globe');
+      projResult.current.setProjection('globe');
     });
 
     vi.clearAllMocks();
 
     act(() => {
-      result.current.setProjection('mercator');
+      projResult.current.setProjection('mercator');
     });
 
     expect(mapInstance.flyTo).toHaveBeenCalledWith(
@@ -90,10 +111,16 @@ describe('useProjection', () => {
     const { ref, mapInstance } = createMockMapRef();
     mapInstance.getZoom.mockReturnValue(5);
 
-    const { result } = renderHook(() => useProjection(ref as never, true));
+    const { result: projResult } = renderHook(
+      () => {
+        useProjection(ref as never, true);
+        return useProjectionContext();
+      },
+      { wrapper },
+    );
 
     act(() => {
-      result.current.setProjection('globe');
+      projResult.current.setProjection('globe');
     });
 
     expect(mapInstance.flyTo).toHaveBeenCalledWith(expect.objectContaining({ zoom: 2 }));
@@ -103,16 +130,22 @@ describe('useProjection', () => {
     const { ref, mapInstance } = createMockMapRef();
     mapInstance.getZoom.mockReturnValue(1);
 
-    const { result } = renderHook(() => useProjection(ref as never, true));
+    const { result: projResult } = renderHook(
+      () => {
+        useProjection(ref as never, true);
+        return useProjectionContext();
+      },
+      { wrapper },
+    );
 
     act(() => {
-      result.current.setProjection('globe');
+      projResult.current.setProjection('globe');
     });
 
     vi.clearAllMocks();
 
     act(() => {
-      result.current.setProjection('mercator');
+      projResult.current.setProjection('mercator');
     });
 
     expect(mapInstance.flyTo).toHaveBeenCalledWith(expect.objectContaining({ zoom: 3 }));
@@ -120,7 +153,7 @@ describe('useProjection', () => {
 
   it('does nothing when map is not loaded', () => {
     const { ref, mapInstance } = createMockMapRef();
-    renderHook(() => useProjection(ref as never, false));
+    renderHook(() => useProjection(ref as never, false), { wrapper });
 
     expect(mapInstance.setProjection).not.toHaveBeenCalled();
     expect(mapInstance.flyTo).not.toHaveBeenCalled();
@@ -129,7 +162,7 @@ describe('useProjection', () => {
   it('does nothing when map ref is null', () => {
     const ref = createRef();
     expect(() => {
-      renderHook(() => useProjection(ref as never, true));
+      renderHook(() => useProjection(ref as never, true), { wrapper });
     }).not.toThrow();
   });
 });

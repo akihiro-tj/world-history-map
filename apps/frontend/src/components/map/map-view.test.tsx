@@ -1,6 +1,7 @@
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { AppStateProvider } from '@/contexts/app-state-context';
+import { ProjectionProvider } from '@/contexts/projection-context';
 import { MapView } from './map-view';
 
 let capturedOnClick: ((e: unknown) => void) | undefined;
@@ -46,7 +47,11 @@ global.fetch = vi.fn(() =>
 
 describe('MapView', () => {
   const renderWithProvider = (ui: React.ReactElement) => {
-    return render(<AppStateProvider>{ui}</AppStateProvider>);
+    return render(
+      <AppStateProvider>
+        <ProjectionProvider>{ui}</ProjectionProvider>
+      </AppStateProvider>,
+    );
   };
 
   it('should render the map container', async () => {
@@ -69,14 +74,6 @@ describe('MapView', () => {
     renderWithProvider(<MapView />);
     await waitFor(() => {
       expect(screen.getByTestId('map-layer-territory-fill')).toBeInTheDocument();
-    });
-  });
-
-  it('should call onProjectionReady when map loads', async () => {
-    const onProjectionReady = vi.fn();
-    renderWithProvider(<MapView onProjectionReady={onProjectionReady} />);
-    await waitFor(() => {
-      expect(onProjectionReady).toHaveBeenCalled();
     });
   });
 
@@ -164,7 +161,9 @@ describe('MapView - error state', () => {
 
     render(
       <AppStateProvider>
-        <MapView />
+        <ProjectionProvider>
+          <MapView />
+        </ProjectionProvider>
       </AppStateProvider>,
     );
 

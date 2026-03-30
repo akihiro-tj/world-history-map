@@ -1,6 +1,7 @@
-import { type RefObject, useEffect, useRef, useState } from 'react';
+import { type RefObject, useEffect, useRef } from 'react';
 import type { MapRef } from 'react-map-gl/maplibre';
-import type { ProjectionType } from '../projection-toggle';
+import { useProjectionContext } from '../../../contexts/projection-context';
+import type { ProjectionType } from '../../../types/projection';
 
 const GLOBE_MAX_ZOOM = 2;
 const GLOBE_FLY_DURATION_MS = 1200;
@@ -10,14 +11,8 @@ const MERCATOR_FLY_DURATION_MS = 800;
 const MERCATOR_FLY_CURVE = 1.5;
 const PROJECTION_SWITCH_DELAY_MS = 200;
 
-export function useProjection(
-  mapRef: RefObject<MapRef | null>,
-  mapLoaded: boolean,
-): {
-  projection: ProjectionType;
-  setProjection: (projection: ProjectionType) => void;
-} {
-  const [projection, setProjection] = useState<ProjectionType>('mercator');
+export function useProjection(mapRef: RefObject<MapRef | null>, mapLoaded: boolean): void {
+  const { projection } = useProjectionContext();
   const prevProjectionRef = useRef<ProjectionType | null>(null);
 
   useEffect(() => {
@@ -26,7 +21,6 @@ export function useProjection(
 
     const prevProjection = prevProjectionRef.current;
 
-    // Skip animation on initial load (when there's no previous projection)
     if (prevProjection === null) {
       prevProjectionRef.current = projection;
       mapInstance.setProjection({ type: projection });
@@ -66,6 +60,4 @@ export function useProjection(
       }, PROJECTION_SWITCH_DELAY_MS);
     }
   }, [projection, mapLoaded, mapRef]);
-
-  return { projection, setProjection };
 }
