@@ -4,8 +4,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 let mockYears: { year: number; filename: string; countries: string[] }[] = [];
 let mockIsLoading = false;
 
-vi.mock('./hooks/use-year-index', () => ({
+vi.mock('@/domain/year/use-year-index', () => ({
   useYearIndex: () => ({ years: mockYears, isLoading: mockIsLoading }),
+}));
+
+vi.mock('@/domain/territory/description-loader', () => ({
+  prefetchYearDescriptions: vi.fn(),
 }));
 
 vi.mock('./components/territory-info/hooks/use-territory-description', () => ({

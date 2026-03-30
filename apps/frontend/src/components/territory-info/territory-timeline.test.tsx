@@ -1,6 +1,6 @@
 import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import type { KeyEvent } from '@/types/territory';
+import type { KeyEvent } from '@/domain/territory/types';
 import { TerritoryTimeline } from './territory-timeline';
 
 describe('TerritoryTimeline', () => {

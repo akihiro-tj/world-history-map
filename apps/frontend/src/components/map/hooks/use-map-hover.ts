@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { MapLayerMouseEvent } from 'react-map-gl/maplibre';
-import type { TerritoryProperties } from '../../../types/territory';
+import type { TerritoryProperties } from '@/domain/territory/types';
 
 export function useMapHover(): {
   isHoveringTerritory: boolean;

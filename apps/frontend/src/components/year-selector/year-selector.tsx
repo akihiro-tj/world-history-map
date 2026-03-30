@@ -1,8 +1,8 @@
 import { type KeyboardEvent, useCallback, useEffect, useMemo, useRef } from 'react';
+import { formatYear } from '@/domain/year/format';
+import type { YearEntry } from '@/domain/year/types';
 import { cn } from '@/lib/utils';
-import { formatYear } from '@/utils/format-year';
 import { useAppState } from '../../contexts/app-state-context';
-import type { YearEntry } from '../../types/year';
 
 interface YearSelectorProps {
   years: YearEntry[];

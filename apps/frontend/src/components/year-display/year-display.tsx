@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
+import { formatYear } from '@/domain/year/format';
 import { cn } from '@/lib/utils';
-import { formatYear } from '@/utils/format-year';
 
 const FADE_DURATION_MS = 150;
 

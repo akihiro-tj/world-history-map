@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { KeyEvent } from '@/types/territory';
+import type { KeyEvent } from '@/domain/territory/types';
 import { TerritoryTimeline } from './territory-timeline';
 
 const sampleEvents: KeyEvent[] = [

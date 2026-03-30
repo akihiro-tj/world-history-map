@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
+import { loadYearIndex } from '@/domain/year/loader';
+import type { YearIndex } from '@/domain/year/types';
 import { MAP_CONFIG } from '../../../styles/map-style';
-import type { YearIndex } from '../../../types/year';
 import { loadColorScheme } from '../../../utils/color-scheme';
 import { getTilesUrl, loadTilesManifest, type TilesManifest } from '../../../utils/tiles-config';
-import { loadYearIndex } from '../../../utils/year-index';
 
 interface MapDataState {
   yearIndex: YearIndex | null;

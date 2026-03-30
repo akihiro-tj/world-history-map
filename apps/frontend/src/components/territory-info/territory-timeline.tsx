@@ -1,7 +1,7 @@
 import { Fragment, useMemo } from 'react';
+import { classifyEvents } from '@/domain/territory/classify-events';
+import type { KeyEvent } from '@/domain/territory/types';
 import { cn } from '@/lib/utils';
-import type { KeyEvent } from '@/types/territory';
-import { classifyEvents } from '@/utils/classify-events';
 
 export function TerritoryTimeline({
   keyEvents,
