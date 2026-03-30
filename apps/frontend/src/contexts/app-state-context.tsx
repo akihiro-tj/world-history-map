@@ -5,6 +5,7 @@ import {
   initialAppState,
   type MapViewState,
 } from '../types/app-state';
+import type { HistoricalYear } from '../types/historical-year';
 
 interface AppStateContextValue {
   state: AppState;
@@ -19,7 +20,7 @@ interface AppStateProviderProps {
 }
 
 type AppStateAction =
-  | { type: 'SET_SELECTED_YEAR'; year: number }
+  | { type: 'SET_SELECTED_YEAR'; year: HistoricalYear }
   | { type: 'SELECT_TERRITORY'; territory: string }
   | { type: 'CLEAR_SELECTION' }
   | { type: 'SET_MAP_VIEW'; view: MapViewState };
@@ -45,7 +46,7 @@ export function AppStateProvider({
 
   const actions: AppStateActions = useMemo(
     () => ({
-      setSelectedYear: (year: number) => dispatch({ type: 'SET_SELECTED_YEAR', year }),
+      setSelectedYear: (year: HistoricalYear) => dispatch({ type: 'SET_SELECTED_YEAR', year }),
       selectTerritory: (territory: string) => dispatch({ type: 'SELECT_TERRITORY', territory }),
       clearSelection: () => dispatch({ type: 'CLEAR_SELECTION' }),
       setMapView: (view: MapViewState) => dispatch({ type: 'SET_MAP_VIEW', view }),
