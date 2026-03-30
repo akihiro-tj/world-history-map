@@ -3,8 +3,8 @@ import { createHistoricalYear, type HistoricalYear } from '@/domain/year/histori
 import { loadYearIndex } from '@/domain/year/loader';
 import type { YearIndex } from '@/domain/year/types';
 import { MAP_CONFIG } from '../../../styles/map-style';
-import { loadColorScheme } from '../../../utils/color-scheme';
-import { getTilesUrl, loadTilesManifest, type TilesManifest } from '../../../utils/tiles-config';
+import { loadColorScheme } from '../color-scheme';
+import { getTilesUrl, loadTilesManifest, type TilesManifest } from '../tiles-config';
 
 interface MapDataState {
   yearIndex: YearIndex | null;

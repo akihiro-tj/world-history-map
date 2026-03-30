@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { render, screen } from '@testing-library/react';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import { clearColorSchemeCache, loadColorScheme } from '../../utils/color-scheme';
+import { clearColorSchemeCache, loadColorScheme } from './color-scheme';
 import { TerritoryLayer } from './territory-layer';
 
 vi.mock('react-map-gl/maplibre', () => ({

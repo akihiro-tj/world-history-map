@@ -1,5 +1,5 @@
-import type { HistoricalYear } from '../domain/year/historical-year';
-import { CachedFetcher } from '../lib/cached-fetcher';
+import type { HistoricalYear } from '../../domain/year/historical-year';
+import { CachedFetcher } from '../../lib/cached-fetcher';
 
 export interface TilesManifest {
   version: string;
