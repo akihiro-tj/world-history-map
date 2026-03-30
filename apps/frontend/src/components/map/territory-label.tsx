@@ -1,4 +1,16 @@
 import { Layer } from 'react-map-gl/maplibre';
+import {
+  LABEL_ANCHOR,
+  LABEL_HALO_BLUR,
+  LABEL_HALO_COLOR,
+  LABEL_HALO_WIDTH,
+  LABEL_MAX_WIDTH,
+  LABEL_OPACITY_STOPS,
+  LABEL_PADDING,
+  LABEL_RADIAL_OFFSET,
+  LABEL_TEXT_COLOR,
+  LABEL_TEXT_SIZE_STOPS,
+} from './territory-style-constants';
 
 interface TerritoryLabelProps {
   sourceId: string;
@@ -17,20 +29,20 @@ export function TerritoryLabel({ sourceId, sourceLayer }: TerritoryLabelProps) {
       layout={{
         'text-field': ['get', 'NAME'],
         'text-font': ['Noto Sans Regular'],
-        'text-size': ['interpolate', ['linear'], ['zoom'], 0, 7, 3, 10, 6, 13, 10, 16],
-        'text-max-width': 8,
-        'text-variable-anchor': ['center', 'top', 'bottom', 'left', 'right'],
-        'text-radial-offset': 0.5,
+        'text-size': LABEL_TEXT_SIZE_STOPS,
+        'text-max-width': LABEL_MAX_WIDTH,
+        'text-variable-anchor': LABEL_ANCHOR,
+        'text-radial-offset': LABEL_RADIAL_OFFSET,
         'text-justify': 'auto',
-        'text-padding': 2,
+        'text-padding': LABEL_PADDING,
         'text-optional': true,
       }}
       paint={{
-        'text-color': '#f0f0f0',
-        'text-halo-color': '#1a1a1a',
-        'text-halo-width': 1.5,
-        'text-halo-blur': 0.5,
-        'text-opacity': ['interpolate', ['linear'], ['zoom'], 2, 0.6, 4, 0.9, 6, 1],
+        'text-color': LABEL_TEXT_COLOR,
+        'text-halo-color': LABEL_HALO_COLOR,
+        'text-halo-width': LABEL_HALO_WIDTH,
+        'text-halo-blur': LABEL_HALO_BLUR,
+        'text-opacity': LABEL_OPACITY_STOPS,
       }}
     />
   );
