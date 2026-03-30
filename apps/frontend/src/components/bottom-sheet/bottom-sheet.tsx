@@ -27,20 +27,22 @@ export function BottomSheet({ isOpen, onClose, header, children, ...props }: Bot
   });
 
   useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
+    const scrollContainer = scrollRef.current;
+    if (!scrollContainer) return;
 
     const checkScroll = () => {
-      setCanScrollDown(el.scrollHeight - el.scrollTop - el.clientHeight > 1);
+      setCanScrollDown(
+        scrollContainer.scrollHeight - scrollContainer.scrollTop - scrollContainer.clientHeight > 1,
+      );
     };
 
     checkScroll();
-    el.addEventListener('scroll', checkScroll, { passive: true });
+    scrollContainer.addEventListener('scroll', checkScroll, { passive: true });
     const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(checkScroll) : null;
-    ro?.observe(el);
+    ro?.observe(scrollContainer);
 
     return () => {
-      el.removeEventListener('scroll', checkScroll);
+      scrollContainer.removeEventListener('scroll', checkScroll);
       ro?.disconnect();
     };
   }, []);

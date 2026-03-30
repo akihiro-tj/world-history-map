@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
-import { createHistoricalYear, type HistoricalYear } from '@/domain/year/historical-year';
+import {
+  createHistoricalYear,
+  type HistoricalYear,
+  INITIAL_YEAR,
+} from '@/domain/year/historical-year';
 import { loadYearIndex } from '@/domain/year/loader';
 import type { YearIndex } from '@/domain/year/types';
-import { MAP_CONFIG } from '../../../styles/map-style';
 import { loadColorScheme } from '../color-scheme';
 import { getTilesUrl, loadTilesManifest, type TilesManifest } from '../tiles-config';
 
@@ -15,11 +18,9 @@ interface MapDataState {
   error: string | null;
 }
 
-type UseMapDataReturn = MapDataState;
-
 export function useMapData(
-  initialYear: HistoricalYear = createHistoricalYear(MAP_CONFIG.initialYear),
-): UseMapDataReturn {
+  initialYear: HistoricalYear = createHistoricalYear(INITIAL_YEAR),
+): MapDataState {
   const [state, setState] = useState<MapDataState>({
     yearIndex: null,
     tilesManifest: null,

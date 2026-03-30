@@ -1,5 +1,4 @@
 export const MAP_CONFIG = {
-  initialYear: 1650,
   initialLongitude: 40,
   initialLatitude: 30,
   initialZoom: 2,

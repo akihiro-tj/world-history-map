@@ -4,7 +4,7 @@ import {
   type AppState,
   type AppStateActions,
   initialAppState,
-  type MapViewState,
+  type MapView,
 } from '../types/app-state';
 
 interface AppStateContextValue {
@@ -23,7 +23,7 @@ type AppStateAction =
   | { type: 'SET_SELECTED_YEAR'; year: HistoricalYear }
   | { type: 'SELECT_TERRITORY'; territory: string }
   | { type: 'CLEAR_SELECTION' }
-  | { type: 'SET_MAP_VIEW'; view: MapViewState };
+  | { type: 'SET_MAP_VIEW'; view: MapView };
 
 function appStateReducer(state: AppState, action: AppStateAction): AppState {
   switch (action.type) {
@@ -49,7 +49,7 @@ export function AppStateProvider({
       setSelectedYear: (year: HistoricalYear) => dispatch({ type: 'SET_SELECTED_YEAR', year }),
       selectTerritory: (territory: string) => dispatch({ type: 'SELECT_TERRITORY', territory }),
       clearSelection: () => dispatch({ type: 'CLEAR_SELECTION' }),
-      setMapView: (view: MapViewState) => dispatch({ type: 'SET_MAP_VIEW', view }),
+      setMapView: (view: MapView) => dispatch({ type: 'SET_MAP_VIEW', view }),
     }),
     [],
   );

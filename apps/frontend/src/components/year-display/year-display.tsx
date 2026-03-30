@@ -15,11 +15,11 @@ export function YearDisplay({ year }: YearDisplayProps) {
   useEffect(() => {
     if (year === displayYear) return;
     setVisible(false);
-    const id = setTimeout(() => {
+    const fadeTimerId = setTimeout(() => {
       setDisplayYear(year);
       setVisible(true);
     }, FADE_DURATION_MS);
-    return () => clearTimeout(id);
+    return () => clearTimeout(fadeTimerId);
   }, [year, displayYear]);
 
   return (
