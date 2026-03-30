@@ -4,18 +4,18 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 vi.mock('../../../utils/year-index', () => ({
   loadYearIndex: vi.fn(),
 }));
-vi.mock('../../../utils/tiles-config', () => ({
+vi.mock('../tiles-config', () => ({
   loadTilesManifest: vi.fn(),
   getTilesUrl: vi.fn(),
 }));
-vi.mock('../../../utils/color-scheme', () => ({
+vi.mock('../color-scheme', () => ({
   loadColorScheme: vi.fn(),
 }));
 
 import { createHistoricalYear } from '../../../types/historical-year';
-import { loadColorScheme } from '../../../utils/color-scheme';
-import { getTilesUrl, loadTilesManifest } from '../../../utils/tiles-config';
 import { loadYearIndex } from '../../../utils/year-index';
+import { loadColorScheme } from '../color-scheme';
+import { getTilesUrl, loadTilesManifest } from '../tiles-config';
 import { useMapData } from './use-map-data';
 
 const mockLoadYearIndex = vi.mocked(loadYearIndex);

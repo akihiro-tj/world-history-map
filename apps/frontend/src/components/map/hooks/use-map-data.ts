@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { MAP_CONFIG } from '../../../styles/map-style';
 import { createHistoricalYear, type HistoricalYear } from '../../../types/historical-year';
 import type { YearIndex } from '../../../types/year';
-import { loadColorScheme } from '../../../utils/color-scheme';
-import { getTilesUrl, loadTilesManifest, type TilesManifest } from '../../../utils/tiles-config';
 import { loadYearIndex } from '../../../utils/year-index';
+import { loadColorScheme } from '../color-scheme';
+import { getTilesUrl, loadTilesManifest, type TilesManifest } from '../tiles-config';
 
 interface MapDataState {
   yearIndex: YearIndex | null;
