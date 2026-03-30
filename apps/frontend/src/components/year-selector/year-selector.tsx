@@ -1,12 +1,12 @@
 import { type KeyboardEvent, useCallback, useEffect, useMemo, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import { formatYear } from '@/utils/format-year';
 import { useAppState } from '../../contexts/app-state-context';
+import { formatHistoricalYear, type HistoricalYear } from '../../types/historical-year';
 import type { YearEntry } from '../../types/year';
 
 interface YearSelectorProps {
   years: YearEntry[];
-  onYearSelect?: (year: number) => void;
+  onYearSelect?: (year: HistoricalYear) => void;
 }
 
 export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
@@ -46,7 +46,7 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
   }, [state.selectedYear]);
 
   const handleYearClick = useCallback(
-    (year: number) => {
+    (year: HistoricalYear) => {
       actions.setSelectedYear(year);
       onYearSelect?.(year);
     },
@@ -147,7 +147,7 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
               ref={(el) => setButtonRef(yearEntry.year, el)}
               type="button"
               data-testid={`year-button-${yearEntry.year}`}
-              aria-label={`${formatYear(yearEntry.year)}年を選択`}
+              aria-label={`${formatHistoricalYear(yearEntry.year)}年を選択`}
               aria-current={isSelected ? 'true' : undefined}
               onClick={() => handleYearClick(yearEntry.year)}
               onKeyDown={(e) => handleKeyDown(e, index)}
@@ -158,7 +158,7 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
                   : 'min-w-[4rem] px-3 text-base text-gray-300 hover:bg-gray-600 hover:text-white',
               )}
             >
-              {formatYear(yearEntry.year)}
+              {formatHistoricalYear(yearEntry.year)}
             </button>
           );
         })}

@@ -1,4 +1,5 @@
 import { MAP_CONFIG } from '../styles/map-style';
+import { createHistoricalYear, type HistoricalYear } from './historical-year';
 
 export interface MapViewState {
   longitude: number;
@@ -7,14 +8,14 @@ export interface MapViewState {
 }
 
 export interface AppState {
-  selectedYear: number;
+  selectedYear: HistoricalYear;
   selectedTerritory: string | null;
   isInfoPanelOpen: boolean;
   mapView: MapViewState;
 }
 
 export const initialAppState: AppState = {
-  selectedYear: MAP_CONFIG.initialYear,
+  selectedYear: createHistoricalYear(MAP_CONFIG.initialYear),
   selectedTerritory: null,
   isInfoPanelOpen: false,
   mapView: {
@@ -25,7 +26,7 @@ export const initialAppState: AppState = {
 };
 
 export interface AppStateActions {
-  setSelectedYear: (year: number) => void;
+  setSelectedYear: (year: HistoricalYear) => void;
   selectTerritory: (territory: string) => void;
   clearSelection: () => void;
   setMapView: (view: MapViewState) => void;

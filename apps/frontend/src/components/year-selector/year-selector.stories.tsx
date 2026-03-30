@@ -1,21 +1,22 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { AppStateProvider } from '../../contexts/app-state-context';
+import { createHistoricalYear } from '../../types/historical-year';
 import type { YearEntry } from '../../types/year';
 import { YearSelector } from './year-selector';
 
 const sampleYears: YearEntry[] = [
-  { year: -500, filename: 'world_-500.pmtiles', countries: [] },
-  { year: -323, filename: 'world_-323.pmtiles', countries: [] },
-  { year: -1, filename: 'world_-1.pmtiles', countries: [] },
-  { year: 100, filename: 'world_100.pmtiles', countries: [] },
-  { year: 500, filename: 'world_500.pmtiles', countries: [] },
-  { year: 1000, filename: 'world_1000.pmtiles', countries: [] },
-  { year: 1500, filename: 'world_1500.pmtiles', countries: [] },
-  { year: 1650, filename: 'world_1650.pmtiles', countries: [] },
-  { year: 1800, filename: 'world_1800.pmtiles', countries: [] },
-  { year: 1900, filename: 'world_1900.pmtiles', countries: [] },
-  { year: 2000, filename: 'world_2000.pmtiles', countries: [] },
+  { year: createHistoricalYear(-500), filename: 'world_-500.pmtiles', countries: [] },
+  { year: createHistoricalYear(-323), filename: 'world_-323.pmtiles', countries: [] },
+  { year: createHistoricalYear(-1), filename: 'world_-1.pmtiles', countries: [] },
+  { year: createHistoricalYear(100), filename: 'world_100.pmtiles', countries: [] },
+  { year: createHistoricalYear(500), filename: 'world_500.pmtiles', countries: [] },
+  { year: createHistoricalYear(1000), filename: 'world_1000.pmtiles', countries: [] },
+  { year: createHistoricalYear(1500), filename: 'world_1500.pmtiles', countries: [] },
+  { year: createHistoricalYear(1650), filename: 'world_1650.pmtiles', countries: [] },
+  { year: createHistoricalYear(1800), filename: 'world_1800.pmtiles', countries: [] },
+  { year: createHistoricalYear(1900), filename: 'world_1900.pmtiles', countries: [] },
+  { year: createHistoricalYear(2000), filename: 'world_2000.pmtiles', countries: [] },
 ];
 
 const meta = {
@@ -30,7 +31,7 @@ const meta = {
     (Story) => (
       <AppStateProvider
         initialState={{
-          selectedYear: 1650,
+          selectedYear: createHistoricalYear(1650),
           selectedTerritory: null,
           mapView: { longitude: 0, latitude: 30, zoom: 2 },
           isInfoPanelOpen: false,
@@ -70,7 +71,7 @@ export const ManyYears: Story = {
     (Story) => (
       <AppStateProvider
         initialState={{
-          selectedYear: -500,
+          selectedYear: createHistoricalYear(-500),
           selectedTerritory: null,
           mapView: { longitude: 0, latitude: 30, zoom: 2 },
           isInfoPanelOpen: false,

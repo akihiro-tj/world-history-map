@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { createHistoricalYear } from '../types/historical-year';
 import type { TilesManifest } from './tiles-config';
 
 const mockFetch = vi.fn();
@@ -90,7 +91,7 @@ describe('tiles-config', () => {
       const { getTilesUrl } = await importFresh();
       const manifest: TilesManifest = { version: 'development', files: {} };
 
-      const url = getTilesUrl(1700, manifest);
+      const url = getTilesUrl(createHistoricalYear(1700), manifest);
 
       expect(url).toBe('pmtiles:///pmtiles/world_1700.pmtiles');
     });
@@ -103,7 +104,7 @@ describe('tiles-config', () => {
         files: { '1700': 'world_1700_abc123.pmtiles' },
       };
 
-      const url = getTilesUrl(1700, manifest);
+      const url = getTilesUrl(createHistoricalYear(1700), manifest);
 
       expect(url).toBe('pmtiles://https://tiles.example.com/world_1700_abc123.pmtiles');
     });
@@ -113,7 +114,7 @@ describe('tiles-config', () => {
       const { getTilesUrl } = await importFresh();
       const manifest: TilesManifest = { version: '1.0.0', files: {} };
 
-      const url = getTilesUrl(9999, manifest);
+      const url = getTilesUrl(createHistoricalYear(9999), manifest);
 
       expect(url).toBeNull();
     });
