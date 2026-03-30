@@ -1,6 +1,5 @@
-export function formatYear(year: number): string {
-  if (year < 0) {
-    return `前${Math.abs(year)}`;
-  }
-  return String(year);
+import { formatHistoricalYear, type HistoricalYear } from '../types/historical-year';
+
+export function formatYear(year: HistoricalYear): string {
+  return formatHistoricalYear(year);
 }

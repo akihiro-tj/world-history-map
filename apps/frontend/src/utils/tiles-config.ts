@@ -1,4 +1,5 @@
 import { CachedFetcher } from '../lib/cached-fetcher';
+import type { HistoricalYear } from '../types/historical-year';
 
 export interface TilesManifest {
   version: string;
@@ -41,7 +42,7 @@ export async function loadTilesManifest(): Promise<TilesManifest> {
   return tilesManifestFetcher.load();
 }
 
-function getTilesFilename(year: number, manifest: TilesManifest): string | null {
+function getTilesFilename(year: HistoricalYear, manifest: TilesManifest): string | null {
   if (!isProductionTiles()) {
     return `world_${year}.pmtiles`;
   }
@@ -50,7 +51,7 @@ function getTilesFilename(year: number, manifest: TilesManifest): string | null 
   return filename || null;
 }
 
-export function getTilesUrl(year: number, manifest: TilesManifest): string | null {
+export function getTilesUrl(year: HistoricalYear, manifest: TilesManifest): string | null {
   const filename = getTilesFilename(year, manifest);
   if (!filename) {
     return null;
