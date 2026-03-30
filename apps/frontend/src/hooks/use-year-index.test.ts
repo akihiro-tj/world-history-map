@@ -1,5 +1,6 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { createHistoricalYear } from '../types/historical-year';
 import type { YearIndex } from '../types/year';
 
 vi.mock('../utils/year-index', () => ({
@@ -13,8 +14,12 @@ const mockLoadYearIndex = vi.mocked(loadYearIndex);
 
 const mockYearIndex: YearIndex = {
   years: [
-    { year: 1650, filename: 'world_1650.pmtiles', countries: ['France', 'England'] },
-    { year: 1700, filename: 'world_1700.pmtiles', countries: ['France'] },
+    {
+      year: createHistoricalYear(1650),
+      filename: 'world_1650.pmtiles',
+      countries: ['France', 'England'],
+    },
+    { year: createHistoricalYear(1700), filename: 'world_1700.pmtiles', countries: ['France'] },
   ],
 };
 

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
-import type { HistoricalYear } from '@/types/historical-year';
-import { formatYear } from '@/utils/format-year';
+import { formatHistoricalYear, type HistoricalYear } from '@/types/historical-year';
 
 const FADE_DURATION_MS = 150;
 
@@ -31,7 +30,7 @@ export function YearDisplay({ year }: YearDisplayProps) {
         visible ? 'opacity-100' : 'opacity-0',
       )}
     >
-      {formatYear(displayYear)}
+      {formatHistoricalYear(displayYear)}
     </div>
   );
 }

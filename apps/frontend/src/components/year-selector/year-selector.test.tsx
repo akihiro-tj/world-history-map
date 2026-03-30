@@ -11,11 +11,11 @@ const scrollIntoViewMock = vi.fn();
 Element.prototype.scrollIntoView = scrollIntoViewMock;
 
 const mockYears: YearEntry[] = [
-  { year: 1600, filename: 'world_1600.pmtiles', countries: [] },
-  { year: 1650, filename: 'world_1650.pmtiles', countries: [] },
-  { year: 1700, filename: 'world_1700.pmtiles', countries: [] },
-  { year: 1750, filename: 'world_1750.pmtiles', countries: [] },
-  { year: 1800, filename: 'world_1800.pmtiles', countries: [] },
+  { year: createHistoricalYear(1600), filename: 'world_1600.pmtiles', countries: [] },
+  { year: createHistoricalYear(1650), filename: 'world_1650.pmtiles', countries: [] },
+  { year: createHistoricalYear(1700), filename: 'world_1700.pmtiles', countries: [] },
+  { year: createHistoricalYear(1750), filename: 'world_1750.pmtiles', countries: [] },
+  { year: createHistoricalYear(1800), filename: 'world_1800.pmtiles', countries: [] },
 ];
 
 describe('YearSelector', () => {
@@ -193,9 +193,9 @@ describe('YearSelector', () => {
 
   it('should handle years with BCE notation', () => {
     const yearsWithBCE: YearEntry[] = [
-      { year: -500, filename: 'world_-500.pmtiles', countries: [] },
-      { year: -100, filename: 'world_-100.pmtiles', countries: [] },
-      { year: 100, filename: 'world_100.pmtiles', countries: [] },
+      { year: createHistoricalYear(-500), filename: 'world_-500.pmtiles', countries: [] },
+      { year: createHistoricalYear(-100), filename: 'world_-100.pmtiles', countries: [] },
+      { year: createHistoricalYear(100), filename: 'world_100.pmtiles', countries: [] },
     ];
 
     renderWithProvider(<YearSelector years={yearsWithBCE} />, { initialYear: -500 });

@@ -6,17 +6,17 @@ import type { YearEntry } from '../../types/year';
 import { YearSelector } from './year-selector';
 
 const sampleYears: YearEntry[] = [
-  { year: -500, filename: 'world_-500.pmtiles', countries: [] },
-  { year: -323, filename: 'world_-323.pmtiles', countries: [] },
-  { year: -1, filename: 'world_-1.pmtiles', countries: [] },
-  { year: 100, filename: 'world_100.pmtiles', countries: [] },
-  { year: 500, filename: 'world_500.pmtiles', countries: [] },
-  { year: 1000, filename: 'world_1000.pmtiles', countries: [] },
-  { year: 1500, filename: 'world_1500.pmtiles', countries: [] },
-  { year: 1650, filename: 'world_1650.pmtiles', countries: [] },
-  { year: 1800, filename: 'world_1800.pmtiles', countries: [] },
-  { year: 1900, filename: 'world_1900.pmtiles', countries: [] },
-  { year: 2000, filename: 'world_2000.pmtiles', countries: [] },
+  { year: createHistoricalYear(-500), filename: 'world_-500.pmtiles', countries: [] },
+  { year: createHistoricalYear(-323), filename: 'world_-323.pmtiles', countries: [] },
+  { year: createHistoricalYear(-1), filename: 'world_-1.pmtiles', countries: [] },
+  { year: createHistoricalYear(100), filename: 'world_100.pmtiles', countries: [] },
+  { year: createHistoricalYear(500), filename: 'world_500.pmtiles', countries: [] },
+  { year: createHistoricalYear(1000), filename: 'world_1000.pmtiles', countries: [] },
+  { year: createHistoricalYear(1500), filename: 'world_1500.pmtiles', countries: [] },
+  { year: createHistoricalYear(1650), filename: 'world_1650.pmtiles', countries: [] },
+  { year: createHistoricalYear(1800), filename: 'world_1800.pmtiles', countries: [] },
+  { year: createHistoricalYear(1900), filename: 'world_1900.pmtiles', countries: [] },
+  { year: createHistoricalYear(2000), filename: 'world_2000.pmtiles', countries: [] },
 ];
 
 const meta = {

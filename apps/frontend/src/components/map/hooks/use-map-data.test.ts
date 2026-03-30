@@ -24,7 +24,9 @@ const mockGetTilesUrl = vi.mocked(getTilesUrl);
 const mockLoadColorScheme = vi.mocked(loadColorScheme);
 
 const mockYearIndex = {
-  years: [{ year: 1650, filename: 'world_1650.pmtiles', countries: ['France'] }],
+  years: [
+    { year: createHistoricalYear(1650), filename: 'world_1650.pmtiles', countries: ['France'] },
+  ],
 };
 
 const mockManifest = {
