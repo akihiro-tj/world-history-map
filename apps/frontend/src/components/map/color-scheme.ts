@@ -1,7 +1,7 @@
 import type { ExpressionSpecification } from 'maplibre-gl';
 import { CachedFetcher } from '../../lib/cached-fetcher';
 
-const DEFAULT_COLOR = '#cccccc';
+const TERRITORY_FALLBACK_COLOR = '#cccccc';
 const COLOR_SCHEME_PATH = '/data/color-scheme.json';
 
 const colorSchemeFetcher = new CachedFetcher<Record<string, string>>({
@@ -29,7 +29,7 @@ export function createMatchColorExpression(
   const scheme = colorScheme;
 
   if (!scheme) {
-    return ['literal', DEFAULT_COLOR] as unknown as ExpressionSpecification;
+    return ['literal', TERRITORY_FALLBACK_COLOR] as unknown as ExpressionSpecification;
   }
 
   const entries = Object.entries(scheme);
@@ -38,6 +38,6 @@ export function createMatchColorExpression(
     'match',
     ['case', ['==', ['get', 'SUBJECTO'], ''], ['get', 'NAME'], ['get', 'SUBJECTO']],
     ...entries.flat(),
-    DEFAULT_COLOR,
+    TERRITORY_FALLBACK_COLOR,
   ] as unknown as ExpressionSpecification;
 }
