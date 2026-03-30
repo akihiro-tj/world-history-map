@@ -155,6 +155,7 @@ describe('MapView - error state', () => {
       yearIndex: null,
       tilesManifest: null,
       pmtilesUrl: null,
+      colorScheme: null,
       isLoading: false,
       error: 'Network error',
     });

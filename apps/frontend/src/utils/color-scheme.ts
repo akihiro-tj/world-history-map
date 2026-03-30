@@ -1,33 +1,38 @@
 import type { ExpressionSpecification } from 'maplibre-gl';
+import { CachedFetcher } from '../lib/cached-fetcher';
 
 const DEFAULT_COLOR = '#cccccc';
 const COLOR_SCHEME_PATH = '/data/color-scheme.json';
-let cachedColorScheme: Record<string, string> | null = null;
+
+const colorSchemeFetcher = new CachedFetcher<Record<string, string>>({
+  async fetch() {
+    const response = await fetch(COLOR_SCHEME_PATH);
+    if (!response.ok) {
+      throw new Error(`Failed to load color scheme: ${response.status} ${response.statusText}`);
+    }
+
+    return (await response.json()) as Record<string, string>;
+  },
+});
 
 export async function loadColorScheme(): Promise<Record<string, string>> {
-  if (cachedColorScheme) {
-    return cachedColorScheme;
-  }
-
-  const response = await fetch(COLOR_SCHEME_PATH);
-  if (!response.ok) {
-    throw new Error(`Failed to load color scheme: ${response.status} ${response.statusText}`);
-  }
-
-  cachedColorScheme = (await response.json()) as Record<string, string>;
-  return cachedColorScheme;
+  return colorSchemeFetcher.load();
 }
 
 export function clearColorSchemeCache(): void {
-  cachedColorScheme = null;
+  colorSchemeFetcher.clear();
 }
 
-export function createMatchColorExpression(): ExpressionSpecification {
-  if (!cachedColorScheme) {
+export function createMatchColorExpression(
+  colorScheme: Record<string, string> | null,
+): ExpressionSpecification {
+  const scheme = colorScheme;
+
+  if (!scheme) {
     return ['literal', DEFAULT_COLOR] as unknown as ExpressionSpecification;
   }
 
-  const entries = Object.entries(cachedColorScheme);
+  const entries = Object.entries(scheme);
 
   return [
     'match',
