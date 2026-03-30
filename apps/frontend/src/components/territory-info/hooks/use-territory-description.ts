@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { CachedFetcher } from '../../../lib/cached-fetcher';
+import type { HistoricalYear } from '../../../types/historical-year';
 import type { TerritoryDescription, YearDescriptionBundle } from '../../../types/territory';
 
 interface UseTerritoryDescriptionResult {
@@ -8,9 +9,9 @@ interface UseTerritoryDescriptionResult {
   error: string | null;
 }
 
-const yearFetchers = new Map<number, CachedFetcher<YearDescriptionBundle | null>>();
+const yearFetchers = new Map<HistoricalYear, CachedFetcher<YearDescriptionBundle | null>>();
 
-function getYearFetcher(year: number): CachedFetcher<YearDescriptionBundle | null> {
+function getYearFetcher(year: HistoricalYear): CachedFetcher<YearDescriptionBundle | null> {
   let fetcher = yearFetchers.get(year);
   if (fetcher) return fetcher;
 
@@ -41,7 +42,7 @@ function toKebabCase(name: string): string {
     .replace(/[^a-z0-9-]/g, '');
 }
 
-export function prefetchYearDescriptions(year: number): void {
+export function prefetchYearDescriptions(year: HistoricalYear): void {
   getYearFetcher(year)
     .load()
     .catch(() => {});
@@ -53,7 +54,7 @@ export function clearDescriptionCache(): void {
 
 export function useTerritoryDescription(
   territoryName: string | null,
-  year: number,
+  year: HistoricalYear,
 ): UseTerritoryDescriptionResult {
   const [description, setDescription] = useState<TerritoryDescription | null>(null);
   const [isLoading, setIsLoading] = useState(false);

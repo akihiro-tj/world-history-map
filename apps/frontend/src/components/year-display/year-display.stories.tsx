@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { createHistoricalYear } from '@/types/historical-year';
 import { YearDisplay } from './year-display';
 
 const meta = {
@@ -19,19 +20,19 @@ type Story = StoryObj<typeof meta>;
 
 export const CE: Story = {
   args: {
-    year: 1700,
+    year: createHistoricalYear(1700),
   },
 };
 
 export const BCE: Story = {
   args: {
-    year: -500,
+    year: createHistoricalYear(-500),
   },
 };
 
 export const Year1: Story = {
   name: 'Year 1',
   args: {
-    year: 1,
+    year: createHistoricalYear(1),
   },
 };

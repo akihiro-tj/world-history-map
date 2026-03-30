@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 import { AppStateProvider } from '../../contexts/app-state-context';
+import { createHistoricalYear } from '../../types/historical-year';
 import type { YearEntry } from '../../types/year';
 import { YearSelector } from './year-selector';
 
@@ -30,7 +31,7 @@ const meta = {
     (Story) => (
       <AppStateProvider
         initialState={{
-          selectedYear: 1650,
+          selectedYear: createHistoricalYear(1650),
           selectedTerritory: null,
           mapView: { longitude: 0, latitude: 30, zoom: 2 },
           isInfoPanelOpen: false,
@@ -70,7 +71,7 @@ export const ManyYears: Story = {
     (Story) => (
       <AppStateProvider
         initialState={{
-          selectedYear: -500,
+          selectedYear: createHistoricalYear(-500),
           selectedTerritory: null,
           mapView: { longitude: 0, latitude: 30, zoom: 2 },
           isInfoPanelOpen: false,

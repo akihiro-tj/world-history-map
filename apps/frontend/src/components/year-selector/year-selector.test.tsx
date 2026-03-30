@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { AppStateProvider } from '@/contexts/app-state-context';
+import { createHistoricalYear } from '@/types/historical-year';
 import type { YearEntry } from '@/types/year';
 import { YearSelector } from './year-selector';
 
@@ -29,7 +30,7 @@ describe('YearSelector', () => {
     return render(
       <AppStateProvider
         initialState={{
-          selectedYear: initialYear,
+          selectedYear: createHistoricalYear(initialYear),
           selectedTerritory: null,
           isInfoPanelOpen: false,
           mapView: { longitude: 0, latitude: 30, zoom: 2 },
