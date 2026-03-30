@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import { useEffect } from 'react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 let mockYears: { year: number; filename: string; countries: string[] }[] = [];
@@ -15,16 +14,7 @@ vi.mock('./components/territory-info/hooks/use-territory-description', () => ({
 }));
 
 vi.mock('./components/map/map-view', () => ({
-  MapView: ({
-    onProjectionReady,
-  }: {
-    onProjectionReady?: (p: string, setter: (p: string) => void) => void;
-  }) => {
-    useEffect(() => {
-      onProjectionReady?.('mercator', vi.fn());
-    }, [onProjectionReady]);
-    return <div data-testid="mock-map-view" />;
-  },
+  MapView: () => <div data-testid="mock-map-view" />,
 }));
 
 vi.mock('./components/territory-info/territory-info-panel', () => ({
@@ -32,13 +22,7 @@ vi.mock('./components/territory-info/territory-info-panel', () => ({
 }));
 
 vi.mock('./components/control-bar/control-bar', () => ({
-  ControlBar: ({
-    projection,
-  }: {
-    projection: string;
-    onToggleProjection: (p: string) => void;
-    onOpenLicense: () => void;
-  }) => <div data-testid="mock-control-bar" data-projection={projection} />,
+  ControlBar: () => <div data-testid="mock-control-bar" />,
 }));
 
 vi.mock('./components/year-display/year-display', () => ({
@@ -97,10 +81,10 @@ describe('App', () => {
     expect(screen.queryByTestId('mock-year-selector')).not.toBeInTheDocument();
   });
 
-  it('passes projection state to ControlBar', () => {
+  it('renders ControlBar', () => {
     render(<App />);
 
-    expect(screen.getByTestId('mock-control-bar')).toHaveAttribute('data-projection', 'mercator');
+    expect(screen.getByTestId('mock-control-bar')).toBeInTheDocument();
   });
 
   it('renders YearDisplay with selected year', () => {

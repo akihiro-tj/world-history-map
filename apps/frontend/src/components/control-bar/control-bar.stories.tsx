@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
+import { ProjectionProvider } from '../../contexts/projection-context';
 import { ControlBar } from './control-bar';
 
 const meta = {
@@ -10,14 +11,14 @@ const meta = {
     backgrounds: { default: 'dark' },
   },
   tags: ['autodocs'],
-  argTypes: {
-    projection: {
-      control: 'radio',
-      options: ['mercator', 'globe'],
-    },
-  },
+  decorators: [
+    (Story) => (
+      <ProjectionProvider>
+        <Story />
+      </ProjectionProvider>
+    ),
+  ],
   args: {
-    onToggleProjection: fn(),
     onOpenLicense: fn(),
   },
 } satisfies Meta<typeof ControlBar>;
@@ -25,14 +26,4 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Mercator: Story = {
-  args: {
-    projection: 'mercator',
-  },
-};
-
-export const Globe: Story = {
-  args: {
-    projection: 'globe',
-  },
-};
+export const Default: Story = {};

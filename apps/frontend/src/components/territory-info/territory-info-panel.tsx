@@ -1,9 +1,8 @@
-import type { ReactNode } from 'react';
 import { useCallback } from 'react';
 import { useEscapeKey } from '@/hooks/use-escape-key';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { cn } from '@/lib/utils';
-import type { TerritoryProfile as TerritoryProfileType } from '@/types/territory';
+import type { TerritoryDescription } from '@/types/territory';
 import { useAppState } from '../../contexts/app-state-context';
 import { BottomSheet } from '../bottom-sheet/bottom-sheet';
 import { CloseButton } from '../close-button/close-button';
@@ -17,7 +16,7 @@ function PanelWrapper({
   scrollable,
   busy,
 }: {
-  children: ReactNode;
+  children: React.ReactNode;
   scrollable?: boolean;
   busy?: boolean;
 }) {
@@ -63,28 +62,7 @@ function PanelHeader({
   );
 }
 
-function DescriptionBody({
-  profile,
-  context,
-  keyEvents,
-  selectedYear,
-}: {
-  profile?: TerritoryProfileType;
-  context?: string;
-  keyEvents?: import('@/types/territory').KeyEvent[];
-  selectedYear: number;
-}) {
-  return (
-    <div data-testid="territory-description" className="space-y-3 px-4 pt-2 pb-4">
-      <TerritoryProfile profile={profile} />
-      {context && <p className="text-sm leading-relaxed text-gray-300">{context}</p>}
-      <TerritoryTimeline keyEvents={keyEvents} selectedYear={selectedYear} />
-      <AiNotice className="mt-4" />
-    </div>
-  );
-}
-
-function LoadingSpinner() {
+function LoadingBody() {
   return (
     <div className="flex items-center justify-center py-8">
       <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
@@ -92,64 +70,125 @@ function LoadingSpinner() {
   );
 }
 
-function buildPanelContent(
-  description: import('@/types/territory').TerritoryDescription | null,
-  isLoading: boolean,
-  error: string | null,
-  selectedTerritory: string | null,
-  selectedYear: number,
-  onClose: () => void,
-): { header: ReactNode; body: ReactNode; busy: boolean; scrollable: boolean } {
-  const title = isLoading
+function ErrorBody({ error }: { error: string | null }) {
+  return <p className="p-4 text-red-400">{error}</p>;
+}
+
+function NoDescriptionBody() {
+  return (
+    <div data-testid="no-description-message" className="p-4 text-center text-gray-300">
+      <p>この領土の詳細情報は準備中です。</p>
+    </div>
+  );
+}
+
+function DescriptionBody({
+  description,
+  selectedYear,
+}: {
+  description: TerritoryDescription;
+  selectedYear: number;
+}) {
+  return (
+    <div data-testid="territory-description" className="space-y-3 px-4 pt-2 pb-4">
+      <TerritoryProfile profile={description.profile} />
+      {description.context && (
+        <p className="text-sm leading-relaxed text-gray-300">{description.context}</p>
+      )}
+      <TerritoryTimeline keyEvents={description.keyEvents} selectedYear={selectedYear} />
+      <AiNotice className="mt-4" />
+    </div>
+  );
+}
+
+interface ContentProps {
+  description: TerritoryDescription | null;
+  isLoading: boolean;
+  error: string | null;
+  selectedTerritory: string | null;
+  selectedYear: number;
+  onClose: () => void;
+}
+
+function DesktopContent({
+  description,
+  isLoading,
+  error,
+  selectedTerritory,
+  selectedYear,
+  onClose,
+}: ContentProps) {
+  if (isLoading) {
+    return (
+      <PanelWrapper busy>
+        <PanelHeader name={selectedTerritory ?? '読み込み中…'} onClose={onClose} />
+        <LoadingBody />
+      </PanelWrapper>
+    );
+  }
+  if (error) {
+    return (
+      <PanelWrapper>
+        <PanelHeader name="エラー" onClose={onClose} />
+        <ErrorBody error={error} />
+      </PanelWrapper>
+    );
+  }
+  if (!description) {
+    return (
+      <PanelWrapper>
+        <PanelHeader name={selectedTerritory ?? '領土情報'} onClose={onClose} />
+        <NoDescriptionBody />
+      </PanelWrapper>
+    );
+  }
+  return (
+    <PanelWrapper scrollable>
+      <PanelHeader name={description.name} era={description.era} onClose={onClose} />
+      <DescriptionBody description={description} selectedYear={selectedYear} />
+    </PanelWrapper>
+  );
+}
+
+function MobileContent({
+  description,
+  isLoading,
+  error,
+  selectedTerritory,
+  selectedYear,
+  onClose,
+}: ContentProps) {
+  const headerName = isLoading
     ? (selectedTerritory ?? '読み込み中…')
     : error
       ? 'エラー'
-      : (description?.name ?? selectedTerritory ?? '領土情報');
+      : description
+        ? description.name
+        : (selectedTerritory ?? '領土情報');
+  const headerEra = description && !isLoading && !error ? description.era : undefined;
 
-  if (isLoading) {
-    return {
-      header: <PanelHeader name={title} onClose={onClose} />,
-      body: <LoadingSpinner />,
-      busy: true,
-      scrollable: false,
-    };
-  }
-
-  if (error) {
-    return {
-      header: <PanelHeader name="エラー" onClose={onClose} />,
-      body: <p className="p-4 text-red-400">{error}</p>,
-      busy: false,
-      scrollable: false,
-    };
-  }
-
-  if (!description) {
-    return {
-      header: <PanelHeader name={selectedTerritory ?? '領土情報'} onClose={onClose} />,
-      body: (
-        <div data-testid="no-description-message" className="p-4 text-center text-gray-300">
-          <p>この領土の詳細情報は準備中です。</p>
+  return (
+    <BottomSheet
+      isOpen
+      onClose={onClose}
+      header={
+        <div className="px-4">
+          <PanelHeader name={headerName} era={headerEra} onClose={onClose} />
         </div>
-      ),
-      busy: false,
-      scrollable: false,
-    };
-  }
-
-  return {
-    header: <PanelHeader name={description.name} era={description.era} onClose={onClose} />,
-    body: (
-      <DescriptionBody
-        {...(description.profile !== undefined && { profile: description.profile })}
-        {...(description.context !== undefined && { context: description.context })}
-        {...(description.keyEvents !== undefined && { keyEvents: description.keyEvents })}
-        selectedYear={selectedYear}
-      />
-    ),
-    busy: false,
-    scrollable: true,
-  };
+      }
+      aria-labelledby="territory-info-title"
+    >
+      {isLoading ? (
+        <LoadingBody />
+      ) : error ? (
+        <ErrorBody error={error} />
+      ) : !description ? (
+        <NoDescriptionBody />
+      ) : (
+        <DescriptionBody description={description} selectedYear={selectedYear} />
+      )}
+    </BottomSheet>
+  );
 }
 
 export function TerritoryInfoPanel() {
@@ -172,32 +211,18 @@ export function TerritoryInfoPanel() {
     return null;
   }
 
-  const { header, body, busy, scrollable } = buildPanelContent(
+  const contentProps: ContentProps = {
     description,
     isLoading,
     error,
     selectedTerritory,
     selectedYear,
-    handleClose,
-  );
+    onClose: handleClose,
+  };
 
   if (isMobile) {
-    return (
-      <BottomSheet
-        isOpen={isInfoPanelOpen}
-        onClose={handleClose}
-        header={<div className="px-4">{header}</div>}
-        aria-labelledby="territory-info-title"
-      >
-        {body}
-      </BottomSheet>
-    );
+    return <MobileContent {...contentProps} />;
   }
 
-  return (
-    <PanelWrapper scrollable={scrollable} busy={busy}>
-      {header}
-      {body}
-    </PanelWrapper>
-  );
+  return <DesktopContent {...contentProps} />;
 }

@@ -1,6 +1,6 @@
 import 'maplibre-gl/dist/maplibre-gl.css';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import type { MapLayerMouseEvent, MapRef } from 'react-map-gl/maplibre';
 import MapGL, { Source } from 'react-map-gl/maplibre';
 import { useAppState } from '../../contexts/app-state-context';
@@ -11,35 +11,21 @@ import { useMapHover } from './hooks/use-map-hover';
 import { useMapKeyboard } from './hooks/use-map-keyboard';
 import { usePMTilesProtocol } from './hooks/use-pmtiles-protocol';
 import { useProjection } from './hooks/use-projection';
-import type { ProjectionType } from './projection-toggle';
 import { TerritoryHighlightLayer } from './territory-highlight-layer';
 import { TerritoryLabel } from './territory-label';
 import { TERRITORY_LAYER_IDS, TerritoryLayer } from './territory-layer';
-
-export type { ProjectionType } from './projection-toggle';
 
 const SOURCE_ID = 'territories';
 const SOURCE_LAYER_TERRITORIES = 'territories';
 const SOURCE_LAYER_LABELS = 'labels';
 
-interface MapViewProps {
-  onProjectionReady?: (
-    projection: ProjectionType,
-    setProjection: (p: ProjectionType) => void,
-  ) => void;
-}
-
-export function MapView({ onProjectionReady }: MapViewProps = {}) {
+export function MapView() {
   const mapRef = useRef<MapRef>(null);
   const { state, actions } = useAppState();
   const { pmtilesUrl, colorScheme, isLoading, error } = useMapData(state.selectedYear);
   const [mapLoaded, setMapLoaded] = useState(false);
   const { isHoveringTerritory, handleMouseMove } = useMapHover();
-  const { projection, setProjection } = useProjection(mapRef, mapLoaded);
-
-  useEffect(() => {
-    onProjectionReady?.(projection, setProjection);
-  }, [projection, setProjection, onProjectionReady]);
+  useProjection(mapRef, mapLoaded);
 
   usePMTilesProtocol();
 
