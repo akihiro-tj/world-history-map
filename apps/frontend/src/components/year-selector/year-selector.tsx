@@ -1,8 +1,8 @@
 import { type KeyboardEvent, useCallback, useEffect, useMemo, useRef } from 'react';
+import { formatHistoricalYear, type HistoricalYear } from '@/domain/year/historical-year';
+import type { YearEntry } from '@/domain/year/types';
 import { cn } from '@/lib/utils';
 import { useAppState } from '../../contexts/app-state-context';
-import { formatHistoricalYear, type HistoricalYear } from '../../types/historical-year';
-import type { YearEntry } from '../../types/year';
 
 interface YearSelectorProps {
   years: YearEntry[];

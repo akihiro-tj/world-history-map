@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { createHistoricalYear } from '../types/historical-year';
-import type { YearIndex } from '../types/year';
-import { clearYearIndexCache, loadYearIndex } from './year-index';
+import { createHistoricalYear } from './historical-year';
+import { clearYearIndexCache, loadYearIndex } from './loader';
+import type { YearIndex } from './types';
 
 const SAMPLE_RAW_INDEX = {
   years: [

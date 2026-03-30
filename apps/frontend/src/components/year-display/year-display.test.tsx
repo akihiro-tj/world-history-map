@@ -1,6 +1,6 @@
 import { act, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { createHistoricalYear } from '@/types/historical-year';
+import { createHistoricalYear } from '@/domain/year/historical-year';
 import { YearDisplay } from './year-display';
 
 describe('YearDisplay', () => {

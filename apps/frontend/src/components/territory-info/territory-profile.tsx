@@ -1,5 +1,5 @@
-import type { TerritoryProfile as TerritoryProfileType } from '@/types/territory';
-import { PROFILE_FIELD_LABELS, PROFILE_FIELD_ORDER } from '@/types/territory';
+import type { TerritoryProfile as TerritoryProfileType } from '@/domain/territory/types';
+import { PROFILE_FIELD_LABELS, PROFILE_FIELD_ORDER } from '@/domain/territory/types';
 
 export function TerritoryProfile({ profile }: { profile: TerritoryProfileType | undefined }) {
   if (!profile) return null;

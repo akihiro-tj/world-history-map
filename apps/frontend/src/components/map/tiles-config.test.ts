@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { createHistoricalYear } from '../../types/historical-year';
+import { createHistoricalYear } from '../../domain/year/historical-year';
 import type { TilesManifest } from './tiles-config';
 
 const mockFetch = vi.fn();

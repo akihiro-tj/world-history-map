@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { createHistoricalYear } from '@/types/historical-year';
+import { createHistoricalYear } from '@/domain/year/historical-year';
 import { YearDisplay } from './year-display';
 
 const meta = {

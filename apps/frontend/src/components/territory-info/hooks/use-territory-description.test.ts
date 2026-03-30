@@ -4,12 +4,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
-import { createHistoricalYear } from '../../../types/historical-year';
 import {
   clearDescriptionCache,
   prefetchYearDescriptions,
-  useTerritoryDescription,
-} from './use-territory-description';
+} from '@/domain/territory/description-loader';
+import { createHistoricalYear } from '@/domain/year/historical-year';
+import { useTerritoryDescription } from './use-territory-description';
 
 function createMockHeaders(contentType: string | null) {
   return {

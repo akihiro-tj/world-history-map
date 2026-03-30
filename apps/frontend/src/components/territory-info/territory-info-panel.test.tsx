@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { TerritoryDescription } from '@/types/territory';
+import type { TerritoryDescription } from '@/domain/territory/types';
 
 beforeAll(() => {
   Object.defineProperty(window, 'matchMedia', {

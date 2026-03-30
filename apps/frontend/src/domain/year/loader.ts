@@ -1,6 +1,6 @@
-import { CachedFetcher } from '../lib/cached-fetcher';
-import { createHistoricalYear } from '../types/historical-year';
-import type { YearEntry, YearIndex } from '../types/year';
+import { CachedFetcher } from '../../lib/cached-fetcher';
+import { createHistoricalYear } from './historical-year';
+import type { YearEntry, YearIndex } from './types';
 
 const INDEX_PATH = '/pmtiles/index.json';
 const FILENAME_PATTERN = /^world_-?\d+\.pmtiles$/;

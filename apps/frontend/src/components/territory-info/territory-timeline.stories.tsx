@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { createHistoricalYear } from '@/types/historical-year';
-import type { KeyEvent } from '@/types/territory';
+import type { KeyEvent } from '@/domain/territory/types';
+import { createHistoricalYear } from '@/domain/year/historical-year';
 import { TerritoryTimeline } from './territory-timeline';
 
 const sampleEvents: KeyEvent[] = [

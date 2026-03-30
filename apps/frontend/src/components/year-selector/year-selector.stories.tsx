@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
+import { createHistoricalYear } from '@/domain/year/historical-year';
+import type { YearEntry } from '@/domain/year/types';
 import { AppStateProvider } from '../../contexts/app-state-context';
-import { createHistoricalYear } from '../../types/historical-year';
-import type { YearEntry } from '../../types/year';
 import { YearSelector } from './year-selector';
 
 const sampleYears: YearEntry[] = [

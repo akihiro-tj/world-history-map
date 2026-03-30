@@ -1,13 +1,13 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { createHistoricalYear } from '../types/historical-year';
-import type { YearIndex } from '../types/year';
+import { createHistoricalYear } from '@/domain/year/historical-year';
+import type { YearIndex } from '@/domain/year/types';
 
-vi.mock('../utils/year-index', () => ({
+vi.mock('@/domain/year/loader', () => ({
   loadYearIndex: vi.fn(),
 }));
 
-import { loadYearIndex } from '../utils/year-index';
+import { loadYearIndex } from '@/domain/year/loader';
 import { useYearIndex } from './use-year-index';
 
 const mockLoadYearIndex = vi.mocked(loadYearIndex);

@@ -4,15 +4,15 @@ const LicenseDisclaimer = lazy(() =>
   import('./components/legal/license-disclaimer').then((m) => ({ default: m.LicenseDisclaimer })),
 );
 
+import { prefetchYearDescriptions } from '@/domain/territory/description-loader';
+import { useYearIndex } from '@/hooks/use-year-index';
 import { ControlBar } from './components/control-bar/control-bar';
 import { MapView } from './components/map/map-view';
-import { prefetchYearDescriptions } from './components/territory-info/hooks/use-territory-description';
 import { TerritoryInfoPanel } from './components/territory-info/territory-info-panel';
 import { YearDisplay } from './components/year-display/year-display';
 import { YearSelector } from './components/year-selector/year-selector';
 import { AppStateProvider, useAppState } from './contexts/app-state-context';
 import { ProjectionProvider } from './contexts/projection-context';
-import { useYearIndex } from './hooks/use-year-index';
 
 function AppContent() {
   const { state } = useAppState();

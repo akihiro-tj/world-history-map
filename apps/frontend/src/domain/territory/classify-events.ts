@@ -1,5 +1,5 @@
-import type { HistoricalYear } from '../types/historical-year';
-import type { ClassifiedKeyEvent, KeyEvent, KeyEventTemporal } from '../types/territory';
+import type { HistoricalYear } from '../year/historical-year';
+import type { ClassifiedKeyEvent, KeyEvent, KeyEventTemporal } from './types';
 
 export function classifyEvents(
   events: KeyEvent[],

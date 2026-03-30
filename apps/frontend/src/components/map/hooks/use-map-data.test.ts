@@ -1,7 +1,7 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('../../../utils/year-index', () => ({
+vi.mock('@/domain/year/loader', () => ({
   loadYearIndex: vi.fn(),
 }));
 vi.mock('../tiles-config', () => ({
@@ -12,8 +12,8 @@ vi.mock('../color-scheme', () => ({
   loadColorScheme: vi.fn(),
 }));
 
-import { createHistoricalYear } from '../../../types/historical-year';
-import { loadYearIndex } from '../../../utils/year-index';
+import { createHistoricalYear } from '@/domain/year/historical-year';
+import { loadYearIndex } from '@/domain/year/loader';
 import { loadColorScheme } from '../color-scheme';
 import { getTilesUrl, loadTilesManifest } from '../tiles-config';
 import { useMapData } from './use-map-data';

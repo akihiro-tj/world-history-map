@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
+import type { TerritoryDescription } from '@/domain/territory/types';
+import type { HistoricalYear } from '@/domain/year/historical-year';
 import { useEscapeKey } from '@/hooks/use-escape-key';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { cn } from '@/lib/utils';
-import type { HistoricalYear } from '@/types/historical-year';
-import type { TerritoryDescription } from '@/types/territory';
 import { useAppState } from '../../contexts/app-state-context';
 import { BottomSheet } from '../bottom-sheet/bottom-sheet';
 import { CloseButton } from '../close-button/close-button';

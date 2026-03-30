@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
+import { createHistoricalYear, type HistoricalYear } from '@/domain/year/historical-year';
+import { loadYearIndex } from '@/domain/year/loader';
+import type { YearIndex } from '@/domain/year/types';
 import { MAP_CONFIG } from '../../../styles/map-style';
-import { createHistoricalYear, type HistoricalYear } from '../../../types/historical-year';
-import type { YearIndex } from '../../../types/year';
-import { loadYearIndex } from '../../../utils/year-index';
 import { loadColorScheme } from '../color-scheme';
 import { getTilesUrl, loadTilesManifest, type TilesManifest } from '../tiles-config';
 

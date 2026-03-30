@@ -1,5 +1,5 @@
+import { createHistoricalYear, type HistoricalYear } from '../domain/year/historical-year';
 import { MAP_CONFIG } from '../styles/map-style';
-import { createHistoricalYear, type HistoricalYear } from './historical-year';
 
 export interface MapViewState {
   longitude: number;

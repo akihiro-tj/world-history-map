@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
-import type { TerritoryProfile as TerritoryProfileType } from '@/types/territory';
-import { PROFILE_FIELD_LABELS, PROFILE_FIELD_ORDER } from '@/types/territory';
+import type { TerritoryProfile as TerritoryProfileType } from '@/domain/territory/types';
+import { PROFILE_FIELD_LABELS, PROFILE_FIELD_ORDER } from '@/domain/territory/types';
 import { TerritoryProfile } from './territory-profile';
 
 describe('TerritoryProfile', () => {

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { createHistoricalYear } from '../types/historical-year';
-import type { KeyEvent } from '../types/territory';
+import { createHistoricalYear } from '../year/historical-year';
 import { classifyEvents } from './classify-events';
+import type { KeyEvent } from './types';
 
 describe('classifyEvents', () => {
   it('classifies events as past, current, or future relative to selectedYear', () => {

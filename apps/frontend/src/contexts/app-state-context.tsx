@@ -1,11 +1,11 @@
 import { createContext, type ReactNode, useContext, useMemo, useReducer } from 'react';
+import type { HistoricalYear } from '../domain/year/historical-year';
 import {
   type AppState,
   type AppStateActions,
   initialAppState,
   type MapViewState,
 } from '../types/app-state';
-import type { HistoricalYear } from '../types/historical-year';
 
 interface AppStateContextValue {
   state: AppState;

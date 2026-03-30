@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
+import { formatHistoricalYear, type HistoricalYear } from '@/domain/year/historical-year';
 import { cn } from '@/lib/utils';
-import { formatHistoricalYear, type HistoricalYear } from '@/types/historical-year';
 
 const FADE_DURATION_MS = 150;
 
