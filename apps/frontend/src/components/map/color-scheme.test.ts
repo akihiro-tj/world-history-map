@@ -4,7 +4,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 import { clearColorSchemeCache, createMatchColorExpression, loadColorScheme } from './color-scheme';
 
 const colorSchemeJson = JSON.parse(
-  fs.readFileSync(path.resolve(__dirname, '../../public/data/color-scheme.json'), 'utf8'),
+  fs.readFileSync(path.resolve(__dirname, '../../../public/data/color-scheme.json'), 'utf8'),
 ) as Record<string, string>;
 
 const mockFetch = vi.fn();

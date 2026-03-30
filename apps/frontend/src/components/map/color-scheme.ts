@@ -1,5 +1,5 @@
 import type { ExpressionSpecification } from 'maplibre-gl';
-import { CachedFetcher } from '../lib/cached-fetcher';
+import { CachedFetcher } from '../../lib/cached-fetcher';
 
 const DEFAULT_COLOR = '#cccccc';
 const COLOR_SCHEME_PATH = '/data/color-scheme.json';

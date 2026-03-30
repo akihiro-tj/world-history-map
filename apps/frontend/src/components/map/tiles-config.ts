@@ -1,4 +1,4 @@
-import { CachedFetcher } from '../lib/cached-fetcher';
+import { CachedFetcher } from '../../lib/cached-fetcher';
 
 export interface TilesManifest {
   version: string;
