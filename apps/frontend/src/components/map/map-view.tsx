@@ -3,6 +3,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import type { MapLayerMouseEvent, MapRef } from 'react-map-gl/maplibre';
 import MapGL, { Source } from 'react-map-gl/maplibre';
+import { resolveTerritoryName } from '@/domain/territory/resolve-territory-name';
 import type { TerritoryProperties } from '@/domain/territory/types';
 import { useAppState } from '../../contexts/app-state-context';
 import { MAP_CONFIG } from '../../styles/map-style';
@@ -14,6 +15,7 @@ import { useProjection } from './hooks/use-projection';
 import { TerritoryHighlightLayer } from './territory-highlight-layer';
 import { TerritoryLabel } from './territory-label';
 import { TERRITORY_LAYER_IDS, TerritoryLayer } from './territory-layer';
+import { LOADING_SPIN_DURATION } from './territory-style-constants';
 
 const SOURCE_ID = 'territories';
 const SOURCE_LAYER_TERRITORIES = 'territories';
@@ -45,7 +47,7 @@ export function MapView() {
       if (!feature) return;
       const properties = feature.properties as TerritoryProperties;
 
-      const territoryName = properties.NAME || properties.SUBJECTO;
+      const territoryName = resolveTerritoryName(properties);
 
       if (territoryName) {
         actions.selectTerritory(territoryName);
@@ -109,7 +111,7 @@ export function MapView() {
             <div className="relative h-16 w-16">
               <svg
                 className="h-16 w-16 animate-spin text-blue-400"
-                style={{ animationDuration: '3s' }}
+                style={{ animationDuration: LOADING_SPIN_DURATION }}
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -137,7 +139,7 @@ export function MapView() {
           }}
           minZoom={MAP_CONFIG.minZoom}
           maxZoom={MAP_CONFIG.maxZoom}
-          style={{ width: '100%', height: '100%', background: '#000' }}
+          style={{ width: '100%', height: '100%', background: MAP_CONFIG.backgroundColor }}
           mapStyle={mapStyle}
           onLoad={handleLoad}
           onClick={handleClick}
