@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { loadYearIndex } from './loader';
-import type { YearEntry } from './types';
+import { loadYearIndex } from '@/domain/year/loader';
+import type { YearEntry } from '@/domain/year/types';
 
 interface UseYearIndexReturn {
   years: YearEntry[];

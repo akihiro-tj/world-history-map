@@ -5,7 +5,7 @@ const LicenseDisclaimer = lazy(() =>
 );
 
 import { prefetchYearDescriptions } from '@/domain/territory/description-loader';
-import { useYearIndex } from '@/domain/year/use-year-index';
+import { useYearIndex } from '@/hooks/use-year-index';
 import { ControlBar } from './components/control-bar/control-bar';
 import { MapView } from './components/map/map-view';
 import { TerritoryInfoPanel } from './components/territory-info/territory-info-panel';

@@ -1,12 +1,6 @@
 import { useEffect, useState } from 'react';
-import {
-  clearDescriptionCache,
-  loadTerritoryDescription,
-  prefetchYearDescriptions,
-} from '@/domain/territory/description-loader';
+import { loadTerritoryDescription } from '@/domain/territory/description-loader';
 import type { TerritoryDescription } from '@/domain/territory/types';
-
-export { clearDescriptionCache, prefetchYearDescriptions };
 
 interface UseTerritoryDescriptionResult {
   description: TerritoryDescription | null;

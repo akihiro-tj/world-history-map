@@ -7,8 +7,8 @@ global.fetch = mockFetch;
 import {
   clearDescriptionCache,
   prefetchYearDescriptions,
-  useTerritoryDescription,
-} from './use-territory-description';
+} from '@/domain/territory/description-loader';
+import { useTerritoryDescription } from './use-territory-description';
 
 function createMockHeaders(contentType: string | null) {
   return {
