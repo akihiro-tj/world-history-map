@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { createHistoricalYear } from '../types/historical-year';
 import type { KeyEvent } from '../types/territory';
 import { classifyEvents } from './classify-events';
 
@@ -10,7 +11,7 @@ describe('classifyEvents', () => {
       { year: 1789, event: 'フランス革命' },
     ];
 
-    const result = classifyEvents(events, 1700);
+    const result = classifyEvents(events, createHistoricalYear(1700));
 
     expect(result).toEqual([
       { year: 1643, event: 'ルイ14世即位', temporal: 'past' },
@@ -26,7 +27,7 @@ describe('classifyEvents', () => {
       { year: 1701, event: 'one year after' },
     ];
 
-    const result = classifyEvents(events, 1700);
+    const result = classifyEvents(events, createHistoricalYear(1700));
 
     expect(result[0]?.temporal).toBe('past');
     expect(result[1]?.temporal).toBe('current');
@@ -34,7 +35,7 @@ describe('classifyEvents', () => {
   });
 
   it('returns empty array for empty input', () => {
-    expect(classifyEvents([], 1700)).toEqual([]);
+    expect(classifyEvents([], createHistoricalYear(1700))).toEqual([]);
   });
 
   it('classifies all events as past when all are before selectedYear', () => {
@@ -43,7 +44,7 @@ describe('classifyEvents', () => {
       { year: 1650, event: 'b' },
     ];
 
-    const result = classifyEvents(events, 1700);
+    const result = classifyEvents(events, createHistoricalYear(1700));
 
     expect(result.every((e) => e.temporal === 'past')).toBe(true);
   });
@@ -54,7 +55,7 @@ describe('classifyEvents', () => {
       { year: 1900, event: 'b' },
     ];
 
-    const result = classifyEvents(events, 1700);
+    const result = classifyEvents(events, createHistoricalYear(1700));
 
     expect(result.every((e) => e.temporal === 'future')).toBe(true);
   });
@@ -66,7 +67,7 @@ describe('classifyEvents', () => {
       { year: -400, event: 'later event' },
     ];
 
-    const result = classifyEvents(events, -500);
+    const result = classifyEvents(events, createHistoricalYear(-500));
 
     expect(result[0]?.temporal).toBe('past');
     expect(result[1]?.temporal).toBe('current');

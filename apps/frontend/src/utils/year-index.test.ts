@@ -1,12 +1,29 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { createHistoricalYear } from '../types/historical-year';
 import type { YearIndex } from '../types/year';
 import { clearYearIndexCache, loadYearIndex } from './year-index';
 
-const SAMPLE_INDEX: YearIndex = {
+const SAMPLE_RAW_INDEX = {
   years: [
     { year: -500, filename: 'world_-500.pmtiles', countries: ['Greece', 'Persia'] },
     { year: 200, filename: 'world_200.pmtiles', countries: ['Rome'] },
     { year: 1600, filename: 'world_1600.pmtiles', countries: ['Spain', 'England'] },
+  ],
+};
+
+const EXPECTED_INDEX: YearIndex = {
+  years: [
+    {
+      year: createHistoricalYear(-500),
+      filename: 'world_-500.pmtiles',
+      countries: ['Greece', 'Persia'],
+    },
+    { year: createHistoricalYear(200), filename: 'world_200.pmtiles', countries: ['Rome'] },
+    {
+      year: createHistoricalYear(1600),
+      filename: 'world_1600.pmtiles',
+      countries: ['Spain', 'England'],
+    },
   ],
 };
 
@@ -18,7 +35,7 @@ describe('loadYearIndex', () => {
       vi.fn(() =>
         Promise.resolve({
           ok: true,
-          json: () => Promise.resolve(structuredClone(SAMPLE_INDEX)),
+          json: () => Promise.resolve(structuredClone(SAMPLE_RAW_INDEX)),
         }),
       ),
     );
@@ -30,7 +47,7 @@ describe('loadYearIndex', () => {
 
   it('fetches and returns valid year index', async () => {
     const result = await loadYearIndex();
-    expect(result).toEqual(SAMPLE_INDEX);
+    expect(result).toEqual(EXPECTED_INDEX);
     expect(fetch).toHaveBeenCalledWith('/pmtiles/index.json');
   });
 

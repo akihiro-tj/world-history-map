@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
+import { createHistoricalYear } from '../../../types/historical-year';
 import {
   clearDescriptionCache,
   prefetchYearDescriptions,
@@ -68,7 +69,7 @@ describe('useTerritoryDescription', () => {
   });
 
   it('returns null description when territoryName is null', () => {
-    const { result } = renderHook(() => useTerritoryDescription(null, 1650));
+    const { result } = renderHook(() => useTerritoryDescription(null, createHistoricalYear(1650)));
 
     expect(result.current.description).toBeNull();
     expect(result.current.isLoading).toBe(false);
@@ -78,7 +79,9 @@ describe('useTerritoryDescription', () => {
   it('fetches year bundle and extracts territory description', async () => {
     mockFetchBundle(mockBundle1650);
 
-    const { result } = renderHook(() => useTerritoryDescription('France', 1650));
+    const { result } = renderHook(() =>
+      useTerritoryDescription('France', createHistoricalYear(1650)),
+    );
 
     expect(result.current.isLoading).toBe(true);
 
@@ -97,7 +100,7 @@ describe('useTerritoryDescription', () => {
       headers: createMockHeaders(null),
     });
 
-    renderHook(() => useTerritoryDescription('France', 1650));
+    renderHook(() => useTerritoryDescription('France', createHistoricalYear(1650)));
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalled();
@@ -110,7 +113,9 @@ describe('useTerritoryDescription', () => {
   it('converts territory name to kebab-case for bundle key lookup', async () => {
     mockFetchBundle(mockBundle1650);
 
-    const { result } = renderHook(() => useTerritoryDescription('England and Ireland', 1650));
+    const { result } = renderHook(() =>
+      useTerritoryDescription('England and Ireland', createHistoricalYear(1650)),
+    );
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
@@ -122,7 +127,9 @@ describe('useTerritoryDescription', () => {
   it('returns null when territory is not found in bundle', async () => {
     mockFetchBundle(mockBundle1650);
 
-    const { result } = renderHook(() => useTerritoryDescription('UnknownTerritory', 1650));
+    const { result } = renderHook(() =>
+      useTerritoryDescription('UnknownTerritory', createHistoricalYear(1650)),
+    );
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
@@ -139,7 +146,9 @@ describe('useTerritoryDescription', () => {
       headers: createMockHeaders(null),
     });
 
-    const { result } = renderHook(() => useTerritoryDescription('France', 9999));
+    const { result } = renderHook(() =>
+      useTerritoryDescription('France', createHistoricalYear(9999)),
+    );
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
@@ -152,7 +161,9 @@ describe('useTerritoryDescription', () => {
   it('handles network errors', async () => {
     mockFetch.mockRejectedValueOnce(new Error('Network error'));
 
-    const { result } = renderHook(() => useTerritoryDescription('France', 1650));
+    const { result } = renderHook(() =>
+      useTerritoryDescription('France', createHistoricalYear(1650)),
+    );
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
@@ -165,7 +176,9 @@ describe('useTerritoryDescription', () => {
   it('uses cache for second territory in same year (no additional fetch)', async () => {
     mockFetchBundle(mockBundle1650);
 
-    const { result: result1 } = renderHook(() => useTerritoryDescription('France', 1650));
+    const { result: result1 } = renderHook(() =>
+      useTerritoryDescription('France', createHistoricalYear(1650)),
+    );
 
     await waitFor(() => {
       expect(result1.current.isLoading).toBe(false);
@@ -174,7 +187,9 @@ describe('useTerritoryDescription', () => {
     expect(result1.current.description).toEqual(mockBundle1650.france);
     expect(mockFetch).toHaveBeenCalledTimes(1);
 
-    const { result: result2 } = renderHook(() => useTerritoryDescription('England', 1650));
+    const { result: result2 } = renderHook(() =>
+      useTerritoryDescription('England', createHistoricalYear(1650)),
+    );
 
     await waitFor(() => {
       expect(result2.current.isLoading).toBe(false);
@@ -189,7 +204,8 @@ describe('useTerritoryDescription', () => {
     mockFetchBundle(mockBundle1700);
 
     const { result, rerender } = renderHook(
-      ({ territory, year }) => useTerritoryDescription(territory, year),
+      ({ territory, year }: { territory: string; year: number }) =>
+        useTerritoryDescription(territory, createHistoricalYear(year)),
       { initialProps: { territory: 'France', year: 1650 } },
     );
 
@@ -212,7 +228,9 @@ describe('useTerritoryDescription', () => {
       headers: createMockHeaders('text/html'),
     });
 
-    const { result } = renderHook(() => useTerritoryDescription('France', 1650));
+    const { result } = renderHook(() =>
+      useTerritoryDescription('France', createHistoricalYear(1650)),
+    );
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
@@ -232,13 +250,15 @@ describe('prefetchYearDescriptions', () => {
   it('prefetches year bundle so subsequent hook calls use cache', async () => {
     mockFetchBundle(mockBundle1650);
 
-    prefetchYearDescriptions(1650);
+    prefetchYearDescriptions(createHistoricalYear(1650));
 
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledTimes(1);
     });
 
-    const { result } = renderHook(() => useTerritoryDescription('France', 1650));
+    const { result } = renderHook(() =>
+      useTerritoryDescription('France', createHistoricalYear(1650)),
+    );
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
@@ -251,6 +271,6 @@ describe('prefetchYearDescriptions', () => {
   it('silently ignores prefetch errors', async () => {
     mockFetch.mockRejectedValueOnce(new Error('Network error'));
 
-    expect(() => prefetchYearDescriptions(1650)).not.toThrow();
+    expect(() => prefetchYearDescriptions(createHistoricalYear(1650))).not.toThrow();
   });
 });

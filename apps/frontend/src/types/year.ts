@@ -1,5 +1,7 @@
+import type { HistoricalYear } from './historical-year';
+
 export interface YearEntry {
-  year: number;
+  year: HistoricalYear;
   filename: string;
   countries: string[];
 }
