@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import type { TerritoryDescription } from '@/domain/territory/types';
+import type { HistoricalYear } from '@/domain/year/historical-year';
 import { useEscapeKey } from '@/hooks/use-escape-key';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { cn } from '@/lib/utils';
@@ -87,7 +88,7 @@ function DescriptionBody({
   selectedYear,
 }: {
   description: TerritoryDescription;
-  selectedYear: number;
+  selectedYear: HistoricalYear;
 }) {
   return (
     <div data-testid="territory-description" className="space-y-3 px-4 pt-2 pb-4">
@@ -106,7 +107,7 @@ interface ContentProps {
   isLoading: boolean;
   error: string | null;
   selectedTerritory: string | null;
-  selectedYear: number;
+  selectedYear: HistoricalYear;
   onClose: () => void;
 }
 

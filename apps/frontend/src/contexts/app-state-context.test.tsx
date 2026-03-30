@@ -1,11 +1,12 @@
 import { act, renderHook } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { describe, expect, it } from 'vitest';
+import { createHistoricalYear } from '../domain/year/historical-year';
 import { AppStateProvider, useAppState } from './app-state-context';
 
 const initialState = {
-  selectedYear: 1700,
-  selectedTerritory: null,
+  selectedYear: createHistoricalYear(1700),
+  selectedTerritory: null as string | null,
   isInfoPanelOpen: false,
   mapView: { longitude: 0, latitude: 30, zoom: 2 },
 };
@@ -25,7 +26,7 @@ describe('AppStateProvider + useAppState', () => {
     const { result } = renderHook(() => useAppState(), { wrapper });
 
     act(() => {
-      result.current.actions.setSelectedYear(1800);
+      result.current.actions.setSelectedYear(createHistoricalYear(1800));
     });
 
     expect(result.current.state.selectedYear).toBe(1800);

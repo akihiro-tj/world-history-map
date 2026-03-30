@@ -1,6 +1,7 @@
 import { Fragment, useMemo } from 'react';
 import { classifyEvents } from '@/domain/territory/classify-events';
 import type { KeyEvent } from '@/domain/territory/types';
+import type { HistoricalYear } from '@/domain/year/historical-year';
 import { cn } from '@/lib/utils';
 
 export function TerritoryTimeline({
@@ -8,7 +9,7 @@ export function TerritoryTimeline({
   selectedYear,
 }: {
   keyEvents: KeyEvent[] | undefined;
-  selectedYear: number;
+  selectedYear: HistoricalYear;
 }) {
   const classified = useMemo(
     () => (keyEvents ? classifyEvents(keyEvents, selectedYear) : []),

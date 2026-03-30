@@ -12,6 +12,7 @@ vi.mock('../../../utils/color-scheme', () => ({
   loadColorScheme: vi.fn(),
 }));
 
+import { createHistoricalYear } from '@/domain/year/historical-year';
 import { loadYearIndex } from '@/domain/year/loader';
 import { loadColorScheme } from '../../../utils/color-scheme';
 import { getTilesUrl, loadTilesManifest } from '../../../utils/tiles-config';
@@ -23,7 +24,9 @@ const mockGetTilesUrl = vi.mocked(getTilesUrl);
 const mockLoadColorScheme = vi.mocked(loadColorScheme);
 
 const mockYearIndex = {
-  years: [{ year: 1650, filename: 'world_1650.pmtiles', countries: ['France'] }],
+  years: [
+    { year: createHistoricalYear(1650), filename: 'world_1650.pmtiles', countries: ['France'] },
+  ],
 };
 
 const mockManifest = {
@@ -41,7 +44,7 @@ describe('useMapData', () => {
     mockLoadYearIndex.mockReturnValue(new Promise(() => {}));
     mockLoadTilesManifest.mockReturnValue(new Promise(() => {}));
 
-    const { result } = renderHook(() => useMapData(1650));
+    const { result } = renderHook(() => useMapData(createHistoricalYear(1650)));
 
     expect(result.current.isLoading).toBe(true);
     expect(result.current.pmtilesUrl).toBeNull();
@@ -53,7 +56,7 @@ describe('useMapData', () => {
     mockLoadTilesManifest.mockResolvedValue(mockManifest);
     mockGetTilesUrl.mockReturnValue('pmtiles:///pmtiles/world_1650.pmtiles');
 
-    const { result } = renderHook(() => useMapData(1650));
+    const { result } = renderHook(() => useMapData(createHistoricalYear(1650)));
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
@@ -70,7 +73,7 @@ describe('useMapData', () => {
     mockLoadTilesManifest.mockResolvedValue(mockManifest);
     mockGetTilesUrl.mockReturnValue(null);
 
-    const { result } = renderHook(() => useMapData(9999));
+    const { result } = renderHook(() => useMapData(createHistoricalYear(9999)));
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
@@ -84,7 +87,7 @@ describe('useMapData', () => {
     mockLoadYearIndex.mockRejectedValue(new Error('Network error'));
     mockLoadTilesManifest.mockResolvedValue(mockManifest);
 
-    const { result } = renderHook(() => useMapData(1650));
+    const { result } = renderHook(() => useMapData(createHistoricalYear(1650)));
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
@@ -97,7 +100,7 @@ describe('useMapData', () => {
     mockLoadYearIndex.mockRejectedValue('unknown failure');
     mockLoadTilesManifest.mockResolvedValue(mockManifest);
 
-    const { result } = renderHook(() => useMapData(1650));
+    const { result } = renderHook(() => useMapData(createHistoricalYear(1650)));
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { KeyEvent } from '@/domain/territory/types';
+import { createHistoricalYear } from '@/domain/year/historical-year';
 import { TerritoryTimeline } from './territory-timeline';
 
 const sampleEvents: KeyEvent[] = [
@@ -34,34 +35,34 @@ type Story = StoryObj<typeof meta>;
 export const SelectedYearInMiddle: Story = {
   args: {
     keyEvents: sampleEvents,
-    selectedYear: 1700,
+    selectedYear: createHistoricalYear(1700),
   },
 };
 
 export const SelectedYearMatchesEvent: Story = {
   args: {
     keyEvents: sampleEvents,
-    selectedYear: 1682,
+    selectedYear: createHistoricalYear(1682),
   },
 };
 
 export const SelectedYearBeforeAll: Story = {
   args: {
     keyEvents: sampleEvents,
-    selectedYear: 1600,
+    selectedYear: createHistoricalYear(1600),
   },
 };
 
 export const SelectedYearAfterAll: Story = {
   args: {
     keyEvents: sampleEvents,
-    selectedYear: 1900,
+    selectedYear: createHistoricalYear(1900),
   },
 };
 
 export const NoEvents: Story = {
   args: {
     keyEvents: undefined,
-    selectedYear: 1700,
+    selectedYear: createHistoricalYear(1700),
   },
 };

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { loadTerritoryDescription } from '@/domain/territory/description-loader';
 import type { TerritoryDescription } from '@/domain/territory/types';
+import type { HistoricalYear } from '@/domain/year/historical-year';
 
 interface UseTerritoryDescriptionResult {
   description: TerritoryDescription | null;
@@ -10,7 +11,7 @@ interface UseTerritoryDescriptionResult {
 
 export function useTerritoryDescription(
   territoryName: string | null,
-  year: number,
+  year: HistoricalYear,
 ): UseTerritoryDescriptionResult {
   const [description, setDescription] = useState<TerritoryDescription | null>(null);
   const [isLoading, setIsLoading] = useState(false);

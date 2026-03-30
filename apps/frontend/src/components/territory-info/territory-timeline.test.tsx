@@ -1,6 +1,7 @@
 import { render, screen, within } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import type { KeyEvent } from '@/domain/territory/types';
+import { createHistoricalYear } from '@/domain/year/historical-year';
 import { TerritoryTimeline } from './territory-timeline';
 
 describe('TerritoryTimeline', () => {
@@ -14,7 +15,9 @@ describe('TerritoryTimeline', () => {
   ];
 
   it('applies opacity/muted styling classes to past events', () => {
-    render(<TerritoryTimeline keyEvents={sampleEvents} selectedYear={1700} />);
+    render(
+      <TerritoryTimeline keyEvents={sampleEvents} selectedYear={createHistoricalYear(1700)} />,
+    );
 
     const list = screen.getByRole('list');
     const items = within(list).getAllByRole('listitem');
@@ -25,7 +28,9 @@ describe('TerritoryTimeline', () => {
   });
 
   it('applies aria-current="true" and bold styling to current events', () => {
-    render(<TerritoryTimeline keyEvents={sampleEvents} selectedYear={1700} />);
+    render(
+      <TerritoryTimeline keyEvents={sampleEvents} selectedYear={createHistoricalYear(1700)} />,
+    );
 
     const list = screen.getByRole('list');
     const items = within(list).getAllByRole('listitem');
@@ -36,7 +41,9 @@ describe('TerritoryTimeline', () => {
   });
 
   it('applies dashed/muted style to future events', () => {
-    render(<TerritoryTimeline keyEvents={sampleEvents} selectedYear={1700} />);
+    render(
+      <TerritoryTimeline keyEvents={sampleEvents} selectedYear={createHistoricalYear(1700)} />,
+    );
 
     const list = screen.getByRole('list');
     const items = within(list).getAllByRole('listitem');
@@ -52,7 +59,9 @@ describe('TerritoryTimeline', () => {
       { year: 1789, event: 'フランス革命' },
     ];
 
-    render(<TerritoryTimeline keyEvents={eventsNoMatch} selectedYear={1700} />);
+    render(
+      <TerritoryTimeline keyEvents={eventsNoMatch} selectedYear={createHistoricalYear(1700)} />,
+    );
 
     const marker = screen.getByRole('separator');
     expect(marker).toBeInTheDocument();
@@ -60,12 +69,16 @@ describe('TerritoryTimeline', () => {
   });
 
   it('renders nothing when keyEvents is undefined', () => {
-    const { container } = render(<TerritoryTimeline keyEvents={undefined} selectedYear={1700} />);
+    const { container } = render(
+      <TerritoryTimeline keyEvents={undefined} selectedYear={createHistoricalYear(1700)} />,
+    );
     expect(container.innerHTML).toBe('');
   });
 
   it('renders a semantic <ol> with aria-label', () => {
-    render(<TerritoryTimeline keyEvents={sampleEvents} selectedYear={1700} />);
+    render(
+      <TerritoryTimeline keyEvents={sampleEvents} selectedYear={createHistoricalYear(1700)} />,
+    );
 
     const list = screen.getByRole('list');
     expect(list.tagName).toBe('OL');
@@ -78,7 +91,7 @@ describe('TerritoryTimeline', () => {
       { year: 1650, event: '過去B' },
     ];
 
-    render(<TerritoryTimeline keyEvents={pastEvents} selectedYear={1700} />);
+    render(<TerritoryTimeline keyEvents={pastEvents} selectedYear={createHistoricalYear(1700)} />);
 
     const list = screen.getByRole('list');
     const marker = within(list).getByRole('separator');
@@ -95,7 +108,9 @@ describe('TerritoryTimeline', () => {
       { year: 1900, event: '未来B' },
     ];
 
-    render(<TerritoryTimeline keyEvents={futureEvents} selectedYear={1700} />);
+    render(
+      <TerritoryTimeline keyEvents={futureEvents} selectedYear={createHistoricalYear(1700)} />,
+    );
 
     const list = screen.getByRole('list');
     const marker = within(list).getByRole('separator');

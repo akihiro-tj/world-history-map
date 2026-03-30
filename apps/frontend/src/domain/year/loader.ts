@@ -1,10 +1,11 @@
 import { CachedFetcher } from '../../lib/cached-fetcher';
+import { createHistoricalYear } from './historical-year';
 import type { YearEntry, YearIndex } from './types';
 
 const INDEX_PATH = '/pmtiles/index.json';
 const FILENAME_PATTERN = /^world_-?\d+\.pmtiles$/;
 
-function validateYearEntry(entry: unknown): entry is YearEntry {
+function isValidYearEntryShape(entry: unknown): boolean {
   if (typeof entry !== 'object' || entry === null) {
     return false;
   }
@@ -33,19 +34,33 @@ function validateYearEntry(entry: unknown): entry is YearEntry {
   return true;
 }
 
-function validateYearIndex(data: unknown): data is YearIndex {
+function toYearEntry(raw: Record<string, unknown>): YearEntry {
+  return {
+    year: createHistoricalYear(raw['year'] as number),
+    filename: raw['filename'] as string,
+    countries: raw['countries'] as string[],
+  };
+}
+
+function validateAndTransformYearIndex(data: unknown): YearIndex | null {
   if (typeof data !== 'object' || data === null) {
-    return false;
+    return null;
   }
 
   const record = data as Record<string, unknown>;
   const years = record['years'];
 
   if (!Array.isArray(years)) {
-    return false;
+    return null;
   }
 
-  return years.every(validateYearEntry);
+  if (!years.every(isValidYearEntryShape)) {
+    return null;
+  }
+
+  return {
+    years: years.map((entry) => toYearEntry(entry as Record<string, unknown>)),
+  };
 }
 
 const yearIndexFetcher = new CachedFetcher<YearIndex>({
@@ -57,12 +72,12 @@ const yearIndexFetcher = new CachedFetcher<YearIndex>({
     }
 
     const data: unknown = await response.json();
-    return data as YearIndex;
+    const result = validateAndTransformYearIndex(data);
+    if (!result) {
+      throw new Error('Invalid year index format');
+    }
+    return result;
   },
-  validate(data) {
-    return validateYearIndex(data);
-  },
-  validationError: 'Invalid year index format',
 });
 
 export async function loadYearIndex(): Promise<YearIndex> {
