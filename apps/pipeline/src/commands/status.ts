@@ -5,11 +5,11 @@ import { PipelineCheckpoint } from '@/state/checkpoint.ts';
 interface StatusColumn {
   label: string;
   width: number;
-  getValue: (yearState: ReturnType<PipelineCheckpoint['getYearState']>) => string;
+  getValue: (yearState: ReturnType<PipelineCheckpoint['getYearState']>, yearKey: string) => string;
 }
 
 const STATUS_COLUMNS: StatusColumn[] = [
-  { label: 'Year', width: 8, getValue: () => '' },
+  { label: 'Year', width: 8, getValue: (_state, yearKey) => yearKey },
   { label: 'Source', width: 8, getValue: (s) => (s?.source ? 'ok' : '-') },
   { label: 'Merge', width: 8, getValue: (s) => (s?.merge ? 'ok' : '-') },
   { label: 'Validate', width: 10, getValue: (s) => (s?.validate ? 'ok' : '-') },
@@ -37,9 +37,7 @@ export function showStatus(logger: PipelineLogger): void {
   for (const yearKey of yearKeys) {
     const yearState = checkpoint.getYearState(Number(yearKey));
     if (!yearState) continue;
-    const cells = STATUS_COLUMNS.map((col, index) =>
-      (index === 0 ? yearKey : col.getValue(yearState)).padEnd(col.width),
-    );
+    const cells = STATUS_COLUMNS.map((col) => col.getValue(yearState, yearKey).padEnd(col.width));
     console.log(cells.join(''));
   }
 }
