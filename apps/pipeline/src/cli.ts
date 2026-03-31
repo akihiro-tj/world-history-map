@@ -1,7 +1,9 @@
 import path from 'node:path';
+import { listYears } from '@/commands/list-years.ts';
+import { showStatus } from '@/commands/status.ts';
 import { PATHS } from '@/config.ts';
 import type { PipelineOptions } from '@/pipeline.ts';
-import { listYears, PipelineError, runPipeline, showStatus } from '@/pipeline.ts';
+import { PipelineError, runPipeline } from '@/pipeline.ts';
 import { syncDescriptions } from '@/stages/sync-descriptions.ts';
 import { createLogger } from '@/stages/types.ts';
 import { publishManifest, runStandaloneUpload } from '@/stages/upload.ts';
