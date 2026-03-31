@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs';
 import { readdir } from 'node:fs/promises';
-import { filenameToYear, PATHS, UPSTREAM } from '@/config.ts';
+import { PATHS, UPSTREAM, YearPaths } from '@/config.ts';
 import { execFileAsync } from '@/exec.ts';
 import type { PipelineLogger } from '@/stages/types.ts';
 
@@ -36,9 +36,9 @@ export async function parseYearsFromDirectory(dir: string): Promise<number[]> {
   const years: number[] = [];
 
   for (const file of files) {
-    const year = filenameToYear(file);
-    if (year !== null) {
-      years.push(year);
+    const yearPaths = YearPaths.fromFilename(file);
+    if (yearPaths !== null) {
+      years.push(yearPaths.year);
     }
   }
 
