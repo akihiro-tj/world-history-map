@@ -36,9 +36,9 @@ export async function parseYearsFromDirectory(dir: string): Promise<number[]> {
   const years: number[] = [];
 
   for (const file of files) {
-    const yp = YearPaths.fromFilename(file);
-    if (yp !== null) {
-      years.push(yp.year);
+    const yearPaths = YearPaths.fromFilename(file);
+    if (yearPaths !== null) {
+      years.push(yearPaths.year);
     }
   }
 

@@ -86,8 +86,8 @@ export async function runPipeline(
     const validationResults: ValidationResult[] = [];
 
     for (const year of yearsToProcess) {
-      const yp = new YearPaths(year);
-      const sourceFile = yp.sourceGeojsonPath;
+      const yearPaths = new YearPaths(year);
+      const sourceFile = yearPaths.sourceGeojsonPath;
       if (!existsSync(sourceFile)) {
         logger.warn('pipeline', `Year ${year}: source file not found, skipping`);
         continue;
@@ -132,7 +132,7 @@ export async function runPipeline(
 
       if (shouldProcessYear(state, year, 'validate', sourceHash)) {
         logger.info('pipeline', `=== Year ${year}: validate ===`);
-        const validationResult = runValidateForYear(year, yp.mergedGeojsonPath, logger);
+        const validationResult = runValidateForYear(year, yearPaths.mergedGeojsonPath, logger);
         validationResults.push(validationResult);
 
         updateYearState(state, year, 'validate', {
@@ -162,9 +162,9 @@ export async function runPipeline(
 
         const start = Date.now();
         const pmtilesPath = await runConvertForYear(
-          year,
-          yp.mergedGeojsonPath,
-          yp.labelsGeojsonPath,
+          yearPaths.mergedGeojsonPath,
+          yearPaths.labelsGeojsonPath,
+          yearPaths.pmtilesPath,
           logger,
         );
         const convertHash = await hashFile(pmtilesPath);
@@ -181,7 +181,7 @@ export async function runPipeline(
 
       if (shouldProcessYear(state, year, 'prepare', sourceHash)) {
         logger.info('pipeline', `=== Year ${year}: prepare ===`);
-        const result = await runPrepareForYear(year, yp.pmtilesPath, logger);
+        const result = await runPrepareForYear(year, yearPaths.pmtilesPath, logger);
 
         updateYearState(state, year, 'prepare', {
           hash: result.hash,

@@ -90,10 +90,6 @@ export class YearPaths {
     return `world_${this.year}.geojson`;
   }
 
-  get local(): string {
-    return `world_${this.year}.geojson`;
-  }
-
   get merged(): string {
     return `world_${this.year}_merged.geojson`;
   }

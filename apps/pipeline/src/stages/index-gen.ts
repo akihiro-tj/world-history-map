@@ -22,14 +22,14 @@ export async function generateYearIndex(
   const entries: YearIndex['years'] = [];
 
   for (const year of sortedYears) {
-    const yp = new YearPaths(year);
-    const pmtilesPath = path.join(pmtilesDir, yp.pmtiles);
+    const yearPaths = new YearPaths(year);
+    const pmtilesPath = path.join(pmtilesDir, yearPaths.pmtiles);
     if (!existsSync(pmtilesPath)) {
       logger.warn('index-gen', `Year ${year}: PMTiles not found, skipping`);
       continue;
     }
 
-    const mergedPath = path.join(mergedDir, yp.merged);
+    const mergedPath = path.join(mergedDir, yearPaths.merged);
     let countries: string[] = [];
 
     if (existsSync(mergedPath)) {
@@ -50,7 +50,7 @@ export async function generateYearIndex(
 
     entries.push({
       year,
-      filename: yp.pmtiles,
+      filename: yearPaths.pmtiles,
       countries,
     });
   }

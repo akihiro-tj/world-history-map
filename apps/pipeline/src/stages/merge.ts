@@ -127,9 +127,9 @@ export async function runMergeForYear(
 
   const { polygons, labels } = mergeByName(geojson);
 
-  const yp = new YearPaths(year);
-  const polygonsPath = yp.mergedGeojsonPath;
-  const labelsPath = yp.labelsGeojsonPath;
+  const yearPaths = new YearPaths(year);
+  const polygonsPath = yearPaths.mergedGeojsonPath;
+  const labelsPath = yearPaths.labelsGeojsonPath;
 
   writeFileSync(polygonsPath, JSON.stringify(polygons));
   writeFileSync(labelsPath, JSON.stringify(labels));
