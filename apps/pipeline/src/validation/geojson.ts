@@ -20,9 +20,14 @@ interface FeatureCollection {
   features: GeoJSONFeature[];
 }
 
+interface RepairAttemptResult {
+  transformed: GeoJSONFeature;
+  valid: boolean;
+}
+
 interface RepairStrategy {
   type: RepairAction['type'];
-  attempt(feature: GeoJSONFeature): GeoJSONFeature | null;
+  attempt(feature: GeoJSONFeature): RepairAttemptResult | null;
 }
 
 interface RepairResult {
@@ -35,10 +40,9 @@ const cleanCoordsStrategy: RepairStrategy = {
   type: 'clean_coords',
   attempt(feature) {
     const cleaned = turf.cleanCoords(feature as unknown as Parameters<typeof turf.cleanCoords>[0]);
-    if (turf.booleanValid(cleaned as unknown as Parameters<typeof turf.booleanValid>[0])) {
-      return cleaned as unknown as GeoJSONFeature;
-    }
-    return null;
+    const transformed = cleaned as unknown as GeoJSONFeature;
+    const valid = turf.booleanValid(cleaned as unknown as Parameters<typeof turf.booleanValid>[0]);
+    return { transformed, valid };
   },
 };
 
@@ -46,10 +50,9 @@ const rewindStrategy: RepairStrategy = {
   type: 'rewind',
   attempt(feature) {
     const rewound = turf.rewind(feature as unknown as Parameters<typeof turf.rewind>[0]);
-    if (turf.booleanValid(rewound as unknown as Parameters<typeof turf.booleanValid>[0])) {
-      return rewound as unknown as GeoJSONFeature;
-    }
-    return null;
+    const transformed = rewound as unknown as GeoJSONFeature;
+    const valid = turf.booleanValid(rewound as unknown as Parameters<typeof turf.booleanValid>[0]);
+    return { transformed, valid };
   },
 };
 
@@ -61,14 +64,15 @@ const bufferZeroStrategy: RepairStrategy = {
       0,
     ) as unknown;
     if (
-      buffered &&
-      typeof buffered === 'object' &&
-      (buffered as GeoJSONFeature).type === 'Feature' &&
-      turf.booleanValid(buffered as Parameters<typeof turf.booleanValid>[0])
+      !buffered ||
+      typeof buffered !== 'object' ||
+      (buffered as GeoJSONFeature).type !== 'Feature'
     ) {
-      return buffered as GeoJSONFeature;
+      return null;
     }
-    return null;
+    const transformed = buffered as GeoJSONFeature;
+    const valid = turf.booleanValid(buffered as Parameters<typeof turf.booleanValid>[0]);
+    return { transformed, valid };
   },
 };
 
@@ -88,10 +92,14 @@ const unkinkStrategy: RepairStrategy = {
 
     if (coords.length === 0) return null;
 
-    return turf.multiPolygon(
+    const transformed = turf.multiPolygon(
       coords,
       (feature.properties ?? undefined) as Record<string, unknown> | undefined,
     ) as unknown as GeoJSONFeature;
+    const valid = turf.booleanValid(
+      transformed as unknown as Parameters<typeof turf.booleanValid>[0],
+    );
+    return { transformed, valid };
   },
 };
 
@@ -109,19 +117,23 @@ function attemptRepair(
 ): RepairResult {
   const repairs: RepairAction[] = [];
   const warnings: ValidationWarning[] = [];
-  const current = feature;
+  let current = feature;
 
   for (const strategy of repairStrategies) {
     try {
       const result = strategy.attempt(current);
-      if (result) {
-        repairs.push({ type: strategy.type, featureIndex, featureName });
-        warnings.push({
-          type: 'repaired_geometry',
-          featureIndex,
-          details: `"${featureName}" repaired via ${strategy.type.replace('_', '-')}`,
-        });
-        return { feature: result, repairs, warnings };
+      if (!result) continue;
+
+      current = result.transformed;
+      repairs.push({ type: strategy.type, featureIndex, featureName });
+      warnings.push({
+        type: 'repaired_geometry',
+        featureIndex,
+        details: `"${featureName}" repaired via ${strategy.type.replaceAll('_', '-')}`,
+      });
+
+      if (result.valid) {
+        return { feature: current, repairs, warnings };
       }
     } catch {}
   }
