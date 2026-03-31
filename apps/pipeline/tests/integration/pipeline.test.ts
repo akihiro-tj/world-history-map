@@ -21,7 +21,7 @@ vi.mock('@/config.ts', async (importOriginal) => {
 import { generateYearIndex } from '@/stages/index-gen.ts';
 import { mergeByName } from '@/stages/merge.ts';
 import { prepareTile } from '@/stages/prepare.ts';
-import { createInitialState, loadState, saveState } from '@/state/checkpoint.ts';
+import { PipelineCheckpoint } from '@/state/checkpoint.ts';
 import type { ValidationResult } from '@/types/pipeline.ts';
 import { validateGeoJSON } from '@/validation/geojson.ts';
 import { generateReport } from '@/validation/report.ts';
@@ -190,22 +190,23 @@ describe('pipeline integration', () => {
   it('should persist and resume pipeline state', () => {
     const statePath = path.join(tempDir, 'pipeline-state.json');
 
-    const state = createInitialState();
-    state.years['1650'] = {
-      source: { hash: 'abc123', fetchedAt: new Date().toISOString() },
-      merge: {
-        hash: 'def456',
-        completedAt: new Date().toISOString(),
-        featureCount: 42,
-        labelCount: 42,
-      },
-    };
-    saveState(state, statePath);
+    const checkpoint = PipelineCheckpoint.create(statePath);
+    checkpoint.updateYear(1650, 'source', {
+      hash: 'abc123',
+      fetchedAt: new Date().toISOString(),
+    });
+    checkpoint.updateYear(1650, 'merge', {
+      hash: 'def456',
+      completedAt: new Date().toISOString(),
+      featureCount: 42,
+      labelCount: 42,
+    });
+    checkpoint.persist();
 
-    const loaded = loadState(statePath);
+    const loaded = PipelineCheckpoint.load(statePath);
     expect(loaded).not.toBeNull();
-    expect(loaded?.years['1650']?.merge?.featureCount).toBe(42);
-    expect(loaded?.runId).toBe(state.runId);
+    expect(loaded?.getYearState(1650)?.merge?.featureCount).toBe(42);
+    expect(loaded?.runId).toBe(checkpoint.runId);
 
     const raw = JSON.parse(readFileSync(statePath, 'utf-8'));
     expect(raw.version).toBe(1);
