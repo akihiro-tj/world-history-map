@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { PATHS } from '@/config.ts';
+import { PATHS, TIMEOUTS } from '@/config.ts';
 import { execFileAsync } from '@/exec.ts';
 import type { PipelineLogger } from '@/stages/types.ts';
 import type { DeploymentManifest } from '@/types/pipeline.ts';
@@ -61,7 +61,7 @@ export async function executeUpload(
     await execFileAsync(
       'wrangler',
       ['r2', 'object', 'put', `${bucketName}/${objectKey}`, '--file', filePath, '--remote'],
-      { timeout: 120_000 },
+      { timeout: TIMEOUTS.WRANGLER_MS },
     );
     logger.info('upload', `Year ${entry.year}: uploaded`);
   }
@@ -110,7 +110,7 @@ export async function publishManifest(logger: PipelineLogger): Promise<void> {
   await execFileAsync(
     'wrangler',
     ['r2', 'object', 'put', `${R2_BUCKET}/manifest.json`, '--file', manifestPath, '--remote'],
-    { timeout: 120_000 },
+    { timeout: TIMEOUTS.WRANGLER_MS },
   );
   logger.info('publish', 'manifest.json published');
 }

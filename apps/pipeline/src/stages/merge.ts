@@ -3,15 +3,7 @@ import { mkdir } from 'node:fs/promises';
 import * as turf from '@turf/turf';
 import { PATHS, YearPaths } from '@/config.ts';
 import type { PipelineLogger } from '@/stages/types.ts';
-
-interface GeoJSONFeature {
-  type: 'Feature';
-  properties: Record<string, unknown>;
-  geometry: {
-    type: string;
-    coordinates: unknown[];
-  };
-}
+import type { FeatureCollection, GeoJSONFeature } from '@/types/geojson.ts';
 
 const KEPT_PROPERTIES = new Set(['NAME', 'SUBJECTO']);
 
@@ -23,11 +15,6 @@ function stripProperties(props: Record<string, unknown>): Record<string, unknown
     }
   }
   return stripped;
-}
-
-interface FeatureCollection {
-  type: 'FeatureCollection';
-  features: GeoJSONFeature[];
 }
 
 interface MergeResult {
@@ -55,25 +42,25 @@ export function mergeByName(geojson: FeatureCollection): MergeResult {
     let mergedFeature: ReturnType<typeof turf.feature>;
 
     if (features.length === 1 && features[0]) {
-      const f = features[0];
-      f.properties = stripProperties(f.properties);
-      mergedFeature = f as unknown as ReturnType<typeof turf.feature>;
+      const singleFeature = features[0];
+      singleFeature.properties = stripProperties(singleFeature.properties ?? {});
+      mergedFeature = singleFeature as unknown as ReturnType<typeof turf.feature>;
       mergedFeatures.push(mergedFeature);
     } else {
       const allPolygonCoords: number[][][][] = [];
 
-      for (const f of features) {
-        if (f.geometry.type === 'Polygon') {
-          allPolygonCoords.push(f.geometry.coordinates as number[][][]);
-        } else if (f.geometry.type === 'MultiPolygon') {
-          for (const poly of f.geometry.coordinates as number[][][][]) {
+      for (const feature of features) {
+        if (feature.geometry.type === 'Polygon') {
+          allPolygonCoords.push(feature.geometry.coordinates as number[][][]);
+        } else if (feature.geometry.type === 'MultiPolygon') {
+          for (const poly of feature.geometry.coordinates as number[][][][]) {
             allPolygonCoords.push(poly);
           }
         }
       }
 
       const firstFeature = features[0];
-      const properties = firstFeature ? stripProperties(firstFeature.properties) : {};
+      const properties = firstFeature ? stripProperties(firstFeature.properties ?? {}) : {};
       mergedFeature = turf.multiPolygon(allPolygonCoords, properties);
       mergedFeatures.push(mergedFeature);
     }

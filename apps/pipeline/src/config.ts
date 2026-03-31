@@ -3,6 +3,29 @@ import path from 'node:path';
 
 const ROOT_DIR = path.resolve(import.meta.dirname, '..');
 
+export const EXIT_CODES = {
+  GENERAL_FAILURE: 1,
+  LOCK_CONFLICT: 2,
+  INVALID_ARGUMENTS: 3,
+  SIGINT: 130,
+  SIGTERM: 143,
+} as const;
+
+export const TIMEOUTS = {
+  WRANGLER_MS: 120_000,
+  TIPPECANOE_MS: 300_000,
+} as const;
+
+export const ZOOM = {
+  MIN: 0,
+  MAX: 10,
+} as const;
+
+export const DESCRIPTION_CONSTRAINTS = {
+  CONTEXT_MIN_LENGTH: 50,
+  CONTEXT_MAX_LENGTH: 200,
+} as const;
+
 export const NOTION = {
   getDataSourceId: (): string => {
     return execFileSync(
@@ -39,9 +62,9 @@ export const TIPPECANOE = {
     '-l',
     'territories',
     '-z',
-    '10',
+    String(ZOOM.MAX),
     '-Z',
-    '0',
+    String(ZOOM.MIN),
     '--simplification=10',
     '--coalesce-densest-as-needed',
     '--extend-zooms-if-still-dropping',
@@ -51,9 +74,9 @@ export const TIPPECANOE = {
     '-l',
     'labels',
     '-z',
-    '10',
+    String(ZOOM.MAX),
     '-Z',
-    '0',
+    String(ZOOM.MIN),
     '-r1',
     '--no-feature-limit',
     '--no-tile-size-limit',
@@ -102,8 +125,8 @@ export class YearPaths {
     return `world_${this.year}.pmtiles`;
   }
 
-  hashed(hash8: string): string {
-    return `world_${this.year}.${hash8}.pmtiles`;
+  hashed(shortHash: string): string {
+    return `world_${this.year}.${shortHash}.pmtiles`;
   }
 
   get sourceGeojsonPath(): string {

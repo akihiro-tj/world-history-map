@@ -1,11 +1,12 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { z } from 'zod';
+import { DESCRIPTION_CONSTRAINTS } from '@/config.ts';
 
 const nonEmptyNoUnknown = z
   .string()
   .min(1)
-  .refine((v) => v !== '不明', { message: 'Value must not be "不明"' });
+  .refine((value) => value !== '不明', { message: 'Value must not be "不明"' });
 
 const territoryProfileSchema = z
   .object({
@@ -15,7 +16,7 @@ const territoryProfileSchema = z
     leader: nonEmptyNoUnknown.optional(),
     religion: nonEmptyNoUnknown.optional(),
   })
-  .refine((p) => Object.values(p).some((v) => v !== undefined), {
+  .refine((profile) => Object.values(profile).some((value) => value !== undefined), {
     message: 'Profile must have at least one field (omit profile object if empty)',
   });
 
@@ -30,16 +31,18 @@ const territoryDescriptionSchema = z.object({
   profile: territoryProfileSchema.optional(),
   context: z
     .string()
-    .min(50)
-    .max(200)
-    .refine((v) => v !== '不明', { message: 'Context must not be "不明"' })
+    .min(DESCRIPTION_CONSTRAINTS.CONTEXT_MIN_LENGTH)
+    .max(DESCRIPTION_CONSTRAINTS.CONTEXT_MAX_LENGTH)
+    .refine((value) => value !== '不明', { message: 'Context must not be "不明"' })
     .optional(),
   keyEvents: z
     .array(keyEventSchema)
     .min(1)
-    .refine((events) => events.every((e, i) => i === 0 || e.year >= (events[i - 1]?.year ?? 0)), {
-      message: 'Key events must be sorted by year ascending',
-    })
+    .refine(
+      (events) =>
+        events.every((event, index) => index === 0 || event.year >= (events[index - 1]?.year ?? 0)),
+      { message: 'Key events must be sorted by year ascending' },
+    )
     .optional(),
 });
 
@@ -69,6 +72,6 @@ export function validateDescriptionFile(filePath: string): DescriptionValidation
 }
 
 export async function validateAllDescriptions(dir: string): Promise<DescriptionValidationResult[]> {
-  const files = readdirSync(dir).filter((f) => f.endsWith('.json'));
-  return files.map((f) => validateDescriptionFile(path.join(dir, f)));
+  const files = readdirSync(dir).filter((file) => file.endsWith('.json'));
+  return files.map((file) => validateDescriptionFile(path.join(dir, file)));
 }

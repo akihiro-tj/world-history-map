@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs';
-import { YearPaths } from '@/config.ts';
+import { EXIT_CODES, YearPaths } from '@/config.ts';
 import { PipelineError } from '@/pipeline.ts';
 import { runConvertForYear } from '@/stages/convert.ts';
 import { runMergeForYear } from '@/stages/merge.ts';
@@ -104,7 +104,7 @@ export class YearProcessor {
       if (!validationResult.passed) {
         throw new PipelineError(
           `Validation failed for year ${year}: ${validationResult.errors.length} errors`,
-          1,
+          EXIT_CODES.GENERAL_FAILURE,
         );
       }
 

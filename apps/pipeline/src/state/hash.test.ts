@@ -2,7 +2,7 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { hash8, hashContent, hashFile } from '@/state/hash.ts';
+import { hashContent, hashFile, truncateHash } from '@/state/hash.ts';
 
 describe('hash utilities', () => {
   let tempDir: string;
@@ -67,10 +67,10 @@ describe('hash utilities', () => {
     });
   });
 
-  describe('hash8', () => {
+  describe('truncateHash', () => {
     it('should extract first 8 characters', () => {
       const full = 'b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9';
-      expect(hash8(full)).toBe('b94d27b9');
+      expect(truncateHash(full)).toBe('b94d27b9');
     });
   });
 });

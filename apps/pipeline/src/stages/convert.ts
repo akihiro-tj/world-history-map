@@ -1,6 +1,6 @@
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
-import { PATHS, TIPPECANOE } from '@/config.ts';
+import { PATHS, TIMEOUTS, TIPPECANOE } from '@/config.ts';
 import { execFileAsync } from '@/exec.ts';
 import type { PipelineLogger } from '@/stages/types.ts';
 
@@ -24,11 +24,11 @@ export async function executeConvert(
 
   const territoryArgs = buildTippecanoeArgs('territories', input.polygonsPath, polygonsPmtiles);
   logger.info('convert', 'Running tippecanoe for territories...');
-  await execFileAsync('tippecanoe', territoryArgs, { timeout: 300_000 });
+  await execFileAsync('tippecanoe', territoryArgs, { timeout: TIMEOUTS.TIPPECANOE_MS });
 
   const labelArgs = buildTippecanoeArgs('labels', input.labelsPath, labelsPmtiles);
   logger.info('convert', 'Running tippecanoe for labels...');
-  await execFileAsync('tippecanoe', labelArgs, { timeout: 300_000 });
+  await execFileAsync('tippecanoe', labelArgs, { timeout: TIMEOUTS.TIPPECANOE_MS });
 
   const tileJoinArgs = [
     `--output=${outputPath}`,
@@ -38,7 +38,7 @@ export async function executeConvert(
     labelsPmtiles,
   ];
   logger.info('convert', 'Running tile-join...');
-  await execFileAsync('tile-join', tileJoinArgs, { timeout: 300_000 });
+  await execFileAsync('tile-join', tileJoinArgs, { timeout: TIMEOUTS.TIPPECANOE_MS });
 }
 
 export async function runConvertForYear(

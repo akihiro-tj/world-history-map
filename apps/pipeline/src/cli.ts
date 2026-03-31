@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { listYears } from '@/commands/list-years.ts';
 import { showStatus } from '@/commands/status.ts';
-import { PATHS } from '@/config.ts';
+import { EXIT_CODES, PATHS } from '@/config.ts';
 import type { PipelineOptions } from '@/pipeline.ts';
 import { PipelineError, runPipeline } from '@/pipeline.ts';
 import { syncDescriptions } from '@/stages/sync-descriptions.ts';
@@ -28,7 +28,7 @@ function parseArgs(argv: string[]): { command: string; options: PipelineOptions 
         if (yearStr) {
           options.year = Number(yearStr);
           if (Number.isNaN(options.year)) {
-            throw new PipelineError(`Invalid year: ${yearStr}`, 3);
+            throw new PipelineError(`Invalid year: ${yearStr}`, EXIT_CODES.INVALID_ARGUMENTS);
           }
         }
         break;
@@ -38,7 +38,10 @@ function parseArgs(argv: string[]): { command: string; options: PipelineOptions 
         if (rangeStr) {
           const match = rangeStr.match(/^(-?\d+)\.\.(-?\d+)$/);
           if (!match?.[1] || !match[2]) {
-            throw new PipelineError(`Invalid year range: ${rangeStr}. Use format: 1600..1800`, 3);
+            throw new PipelineError(
+              `Invalid year range: ${rangeStr}. Use format: 1600..1800`,
+              EXIT_CODES.INVALID_ARGUMENTS,
+            );
           }
           options.years = { from: Number(match[1]), to: Number(match[2]) };
         }
@@ -58,7 +61,7 @@ function parseArgs(argv: string[]): { command: string; options: PipelineOptions 
         break;
       default:
         if (arg?.startsWith('--')) {
-          throw new PipelineError(`Unknown option: ${arg}`, 3);
+          throw new PipelineError(`Unknown option: ${arg}`, EXIT_CODES.INVALID_ARGUMENTS);
         }
     }
   }
@@ -108,7 +111,7 @@ async function main(): Promise<void> {
         }
       }
       if (hasErrors) {
-        throw new PipelineError('Validation failed', 1);
+        throw new PipelineError('Validation failed', EXIT_CODES.GENERAL_FAILURE);
       }
       logger.info('territory-validate', `All ${results.length} files passed validation`);
       break;
@@ -127,7 +130,7 @@ async function main(): Promise<void> {
       console.error(
         'Usage: pnpm pipeline <run|status|list|upload|publish-manifest|territory-sync|territory-validate> [options]',
       );
-      process.exit(3);
+      process.exit(EXIT_CODES.INVALID_ARGUMENTS);
   }
 }
 
@@ -136,5 +139,5 @@ main().catch((err: unknown) => {
     process.exit(err.exitCode);
   }
   console.error('Unexpected error:', err);
-  process.exit(1);
+  process.exit(EXIT_CODES.GENERAL_FAILURE);
 });
