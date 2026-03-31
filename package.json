@@ -20,6 +20,9 @@
   "lint-staged": {
     "*.{ts,tsx,js,jsx,json,css}": "biome check --no-errors-on-unmatched"
   },
+  "pnpm": {
+    "minimumReleaseAge": "3 days"
+  },
   "devDependencies": {
     "@biomejs/biome": "^2.4.9",
     "husky": "^9.1.7",
