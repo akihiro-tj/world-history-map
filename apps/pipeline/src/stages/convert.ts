@@ -1,6 +1,6 @@
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
-import { PATHS, TIPPECANOE, yearToPmtilesFilename } from '@/config.ts';
+import { PATHS, TIPPECANOE, YearPaths } from '@/config.ts';
 import { execFileAsync } from '@/exec.ts';
 import type { PipelineLogger } from '@/stages/types.ts';
 
@@ -49,7 +49,7 @@ export async function runConvertForYear(
 ): Promise<string> {
   await mkdir(PATHS.publicPmtiles, { recursive: true });
 
-  const outputPath = path.join(PATHS.publicPmtiles, yearToPmtilesFilename(year));
+  const outputPath = new YearPaths(year).pmtilesPath;
   const tempDir = PATHS.mergedGeojson;
 
   const start = Date.now();

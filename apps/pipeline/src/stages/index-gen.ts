@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { PATHS, yearToMergedFilename, yearToPmtilesFilename } from '@/config.ts';
+import { PATHS, YearPaths } from '@/config.ts';
 import type { PipelineLogger } from '@/stages/types.ts';
 import type { YearIndex } from '@/types/year.ts';
 
@@ -22,13 +22,14 @@ export async function generateYearIndex(
   const entries: YearIndex['years'] = [];
 
   for (const year of sortedYears) {
-    const pmtilesPath = path.join(pmtilesDir, yearToPmtilesFilename(year));
+    const yp = new YearPaths(year);
+    const pmtilesPath = path.join(pmtilesDir, yp.pmtiles);
     if (!existsSync(pmtilesPath)) {
       logger.warn('index-gen', `Year ${year}: PMTiles not found, skipping`);
       continue;
     }
 
-    const mergedPath = path.join(mergedDir, yearToMergedFilename(year));
+    const mergedPath = path.join(mergedDir, yp.merged);
     let countries: string[] = [];
 
     if (existsSync(mergedPath)) {
@@ -49,7 +50,7 @@ export async function generateYearIndex(
 
     entries.push({
       year,
-      filename: yearToPmtilesFilename(year),
+      filename: yp.pmtiles,
       countries,
     });
   }

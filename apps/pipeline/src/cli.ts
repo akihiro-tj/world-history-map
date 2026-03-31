@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { PATHS } from '@/config.ts';
 import type { PipelineOptions } from '@/pipeline.ts';
 import { listYears, PipelineError, runPipeline, showStatus } from '@/pipeline.ts';
 import { syncDescriptions } from '@/stages/sync-descriptions.ts';
@@ -84,33 +85,15 @@ async function main(): Promise<void> {
       await publishManifest(logger);
       break;
     case 'territory-sync': {
-      const descriptionsDir = path.resolve(
-        import.meta.dirname,
-        '..',
-        '..',
-        'frontend',
-        'public',
-        'data',
-        'descriptions',
-      );
       await syncDescriptions(
-        descriptionsDir,
+        PATHS.descriptionsDir,
         logger,
         options.year !== undefined ? { year: options.year } : undefined,
       );
       break;
     }
     case 'territory-validate': {
-      const descriptionsDir = path.resolve(
-        import.meta.dirname,
-        '..',
-        '..',
-        'frontend',
-        'public',
-        'data',
-        'descriptions',
-      );
-      const results = await validateAllDescriptions(descriptionsDir);
+      const results = await validateAllDescriptions(PATHS.descriptionsDir);
       let hasErrors = false;
       for (const result of results) {
         if (result.valid) {

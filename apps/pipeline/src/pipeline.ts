@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { PATHS, yearToUpstreamFilename } from '@/config.ts';
+import { PATHS, UPSTREAM, YearPaths } from '@/config.ts';
 import { runConvertForYear } from '@/stages/convert.ts';
 import { executeFetch, getCommitHash, parseYearsFromDirectory } from '@/stages/fetch.ts';
 import { runIndexGenStage } from '@/stages/index-gen.ts';
@@ -56,11 +56,7 @@ export async function runPipeline(
     }
 
     logger.info('pipeline', '=== Stage: fetch ===');
-    await executeFetch(
-      PATHS.historicalBasemaps,
-      'https://github.com/aourednik/historical-basemaps.git',
-      logger,
-    );
+    await executeFetch(PATHS.historicalBasemaps, UPSTREAM.repoUrl, logger);
 
     let commitHash = '';
     try {
@@ -90,7 +86,8 @@ export async function runPipeline(
     const validationResults: ValidationResult[] = [];
 
     for (const year of yearsToProcess) {
-      const sourceFile = path.join(PATHS.sourceGeojson, yearToUpstreamFilename(year));
+      const yp = new YearPaths(year);
+      const sourceFile = yp.sourceGeojsonPath;
       if (!existsSync(sourceFile)) {
         logger.warn('pipeline', `Year ${year}: source file not found, skipping`);
         continue;
@@ -135,9 +132,7 @@ export async function runPipeline(
 
       if (shouldProcessYear(state, year, 'validate', sourceHash)) {
         logger.info('pipeline', `=== Year ${year}: validate ===`);
-        const mergedPath = path.join(PATHS.mergedGeojson, `world_${year}_merged.geojson`);
-
-        const validationResult = runValidateForYear(year, mergedPath, logger);
+        const validationResult = runValidateForYear(year, yp.mergedGeojsonPath, logger);
         validationResults.push(validationResult);
 
         updateYearState(state, year, 'validate', {
@@ -165,11 +160,13 @@ export async function runPipeline(
           continue;
         }
 
-        const polygonsPath = path.join(PATHS.mergedGeojson, `world_${year}_merged.geojson`);
-        const labelsPath = path.join(PATHS.mergedGeojson, `world_${year}_merged_labels.geojson`);
-
         const start = Date.now();
-        const pmtilesPath = await runConvertForYear(year, polygonsPath, labelsPath, logger);
+        const pmtilesPath = await runConvertForYear(
+          year,
+          yp.mergedGeojsonPath,
+          yp.labelsGeojsonPath,
+          logger,
+        );
         const convertHash = await hashFile(pmtilesPath);
 
         updateYearState(state, year, 'convert', {
@@ -184,9 +181,7 @@ export async function runPipeline(
 
       if (shouldProcessYear(state, year, 'prepare', sourceHash)) {
         logger.info('pipeline', `=== Year ${year}: prepare ===`);
-        const pmtilesPath = path.join(PATHS.publicPmtiles, `world_${year}.pmtiles`);
-
-        const result = await runPrepareForYear(year, pmtilesPath, logger);
+        const result = await runPrepareForYear(year, yp.pmtilesPath, logger);
 
         updateYearState(state, year, 'prepare', {
           hash: result.hash,

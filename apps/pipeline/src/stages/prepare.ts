@@ -1,7 +1,7 @@
 import { copyFileSync, statSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
-import { PATHS, yearToHashedPmtilesFilename } from '@/config.ts';
+import { PATHS, YearPaths } from '@/config.ts';
 import type { PipelineLogger } from '@/stages/types.ts';
 import { hash8, hashFile } from '@/state/hash.ts';
 
@@ -18,7 +18,7 @@ export async function prepareTile(
 ): Promise<PrepareResult> {
   const fullHash = await hashFile(sourcePath);
   const short = hash8(fullHash);
-  const hashedFilename = yearToHashedPmtilesFilename(year, short);
+  const hashedFilename = new YearPaths(year).hashed(short);
   const destPath = path.join(distDir, hashedFilename);
 
   copyFileSync(sourcePath, destPath);

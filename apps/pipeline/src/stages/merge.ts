@@ -1,8 +1,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
-import path from 'node:path';
 import * as turf from '@turf/turf';
-import { PATHS, yearToLabelsFilename, yearToMergedFilename } from '@/config.ts';
+import { PATHS, YearPaths } from '@/config.ts';
 import type { PipelineLogger } from '@/stages/types.ts';
 
 interface GeoJSONFeature {
@@ -128,8 +127,9 @@ export async function runMergeForYear(
 
   const { polygons, labels } = mergeByName(geojson);
 
-  const polygonsPath = path.join(PATHS.mergedGeojson, yearToMergedFilename(year));
-  const labelsPath = path.join(PATHS.mergedGeojson, yearToLabelsFilename(year));
+  const yp = new YearPaths(year);
+  const polygonsPath = yp.mergedGeojsonPath;
+  const labelsPath = yp.labelsGeojsonPath;
 
   writeFileSync(polygonsPath, JSON.stringify(polygons));
   writeFileSync(labelsPath, JSON.stringify(labels));
