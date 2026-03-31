@@ -7,7 +7,7 @@ import type { PipelineLogger } from '@/stages/types.ts';
 import { runUploadStage } from '@/stages/upload.ts';
 import { PipelineCheckpoint } from '@/state/checkpoint.ts';
 import { acquireLock, registerCleanupHandlers, releaseLock } from '@/state/lock.ts';
-import type { DeploymentManifest } from '@/types/pipeline.ts';
+import type { DeploymentManifest, ValidationResult } from '@/types/pipeline.ts';
 import { generateReport } from '@/validation/report.ts';
 import { YearProcessor } from '@/year-processor.ts';
 
@@ -61,14 +61,30 @@ export async function runPipeline(
     }
 
     const manifest: DeploymentManifest = loadManifest();
-    const yearProcessor = new YearProcessor(checkpoint, logger, manifest);
+    const yearProcessor = new YearProcessor(checkpoint, logger);
+    const validationResults: ValidationResult[] = [];
 
     for (const year of yearsToProcess) {
-      await yearProcessor.process(year);
+      const result = await yearProcessor.process(year);
+
+      if (result.prepareResult) {
+        manifest.files[String(year)] = result.prepareResult.hashedFilename;
+        if (!manifest.metadata) {
+          manifest.metadata = {};
+        }
+        manifest.metadata[String(year)] = {
+          hash: result.prepareResult.hash,
+          size: result.prepareResult.size,
+        };
+      }
+
+      if (result.validationResult) {
+        validationResults.push(result.validationResult);
+      }
     }
 
-    if (yearProcessor.validationResults.length > 0) {
-      const report = generateReport(checkpoint.runId, yearProcessor.validationResults);
+    if (validationResults.length > 0) {
+      const report = generateReport(checkpoint.runId, validationResults);
       logger.info(
         'validate',
         `Validation report: ${report.totalYears} years, ${report.totalFeatures} features, ${report.totalErrors} errors, ${report.totalWarnings} warnings, ${report.totalRepairs} repairs`,
