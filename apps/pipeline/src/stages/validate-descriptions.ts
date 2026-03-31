@@ -1,6 +1,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { z } from 'zod';
+import { DESCRIPTION_CONSTRAINTS } from '@/config.ts';
 
 const nonEmptyNoUnknown = z
   .string()
@@ -30,8 +31,8 @@ const territoryDescriptionSchema = z.object({
   profile: territoryProfileSchema.optional(),
   context: z
     .string()
-    .min(50)
-    .max(200)
+    .min(DESCRIPTION_CONSTRAINTS.CONTEXT_MIN_LENGTH)
+    .max(DESCRIPTION_CONSTRAINTS.CONTEXT_MAX_LENGTH)
     .refine((v) => v !== '不明', { message: 'Context must not be "不明"' })
     .optional(),
   keyEvents: z

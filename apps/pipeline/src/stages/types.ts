@@ -1,17 +1,3 @@
-import type { PipelineState } from '@/types/pipeline.ts';
-
-export interface PipelineStage<TInput, TOutput> {
-  name: string;
-  execute(input: TInput, context: PipelineContext): Promise<TOutput>;
-}
-
-export interface PipelineContext {
-  state: PipelineState;
-  years: number[];
-  logger: PipelineLogger;
-  dryRun: boolean;
-}
-
 export interface PipelineLogger {
   info(stage: string, message: string): void;
   warn(stage: string, message: string): void;

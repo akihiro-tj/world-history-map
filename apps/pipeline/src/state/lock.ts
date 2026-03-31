@@ -1,7 +1,7 @@
 import { mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { hostname } from 'node:os';
 import path from 'node:path';
-import { PATHS } from '@/config.ts';
+import { EXIT_CODES, PATHS } from '@/config.ts';
 
 interface LockInfo {
   pid: number;
@@ -105,10 +105,10 @@ export function registerCleanupHandlers(lockDir?: string): void {
   process.on('exit', cleanup);
   process.on('SIGINT', () => {
     cleanup();
-    process.exit(130);
+    process.exit(EXIT_CODES.SIGINT);
   });
   process.on('SIGTERM', () => {
     cleanup();
-    process.exit(143);
+    process.exit(EXIT_CODES.SIGTERM);
   });
 }

@@ -1,24 +1,11 @@
 import * as turf from '@turf/turf';
+import type { FeatureCollection, GeoJSONFeature } from '@/types/geojson.ts';
 import type {
   RepairAction,
   ValidationError,
   ValidationResult,
   ValidationWarning,
 } from '@/types/pipeline.ts';
-
-interface GeoJSONFeature {
-  type: 'Feature';
-  properties: Record<string, unknown> | null;
-  geometry: {
-    type: string;
-    coordinates: unknown;
-  };
-}
-
-interface FeatureCollection {
-  type: string;
-  features: GeoJSONFeature[];
-}
 
 interface RepairAttemptResult {
   transformed: GeoJSONFeature;

@@ -2,6 +2,22 @@ import { PATHS } from '@/config.ts';
 import type { PipelineLogger } from '@/stages/types.ts';
 import { PipelineCheckpoint } from '@/state/checkpoint.ts';
 
+interface StatusColumn {
+  label: string;
+  width: number;
+  getValue: (yearState: ReturnType<PipelineCheckpoint['getYearState']>) => string;
+}
+
+const STATUS_COLUMNS: StatusColumn[] = [
+  { label: 'Year', width: 8, getValue: () => '' },
+  { label: 'Source', width: 8, getValue: (s) => (s?.source ? 'ok' : '-') },
+  { label: 'Merge', width: 8, getValue: (s) => (s?.merge ? 'ok' : '-') },
+  { label: 'Validate', width: 10, getValue: (s) => (s?.validate ? 'ok' : '-') },
+  { label: 'Convert', width: 9, getValue: (s) => (s?.convert ? 'ok' : '-') },
+  { label: 'Prepare', width: 9, getValue: (s) => (s?.prepare ? 'ok' : '-') },
+  { label: 'Upload', width: 8, getValue: (s) => (s?.upload ? 'ok' : '-') },
+];
+
 export function showStatus(logger: PipelineLogger): void {
   const checkpoint = PipelineCheckpoint.load(PATHS.pipelineState);
   if (!checkpoint) {
@@ -16,27 +32,14 @@ export function showStatus(logger: PipelineLogger): void {
   logger.info('status', `Years processed: ${yearKeys.length}`);
 
   console.log('');
-  console.log(
-    'Year'.padEnd(8) +
-      'Source'.padEnd(8) +
-      'Merge'.padEnd(8) +
-      'Validate'.padEnd(10) +
-      'Convert'.padEnd(9) +
-      'Prepare'.padEnd(9) +
-      'Upload'.padEnd(8),
-  );
+  console.log(STATUS_COLUMNS.map((col) => col.label.padEnd(col.width)).join(''));
 
   for (const yearKey of yearKeys) {
     const yearState = checkpoint.getYearState(Number(yearKey));
     if (!yearState) continue;
-    const line =
-      yearKey.padEnd(8) +
-      (yearState.source ? 'ok' : '-').padEnd(8) +
-      (yearState.merge ? 'ok' : '-').padEnd(8) +
-      (yearState.validate ? 'ok' : '-').padEnd(10) +
-      (yearState.convert ? 'ok' : '-').padEnd(9) +
-      (yearState.prepare ? 'ok' : '-').padEnd(9) +
-      (yearState.upload ? 'ok' : '-').padEnd(8);
-    console.log(line);
+    const cells = STATUS_COLUMNS.map((col, index) =>
+      (index === 0 ? yearKey : col.getValue(yearState)).padEnd(col.width),
+    );
+    console.log(cells.join(''));
   }
 }

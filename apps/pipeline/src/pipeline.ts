@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { PATHS, UPSTREAM } from '@/config.ts';
+import { EXIT_CODES, PATHS, UPSTREAM } from '@/config.ts';
 import { executeFetch, getCommitHash, parseYearsFromDirectory } from '@/stages/fetch.ts';
 import { runIndexGenStage } from '@/stages/index-gen.ts';
 import type { PipelineLogger } from '@/stages/types.ts';
@@ -27,7 +27,7 @@ export async function runPipeline(
   if (!acquireLock()) {
     throw new PipelineError(
       'Pipeline is already running. Use `rm -rf .cache/pipeline.lock` to clear a stale lock.',
-      2,
+      EXIT_CODES.LOCK_CONFLICT,
     );
   }
   registerCleanupHandlers();
@@ -54,8 +54,8 @@ export async function runPipeline(
 
     if (options.dryRun) {
       logger.info('pipeline', 'Dry run: would process the following years:');
-      for (const y of yearsToProcess) {
-        logger.info('pipeline', `  Year ${y}`);
+      for (const year of yearsToProcess) {
+        logger.info('pipeline', `  Year ${year}`);
       }
       return;
     }
@@ -132,7 +132,7 @@ function filterYears(allYears: number[], options: PipelineOptions): number[] {
   }
   if (options.years) {
     const { from, to } = options.years;
-    return allYears.filter((y) => y >= from && y <= to);
+    return allYears.filter((year) => year >= from && year <= to);
   }
   return allYears;
 }

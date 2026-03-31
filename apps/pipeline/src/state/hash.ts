@@ -15,6 +15,6 @@ export function hashContent(content: string | Buffer): string {
   return createHash('sha256').update(content).digest('hex');
 }
 
-export function hash8(fullHash: string): string {
+export function truncateHash(fullHash: string): string {
   return fullHash.slice(0, 8);
 }
