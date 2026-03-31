@@ -122,10 +122,6 @@ importers:
         version: 4.3.6
 
   apps/worker:
-    dependencies:
-      pmtiles:
-        specifier: ^4.3.0
-        version: 4.4.0
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20260329.1
