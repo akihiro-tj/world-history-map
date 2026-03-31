@@ -20,6 +20,127 @@ interface FeatureCollection {
   features: GeoJSONFeature[];
 }
 
+interface RepairAttemptResult {
+  transformed: GeoJSONFeature;
+  valid: boolean;
+}
+
+interface RepairStrategy {
+  type: RepairAction['type'];
+  attempt(feature: GeoJSONFeature): RepairAttemptResult | null;
+}
+
+interface RepairResult {
+  feature: GeoJSONFeature | null;
+  repairs: RepairAction[];
+  warnings: ValidationWarning[];
+}
+
+const cleanCoordsStrategy: RepairStrategy = {
+  type: 'clean_coords',
+  attempt(feature) {
+    const cleaned = turf.cleanCoords(feature as unknown as Parameters<typeof turf.cleanCoords>[0]);
+    const transformed = cleaned as unknown as GeoJSONFeature;
+    const valid = turf.booleanValid(cleaned as unknown as Parameters<typeof turf.booleanValid>[0]);
+    return { transformed, valid };
+  },
+};
+
+const rewindStrategy: RepairStrategy = {
+  type: 'rewind',
+  attempt(feature) {
+    const rewound = turf.rewind(feature as unknown as Parameters<typeof turf.rewind>[0]);
+    const transformed = rewound as unknown as GeoJSONFeature;
+    const valid = turf.booleanValid(rewound as unknown as Parameters<typeof turf.booleanValid>[0]);
+    return { transformed, valid };
+  },
+};
+
+const bufferZeroStrategy: RepairStrategy = {
+  type: 'buffer_zero',
+  attempt(feature) {
+    const buffered = turf.buffer(
+      feature as unknown as Parameters<typeof turf.buffer>[0],
+      0,
+    ) as unknown;
+    if (
+      !buffered ||
+      typeof buffered !== 'object' ||
+      (buffered as GeoJSONFeature).type !== 'Feature'
+    ) {
+      return null;
+    }
+    const transformed = buffered as GeoJSONFeature;
+    const valid = turf.booleanValid(buffered as Parameters<typeof turf.booleanValid>[0]);
+    return { transformed, valid };
+  },
+};
+
+const unkinkStrategy: RepairStrategy = {
+  type: 'unkink',
+  attempt(feature) {
+    if (feature.geometry.type !== 'Polygon') return null;
+
+    const unkinked = turf.unkinkPolygon(
+      feature as unknown as Parameters<typeof turf.unkinkPolygon>[0],
+    );
+    if (unkinked.features.length === 0) return null;
+
+    const coords = unkinked.features
+      .map((f) => f.geometry.coordinates)
+      .filter((c): c is number[][][] => c !== undefined);
+
+    if (coords.length === 0) return null;
+
+    const transformed = turf.multiPolygon(
+      coords,
+      (feature.properties ?? undefined) as Record<string, unknown> | undefined,
+    ) as unknown as GeoJSONFeature;
+    const valid = turf.booleanValid(
+      transformed as unknown as Parameters<typeof turf.booleanValid>[0],
+    );
+    return { transformed, valid };
+  },
+};
+
+const repairStrategies: RepairStrategy[] = [
+  cleanCoordsStrategy,
+  rewindStrategy,
+  bufferZeroStrategy,
+  unkinkStrategy,
+];
+
+function attemptRepair(
+  feature: GeoJSONFeature,
+  featureIndex: number,
+  featureName: string,
+): RepairResult {
+  const repairs: RepairAction[] = [];
+  const warnings: ValidationWarning[] = [];
+  let current = feature;
+
+  for (const strategy of repairStrategies) {
+    try {
+      const result = strategy.attempt(current);
+      if (!result) continue;
+
+      current = result.transformed;
+      repairs.push({ type: strategy.type, featureIndex, featureName });
+      warnings.push({
+        type: 'repaired_geometry',
+        featureIndex,
+        details: `"${featureName}" repaired via ${strategy.type.replaceAll('_', '-')}`,
+      });
+
+      if (result.valid) {
+        return { feature: current, repairs, warnings };
+      }
+    } catch {}
+  }
+
+  return { feature: null, repairs, warnings };
+}
+
 export function validateGeoJSON(geojson: FeatureCollection, year: number): ValidationResult {
   const errors: ValidationError[] = [];
   const warnings: ValidationWarning[] = [];
@@ -43,8 +164,10 @@ export function validateGeoJSON(geojson: FeatureCollection, year: number): Valid
     return { year, passed: false, featureCount: 0, errors, warnings, repairs };
   }
 
-  for (let i = 0; i < geojson.features.length; i++) {
-    const feature = geojson.features[i];
+  const repairedFeatures = [...geojson.features];
+
+  for (let i = 0; i < repairedFeatures.length; i++) {
+    const feature = repairedFeatures[i];
     if (!feature) continue;
     const name = (feature.properties?.['NAME'] as string | undefined) ?? '';
 
@@ -72,9 +195,11 @@ export function validateGeoJSON(geojson: FeatureCollection, year: number): Valid
         feature as unknown as Parameters<typeof turf.booleanValid>[0],
       );
       if (!isValid) {
-        const repaired = attemptRepair(feature, i, name, repairs, warnings);
-        if (repaired) {
-          feature.geometry = repaired.geometry as typeof feature.geometry;
+        const repairResult = attemptRepair(feature, i, name);
+        repairs.push(...repairResult.repairs);
+        warnings.push(...repairResult.warnings);
+        if (repairResult.feature) {
+          repairedFeatures[i] = repairResult.feature;
         } else {
           warnings.push({
             type: 'unrepairable_geometry',
@@ -95,97 +220,9 @@ export function validateGeoJSON(geojson: FeatureCollection, year: number): Valid
   return {
     year,
     passed: errors.length === 0,
-    featureCount: geojson.features.length,
+    featureCount: repairedFeatures.length,
     errors,
     warnings,
     repairs,
   };
-}
-
-function attemptRepair(
-  feature: GeoJSONFeature,
-  featureIndex: number,
-  featureName: string,
-  repairs: RepairAction[],
-  warnings: ValidationWarning[],
-): GeoJSONFeature | null {
-  let current = feature;
-
-  try {
-    const cleaned = turf.cleanCoords(current as unknown as Parameters<typeof turf.cleanCoords>[0]);
-    if (turf.booleanValid(cleaned as unknown as Parameters<typeof turf.booleanValid>[0])) {
-      repairs.push({ type: 'clean_coords', featureIndex, featureName });
-      warnings.push({
-        type: 'repaired_geometry',
-        featureIndex,
-        details: `"${featureName}" repaired via clean-coords`,
-      });
-      return cleaned as unknown as GeoJSONFeature;
-    }
-    current = cleaned as unknown as GeoJSONFeature;
-  } catch {}
-
-  try {
-    const rewound = turf.rewind(current as unknown as Parameters<typeof turf.rewind>[0]);
-    if (turf.booleanValid(rewound as unknown as Parameters<typeof turf.booleanValid>[0])) {
-      repairs.push({ type: 'rewind', featureIndex, featureName });
-      warnings.push({
-        type: 'repaired_geometry',
-        featureIndex,
-        details: `"${featureName}" repaired via rewind`,
-      });
-      return rewound as unknown as GeoJSONFeature;
-    }
-    current = rewound as unknown as GeoJSONFeature;
-  } catch {}
-
-  try {
-    const buffered = turf.buffer(
-      current as unknown as Parameters<typeof turf.buffer>[0],
-      0,
-    ) as unknown;
-    if (
-      buffered &&
-      typeof buffered === 'object' &&
-      (buffered as GeoJSONFeature).type === 'Feature' &&
-      turf.booleanValid(buffered as Parameters<typeof turf.booleanValid>[0])
-    ) {
-      repairs.push({ type: 'buffer_zero', featureIndex, featureName });
-      warnings.push({
-        type: 'repaired_geometry',
-        featureIndex,
-        details: `"${featureName}" repaired via buffer(0)`,
-      });
-      return buffered as GeoJSONFeature;
-    }
-  } catch {}
-
-  try {
-    if (current.geometry.type === 'Polygon') {
-      const unkinked = turf.unkinkPolygon(
-        current as unknown as Parameters<typeof turf.unkinkPolygon>[0],
-      );
-      if (unkinked.features.length > 0) {
-        const coords = unkinked.features
-          .map((f) => f.geometry.coordinates)
-          .filter((c): c is number[][][] => c !== undefined);
-
-        if (coords.length > 0) {
-          const multiPoly = turf.multiPolygon(
-            coords,
-            (current.properties ?? undefined) as Record<string, unknown> | undefined,
-          );
-          repairs.push({ type: 'unkink', featureIndex, featureName });
-          warnings.push({
-            type: 'repaired_geometry',
-            featureIndex,
-            details: `"${featureName}" repaired via unkink (${coords.length} polygons)`,
-          });
-          return multiPoly as unknown as GeoJSONFeature;
-        }
-      }
-    }
-  } catch {}
-
-  return null;
 }
