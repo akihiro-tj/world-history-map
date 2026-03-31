@@ -1,19 +1,15 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { PATHS, UPSTREAM, YearPaths } from '@/config.ts';
-import { runConvertForYear } from '@/stages/convert.ts';
+import { PATHS, UPSTREAM } from '@/config.ts';
 import { executeFetch, getCommitHash, parseYearsFromDirectory } from '@/stages/fetch.ts';
 import { runIndexGenStage } from '@/stages/index-gen.ts';
-import { runMergeForYear } from '@/stages/merge.ts';
-import { runPrepareForYear } from '@/stages/prepare.ts';
 import type { PipelineLogger } from '@/stages/types.ts';
 import { runUploadStage } from '@/stages/upload.ts';
-import { runValidateForYear } from '@/stages/validate.ts';
 import { PipelineCheckpoint } from '@/state/checkpoint.ts';
-import { hashFile } from '@/state/hash.ts';
 import { acquireLock, registerCleanupHandlers, releaseLock } from '@/state/lock.ts';
-import type { DeploymentManifest, ValidationResult } from '@/types/pipeline.ts';
+import type { DeploymentManifest } from '@/types/pipeline.ts';
 import { generateReport } from '@/validation/report.ts';
+import { YearProcessor } from '@/year-processor.ts';
 
 export interface PipelineOptions {
   year?: number | undefined;
@@ -38,12 +34,7 @@ export async function runPipeline(
 
   let checkpoint: PipelineCheckpoint | undefined;
   try {
-    if (options.restart) {
-      checkpoint = PipelineCheckpoint.create(PATHS.pipelineState);
-      logger.info('pipeline', 'Starting fresh (--restart)');
-    } else {
-      checkpoint = PipelineCheckpoint.loadOrCreate(PATHS.pipelineState);
-    }
+    checkpoint = initCheckpoint(options, logger);
 
     logger.info('pipeline', '=== Stage: fetch ===');
     await executeFetch(PATHS.historicalBasemaps, UPSTREAM.repoUrl, logger);
@@ -70,125 +61,14 @@ export async function runPipeline(
     }
 
     const manifest: DeploymentManifest = loadManifest();
-    const validationResults: ValidationResult[] = [];
+    const yearProcessor = new YearProcessor(checkpoint, logger, manifest);
 
     for (const year of yearsToProcess) {
-      const yearPaths = new YearPaths(year);
-      const sourceFile = yearPaths.sourceGeojsonPath;
-      if (!existsSync(sourceFile)) {
-        logger.warn('pipeline', `Year ${year}: source file not found, skipping`);
-        continue;
-      }
-
-      const sourceHash = await hashFile(sourceFile);
-
-      const yearState = checkpoint.getYearState(year);
-
-      if (yearState?.source && yearState.source.hash !== sourceHash) {
-        logger.info('pipeline', `Year ${year}: source changed, invalidating downstream`);
-        checkpoint.invalidateDownstream(year, 'source');
-      }
-
-      checkpoint.updateYear(year, 'source', {
-        hash: sourceHash,
-        fetchedAt: new Date().toISOString(),
-      });
-
-      if (checkpoint.shouldProcess(year, 'merge', sourceHash)) {
-        logger.info('pipeline', `=== Year ${year}: merge ===`);
-        const start = Date.now();
-        const mergeResult = await runMergeForYear(year, sourceFile, logger);
-        const mergedHash = await hashFile(mergeResult.polygonsPath);
-
-        checkpoint.updateYear(year, 'merge', {
-          hash: mergedHash,
-          completedAt: new Date().toISOString(),
-          featureCount: mergeResult.featureCount,
-          labelCount: mergeResult.labelCount,
-        });
-        checkpoint.persist();
-        logger.timing('merge', Date.now() - start);
-      } else {
-        logger.info('pipeline', `Year ${year}: merge skipped (unchanged)`);
-      }
-
-      if (checkpoint.shouldProcess(year, 'validate', sourceHash)) {
-        logger.info('pipeline', `=== Year ${year}: validate ===`);
-        const validationResult = runValidateForYear(year, yearPaths.mergedGeojsonPath, logger);
-        validationResults.push(validationResult);
-
-        checkpoint.updateYear(year, 'validate', {
-          completedAt: new Date().toISOString(),
-          warnings: validationResult.warnings.length,
-          errors: validationResult.errors.length,
-        });
-        checkpoint.persist();
-
-        if (!validationResult.passed) {
-          throw new PipelineError(
-            `Validation failed for year ${year}: ${validationResult.errors.length} errors`,
-            1,
-          );
-        }
-      } else {
-        logger.info('pipeline', `Year ${year}: validate skipped (unchanged)`);
-      }
-
-      if (checkpoint.shouldProcess(year, 'convert', sourceHash)) {
-        logger.info('pipeline', `=== Year ${year}: convert ===`);
-        const currentYearState = checkpoint.getYearState(year);
-        const mergeState = currentYearState?.merge;
-        if (!mergeState) {
-          logger.error('pipeline', `Year ${year}: merge state not found, skipping convert`);
-          continue;
-        }
-
-        const start = Date.now();
-        const pmtilesPath = await runConvertForYear(
-          yearPaths.mergedGeojsonPath,
-          yearPaths.labelsGeojsonPath,
-          yearPaths.pmtilesPath,
-          logger,
-        );
-        const convertHash = await hashFile(pmtilesPath);
-
-        checkpoint.updateYear(year, 'convert', {
-          hash: convertHash,
-          completedAt: new Date().toISOString(),
-        });
-        checkpoint.persist();
-        logger.timing('convert', Date.now() - start);
-      } else {
-        logger.info('pipeline', `Year ${year}: convert skipped (unchanged)`);
-      }
-
-      if (checkpoint.shouldProcess(year, 'prepare', sourceHash)) {
-        logger.info('pipeline', `=== Year ${year}: prepare ===`);
-        const result = await runPrepareForYear(year, yearPaths.pmtilesPath, logger);
-
-        checkpoint.updateYear(year, 'prepare', {
-          hash: result.hash,
-          hashedFilename: result.hashedFilename,
-          completedAt: new Date().toISOString(),
-        });
-
-        manifest.files[String(year)] = result.hashedFilename;
-        if (!manifest.metadata) {
-          manifest.metadata = {};
-        }
-        manifest.metadata[String(year)] = {
-          hash: result.hash,
-          size: result.size,
-        };
-
-        checkpoint.persist();
-      } else {
-        logger.info('pipeline', `Year ${year}: prepare skipped (unchanged)`);
-      }
+      await yearProcessor.process(year);
     }
 
-    if (validationResults.length > 0) {
-      const report = generateReport(checkpoint.runId, validationResults);
+    if (yearProcessor.validationResults.length > 0) {
+      const report = generateReport(checkpoint.runId, yearProcessor.validationResults);
       logger.info(
         'validate',
         `Validation report: ${report.totalYears} years, ${report.totalFeatures} features, ${report.totalErrors} errors, ${report.totalWarnings} warnings, ${report.totalRepairs} repairs`,
@@ -220,6 +100,14 @@ export async function runPipeline(
   } finally {
     releaseLock();
   }
+}
+
+function initCheckpoint(options: PipelineOptions, logger: PipelineLogger): PipelineCheckpoint {
+  if (options.restart) {
+    logger.info('pipeline', 'Starting fresh (--restart)');
+    return PipelineCheckpoint.create(PATHS.pipelineState);
+  }
+  return PipelineCheckpoint.loadOrCreate(PATHS.pipelineState);
 }
 
 function filterYears(allYears: number[], options: PipelineOptions): number[] {
@@ -262,52 +150,5 @@ export class PipelineError extends Error {
     super(message);
     this.name = 'PipelineError';
     this.exitCode = exitCode;
-  }
-}
-
-export function showStatus(logger: PipelineLogger): void {
-  const checkpoint = PipelineCheckpoint.load(PATHS.pipelineState);
-  if (!checkpoint) {
-    logger.info('status', 'No pipeline state found. Run `pnpm pipeline run` first.');
-    return;
-  }
-
-  logger.info('status', `Pipeline State: ${checkpoint.status}`);
-  logger.info('status', `Last run: ${checkpoint.startedAt} (run-id: ${checkpoint.runId})`);
-
-  const yearKeys = checkpoint.yearKeys.sort((a, b) => Number(a) - Number(b));
-  logger.info('status', `Years processed: ${yearKeys.length}`);
-
-  console.log('');
-  console.log(
-    'Year'.padEnd(8) +
-      'Source'.padEnd(8) +
-      'Merge'.padEnd(8) +
-      'Validate'.padEnd(10) +
-      'Convert'.padEnd(9) +
-      'Prepare'.padEnd(9) +
-      'Upload'.padEnd(8),
-  );
-
-  for (const yearKey of yearKeys) {
-    const yearState = checkpoint.getYearState(Number(yearKey));
-    if (!yearState) continue;
-    const line =
-      yearKey.padEnd(8) +
-      (yearState.source ? 'ok' : '-').padEnd(8) +
-      (yearState.merge ? 'ok' : '-').padEnd(8) +
-      (yearState.validate ? 'ok' : '-').padEnd(10) +
-      (yearState.convert ? 'ok' : '-').padEnd(9) +
-      (yearState.prepare ? 'ok' : '-').padEnd(9) +
-      (yearState.upload ? 'ok' : '-').padEnd(8);
-    console.log(line);
-  }
-}
-
-export async function listYears(logger: PipelineLogger): Promise<void> {
-  const years = await parseYearsFromDirectory(PATHS.sourceGeojson);
-  logger.info('list', `Available years (${years.length}):`);
-  for (const year of years) {
-    console.log(`  ${year}`);
   }
 }
