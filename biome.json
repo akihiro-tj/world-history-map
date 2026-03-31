@@ -14,7 +14,8 @@
       "!**/build",
       "!**/coverage",
       "!apps/frontend/public",
-      "!apps/frontend/src/index.css"
+      "!apps/frontend/src/index.css",
+      "!.claude/worktrees"
     ]
   },
   "formatter": {
