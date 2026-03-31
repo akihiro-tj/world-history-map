@@ -7,7 +7,7 @@ type YearStageKey = keyof YearState;
 const STAGE_ORDER: YearStageKey[] = ['source', 'merge', 'validate', 'convert', 'prepare', 'upload'];
 
 export class PipelineCheckpoint {
-  private state: PipelineState;
+  private readonly state: PipelineState;
   private readonly filePath: string;
 
   private constructor(state: PipelineState, filePath: string) {
@@ -65,8 +65,12 @@ export class PipelineCheckpoint {
     return this.state.startedAt;
   }
 
-  get years(): Readonly<Record<string, YearState>> {
-    return this.state.years;
+  get yearKeys(): string[] {
+    return Object.keys(this.state.years);
+  }
+
+  getYearState(year: number): Readonly<YearState> | undefined {
+    return this.state.years[String(year)];
   }
 
   get stages(): PipelineState['stages'] {
@@ -137,9 +141,5 @@ export class PipelineCheckpoint {
     const tempPath = `${this.filePath}.tmp.${process.pid}`;
     writeFileSync(tempPath, JSON.stringify(this.state, null, 2));
     renameSync(tempPath, this.filePath);
-  }
-
-  toState(): Readonly<PipelineState> {
-    return this.state;
   }
 }

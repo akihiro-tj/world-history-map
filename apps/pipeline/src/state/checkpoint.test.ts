@@ -54,7 +54,7 @@ describe('PipelineCheckpoint', () => {
       expect(checkpoint.status).toBe('running');
       expect(checkpoint.startedAt).toBeTruthy();
       expect(checkpoint.runId).toBeTruthy();
-      expect(checkpoint.years).toEqual({});
+      expect(checkpoint.yearKeys).toEqual([]);
     });
   });
 
@@ -146,10 +146,10 @@ describe('PipelineCheckpoint', () => {
 
       checkpoint.invalidateDownstream(1650, 'source');
 
-      const ys = checkpoint.years['1650'];
-      expect(ys?.source).toBeDefined();
-      expect(ys?.merge).toBeUndefined();
-      expect(ys?.validate).toBeUndefined();
+      const yearState = checkpoint.getYearState(1650);
+      expect(yearState?.source).toBeDefined();
+      expect(yearState?.merge).toBeUndefined();
+      expect(yearState?.validate).toBeUndefined();
     });
   });
 

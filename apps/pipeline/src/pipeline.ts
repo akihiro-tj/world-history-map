@@ -36,8 +36,8 @@ export async function runPipeline(
   }
   registerCleanupHandlers();
 
+  let checkpoint: PipelineCheckpoint | undefined;
   try {
-    let checkpoint: PipelineCheckpoint;
     if (options.restart) {
       checkpoint = PipelineCheckpoint.create(PATHS.pipelineState);
       logger.info('pipeline', 'Starting fresh (--restart)');
@@ -85,7 +85,7 @@ export async function runPipeline(
 
       const sourceHash = await hashFile(sourceFile);
 
-      const yearState = checkpoint.years[String(year)];
+      const yearState = checkpoint.getYearState(year);
 
       if (yearState?.source && yearState.source.hash !== sourceHash) {
         logger.info('pipeline', `Year ${year}: source changed, invalidating downstream`);
@@ -141,7 +141,7 @@ export async function runPipeline(
 
       if (checkpoint.shouldProcess(year, 'convert', sourceHash)) {
         logger.info('pipeline', `=== Year ${year}: convert ===`);
-        const currentYearState = checkpoint.years[String(year)];
+        const currentYearState = checkpoint.getYearState(year);
         const mergeState = currentYearState?.merge;
         if (!mergeState) {
           logger.error('pipeline', `Year ${year}: merge state not found, skipping convert`);
@@ -216,6 +216,7 @@ export async function runPipeline(
 
     logger.info('pipeline', 'Pipeline completed successfully');
   } catch (err) {
+    checkpoint?.fail();
     logger.error(
       'pipeline',
       `Pipeline failed: ${err instanceof Error ? err.message : String(err)}`,
@@ -279,7 +280,7 @@ export function showStatus(logger: PipelineLogger): void {
   logger.info('status', `Pipeline State: ${checkpoint.status}`);
   logger.info('status', `Last run: ${checkpoint.startedAt} (run-id: ${checkpoint.runId})`);
 
-  const yearKeys = Object.keys(checkpoint.years).sort((a, b) => Number(a) - Number(b));
+  const yearKeys = checkpoint.yearKeys.sort((a, b) => Number(a) - Number(b));
   logger.info('status', `Years processed: ${yearKeys.length}`);
 
   console.log('');
@@ -294,16 +295,16 @@ export function showStatus(logger: PipelineLogger): void {
   );
 
   for (const yearKey of yearKeys) {
-    const ys = checkpoint.years[yearKey];
-    if (!ys) continue;
+    const yearState = checkpoint.getYearState(Number(yearKey));
+    if (!yearState) continue;
     const line =
       yearKey.padEnd(8) +
-      (ys.source ? 'ok' : '-').padEnd(8) +
-      (ys.merge ? 'ok' : '-').padEnd(8) +
-      (ys.validate ? 'ok' : '-').padEnd(10) +
-      (ys.convert ? 'ok' : '-').padEnd(9) +
-      (ys.prepare ? 'ok' : '-').padEnd(9) +
-      (ys.upload ? 'ok' : '-').padEnd(8);
+      (yearState.source ? 'ok' : '-').padEnd(8) +
+      (yearState.merge ? 'ok' : '-').padEnd(8) +
+      (yearState.validate ? 'ok' : '-').padEnd(10) +
+      (yearState.convert ? 'ok' : '-').padEnd(9) +
+      (yearState.prepare ? 'ok' : '-').padEnd(9) +
+      (yearState.upload ? 'ok' : '-').padEnd(8);
     console.log(line);
   }
 }

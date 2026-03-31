@@ -205,7 +205,7 @@ describe('pipeline integration', () => {
 
     const loaded = PipelineCheckpoint.load(statePath);
     expect(loaded).not.toBeNull();
-    expect(loaded?.years['1650']?.merge?.featureCount).toBe(42);
+    expect(loaded?.getYearState(1650)?.merge?.featureCount).toBe(42);
     expect(loaded?.runId).toBe(checkpoint.runId);
 
     const raw = JSON.parse(readFileSync(statePath, 'utf-8'));
