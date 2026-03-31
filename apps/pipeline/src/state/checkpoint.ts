@@ -1,110 +1,145 @@
 import { randomBytes } from 'node:crypto';
 import { existsSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
-import path from 'node:path';
 import type { PipelineState, YearState } from '@/types/pipeline.ts';
 
 type YearStageKey = keyof YearState;
 
-export function createInitialState(): PipelineState {
-  const now = new Date().toISOString();
-  const suffix = randomBytes(2).toString('hex');
-  return {
-    version: 1,
-    runId: `${now}-${suffix}`,
-    startedAt: now,
-    completedAt: null,
-    status: 'running',
-    stages: {},
-    years: {},
-  };
-}
+const STAGE_ORDER: YearStageKey[] = ['source', 'merge', 'validate', 'convert', 'prepare', 'upload'];
 
-export function saveState(state: PipelineState, filePath: string): void {
-  const tempPath = `${filePath}.tmp.${process.pid}`;
-  writeFileSync(tempPath, JSON.stringify(state, null, 2));
-  renameSync(tempPath, filePath);
-}
+export class PipelineCheckpoint {
+  private state: PipelineState;
+  private readonly filePath: string;
 
-export function loadState(filePath: string): PipelineState | null {
-  if (!existsSync(filePath)) {
-    return null;
-  }
-  try {
-    const content = readFileSync(filePath, 'utf-8');
-    return JSON.parse(content) as PipelineState;
-  } catch {
-    return null;
-  }
-}
-
-export function shouldProcessYear(
-  state: PipelineState,
-  year: number,
-  stage: YearStageKey,
-  sourceHash: string,
-): boolean {
-  const yearKey = String(year);
-  const yearState = state.years[yearKey];
-
-  if (!yearState) {
-    return true;
+  private constructor(state: PipelineState, filePath: string) {
+    this.state = state;
+    this.filePath = filePath;
   }
 
-  if (yearState.source && yearState.source.hash !== sourceHash) {
-    return true;
+  static create(filePath: string): PipelineCheckpoint {
+    const now = new Date().toISOString();
+    const suffix = randomBytes(2).toString('hex');
+    return new PipelineCheckpoint(
+      {
+        version: 1,
+        runId: `${now}-${suffix}`,
+        startedAt: now,
+        completedAt: null,
+        status: 'running',
+        stages: {},
+        years: {},
+      },
+      filePath,
+    );
   }
 
-  if (!yearState[stage]) {
-    return true;
-  }
-
-  return false;
-}
-
-export function updateYearState(
-  state: PipelineState,
-  year: number,
-  stage: YearStageKey,
-  data: NonNullable<YearState[typeof stage]>,
-): void {
-  const yearKey = String(year);
-  if (!state.years[yearKey]) {
-    state.years[yearKey] = {};
-  }
-  const yearState = state.years[yearKey];
-  if (yearState) {
-    // Type assertion needed due to discriminated union of stage keys
-    (yearState[stage] as NonNullable<YearState[typeof stage]>) = data;
-  }
-}
-
-export function invalidateDownstream(
-  state: PipelineState,
-  year: number,
-  fromStage: YearStageKey,
-): void {
-  const yearKey = String(year);
-  const yearState = state.years[yearKey];
-  if (!yearState) return;
-
-  const stageOrder: YearStageKey[] = [
-    'source',
-    'merge',
-    'validate',
-    'convert',
-    'prepare',
-    'upload',
-  ];
-  const fromIndex = stageOrder.indexOf(fromStage);
-
-  for (let i = fromIndex + 1; i < stageOrder.length; i++) {
-    const key = stageOrder[i];
-    if (key) {
-      delete yearState[key];
+  static load(filePath: string): PipelineCheckpoint | null {
+    if (!existsSync(filePath)) {
+      return null;
+    }
+    try {
+      const content = readFileSync(filePath, 'utf-8');
+      const state = JSON.parse(content) as PipelineState;
+      return new PipelineCheckpoint(state, filePath);
+    } catch {
+      return null;
     }
   }
-}
 
-export function getStatePath(override?: string): string {
-  return override ?? path.join(process.cwd(), '.cache', 'pipeline-state.json');
+  static loadOrCreate(filePath: string): PipelineCheckpoint {
+    const loaded = PipelineCheckpoint.load(filePath);
+    if (loaded && loaded.status !== 'completed' && loaded.status !== 'failed') {
+      return loaded;
+    }
+    return PipelineCheckpoint.create(filePath);
+  }
+
+  get runId(): string {
+    return this.state.runId;
+  }
+
+  get status(): PipelineState['status'] {
+    return this.state.status;
+  }
+
+  get startedAt(): string {
+    return this.state.startedAt;
+  }
+
+  get years(): Readonly<Record<string, YearState>> {
+    return this.state.years;
+  }
+
+  get stages(): PipelineState['stages'] {
+    return this.state.stages;
+  }
+
+  shouldProcess(year: number, stage: YearStageKey, sourceHash: string): boolean {
+    const yearState = this.state.years[String(year)];
+
+    if (!yearState) {
+      return true;
+    }
+
+    if (yearState.source && yearState.source.hash !== sourceHash) {
+      return true;
+    }
+
+    if (!yearState[stage]) {
+      return true;
+    }
+
+    return false;
+  }
+
+  updateYear(year: number, stage: YearStageKey, data: NonNullable<YearState[typeof stage]>): void {
+    const yearKey = String(year);
+    if (!this.state.years[yearKey]) {
+      this.state.years[yearKey] = {};
+    }
+    const yearState = this.state.years[yearKey];
+    if (yearState) {
+      (yearState[stage] as NonNullable<YearState[typeof stage]>) = data;
+    }
+  }
+
+  invalidateDownstream(year: number, fromStage: YearStageKey): void {
+    const yearState = this.state.years[String(year)];
+    if (!yearState) return;
+
+    const fromIndex = STAGE_ORDER.indexOf(fromStage);
+    for (let i = fromIndex + 1; i < STAGE_ORDER.length; i++) {
+      const key = STAGE_ORDER[i];
+      if (key) {
+        delete yearState[key];
+      }
+    }
+  }
+
+  setFetchStage(commitHash: string): void {
+    this.state.stages.fetch = {
+      completedAt: new Date().toISOString(),
+      sourceCommitHash: commitHash,
+    };
+  }
+
+  complete(): void {
+    this.state.status = 'completed';
+    this.state.completedAt = new Date().toISOString();
+    this.persist();
+  }
+
+  fail(): void {
+    this.state.status = 'failed';
+    this.persist();
+  }
+
+  persist(): void {
+    const tempPath = `${this.filePath}.tmp.${process.pid}`;
+    writeFileSync(tempPath, JSON.stringify(this.state, null, 2));
+    renameSync(tempPath, this.filePath);
+  }
+
+  toState(): Readonly<PipelineState> {
+    return this.state;
+  }
 }
