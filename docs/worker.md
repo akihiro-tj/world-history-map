@@ -1,6 +1,6 @@
 # worker: Cloudflare Worker
 
-> Last updated: 2026-04-17
+> Last updated: 2026-04-17T21:51:29+09:00
 
 ## 役割
 
