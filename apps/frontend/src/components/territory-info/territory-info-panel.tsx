@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils';
 import { useAppState } from '../../contexts/app-state-context';
 import { BottomSheet } from '../bottom-sheet/bottom-sheet';
 import { CloseButton } from '../close-button/close-button';
-import { AiNotice } from './ai-notice';
 import { useTerritoryDescription } from './hooks/use-territory-description';
 import { TerritoryProfile } from './territory-profile';
 import { TerritoryTimeline } from './territory-timeline';
@@ -97,7 +96,6 @@ function DescriptionBody({
         <p className="text-sm leading-relaxed text-gray-300">{description.context}</p>
       )}
       <TerritoryTimeline keyEvents={description.keyEvents} selectedYear={selectedYear} />
-      <AiNotice className="mt-4" />
     </div>
   );
 }

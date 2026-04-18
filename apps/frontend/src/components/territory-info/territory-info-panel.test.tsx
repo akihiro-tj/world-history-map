@@ -90,13 +90,6 @@ describe('TerritoryInfoPanel', () => {
     expect(heading).toHaveTextContent('フランス王国');
   });
 
-  it('renders AI-generated notice', () => {
-    render(<TerritoryInfoPanel />);
-
-    const aiNotice = screen.getByTestId('ai-notice');
-    expect(aiNotice).toBeInTheDocument();
-  });
-
   it('renders close button', () => {
     render(<TerritoryInfoPanel />);
 
