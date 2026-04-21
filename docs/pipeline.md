@@ -1,6 +1,6 @@
 # pipeline: データパイプライン
 
-> Last updated: 2026-04-17T21:51:29+09:00
+> Last updated: 2026-04-21T21:24:23+09:00
 
 ## 役割
 
@@ -13,12 +13,12 @@ frontend が描画する PMTiles と領土説明 JSON に変換する CLI アプ
 タイル系統:
 
 ```
- historical-basemaps git repo
-        │ (fetch: git clone/pull)
-        ▼
+ historical-basemaps git repo            frontend/public/data/descriptions/{year}.json
+        │ (fetch: git clone/pull)               │ (territory-sync で生成 / 後述)
+        ▼                                       │
  .cache/historical-basemaps/geojson/world_{year}.geojson
-        │ (merge: 同名領土を turf で統合)
-        ▼
+        │ (merge: 同名領土を turf で統合 + 日本語名 name_ja を焼き込み)
+        ▼ ◄──────────────────────────────────────┘
  .cache/geojson/world_{year}_merged.geojson (+ _labels)
         │ (validate: turf で幾何チェック・修復)
         ▼ (convert: tippecanoe + tile-join)
@@ -45,7 +45,7 @@ frontend が描画する PMTiles と領土説明 JSON に変換する CLI アプ
 
 `fetch` — `historical-basemaps` を git clone（初回）または pull。オフライン時はキャッシュで継続。commit hash をチェックポイントに記録。
 
-`merge` — GeoJSON を読み、`NAME` プロパティでグルーピングして turf.union で多角形を統合。`NAME` と `SUBJECTO` 以外のプロパティは落とす。同時に代表点（ラベル用 Point）を別コレクションとして書き出す。
+`merge` — GeoJSON を読み、`NAME` プロパティでグルーピングして turf.union で多角形を統合。`NAME` と `SUBJECTO` 以外のプロパティは落とす。同時に代表点（ラベル用 Point）を別コレクションとして書き出す。さらに同年の `descriptions/{year}.json` を読み、`NAME` を kebab-case 化したキーにマッチするエントリの日本語名 (`name`) をラベル feature の `name_ja` プロパティとして焼き込む（マッチしない領土には付与しない）。
 
 `validate` — マージ済み GeoJSON を turf でチェックし、破損ジオメトリは clean/rewind/buffer_zero/unkink で修復を試みる。修復不能なものは warning、空コレクションや型違反は error。error があれば pipeline を止める。
 
@@ -66,6 +66,8 @@ frontend が描画する PMTiles と領土説明 JSON に変換する CLI アプ
 状態は `.cache/pipeline-state.json`（`PipelineState`）に保持され、年ごとに `source / merge / validate / convert / prepare / upload` 各ステージの完了時刻とハッシュを記録する。
 
 `YearProcessor.runStage` は各ステージ実行前に `checkpoint.shouldProcess(year, stage, sourceHash)` を問い合わせ、既に記録されたハッシュと現在の sourceHash が一致し、かつ当該ステージが記録済みなら skip する。sourceHash が変わっていれば `invalidateDownstream` で下流ステージを消し、強制再実行に倒す。
+
+ここで言う sourceHash は `historical-basemaps` の年別 GeoJSON と同年の `descriptions/{year}.json` を合成したハッシュ（`hashContent("${sourceFileHash}:${descriptionsHash}")`）であり、いずれかが更新されると下流が自動的に無効化される。`descriptions/{year}.json` が存在しない年は descriptionsHash を空文字列として扱う。
 
 チェックポイントは起動時に `loadOrCreate` — `status` が `running` のまま残っていれば再開、`completed`/`failed` なら新規作成。
 
