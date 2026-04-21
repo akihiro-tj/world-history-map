@@ -9,6 +9,7 @@ vi.mock('react-map-gl/maplibre', () => ({
       data-layer-type={props.type}
       data-source={props.source}
       data-source-layer={props['source-layer']}
+      data-filter={JSON.stringify(props.filter)}
       data-layout={JSON.stringify(props.layout)}
       data-paint={JSON.stringify(props.paint)}
     />
@@ -35,13 +36,22 @@ describe('TerritoryLabel', () => {
     expect(labelLayer).toHaveAttribute('data-layer-type', 'symbol');
   });
 
-  it('should use NAME property for text field', () => {
+  it('should use name_ja property for text field', () => {
     render(<TerritoryLabel {...defaultProps} />);
 
     const labelLayer = screen.getByTestId(`layer-${TERRITORY_LABEL_ID}`);
     const layout = JSON.parse(labelLayer.getAttribute('data-layout') || '{}');
 
-    expect(layout['text-field']).toEqual(['get', 'NAME']);
+    expect(layout['text-field']).toEqual(['get', 'name_ja']);
+  });
+
+  it('should hide labels for features without name_ja', () => {
+    render(<TerritoryLabel {...defaultProps} />);
+
+    const labelLayer = screen.getByTestId(`layer-${TERRITORY_LABEL_ID}`);
+    const filter = JSON.parse(labelLayer.getAttribute('data-filter') || 'null');
+
+    expect(filter).toEqual(['has', 'name_ja']);
   });
 
   it('should have text halo for readability', () => {
