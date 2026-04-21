@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
 import * as turf from '@turf/turf';
 import { PATHS, YearPaths } from '@/config.ts';
@@ -6,6 +6,8 @@ import type { PipelineLogger } from '@/stages/types.ts';
 import type { FeatureCollection, GeoJSONFeature } from '@/types/geojson.ts';
 
 const KEPT_PROPERTIES = new Set(['NAME', 'SUBJECTO']);
+
+export type DescriptionLookup = Record<string, { name?: string }>;
 
 function stripProperties(props: Record<string, unknown>): Record<string, unknown> {
   const stripped: Record<string, unknown> = {};
@@ -17,12 +19,22 @@ function stripProperties(props: Record<string, unknown>): Record<string, unknown
   return stripped;
 }
 
+function toKebabCase(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '');
+}
+
 interface MergeResult {
   polygons: ReturnType<typeof turf.featureCollection>;
   labels: ReturnType<typeof turf.featureCollection>;
 }
 
-export function mergeByName(geojson: FeatureCollection): MergeResult {
+export function mergeByName(
+  geojson: FeatureCollection,
+  descriptions: DescriptionLookup = {},
+): MergeResult {
   const groups = new Map<string, GeoJSONFeature[]>();
 
   for (const feature of geojson.features) {
@@ -85,7 +97,12 @@ export function mergeByName(geojson: FeatureCollection): MergeResult {
 
       if (largestPoly) {
         const labelPoint = turf.pointOnFeature(largestPoly);
-        labelPoint.properties = { ...mergedFeature.properties };
+        const labelProperties: Record<string, unknown> = { ...mergedFeature.properties };
+        const nameJa = descriptions[toKebabCase(name)]?.name;
+        if (nameJa) {
+          labelProperties['name_ja'] = nameJa;
+        }
+        labelPoint.properties = labelProperties;
         labelPoints.push(labelPoint as unknown as ReturnType<typeof turf.point>);
       }
     } catch {
@@ -103,6 +120,7 @@ export function mergeByName(geojson: FeatureCollection): MergeResult {
 export async function runMergeForYear(
   year: number,
   sourcePath: string,
+  descriptionsPath: string | undefined,
   logger: PipelineLogger,
 ): Promise<{ polygonsPath: string; labelsPath: string; featureCount: number; labelCount: number }> {
   await mkdir(PATHS.mergedGeojson, { recursive: true });
@@ -112,7 +130,13 @@ export async function runMergeForYear(
 
   logger.info('merge', `Year ${year}: ${geojson.features.length} input features`);
 
-  const { polygons, labels } = mergeByName(geojson);
+  let descriptions: DescriptionLookup = {};
+  if (descriptionsPath && existsSync(descriptionsPath)) {
+    descriptions = JSON.parse(readFileSync(descriptionsPath, 'utf-8')) as DescriptionLookup;
+    logger.info('merge', `Year ${year}: loaded ${Object.keys(descriptions).length} descriptions`);
+  }
+
+  const { polygons, labels } = mergeByName(geojson, descriptions);
 
   const yearPaths = new YearPaths(year);
   const polygonsPath = yearPaths.mergedGeojsonPath;

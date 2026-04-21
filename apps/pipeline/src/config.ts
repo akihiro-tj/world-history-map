@@ -144,4 +144,8 @@ export class YearPaths {
   get pmtilesPath(): string {
     return path.join(PATHS.publicPmtiles, this.pmtiles);
   }
+
+  get descriptionsPath(): string {
+    return path.join(PATHS.descriptionsDir, `${this.year}.json`);
+  }
 }
