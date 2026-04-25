@@ -1,0 +1,120 @@
+# Tiles Deploy Workflow
+#
+# Triggers on every PR and main push (no paths filter).
+# PR:   detect tile changes → upload new tiles to DEV bucket
+# Main: detect tile changes → upload new tiles to PROD bucket → fire Pages Deploy Hook
+#
+# Pages Deploy Hook fires unconditionally on successful main runs so that
+# frontend-only merges also deploy to production (FR-013).
+#
+# Local dry-run:
+#   act pull_request -s CLOUDFLARE_API_TOKEN=<token> -s CLOUDFLARE_ACCOUNT_ID=<id>
+#
+# Required Secrets:
+#   CLOUDFLARE_API_TOKEN   — R2 object read/write only
+#   CLOUDFLARE_ACCOUNT_ID  — Cloudflare account identifier
+#   PAGES_DEPLOY_HOOK_PROD — Cloudflare Pages production deploy hook URL
+
+name: Tiles Deploy
+
+on:
+  pull_request:
+    branches:
+      - '**'
+  push:
+    branches:
+      - main
+
+env:
+  DEV_BUCKET: world-history-map-tiles-dev
+  PROD_BUCKET: world-history-map-tiles-prod
+
+jobs:
+  deploy:
+    name: ${{ github.event_name == 'push' && 'Deploy to PROD' || 'Upload to DEV' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Verify manifest is up to date
+        run: pnpm --filter @world-history-map/tiles run build:check
+
+      - name: Build hashed tiles
+        run: pnpm --filter @world-history-map/tiles run build
+
+      - name: Detect tile changes
+        id: tile-changes
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BEFORE_SHA: ${{ github.event.before }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          if [ "$EVENT_NAME" = "push" ]; then
+            CHANGED=$(git diff --name-only "$BEFORE_SHA" "$GITHUB_SHA" -- packages/tiles/src/ 2>/dev/null || echo "")
+          else
+            git fetch origin "$BASE_REF" --depth=1
+            CHANGED=$(git diff --name-only "origin/$BASE_REF...HEAD" -- packages/tiles/src/)
+          fi
+          if [ -n "$CHANGED" ]; then
+            echo "has_tile_changes=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_tile_changes=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload new tiles to DEV bucket
+        if: github.event_name == 'pull_request' && steps.tile-changes.outputs.has_tile_changes == 'true'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          for f in packages/tiles/dist/*.pmtiles; do
+            key=$(basename "$f")
+            if ! wrangler r2 object get "$DEV_BUCKET/$key" --pipe > /dev/null 2>&1; then
+              echo "Uploading $key to DEV..."
+              wrangler r2 object put "$DEV_BUCKET/$key" --file "$f" --remote
+            else
+              echo "Skipping $key (already exists)"
+            fi
+          done
+
+      - name: Upload new tiles to PROD bucket
+        if: github.event_name == 'push' && steps.tile-changes.outputs.has_tile_changes == 'true'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          for f in packages/tiles/dist/*.pmtiles; do
+            key=$(basename "$f")
+            if ! wrangler r2 object get "$PROD_BUCKET/$key" --pipe > /dev/null 2>&1; then
+              echo "Uploading $key to PROD..."
+              wrangler r2 object put "$PROD_BUCKET/$key" --file "$f" --remote
+            else
+              echo "Skipping $key (already exists)"
+            fi
+          done
+
+      - name: Deploy frontend to production
+        if: github.event_name == 'push'
+        env:
+          HOOK_URL: ${{ secrets.PAGES_DEPLOY_HOOK_PROD }}
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$HOOK_URL")
+          echo "Pages deploy hook response: $STATUS"
+          [ "$STATUS" -ge 200 ] && [ "$STATUS" -lt 300 ]
