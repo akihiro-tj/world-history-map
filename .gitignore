@@ -14,6 +14,7 @@ node_modules
 dist
 dist-ssr
 build
+!packages/tiles/src/build
 
 # Local env files
 *.local
