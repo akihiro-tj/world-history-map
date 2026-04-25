@@ -20,14 +20,17 @@ interface TerritoryLabelProps {
 export const TERRITORY_LABEL_ID = 'territory-label';
 
 export function TerritoryLabel({ sourceId, sourceLayer }: TerritoryLabelProps) {
+  const filter: ['has', string] = ['has', 'name_ja'];
+
   return (
     <Layer
       id={TERRITORY_LABEL_ID}
       type="symbol"
       source={sourceId}
       source-layer={sourceLayer}
+      filter={filter}
       layout={{
-        'text-field': ['get', 'NAME'],
+        'text-field': ['get', 'name_ja'],
         'text-font': ['Noto Sans Regular'],
         'text-size': LABEL_TEXT_SIZE_STOPS,
         'text-max-width': LABEL_MAX_WIDTH,
