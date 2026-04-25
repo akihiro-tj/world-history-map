@@ -1,33 +1,21 @@
 import { copyFile, mkdir, readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { asHashedFilename, asHistoricalYearString, type Manifest } from '../types.ts';
-import { computeHash, truncateHash } from './hash.ts';
-
-const PMTILES_EXTENSION = '.pmtiles';
-const YEAR_IN_FILENAME = /^world_(-?\d+)\.pmtiles$/;
-
-function extractYear(filename: string): string | null {
-  return YEAR_IN_FILENAME.exec(filename)?.[1] ?? null;
-}
-
-function buildHashedFilename(year: string, fullHash: string): string {
-  return `world_${year}.${truncateHash(fullHash)}.pmtiles`;
-}
+import { HashedTileFilename } from '../manifest/hashed-tile-filename.ts';
+import type { Manifest } from '../types.ts';
+import { computeHash } from './hash.ts';
 
 export async function computeManifest(sourceDir: string): Promise<Manifest> {
   const entries = await readdir(sourceDir).catch(() => [] as string[]);
-  const pmtilesFiles = entries.filter((f) => f.endsWith(PMTILES_EXTENSION));
+  const sourceFiles = entries.filter((f) => f.endsWith(HashedTileFilename.sourceExtension));
 
   const record: Record<string, string> = {};
-  for (const filename of pmtilesFiles) {
-    const year = extractYear(filename);
+  for (const filename of sourceFiles) {
+    const year = HashedTileFilename.extractYearFromSource(filename);
     if (year === null) continue;
     const content = await readFile(path.join(sourceDir, filename));
-    record[year] = buildHashedFilename(year, computeHash(content));
+    record[year] = HashedTileFilename.build(year, computeHash(content)).toString();
   }
-  return Object.fromEntries(
-    Object.entries(record).map(([k, v]) => [asHistoricalYearString(k), asHashedFilename(v)]),
-  ) as Manifest;
+  return record as unknown as Manifest;
 }
 
 export async function buildManifest(sourceDir: string, distDir: string): Promise<Manifest> {
