@@ -1,12 +1,13 @@
+import { TilesManifest } from './manifest/tiles-manifest.ts';
 import { manifest } from './manifest.ts';
-import { asHistoricalYearString, type HistoricalYearString, type Manifest } from './types.ts';
+import type { HistoricalYearString, Manifest } from './types.ts';
 
 export type { Manifest };
 export { manifest };
 
-export const availableYears: readonly HistoricalYearString[] = Object.keys(manifest)
-  .map(asHistoricalYearString)
-  .sort((a, b) => Number(a) - Number(b));
+const tilesManifest = TilesManifest.fromRecord(manifest);
+
+export const availableYears: readonly HistoricalYearString[] = tilesManifest.availableYears();
 
 function stripTrailingSlashes(url: string): string {
   return url.replace(/\/+$/, '');

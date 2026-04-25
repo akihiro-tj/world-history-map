@@ -1,7 +1,7 @@
 import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { Manifest } from '../types.ts';
+import { TilesManifest } from '../manifest/tiles-manifest.ts';
 import { buildManifest, isManifestFresh } from './build.ts';
 
 const PACKAGE_ROOT = path.resolve(fileURLToPath(import.meta.url), '../../..');
@@ -9,17 +9,10 @@ const DEFAULT_SOURCE_DIR = path.join(PACKAGE_ROOT, 'src/pmtiles');
 const DEFAULT_DIST_DIR = path.join(PACKAGE_ROOT, 'dist');
 const DEFAULT_MANIFEST_PATH = path.join(PACKAGE_ROOT, 'src/manifest.ts');
 
-function serializeManifest(manifest: Manifest): string {
-  const entries = Object.entries(manifest)
-    .sort(([a], [b]) => Number(a) - Number(b))
-    .map(([year, filename]) => `  '${year}': '${filename}',`)
-    .join('\n');
-  return `export const manifest = {\n${entries}\n} as const;\n`;
-}
-
 async function runBuild(): Promise<void> {
   const manifest = await buildManifest(DEFAULT_SOURCE_DIR, DEFAULT_DIST_DIR);
-  await writeFile(DEFAULT_MANIFEST_PATH, serializeManifest(manifest));
+  const source = TilesManifest.fromRecord(manifest).toTypeScriptSource();
+  await writeFile(DEFAULT_MANIFEST_PATH, source);
   console.log(`Built ${Object.keys(manifest).length} tiles → manifest.ts`);
 }
 

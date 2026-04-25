@@ -1,6 +1,7 @@
 import { copyFile, mkdir, readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { HashedTileFilename } from '../manifest/hashed-tile-filename.ts';
+import { TilesManifest } from '../manifest/tiles-manifest.ts';
 import type { Manifest } from '../types.ts';
 import { computeHash } from './hash.ts';
 
@@ -30,11 +31,5 @@ export async function buildManifest(sourceDir: string, distDir: string): Promise
 
 export async function isManifestFresh(sourceDir: string, existingManifest: Manifest): Promise<boolean> {
   const freshManifest = await computeManifest(sourceDir);
-  const freshKeys = Object.keys(freshManifest).sort();
-  const existingKeys = Object.keys(existingManifest).sort();
-
-  if (freshKeys.join(',') !== existingKeys.join(',')) return false;
-  const fresh = freshManifest as Record<string, string>;
-  const existing = existingManifest as Record<string, string>;
-  return freshKeys.every((year) => fresh[year] === existing[year]);
+  return TilesManifest.fromRecord(freshManifest).equals(TilesManifest.fromRecord(existingManifest));
 }
