@@ -35,6 +35,10 @@ vi.mock('pmtiles', () => ({
   },
 }));
 
+vi.mock('./tiles-config', () => ({
+  getTilesUrl: vi.fn(() => 'pmtiles:///pmtiles/world_1650.pmtiles'),
+}));
+
 global.fetch = vi.fn(() =>
   Promise.resolve({
     ok: true,
@@ -153,7 +157,6 @@ describe('MapView - error state', () => {
   it('should display error when data loading fails', async () => {
     vi.spyOn(await import('./hooks/use-map-data'), 'useMapData').mockReturnValue({
       yearIndex: null,
-      tilesManifest: null,
       pmtilesUrl: null,
       colorScheme: null,
       isLoading: false,

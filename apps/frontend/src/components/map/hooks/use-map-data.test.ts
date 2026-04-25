@@ -5,7 +5,6 @@ vi.mock('@/domain/year/loader', () => ({
   loadYearIndex: vi.fn(),
 }));
 vi.mock('../tiles-config', () => ({
-  loadTilesManifest: vi.fn(),
   getTilesUrl: vi.fn(),
 }));
 vi.mock('../color-scheme', () => ({
@@ -15,11 +14,10 @@ vi.mock('../color-scheme', () => ({
 import { createHistoricalYear } from '@/domain/year/historical-year';
 import { loadYearIndex } from '@/domain/year/loader';
 import { loadColorScheme } from '../color-scheme';
-import { getTilesUrl, loadTilesManifest } from '../tiles-config';
+import { getTilesUrl } from '../tiles-config';
 import { useMapData } from './use-map-data';
 
 const mockLoadYearIndex = vi.mocked(loadYearIndex);
-const mockLoadTilesManifest = vi.mocked(loadTilesManifest);
 const mockGetTilesUrl = vi.mocked(getTilesUrl);
 const mockLoadColorScheme = vi.mocked(loadColorScheme);
 
@@ -27,11 +25,6 @@ const mockYearIndex = {
   years: [
     { year: createHistoricalYear(1650), filename: 'world_1650.pmtiles', countries: ['France'] },
   ],
-};
-
-const mockManifest = {
-  version: 'development',
-  files: {},
 };
 
 describe('useMapData', () => {
@@ -42,7 +35,6 @@ describe('useMapData', () => {
 
   it('starts in loading state', () => {
     mockLoadYearIndex.mockReturnValue(new Promise(() => {}));
-    mockLoadTilesManifest.mockReturnValue(new Promise(() => {}));
 
     const { result } = renderHook(() => useMapData(createHistoricalYear(1650)));
 
@@ -53,7 +45,6 @@ describe('useMapData', () => {
 
   it('loads data and returns PMTiles URL', async () => {
     mockLoadYearIndex.mockResolvedValue(mockYearIndex);
-    mockLoadTilesManifest.mockResolvedValue(mockManifest);
     mockGetTilesUrl.mockReturnValue('pmtiles:///pmtiles/world_1650.pmtiles');
 
     const { result } = renderHook(() => useMapData(createHistoricalYear(1650)));
@@ -64,13 +55,11 @@ describe('useMapData', () => {
 
     expect(result.current.pmtilesUrl).toBe('pmtiles:///pmtiles/world_1650.pmtiles');
     expect(result.current.yearIndex).toEqual(mockYearIndex);
-    expect(result.current.tilesManifest).toEqual(mockManifest);
     expect(result.current.error).toBeNull();
   });
 
   it('sets error when year is not found', async () => {
     mockLoadYearIndex.mockResolvedValue(mockYearIndex);
-    mockLoadTilesManifest.mockResolvedValue(mockManifest);
     mockGetTilesUrl.mockReturnValue(null);
 
     const { result } = renderHook(() => useMapData(createHistoricalYear(9999)));
@@ -85,7 +74,6 @@ describe('useMapData', () => {
 
   it('handles load failure with Error instance', async () => {
     mockLoadYearIndex.mockRejectedValue(new Error('Network error'));
-    mockLoadTilesManifest.mockResolvedValue(mockManifest);
 
     const { result } = renderHook(() => useMapData(createHistoricalYear(1650)));
 
@@ -98,7 +86,6 @@ describe('useMapData', () => {
 
   it('handles load failure with non-Error value', async () => {
     mockLoadYearIndex.mockRejectedValue('unknown failure');
-    mockLoadTilesManifest.mockResolvedValue(mockManifest);
 
     const { result } = renderHook(() => useMapData(createHistoricalYear(1650)));
 
@@ -109,17 +96,16 @@ describe('useMapData', () => {
     expect(result.current.error).toBe('Failed to load data');
   });
 
-  it('uses default initialYear of 1650', async () => {
+  it('calls getTilesUrl with the initial year', async () => {
     mockLoadYearIndex.mockResolvedValue(mockYearIndex);
-    mockLoadTilesManifest.mockResolvedValue(mockManifest);
     mockGetTilesUrl.mockReturnValue('pmtiles:///pmtiles/world_1650.pmtiles');
 
-    const { result } = renderHook(() => useMapData());
+    const { result } = renderHook(() => useMapData(createHistoricalYear(1650)));
 
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
     });
 
-    expect(mockGetTilesUrl).toHaveBeenCalledWith(1650, mockManifest);
+    expect(mockGetTilesUrl).toHaveBeenCalledWith(createHistoricalYear(1650));
   });
 });

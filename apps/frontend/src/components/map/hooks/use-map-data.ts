@@ -7,11 +7,10 @@ import {
 import { loadYearIndex } from '@/domain/year/loader';
 import type { YearIndex } from '@/domain/year/types';
 import { loadColorScheme } from '../color-scheme';
-import { getTilesUrl, loadTilesManifest, type TilesManifest } from '../tiles-config';
+import { getTilesUrl } from '../tiles-config';
 
 interface MapDataState {
   yearIndex: YearIndex | null;
-  tilesManifest: TilesManifest | null;
   pmtilesUrl: string | null;
   colorScheme: Record<string, string> | null;
   isLoading: boolean;
@@ -23,7 +22,6 @@ export function useMapData(
 ): MapDataState {
   const [state, setState] = useState<MapDataState>({
     yearIndex: null,
-    tilesManifest: null,
     pmtilesUrl: null,
     colorScheme: null,
     isLoading: true,
@@ -35,18 +33,13 @@ export function useMapData(
 
     async function loadData() {
       try {
-        const [index, manifest, colors] = await Promise.all([
-          loadYearIndex(),
-          loadTilesManifest(),
-          loadColorScheme(),
-        ]);
+        const [index, colors] = await Promise.all([loadYearIndex(), loadColorScheme()]);
         if (!isMounted) return;
 
-        const pmtilesUrl = getTilesUrl(initialYear, manifest);
+        const pmtilesUrl = getTilesUrl(initialYear);
         if (!pmtilesUrl) {
           setState({
             yearIndex: index,
-            tilesManifest: manifest,
             pmtilesUrl: null,
             colorScheme: colors,
             isLoading: false,
@@ -57,7 +50,6 @@ export function useMapData(
 
         setState({
           yearIndex: index,
-          tilesManifest: manifest,
           pmtilesUrl,
           colorScheme: colors,
           isLoading: false,

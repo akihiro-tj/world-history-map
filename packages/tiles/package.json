@@ -7,8 +7,8 @@
     ".": "./src/index.ts"
   },
   "scripts": {
-    "build": "tsx src/build/build.ts",
-    "build:check": "tsx src/build/build.ts --check",
+    "build": "tsx src/build/cli.ts",
+    "build:check": "tsx src/build/cli.ts --check",
     "predev": "pnpm run build",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage"
