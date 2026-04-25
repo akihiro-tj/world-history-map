@@ -19,6 +19,7 @@ name: Tiles Deploy
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened]
     branches:
       - '**'
   push:
@@ -52,6 +53,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Add wrangler to PATH
+        run: echo "${{ github.workspace }}/apps/worker/node_modules/.bin" >> $GITHUB_PATH
 
       - name: Verify manifest is up to date
         run: pnpm --filter @world-history-map/tiles run build:check
