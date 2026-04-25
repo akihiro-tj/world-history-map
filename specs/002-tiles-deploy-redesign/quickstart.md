@@ -65,18 +65,24 @@ gh workflow run tiles-gc.yml -f dry_run=false -f window_size=3 -f target_env=bot
 ## ローカル開発環境
 
 ```bash
-# frontend dev server（manifest は build-time import なので即時反映）
+# frontend dev server（packages/tiles のビルドが先に走る）
 pnpm dev
 
 # storybook
 pnpm storybook
 
 # packages/tiles のビルド検証
-pnpm --filter @world-history-map/tiles run build --check  # 鮮度確認
-pnpm --filter @world-history-map/tiles run test           # テスト
+pnpm --filter @world-history-map/tiles run build:check  # manifest 鮮度確認
+pnpm --filter @world-history-map/tiles run test         # テスト
 ```
 
-`apps/frontend/public/pmtiles/` の binary は不要になり、`packages/tiles/src/pmtiles/` 配下に統合される。dev server は `import { manifest, getTilesUrl }` で読むので、追加の静的配信設定は不要。
+`apps/frontend/public/pmtiles/` の binary は無くなり、`packages/tiles/src/pmtiles/` の raw binary を `packages/tiles/dist/` にビルドした結果を **vite の dev middleware** が `/pmtiles/` パスで配信する。
+仕組み:
+
+- `apps/frontend/package.json` の `dev` script は `predev` フックで `pnpm --filter @world-history-map/tiles run build` を先行実行する
+- `apps/frontend/vite.config.ts` に `serve-tiles-dev` プラグインを追加し、`packages/tiles/dist/` を `/pmtiles/` で配信する（contracts/packages-tiles-api.md の「Dev mode tile resolution」を参照）
+- frontend の `getTilesUrl(year, '')` は `pmtiles:///pmtiles/world_{year}.{hash}.pmtiles` を返し、dev middleware が解決する
+- `vite build`（prod / preview）ではこのプラグインは無効、`VITE_TILES_BASE_URL` 経由で Worker / R2 から配信される
 
 ## トラブルシューティング
 
@@ -104,10 +110,13 @@ src/pmtiles/ を変更したらまずコミットしてから build を実行す
 
 | 項目 | 確認方法 |
 |---|---|
-| frontend bundle に manifest が埋め込まれている | `grep 'world_1600' apps/frontend/dist/assets/*.js` |
-| runtime fetch が消えている | DevTools Network タブで `manifest.json` リクエストが発生しないこと |
-| PR の preview が DEV bucket を見ている | preview URL の Network タブで Worker URL を確認 |
-| main マージ後、PROD upload → Pages deploy の順 | CI workflow のログで時系列確認 |
+| frontend bundle に manifest が埋め込まれている | `grep 'world_1600' apps/frontend/dist/assets/*.js` がヒット |
+| frontend bundle に `manifest.json` への runtime fetch が残っていない | `grep '/manifest.json' apps/frontend/dist/assets/*.js` がヒットしない |
+| runtime manifest 取得が消えている（実環境） | DevTools Network タブで `manifest.json` リクエストが発生しないこと |
+| PR の preview が DEV bucket を見ている | preview URL の Network タブで Worker URL（preview env）を確認 |
+| frontend-only な main マージで本番が deploy される | tiles-deploy.yml ログで `has_tile_changes=false` かつ Pages Deploy Hook が発火していること |
+| tile 変更ありの main マージ、PROD upload → Pages deploy の順 | CI workflow のログで時系列確認 |
+| descriptions / index.json / color-scheme.json への影響なし | `git diff origin/main..HEAD -- apps/frontend/public/data/` が空 |
 | GC dry-run の保持集合が直近 N コミット manifest を覆う | workflow summary を目視確認 |
 
 ## マイグレーション期間中の挙動
@@ -115,9 +124,9 @@ src/pmtiles/ を変更したらまずコミットしてから build を実行す
 | Phase | frontend が読む manifest | R2 bucket |
 |---|---|---|
 | 移行前 | runtime fetch（Worker `/manifest.json`） | `world-history-map-tiles` のみ |
-| Phase A 完了 | 旧と同じ（packages/tiles はまだ参照されない） | 同上 |
-| Phase B 完了 | build-time import（packages/tiles） | 同上 |
-| Phase C 完了 | build-time import | DEV / PROD に分離 |
-| Phase D 完了 | build-time import | DEV / PROD のみ（旧 bucket 退役） |
+| Phase A 完了 | build-time import（packages/tiles） | 同上（旧 bucket 続投） |
+| Phase B 完了 | build-time import | DEV / PROD に分離 |
+| Phase C 完了 | build-time import | DEV / PROD のみ（旧 bucket 退役、Worker `/manifest.json` 削除） |
+| Phase D 完了 | build-time import | 同上 + GC が稼働 |
 
 各 Phase 境界で本番ユーザーへの可視差分はゼロを目標とする。

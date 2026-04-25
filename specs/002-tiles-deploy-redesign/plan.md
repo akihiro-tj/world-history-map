@@ -101,7 +101,7 @@ packages/
 
 .github/workflows/
 ├── ci.yml                             # 既存に packages/tiles ジョブを追加
-├── tiles-upload.yml                   # NEW: PR=DEV, main=PROD への差分 upload
+├── tiles-deploy.yml                   # NEW: PR/main 共通 — tile 変更時のみ R2 upload、main は常に Pages Deploy Hook を発火
 └── tiles-gc.yml                       # NEW: 月次（手動 trigger 可）の GC
 
 pnpm-workspace.yaml                    # 既存 — `packages/*` を追加
@@ -117,26 +117,26 @@ pnpm-workspace.yaml                    # 既存 — `packages/*` を追加
 
 破壊的変更を避けるため、以下の順で段階移行する：
 
-1. **Phase A: packages/tiles 新設**（新旧併存）
-   - packages/tiles を新規追加し、既存 `apps/frontend/public/pmtiles/` の binary をコピー
+1. **Phase A: packages/tiles 新設 + frontend 切替**（atomic な単一 PR）
+   - packages/tiles を新規追加し、既存 `apps/frontend/public/pmtiles/` の binary を `git mv` で移管
    - hash 計算 / manifest.ts 生成 / build スクリプトをテスト先行で実装
-   - frontend は引き続き旧 runtime fetch を使用
+   - **同 PR 内で** frontend の `tiles-config.ts` を build-time import に書き換え（dev / prod 双方で動作確認）
+   - dev mode のタイル解決は vite plugin or `pnpm dev` 前後の build script で行う（contracts/packages-tiles-api.md 参照）
+   - 旧 `worker /manifest.json` エンドポイントはこの段階では残置（古い frontend バンドル保護のため移行猶予期間中は維持）
 
-2. **Phase B: frontend を packages/tiles に切替**（runtime fetch 廃止）
-   - `tiles-config.ts` を build-time import に書き換え
-   - VITE_TILES_BASE_URL は引き続き使うが、参照する manifest は静的 import 経由
-   - 旧 `worker /manifest.json` エンドポイントは残置（古い frontend バンドル保護）
+   > **設計決定**: 当初は「packages/tiles 新設」と「frontend 切替」を別 PR にする案だったが、`apps/frontend/public/pmtiles/` を空にした瞬間に dev mode が壊れる窓ができるため、両者を同 PR に統合した
 
-3. **Phase C: R2 バケット分離 + CI 自動化**
+2. **Phase B: R2 バケット分離 + CI 自動化**
    - DEV / PROD の R2 バケットを新規作成
-   - tiles-upload workflow を整備（PR → DEV、main → PROD）
-   - 既存の `world-history-map-tiles` バケットは PROD 役にリネーム or 中身をコピーして退役
+   - Worker の `wrangler.toml` を `[env.production]` / `[env.preview]` 構成に切替
+   - tiles-deploy workflow を整備（main push 時は常に起動、tile 変更がある場合のみ R2 upload を実行、Pages Deploy Hook は常に発火）
+   - 既存の `world-history-map-tiles` バケットは PROD 役の `world-history-map-tiles-prod` に中身をコピーして退役
 
-4. **Phase D: 旧パイプラインの撤去**
+3. **Phase C: 旧パイプラインの撤去**
    - `apps/pipeline/src/stages/{prepare,upload}.ts` と `publish-manifest` コマンドを削除
-   - frontend / R2 の最終確認後、Worker `/manifest.json` エンドポイントを削除
+   - frontend / R2 の最終確認後、Worker `/manifest.json` エンドポイントを削除（移行猶予 2 週間以上経過してから）
 
-5. **Phase E: GC 導入**
+4. **Phase D: GC 導入**
    - tiles-gc workflow（月次 cron + workflow_dispatch）を有効化
 
 各フェーズの境界はコミット単位の独立 PR にする（小さくレビュー可能、ロールバック可能）。

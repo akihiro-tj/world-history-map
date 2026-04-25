@@ -39,13 +39,52 @@ export function getTilesUrl(year: string, baseUrl: string): string | null;
 - year に対応する PMTiles の完全 URL（`pmtiles://` 形式）を返す
 - 該当年が manifest に存在しない場合は `null`
 - baseUrl 末尾のスラッシュは関数内で正規化（呼び出し側で気にしない）
+- `baseUrl` が空文字列のとき（dev mode 想定）は `pmtiles:///pmtiles/{filename}` を返す。frontend 側でこのパスを解決する仕組み（後述「Dev mode tile resolution」）が必要
 
 **Examples**:
 ```ts
 import { getTilesUrl } from '@world-history-map/tiles';
-const url = getTilesUrl('1600', import.meta.env.VITE_TILES_BASE_URL);
+
+// 本番 / preview（VITE_TILES_BASE_URL が設定済み）
+const url = getTilesUrl('1600', 'https://tiles.example.com');
 // "pmtiles://https://tiles.example.com/world_1600.b8e4d9a2c1f0.pmtiles"
+
+// dev mode（VITE_TILES_BASE_URL 未設定）
+const devUrl = getTilesUrl('1600', '');
+// "pmtiles:///pmtiles/world_1600.b8e4d9a2c1f0.pmtiles"
 ```
+
+## Dev mode tile resolution
+
+dev mode（`vite dev` / `vite preview` 起動時、`VITE_TILES_BASE_URL` 未設定）では、frontend は `pmtiles:///pmtiles/{filename}` という相対 URL でハッシュ付き PMTiles を要求する。
+この URL を packages/tiles の dist 配下にマッピングするため、**frontend の `vite.config.ts` に dev 専用ミドルウェアを追加** する：
+
+```ts
+// apps/frontend/vite.config.ts
+import sirv from 'sirv';
+import path from 'node:path';
+
+export default defineConfig({
+  plugins: [
+    {
+      name: 'serve-tiles-dev',
+      apply: 'serve',
+      configureServer(server) {
+        const tilesDist = path.resolve(__dirname, '../../packages/tiles/dist');
+        server.middlewares.use('/pmtiles', sirv(tilesDist, { dev: true, etag: true }));
+      },
+    },
+    react(),
+    tailwindcss(),
+  ],
+  // ...
+});
+```
+
+要件：
+- `pnpm dev` 前に `packages/tiles/dist/` が存在している必要がある（`pnpm --filter @world-history-map/tiles run build` を `predev` script で先行実行）
+- dev mode のみ有効（`apply: 'serve'`）。`vite build` には影響しない
+- prod / preview ビルドでは `VITE_TILES_BASE_URL` が立っているため、このミドルウェアは未使用
 
 ## Build CLI
 
@@ -91,5 +130,7 @@ const url = getTilesUrl('1600', import.meta.env.VITE_TILES_BASE_URL);
 | `getTilesUrl('1600', 'https://x.test')` | `'pmtiles://https://x.test/world_1600.{hash}.pmtiles'` |
 | `getTilesUrl('9999', '...')` | `null` |
 | `getTilesUrl('1600', 'https://x.test/')` | trailing slash が正規化される |
+| `getTilesUrl('1600', '')` | `'pmtiles:///pmtiles/world_1600.{hash}.pmtiles'`（dev mode 用相対 URL） |
+| dev server で `/pmtiles/world_1600.{hash}.pmtiles` を fetch | `packages/tiles/dist/` から該当ファイルが返る（vite middleware 経由） |
 | build 冪等性 | 同 binary 入力 → 同 dist output（バイト単位） |
 | build 出力先 | `dist/` のみ書き換え、`src/` は manifest.ts のみ |

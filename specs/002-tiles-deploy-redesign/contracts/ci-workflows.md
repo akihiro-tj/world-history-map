@@ -1,14 +1,16 @@
 # Contract: CI Workflows
 
-**Files**: `.github/workflows/{tiles-upload,tiles-gc}.yml`
+**Files**: `.github/workflows/{tiles-deploy,tiles-gc}.yml`
 **Stability**: チーム内ツール。破壊的変更は plan 改訂を伴う
 
-## `tiles-upload.yml`
+## `tiles-deploy.yml`
+
+> 旧名 `tiles-upload.yml` から改称。tile 変更時のみ R2 upload を行い、main push 時は変更有無に関わらず必ず Pages Deploy Hook を発火させる責務を持つ
 
 ### Triggers
 
-- `pull_request` — branch: `**`、paths: `packages/tiles/src/**`
-- `push` — branch: `main`、paths: `packages/tiles/src/**`
+- `pull_request` — branch: `**`（**paths filter なし**: 全 PR で起動。tile 変更がない PR では upload が skip される）
+- `push` — branch: `main`（**paths filter なし**: tile 変更なしの main マージでも frontend 本番 deploy を必ず起動するため）
 
 ### Inputs
 
@@ -20,49 +22,71 @@
 |---|---|
 | `CLOUDFLARE_API_TOKEN` | R2 object read/write 権限のみ |
 | `CLOUDFLARE_ACCOUNT_ID` | wrangler の認証先特定 |
-| `PAGES_DEPLOY_HOOK_PROD` | main マージ後の Pages 本番 deploy 起動 URL |
+| `PAGES_DEPLOY_HOOK_PROD` | main マージ後の Pages 本番 deploy 起動 URL（タイル変更の有無に関わらず常に発火） |
+
+### Tile Change Detection
+
+step として「tile 変更有無」を検出する：
+
+```bash
+# pull_request の場合
+git diff --name-only origin/${{ github.base_ref }}...HEAD -- packages/tiles/src/
+
+# push: main の場合
+git diff --name-only ${{ github.event.before }}..${{ github.sha }} -- packages/tiles/src/
+```
+
+出力が空でなければ `has_tile_changes=true` を job output に立てる。
 
 ### Steps（PR）
 
 1. checkout（fetch-depth=2、merge base 比較に必要）
 2. pnpm setup
 3. dependencies 復元（`pnpm install --frozen-lockfile`）
-4. **`pnpm --filter @world-history-map/tiles run build --check`** で manifest.ts の鮮度を検証（古ければ fail）
-5. `pnpm --filter @world-history-map/tiles run build` で dist 再生成（決定的なので冪等）
-6. dist の各 `*.pmtiles` を **DEV bucket** へ差分 upload
+4. **Tile Change Detection** — `has_tile_changes` を判定
+5. **`pnpm --filter @world-history-map/tiles run build:check`** で manifest.ts の鮮度を検証（古ければ fail）
+6. `pnpm --filter @world-history-map/tiles run build` で dist 再生成（決定的なので冪等）
+7. **`if: has_tile_changes == 'true'`** — dist の各 `*.pmtiles` を **DEV bucket** へ差分 upload
    - `wrangler r2 object get world-history-map-tiles-dev/<key> --remote --pipe > /dev/null` で存在チェック
    - 不在のみ `wrangler r2 object put` を実行
+   - tile 変更がない PR ではこの step ごと skip される
+8. PR では Pages Deploy Hook は **発火しない**（preview は GitHub 連携の Cloudflare Pages 標準機能で別途生成）
 
 ### Steps（main push）
 
-1. PR と同じ 1〜5 を実行
-2. dist の各 `*.pmtiles` を **PROD bucket** へ差分 upload
-3. `curl -X POST $PAGES_DEPLOY_HOOK_PROD` で Pages の本番 deploy を起動
-4. step 2/3 のいずれかが失敗した場合、workflow を fail させる（Pages deploy しない）
+1. PR と同じ 1〜6 を実行
+2. **`if: has_tile_changes == 'true'`** — dist の各 `*.pmtiles` を **PROD bucket** へ差分 upload
+3. **無条件で** `curl -X POST $PAGES_DEPLOY_HOOK_PROD` で Pages の本番 deploy を起動（tile 変更の有無に関わらず）
+4. step 2 が失敗した場合、step 3 を実行しない（Pages を壊さない）。step 1 の build:check や build:full が失敗した場合も同様
 
 ### Outputs
 
-- `outputs.uploaded_count` — 実際に PUT された object 数（観測用）
+- `outputs.has_tile_changes` — boolean（tile 変更検出結果）
+- `outputs.uploaded_count` — 実際に PUT された object 数（観測用、has_tile_changes=false なら 0）
 - `outputs.skipped_count` — 既存で skip された object 数
+- `outputs.pages_deploy_triggered` — boolean（main push かつ Deploy Hook 発火に成功したか）
 
 ### Performance Budget
 
 | 操作 | 目標 |
 |---|---|
-| build（変更なし、--check pass） | 5 秒以内 |
+| build:check（変更なし、pass） | 5 秒以内 |
 | build（変更あり、フル再生成） | 30 秒以内 |
 | 差分 upload（典型 PR、1〜3 ファイル） | 2 分以内 |
 | 全件 upload（最悪ケース、50 ファイル） | 10 分以内 |
+| Tile 変更なし main push の workflow 全体 | 1 分以内（build:check + Deploy Hook） |
 
 ### Test Cases（workflow 単体）
 
 | 状況 | 期待挙動 |
 |---|---|
-| PR、tile 変更なし | 何も upload されない、build --check は pass |
-| PR、tile 1 件追加 | 該当 1 件のみ DEV へ PUT |
-| PR、manifest.ts が古い | build --check で fail、CI を red にする |
-| main マージ、PROD upload 失敗 | Deploy Hook が叩かれない、workflow fail |
-| main マージ、全件成功 | Pages deploy が起動される |
+| PR、tile 変更なし | upload step が skip される、build:check は pass、Deploy Hook 発火なし |
+| PR、tile 1 件追加 | 該当 1 件のみ DEV へ PUT、Deploy Hook 発火なし |
+| PR、manifest.ts が古い | build:check で fail、CI を red にする |
+| main マージ、tile 変更あり、PROD upload 成功 | PROD upload → Deploy Hook 発火 の順 |
+| main マージ、tile 変更あり、PROD upload 失敗 | Deploy Hook 発火しない、workflow fail |
+| **main マージ、tile 変更なし**（frontend-only） | upload step skip、Deploy Hook **常に発火**、frontend 本番に反映される |
+| main マージ、build:check fail | upload も Deploy Hook も発火しない、workflow fail |
 
 ## `tiles-gc.yml`
 
@@ -81,7 +105,7 @@
 
 ### Required Secrets
 
-`tiles-upload.yml` と共通の `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID`（DELETE 権限が必要）
+`tiles-deploy.yml` と共通の `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID`（DELETE 権限が必要）
 
 ### Steps
 
@@ -125,19 +149,26 @@
 ```text
 [developer] git push → PR
                        ↓
-              [tiles-upload.yml] (PR job)
+              [tiles-deploy.yml] (PR job)
                        ↓
-                  DEV bucket
+              tile 変更あり? ──no──→ build:check のみ
+                       ↓ yes
+                  DEV bucket diff upload
                        ↓
-              [Cloudflare Pages preview]
+              [Cloudflare Pages preview]   ← GitHub 連携で別途自動生成
                        ↓
               レビュー / マージ
                        ↓
-              [tiles-upload.yml] (push job)
+              [tiles-deploy.yml] (main push job)
                        ↓
-                  PROD bucket
-                       ↓
-              [Pages Deploy Hook]
+              tile 変更あり? ──no──┐
+                       ↓ yes        │
+                  PROD bucket       │
+                  diff upload       │
+                       ↓            │
+                       └────────────┤
+                                    ↓
+              [Pages Deploy Hook] (常に発火)
                        ↓
               [Cloudflare Pages production]
 
