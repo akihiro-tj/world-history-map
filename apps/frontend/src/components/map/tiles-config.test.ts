@@ -1,12 +1,23 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createHistoricalYear } from '../../domain/year/historical-year';
-import type { TilesManifest } from './tiles-config';
+
+vi.mock('@world-history-map/tiles', () => ({
+  getTilesUrl: vi.fn((year: string, baseUrl: string): string | null => {
+    if (year === '1700')
+      return baseUrl
+        ? `pmtiles://${baseUrl}/world_1700.abc123def456.pmtiles`
+        : 'pmtiles:///pmtiles/world_1700.abc123def456.pmtiles';
+    return null;
+  }),
+  manifest: { '1700': 'world_1700.abc123def456.pmtiles' } as const,
+  availableYears: ['1700'],
+}));
 
 const mockFetch = vi.fn();
 
 beforeEach(() => {
-  vi.stubEnv('VITE_TILES_BASE_URL', '');
   global.fetch = mockFetch;
+  vi.stubEnv('VITE_TILES_BASE_URL', '');
 });
 
 afterEach(() => {
@@ -20,103 +31,61 @@ async function importFresh() {
 }
 
 describe('tiles-config', () => {
-  describe('loadTilesManifest', () => {
-    it('returns dev manifest when VITE_TILES_BASE_URL is not set', async () => {
-      const { loadTilesManifest } = await importFresh();
-
-      const manifest = await loadTilesManifest();
-
-      expect(manifest.version).toBe('development');
-      expect(manifest.files).toEqual({});
-      expect(mockFetch).not.toHaveBeenCalled();
-    });
-
-    it('fetches manifest from production URL', async () => {
-      vi.stubEnv('VITE_TILES_BASE_URL', 'https://tiles.example.com');
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () =>
-          Promise.resolve({
-            version: '1.0.0',
-            files: { '1700': 'world_1700_abc123.pmtiles' },
-          }),
-      });
-
-      const { loadTilesManifest } = await importFresh();
-      const manifest = await loadTilesManifest();
-
-      expect(mockFetch).toHaveBeenCalledWith('https://tiles.example.com/manifest.json');
-      expect(manifest.version).toBe('1.0.0');
-    });
-
-    it('throws on fetch failure', async () => {
-      vi.stubEnv('VITE_TILES_BASE_URL', 'https://tiles.example.com');
-      mockFetch.mockResolvedValueOnce({ ok: false, status: 404 });
-
-      const { loadTilesManifest } = await importFresh();
-
-      await expect(loadTilesManifest()).rejects.toThrow('Failed to load tiles manifest: 404');
-    });
-
-    it('returns cached manifest on second call', async () => {
-      vi.stubEnv('VITE_TILES_BASE_URL', 'https://tiles.example.com');
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({ version: '1.0.0', files: {} }),
-      });
-
-      const { loadTilesManifest } = await importFresh();
-      await loadTilesManifest();
-      await loadTilesManifest();
-
-      expect(mockFetch).toHaveBeenCalledTimes(1);
-    });
-
-    it('strips trailing slashes from base URL', async () => {
-      vi.stubEnv('VITE_TILES_BASE_URL', 'https://tiles.example.com///');
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve({ version: '1.0.0', files: {} }),
-      });
-
-      const { loadTilesManifest } = await importFresh();
-      await loadTilesManifest();
-
-      expect(mockFetch).toHaveBeenCalledWith('https://tiles.example.com/manifest.json');
-    });
-  });
-
   describe('getTilesUrl', () => {
-    it('returns local pmtiles path in dev mode', async () => {
-      const { getTilesUrl } = await importFresh();
-      const manifest: TilesManifest = { version: 'development', files: {} };
-
-      const url = getTilesUrl(createHistoricalYear(1700), manifest);
-
-      expect(url).toBe('pmtiles:///pmtiles/world_1700.pmtiles');
-    });
-
-    it('returns production URL with hashed filename', async () => {
+    it('returns a pmtiles URL for a known year in production mode', async () => {
       vi.stubEnv('VITE_TILES_BASE_URL', 'https://tiles.example.com');
       const { getTilesUrl } = await importFresh();
-      const manifest: TilesManifest = {
-        version: '1.0.0',
-        files: { '1700': 'world_1700_abc123.pmtiles' },
-      };
 
-      const url = getTilesUrl(createHistoricalYear(1700), manifest);
+      const url = getTilesUrl(createHistoricalYear(1700));
 
-      expect(url).toBe('pmtiles://https://tiles.example.com/world_1700_abc123.pmtiles');
+      expect(url).toBe('pmtiles://https://tiles.example.com/world_1700.abc123def456.pmtiles');
     });
 
-    it('returns null when year is not in manifest', async () => {
+    it('returns a /pmtiles/ relative URL in dev mode (empty base URL)', async () => {
+      vi.stubEnv('VITE_TILES_BASE_URL', '');
+      const { getTilesUrl } = await importFresh();
+
+      const url = getTilesUrl(createHistoricalYear(1700));
+
+      expect(url).toBe('pmtiles:///pmtiles/world_1700.abc123def456.pmtiles');
+    });
+
+    it('returns null for a year not present in the manifest', async () => {
       vi.stubEnv('VITE_TILES_BASE_URL', 'https://tiles.example.com');
       const { getTilesUrl } = await importFresh();
-      const manifest: TilesManifest = { version: '1.0.0', files: {} };
 
-      const url = getTilesUrl(createHistoricalYear(9999), manifest);
+      expect(getTilesUrl(createHistoricalYear(9999))).toBeNull();
+    });
 
-      expect(url).toBeNull();
+    it('normalizes trailing slashes in the base URL', async () => {
+      vi.stubEnv('VITE_TILES_BASE_URL', 'https://tiles.example.com///');
+      const { getTilesUrl } = await importFresh();
+
+      const url = getTilesUrl(createHistoricalYear(1700));
+
+      expect(url).toBe('pmtiles://https://tiles.example.com/world_1700.abc123def456.pmtiles');
+    });
+
+    it('does not fetch manifest.json at runtime', async () => {
+      vi.stubEnv('VITE_TILES_BASE_URL', 'https://tiles.example.com');
+      const { getTilesUrl } = await importFresh();
+
+      getTilesUrl(createHistoricalYear(1700));
+
+      const manifestFetches = mockFetch.mock.calls.filter(
+        (call) => typeof call[0] === 'string' && (call[0] as string).includes('manifest.json'),
+      );
+      expect(manifestFetches).toHaveLength(0);
+    });
+
+    it('delegates to the tiles package getTilesUrl with the year string and base URL', async () => {
+      vi.stubEnv('VITE_TILES_BASE_URL', 'https://tiles.example.com');
+      const { getTilesUrl } = await importFresh();
+      const { getTilesUrl: packageGetTilesUrl } = await import('@world-history-map/tiles');
+
+      getTilesUrl(createHistoricalYear(1700));
+
+      expect(packageGetTilesUrl).toHaveBeenCalledWith('1700', 'https://tiles.example.com');
     });
   });
 });

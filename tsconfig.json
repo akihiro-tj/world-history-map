@@ -1,4 +1,8 @@
 {
   "files": [],
-  "references": [{ "path": "./apps/frontend" }, { "path": "./apps/pipeline" }]
+  "references": [
+    { "path": "./apps/frontend" },
+    { "path": "./apps/pipeline" },
+    { "path": "./packages/tiles" }
+  ]
 }
