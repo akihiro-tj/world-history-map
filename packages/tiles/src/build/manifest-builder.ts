@@ -5,7 +5,11 @@ import { TilesManifest } from '../manifest/tiles-manifest.ts';
 import { computeHash } from './hash.ts';
 
 export class ManifestBuilder {
-  constructor(private readonly sourceDir: string) {}
+  private readonly sourceDir: string;
+
+  constructor(sourceDir: string) {
+    this.sourceDir = sourceDir;
+  }
 
   async compute(): Promise<TilesManifest> {
     const entries = await readdir(this.sourceDir).catch(() => [] as string[]);

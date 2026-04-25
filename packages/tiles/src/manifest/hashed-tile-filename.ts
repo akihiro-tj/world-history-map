@@ -11,10 +11,13 @@ const HASH_TRUNCATE_LENGTH = 12;
 const SOURCE_EXTENSION = '.pmtiles';
 
 export class HashedTileFilename {
-  private constructor(
-    readonly year: HistoricalYearString,
-    readonly hash: string,
-  ) {}
+  readonly year: HistoricalYearString;
+  readonly hash: string;
+
+  private constructor(year: HistoricalYearString, hash: string) {
+    this.year = year;
+    this.hash = hash;
+  }
 
   static get sourceExtension(): string {
     return SOURCE_EXTENSION;

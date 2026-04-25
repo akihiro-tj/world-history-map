@@ -1,4 +1,6 @@
-import fs from 'node:fs';
+import { createReadStream } from 'node:fs';
+import fs from 'node:fs/promises';
+import type { IncomingMessage, ServerResponse } from 'node:http';
 import path from 'node:path';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
@@ -15,41 +17,64 @@ function parseRangeHeader(header: string, fileSize: number): { start: number; en
   return { start, end };
 }
 
+function resolveSafeFilePath(urlPath: string): string | null {
+  const normalized = (urlPath ?? '').replace(/^\/+/, '');
+  if (!normalized || normalized.includes('..')) return null;
+  return path.join(TILES_DIST, normalized);
+}
+
+function sendRangeResponse(
+  res: ServerResponse,
+  filePath: string,
+  range: { start: number; end: number },
+  fileSize: number,
+): void {
+  res.setHeader('Content-Range', `bytes ${range.start}-${range.end}/${fileSize}`);
+  res.setHeader('Content-Length', range.end - range.start + 1);
+  res.statusCode = 206;
+  createReadStream(filePath, { start: range.start, end: range.end }).pipe(res);
+}
+
+function sendFullResponse(res: ServerResponse, filePath: string, fileSize: number): void {
+  res.setHeader('Content-Length', fileSize);
+  res.statusCode = 200;
+  createReadStream(filePath).pipe(res);
+}
+
 function serveTilesDevPlugin(): Plugin {
   return {
     name: 'serve-tiles-dev',
     apply: 'serve',
     configureServer(server) {
-      server.middlewares.use('/pmtiles', (req, res, next) => {
-        const urlPath = (req.url ?? '').replace(/^\//, '');
-        if (!urlPath || urlPath.includes('..')) {
+      server.middlewares.use('/pmtiles', async (req: IncomingMessage, res, next) => {
+        const filePath = resolveSafeFilePath(req.url ?? '');
+        if (!filePath) {
           next();
           return;
         }
-        const filePath = path.join(TILES_DIST, urlPath);
-        fs.stat(filePath, (statErr, stat) => {
-          if (statErr || !stat.isFile()) {
-            next();
-            return;
-          }
-          res.setHeader('Accept-Ranges', 'bytes');
-          res.setHeader('Content-Type', 'application/octet-stream');
 
-          const rangeHeader = req.headers['range'];
-          if (rangeHeader) {
-            const range = parseRangeHeader(rangeHeader, stat.size);
-            if (range) {
-              res.setHeader('Content-Range', `bytes ${range.start}-${range.end}/${stat.size}`);
-              res.setHeader('Content-Length', range.end - range.start + 1);
-              res.statusCode = 206;
-              fs.createReadStream(filePath, { start: range.start, end: range.end }).pipe(res);
-              return;
-            }
-          }
-          res.setHeader('Content-Length', stat.size);
-          res.statusCode = 200;
-          fs.createReadStream(filePath).pipe(res);
-        });
+        let stat: Awaited<ReturnType<typeof fs.stat>>;
+        try {
+          stat = await fs.stat(filePath);
+        } catch {
+          next();
+          return;
+        }
+        if (!stat.isFile()) {
+          next();
+          return;
+        }
+
+        res.setHeader('Accept-Ranges', 'bytes');
+        res.setHeader('Content-Type', 'application/octet-stream');
+
+        const rangeHeader = req.headers['range'];
+        const range = rangeHeader ? parseRangeHeader(rangeHeader, stat.size) : null;
+        if (range) {
+          sendRangeResponse(res, filePath, range, stat.size);
+          return;
+        }
+        sendFullResponse(res, filePath, stat.size);
       });
     },
   };
