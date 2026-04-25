@@ -73,7 +73,7 @@ describe('tiles-config', () => {
       getTilesUrl(createHistoricalYear(1700));
 
       const manifestFetches = mockFetch.mock.calls.filter(
-        ([url]: [string]) => typeof url === 'string' && url.includes('manifest.json'),
+        (call) => typeof call[0] === 'string' && (call[0] as string).includes('manifest.json'),
       );
       expect(manifestFetches).toHaveLength(0);
     });
