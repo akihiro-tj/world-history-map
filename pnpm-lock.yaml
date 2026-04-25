@@ -23,6 +23,9 @@ importers:
 
   apps/frontend:
     dependencies:
+      '@world-history-map/tiles':
+        specifier: workspace:*
+        version: link:../../packages/tiles
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
