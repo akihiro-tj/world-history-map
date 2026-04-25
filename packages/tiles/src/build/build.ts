@@ -1,6 +1,6 @@
 import { copyFile, mkdir, readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
-import type { Manifest } from '../types.ts';
+import { asHashedFilename, asHistoricalYearString, type Manifest } from '../types.ts';
 import { computeHash, truncateHash } from './hash.ts';
 
 const PMTILES_EXTENSION = '.pmtiles';
@@ -18,14 +18,16 @@ export async function computeManifest(sourceDir: string): Promise<Manifest> {
   const entries = await readdir(sourceDir).catch(() => [] as string[]);
   const pmtilesFiles = entries.filter((f) => f.endsWith(PMTILES_EXTENSION));
 
-  const manifest: Record<string, string> = {};
+  const record: Record<string, string> = {};
   for (const filename of pmtilesFiles) {
     const year = extractYear(filename);
     if (year === null) continue;
     const content = await readFile(path.join(sourceDir, filename));
-    manifest[year] = buildHashedFilename(year, computeHash(content));
+    record[year] = buildHashedFilename(year, computeHash(content));
   }
-  return manifest;
+  return Object.fromEntries(
+    Object.entries(record).map(([k, v]) => [asHistoricalYearString(k), asHashedFilename(v)]),
+  ) as Manifest;
 }
 
 export async function buildManifest(sourceDir: string, distDir: string): Promise<Manifest> {
@@ -44,5 +46,7 @@ export async function isManifestFresh(sourceDir: string, existingManifest: Manif
   const existingKeys = Object.keys(existingManifest).sort();
 
   if (freshKeys.join(',') !== existingKeys.join(',')) return false;
-  return freshKeys.every((year) => freshManifest[year] === existingManifest[year]);
+  const fresh = freshManifest as Record<string, string>;
+  const existing = existingManifest as Record<string, string>;
+  return freshKeys.every((year) => fresh[year] === existing[year]);
 }

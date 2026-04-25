@@ -1,18 +1,18 @@
 import { manifest } from './manifest.ts';
-import type { HistoricalYearString, Manifest } from './types.ts';
+import { asHistoricalYearString, type HistoricalYearString, type Manifest } from './types.ts';
 
 export type { Manifest };
 export { manifest };
 
-export const availableYears: readonly HistoricalYearString[] = (
-  Object.keys(manifest) as HistoricalYearString[]
-).sort((a, b) => Number(a) - Number(b));
+export const availableYears: readonly HistoricalYearString[] = Object.keys(manifest)
+  .map(asHistoricalYearString)
+  .sort((a, b) => Number(a) - Number(b));
 
 function stripTrailingSlashes(url: string): string {
   return url.replace(/\/+$/, '');
 }
 
-export function getTilesUrl(year: HistoricalYearString, baseUrl: string): string | null {
+export function getTilesUrl(year: string, baseUrl: string): string | null {
   const filename = (manifest as Record<string, string>)[year];
   if (!filename) return null;
 
