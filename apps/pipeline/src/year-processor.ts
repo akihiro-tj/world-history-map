@@ -7,7 +7,7 @@ import { runPrepareForYear } from '@/stages/prepare.ts';
 import type { PipelineLogger } from '@/stages/types.ts';
 import { runValidateForYear } from '@/stages/validate.ts';
 import type { PipelineCheckpoint } from '@/state/checkpoint.ts';
-import { hashFile } from '@/state/hash.ts';
+import { hashContent, hashFile } from '@/state/hash.ts';
 import type { ValidationResult } from '@/types/pipeline.ts';
 
 export interface YearProcessResult {
@@ -33,7 +33,7 @@ export class YearProcessor {
       return result;
     }
 
-    const sourceHash = await hashFile(sourceFile);
+    const sourceHash = await this.computeMergeInputHash(yearPaths);
 
     const yearState = this.checkpoint.getYearState(year);
     if (yearState?.source && yearState.source.hash !== sourceHash) {
@@ -46,13 +46,20 @@ export class YearProcessor {
       fetchedAt: new Date().toISOString(),
     });
 
-    await this.runMerge(year, sourceFile, sourceHash);
+    await this.runMerge(year, yearPaths, sourceHash);
     const validationResult = await this.runValidate(year, yearPaths, sourceHash);
     if (validationResult) result.validationResult = validationResult;
     await this.runConvert(year, yearPaths, sourceHash);
     const prepareResult = await this.runPrepare(year, yearPaths, sourceHash);
     if (prepareResult) result.prepareResult = prepareResult;
     return result;
+  }
+
+  private async computeMergeInputHash(yearPaths: YearPaths): Promise<string> {
+    const sourceFileHash = await hashFile(yearPaths.sourceGeojsonPath);
+    const descriptionsPath = yearPaths.descriptionsPath;
+    const descriptionsHash = existsSync(descriptionsPath) ? await hashFile(descriptionsPath) : '';
+    return hashContent(`${sourceFileHash}:${descriptionsHash}`);
   }
 
   private async runStage<T>(
@@ -71,10 +78,15 @@ export class YearProcessor {
     return undefined;
   }
 
-  private async runMerge(year: number, sourceFile: string, sourceHash: string): Promise<void> {
+  private async runMerge(year: number, yearPaths: YearPaths, sourceHash: string): Promise<void> {
     await this.runStage(year, sourceHash, 'merge', async () => {
       const start = Date.now();
-      const mergeResult = await runMergeForYear(year, sourceFile, this.logger);
+      const mergeResult = await runMergeForYear(
+        year,
+        yearPaths.sourceGeojsonPath,
+        yearPaths.descriptionsPath,
+        this.logger,
+      );
       const mergedHash = await hashFile(mergeResult.polygonsPath);
 
       this.checkpoint.updateYear(year, 'merge', {

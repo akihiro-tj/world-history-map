@@ -1,106 +1,139 @@
 # pipeline: データパイプライン
 
-> Last updated: 2026-04-17T21:51:29+09:00
+> Last updated: 2026-04-25T10:31:49+09:00
 
 ## 役割
 
-`aourednik/historical-basemaps` の年別 GeoJSON と Notion DB の領土説明を取り込み、
-frontend が描画する PMTiles と領土説明 JSON に変換する CLI アプリ。
-年単位のチェックポイントで差分だけ処理するインクリメンタル設計。最終成果物は R2 または `public/data/` に置かれる。
+`aourednik/historical-basemaps` の年別 GeoJSON と Notion DB の領土説明を取り込み、frontend が描画する PMTiles と領土説明 JSON を生成する CLI。年単位のチェックポイントで差分だけ処理する。
 
 ## データの流れ
 
-タイル系統:
-
 ```
- historical-basemaps git repo
-        │ (fetch: git clone/pull)
-        ▼
+ historical-basemaps git repo            descriptions/{year}.json
+        │ (fetch)                              │ (territory-sync)
+        ▼                                      │
  .cache/historical-basemaps/geojson/world_{year}.geojson
-        │ (merge: 同名領土を turf で統合)
-        ▼
+        │ (merge: 同名領土を統合 + name_ja を焼き込み)
+        ▼ ◄─────────────────────────────────────┘
  .cache/geojson/world_{year}_merged.geojson (+ _labels)
-        │ (validate: turf で幾何チェック・修復)
-        ▼ (convert: tippecanoe + tile-join)
- public/pmtiles/world_{year}.pmtiles
-        │ (prepare: SHA-256 付きファイル名で複製)
+        │ (validate → convert → prepare)
         ▼
- dist/pmtiles/world_{year}.{hash}.pmtiles ──> R2 (upload)
-                                     └─────> manifest.json (publish)
+ frontend/public/pmtiles/world_{year}.pmtiles  (dev で読まれる)
+ dist/pmtiles/world_{year}.{hash}.pmtiles      (R2 にアップロードされる)
 ```
 
-領土説明系統:
+`index-gen` ステージが全年処理後に `index.json`（年と領土名一覧）を書き出す。`upload` が `dist/pmtiles/` を R2 に同期し、`publish-manifest` が `manifest.json`（年 → ハッシュ付きファイル名のマップ）を更新する。
 
-```
- Notion data source (territory_descriptions)
-        │ (territory-sync: Notion SDK で全件 fetch → 年ごとに groupBy)
-        ▼
- frontend/public/data/descriptions/{year}.json
-        │ (territory-validate: スキーマ・長さ制約チェック)
-```
+## コマンド早見表
 
-さらに全年処理後、`index-gen` ステージが `public/pmtiles/index.json`（`YearIndex`）を書き出す。
+すべて `pnpm pipeline <command>` 形式。
 
-## ステージの責務
+| やりたいこと | コマンド |
+|---|---|
+| タイルを最新化（fetch から upload まで一括） | `pnpm pipeline run` |
+| 1 年だけ処理する | `pnpm pipeline run --year 1600` |
+| 年範囲だけ処理する | `pnpm pipeline run --years 1600..1800` |
+| ローカル動作確認のみ（R2 にアップロードしない） | `pnpm pipeline run --skip-upload` |
+| アップロードだけやり直す | `pnpm pipeline upload` |
+| `manifest.json` だけ R2 に投入する | `pnpm pipeline publish-manifest` |
+| Notion から領土説明を同期する | `pnpm pipeline territory-sync` |
+| 1 年分だけ Notion から同期する | `pnpm pipeline territory-sync --year 1600` |
+| 説明 JSON のスキーマ・制約を検証する | `pnpm pipeline territory-validate` |
+| 進行状況を表示する | `pnpm pipeline status` |
+| 収録年のリストを表示する | `pnpm pipeline list` |
 
-`fetch` — `historical-basemaps` を git clone（初回）または pull。オフライン時はキャッシュで継続。commit hash をチェックポイントに記録。
+## `run` のオプション
 
-`merge` — GeoJSON を読み、`NAME` プロパティでグルーピングして turf.union で多角形を統合。`NAME` と `SUBJECTO` 以外のプロパティは落とす。同時に代表点（ラベル用 Point）を別コレクションとして書き出す。
+| オプション | 用途 |
+|---|---|
+| `--year N` | 指定 1 年だけ処理する |
+| `--years FROM..TO` | 範囲（例: `--years 1600..1800`）だけ処理する |
+| `--restart` | 前回の完了状態を捨てて新規実行する |
+| `--skip-upload` | R2 アップロードを省く |
+| `--dry-run` | 処理対象の年を列挙するだけで実行しない |
+| `--verbose` | 詳細ログを出す |
 
-`validate` — マージ済み GeoJSON を turf でチェックし、破損ジオメトリは clean/rewind/buffer_zero/unkink で修復を試みる。修復不能なものは warning、空コレクションや型違反は error。error があれば pipeline を止める。
+## `run` が走らせるステージ
 
-`convert` — マージ済み GeoJSON を tippecanoe で PMTiles に変換。領土（polygons）とラベル（points）を別タイルに焼いてから tile-join で単一 PMTiles に結合。出力は `public/pmtiles/world_{year}.pmtiles`。
+`run` は上から順に各年について処理する（1 ステージずつ単独で呼ぶ CLI は提供していない）。
 
-`prepare` — PMTiles を SHA-256 でハッシュ化し、`world_{year}.{shortHash}.pmtiles` として `dist/pmtiles/` に複製。ファイル名に hash を混ぜることで R2 配信時の cache busting を成立させる。
+- **fetch** — `historical-basemaps` を git clone（初回）または pull。オフライン時はキャッシュで継続。
+- **merge** — 同名領土を turf で統合し、`NAME` と `SUBJECTO` のみ残す。代表点（ラベル用 Point）を別に出す。同年の `descriptions/{year}.json` から日本語名を引いて、ラベル feature の `name_ja` プロパティに焼き込む。
+- **validate** — turf でジオメトリを検証し、修復可能なものは clean / rewind / buffer_zero / unkink で直す。修復不能は warning、空コレクションや型違反は error で停止。
+- **convert** — tippecanoe で polygons / labels の各レイヤーを別 MVT に焼き、tile-join で 1 つの PMTiles に結合。
+- **prepare** — PMTiles を SHA-256 でハッシュ化し、`world_{year}.{shortHash}.pmtiles` として `dist/pmtiles/` に複製。R2 配信での cache busting のため。
+- **index-gen** — 全年処理後、各年の領土名リストを `index.json` として書き出す。frontend の YearSelector の表示源。
+- **upload** — `--skip-upload` が無ければ R2 に差分同期する。
 
-`index-gen` — 各年のマージ済み GeoJSON から `NAME` を拾い、年ごとの領土名リストを `index.json`（`YearIndex`）として生成。frontend の YearSelector の表示源。
-
-`upload` — `manifest.json` から年 → ハッシュ付きファイル名のマッピングを構築し、`wrangler r2 object put` でアップロード。既存 manifest と hash が一致するものはスキップ。
-
-`territory-sync` — Notion data source を全件クエリ（`--year` 指定で 1 年分のみも可能）し、1Password 経由で token を取得。ページを `TerritoryDescription` に変換して年ごとに groupBy し、`descriptions/{year}.json` に書き出して個別検証する。
-
-`territory-validate` — 既存の `descriptions/*.json` をスキーマと制約（`context` は 50〜200 文字など）に照らして検証する。
+`upload` と `publish-manifest` は `run` の一部であると同時に、独立したコマンドとしても呼べる（「アップロードが落ちた時」シナリオ参照）。
 
 ## 増分処理
 
-状態は `.cache/pipeline-state.json`（`PipelineState`）に保持され、年ごとに `source / merge / validate / convert / prepare / upload` 各ステージの完了時刻とハッシュを記録する。
+状態は `.cache/pipeline-state.json` に保持され、年ごとの各ステージの完了時刻とハッシュを記録する。
 
-`YearProcessor.runStage` は各ステージ実行前に `checkpoint.shouldProcess(year, stage, sourceHash)` を問い合わせ、既に記録されたハッシュと現在の sourceHash が一致し、かつ当該ステージが記録済みなら skip する。sourceHash が変わっていれば `invalidateDownstream` で下流ステージを消し、強制再実行に倒す。
+- **入力ハッシュ** — `historical-basemaps` の年別 GeoJSON と同年の `descriptions/{year}.json` の合成（`hash(sourceFileHash + ":" + descriptionsHash)`）。`descriptions/{year}.json` が無い年は descriptionsHash を空文字列として扱う。どちらかが変わるとその年の merge 以下が無効化される。
+- **ロック** — `.cache/pipeline.lock` を取得して並行実行を抑止。SIGINT/SIGTERM で解放。
+- **完全リセット** — `.cache/pipeline-state.json` を削除すれば次回 `run` で全年が再ビルドされる。
+- **完了済みからの仕切り直し** — `--restart` で前回の completed 状態を捨ててやり直す。
 
-チェックポイントは起動時に `loadOrCreate` — `status` が `running` のまま残っていれば再開、`completed`/`failed` なら新規作成。
+## 運用シナリオ
 
-- 強制的に全年を再ビルド: `.cache/pipeline-state.json` を削除
-- 前回の完了状態を捨てて仕切り直し: `--restart` を付ける
-- 全年ではなく一部だけ回す: `--year 1600` / `--years 1600..1800`
-- アップロードを省いてローカル確認のみ: `--skip-upload`
+### Notion で領土説明を編集してデプロイしたい
 
-並行実行抑止のため `.cache/pipeline.lock` を取り、SIGINT/SIGTERM で解放する。
+1. Notion 側で編集する
+2. `pnpm pipeline territory-sync` — `descriptions/{year}.json` を書き換え
+3. `pnpm pipeline run` — descriptions が変わった年だけ自動で再ビルドされ R2 まで配信される
+
+### `historical-basemaps` 側の更新を反映したい
+
+1. `pnpm pipeline run` — `fetch` が pull で差分を取り、source hash が変わった年だけ再ビルドされる
+
+### ローカルで地図を確認したい（R2 触りたくない）
+
+1. `pnpm pipeline run --skip-upload` — `frontend/public/pmtiles/` まで生成して止まる
+2. `pnpm dev` — Vite が `public/` から PMTiles を直接配信する
+
+### 1 年だけ試行したい
+
+1. `pnpm pipeline run --year 1600` — 対象年だけ全ステージを通す
+2. 検証 OK なら `--year` を外して全年に広げる
+
+### アップロードが落ちた時に再投入したい
+
+タイル本体だけ再アップロード:
+
+1. `pnpm pipeline upload`
+
+`manifest.json` だけ更新（タイルは投入済み）:
+
+1. `pnpm pipeline publish-manifest`
+
+### 説明 JSON を手で編集した
+
+1. `pnpm pipeline territory-validate` — `context` は 50〜200 文字、`name` は非空など制約をチェック
+2. OK なら `pnpm pipeline run` — 該当年が合成ハッシュ経由で再ビルド対象になる
+
+### checkpoint が壊れた・状態を吹き飛ばしたい
+
+1. `rm apps/pipeline/.cache/pipeline-state.json`
+2. `pnpm pipeline run` — 全年がゼロから再ビルドされる
 
 ## 外部依存
 
 データソース:
-- `aourednik/historical-basemaps` — GPL-3.0 の公開リポジトリ。年別 GeoJSON の一次情報
+
+- `aourednik/historical-basemaps` — 年別 GeoJSON の一次情報（GPL-3.0）
 - Notion data source — 領土説明の編集母体。data source ID と token は 1Password (`op read`) から取得
 
-外部ツール:
+外部ツール（PATH 上に必要）:
+
 - `git` — `historical-basemaps` の clone/pull
-- `tippecanoe`（別途インストール） — GeoJSON → MVT → PMTiles
-- `wrangler` — R2 へのオブジェクトアップロード（`wrangler r2 object put`）
-- `op` — Notion 認証情報の 1Password からの取り出し
+- `tippecanoe` — GeoJSON → MVT → PMTiles
+- `wrangler` — R2 へのオブジェクトアップロード
+- `op` — Notion 認証情報を 1Password から取り出す
 
 出力先:
+
 - `apps/frontend/public/pmtiles/` — dev で直接読まれる PMTiles
-- `apps/pipeline/dist/pmtiles/` — ハッシュ付き PMTiles と `manifest.json` の一時置き場（R2 にアップロードされる）
+- `apps/pipeline/dist/pmtiles/` — ハッシュ付き PMTiles と `manifest.json` の置き場（R2 にアップロードされる）
 - `apps/frontend/public/data/descriptions/` — 領土説明 JSON
-
-## 運用シナリオ
-
-タイルを最新化する: `pipeline run` を引数なしで実行する。`fetch` が upstream を更新し、`YearProcessor` が各年についてステージを回す。source hash が変わった年だけ `merge → validate → convert → prepare` が再実行され、出力 PMTiles が `dist/pmtiles/` に新ハッシュ名で出る。`upload` が差分だけ R2 に投げ、`manifest.json` を書き戻す。
-
-特定年だけ更新を試す: `pipeline run --year 1600`。対象年以外は触らない。差分検知は働いたまま。
-
-領土説明を Notion から同期する: `pipeline territory-sync`。Notion 全ページを取って年ごとに `descriptions/{year}.json` を丸ごと書き換える。書き換えごとに `territory-validate` が走り、スキーマ違反があれば失敗する。単一年だけ同期したい場合は `--year` を付ける。
-
-説明 JSON を手修正したあと整合性だけ確かめる: `pipeline territory-validate`。すべての `descriptions/*.json` を読んで検証し、失敗した年だけ列挙する。
-
-manifest をアップロードし直す: PMTiles 本体のアップロードは済んでいるが `manifest.json` だけ R2 に反映したい場合、`pipeline publish-manifest` を使う。
