@@ -3,8 +3,6 @@ import { z } from 'zod';
 import type { BucketName } from './bucket-name.ts';
 import type { CloudflareApiCredentials } from './cloudflare-credentials.ts';
 
-const CLOUDFLARE_API_BASE_URL = 'https://api.cloudflare.com/client/v4';
-
 export type FetchFn = typeof fetch;
 
 const CloudflareR2ListResultSchema = z
@@ -56,11 +54,7 @@ export class CloudflareApiObjectLister implements R2ObjectLister {
     bucket: BucketName,
     cursor: string | undefined,
   ): Promise<{ readonly keys: readonly string[]; readonly nextCursor: string | undefined }> {
-    const url = new URL(
-      `${CLOUDFLARE_API_BASE_URL}/accounts/${this.#credentials.accountId}/r2/buckets/${bucket}/objects`,
-    );
-    if (cursor !== undefined) url.searchParams.set('cursor', cursor);
-
+    const url = this.#credentials.r2ListUrl(bucket, cursor);
     const response = await this.#fetchFn(url, { headers: this.#credentials.authHeader() });
     ensureOk(response, bucket);
     return parseListResult(await response.json());
