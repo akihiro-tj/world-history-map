@@ -6,6 +6,8 @@ import type { CloudflareApiCredentials } from './cloudflare-credentials.ts';
 
 const execFileAsync = promisify(execFile);
 
+const CLOUDFLARE_API_BASE_URL = 'https://api.cloudflare.com/client/v4';
+
 export type ExecWrangler = (args: readonly string[], cwd: string) => Promise<string>;
 
 export type FetchFn = typeof fetch;
@@ -46,32 +48,45 @@ export class WranglerR2BucketRepository implements R2BucketRepository {
   }
 
   async listObjects(bucket: BucketName): Promise<readonly HashedFilename[]> {
-    const keys: string[] = [];
-    let cursor: string | undefined;
+    const objectKeys = await this.#fetchAllObjectKeys(bucket);
+    return HashedTileFilename.parseAll(objectKeys).map((tile) => tile.toString() as HashedFilename);
+  }
+
+  async #fetchAllObjectKeys(bucket: BucketName): Promise<readonly string[]> {
+    const objectKeys: string[] = [];
+    let nextPageCursor: string | undefined;
 
     do {
-      const url = new URL(
-        `https://api.cloudflare.com/client/v4/accounts/${this.#credentials.accountId}/r2/buckets/${bucket}/objects`,
-      );
-      if (cursor) url.searchParams.set('cursor', cursor);
+      const page = await this.#fetchObjectsPage(bucket, nextPageCursor);
+      objectKeys.push(...page.keys);
+      nextPageCursor = page.nextCursor;
+    } while (nextPageCursor !== undefined);
 
-      const response = await this.#fetchFn(url, {
-        headers: this.#credentials.authHeader(),
-      });
+    return objectKeys;
+  }
 
-      if (!response.ok) {
-        throw new Error(`Failed to list ${bucket}: ${response.status} ${response.statusText}`);
-      }
+  async #fetchObjectsPage(
+    bucket: BucketName,
+    cursor: string | undefined,
+  ): Promise<{ readonly keys: readonly string[]; readonly nextCursor: string | undefined }> {
+    const url = new URL(
+      `${CLOUDFLARE_API_BASE_URL}/accounts/${this.#credentials.accountId}/r2/buckets/${bucket}/objects`,
+    );
+    if (cursor !== undefined) url.searchParams.set('cursor', cursor);
 
-      const data = (await response.json()) as CloudflareR2ListResult;
-      keys.push(...data.result.objects.map((o) => o.key));
-      cursor = data.result.truncated ? data.result.cursor : undefined;
-    } while (cursor !== undefined);
-
-    return keys.flatMap((key) => {
-      const tile = HashedTileFilename.parseHashed(key);
-      return tile !== null ? [tile.toString() as HashedFilename] : [];
+    const response = await this.#fetchFn(url, {
+      headers: this.#credentials.authHeader(),
     });
+
+    if (!response.ok) {
+      throw new Error(`Failed to list ${bucket}: ${response.status} ${response.statusText}`);
+    }
+
+    const listResponse = (await response.json()) as CloudflareR2ListResult;
+    return {
+      keys: listResponse.result.objects.map((r2Object) => r2Object.key),
+      nextCursor: listResponse.result.truncated ? listResponse.result.cursor : undefined,
+    };
   }
 
   async deleteObject(bucket: BucketName, key: HashedFilename): Promise<void> {
