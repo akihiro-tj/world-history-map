@@ -69,6 +69,7 @@ function parseListResult(json: unknown): {
   readonly keys: readonly string[];
   readonly nextCursor: string | undefined;
 } {
+  console.log('R2 API raw response:', JSON.stringify(json, null, 2));
   const parsed = CloudflareR2ListResultSchema.safeParse(json);
   if (!parsed.success) {
     throw new Error(`Failed to parse R2 list response: ${parsed.error.message}`);
