@@ -14,8 +14,6 @@ const STATUS_COLUMNS: StatusColumn[] = [
   { label: 'Merge', width: 8, getValue: (s) => (s?.merge ? 'ok' : '-') },
   { label: 'Validate', width: 10, getValue: (s) => (s?.validate ? 'ok' : '-') },
   { label: 'Convert', width: 9, getValue: (s) => (s?.convert ? 'ok' : '-') },
-  { label: 'Prepare', width: 9, getValue: (s) => (s?.prepare ? 'ok' : '-') },
-  { label: 'Upload', width: 8, getValue: (s) => (s?.upload ? 'ok' : '-') },
 ];
 
 export function showStatus(logger: PipelineLogger): void {

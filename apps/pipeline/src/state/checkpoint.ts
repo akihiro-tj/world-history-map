@@ -4,7 +4,7 @@ import type { PipelineState, YearState } from '@/types/pipeline.ts';
 
 type YearStageKey = keyof YearState;
 
-const STAGE_ORDER: YearStageKey[] = ['source', 'merge', 'validate', 'convert', 'prepare', 'upload'];
+const STAGE_ORDER: YearStageKey[] = ['source', 'merge', 'validate', 'convert'];
 
 export class PipelineCheckpoint {
   private readonly state: PipelineState;
