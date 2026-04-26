@@ -34,7 +34,7 @@ export const manifest = {
   '1492': 'world_1492.ecf75d3737a1.pmtiles',
   '1500': 'world_1500.81f1f33ddd83.pmtiles',
   '1530': 'world_1530.b1149259e74c.pmtiles',
-  '1600': 'world_1600.9079a57bc414.pmtiles',
+  '1600': 'world_1600.be885444b112.pmtiles',
   '1650': 'world_1650.6f1edc435fbf.pmtiles',
   '1700': 'world_1700.68ff75ee70dd.pmtiles',
   '1715': 'world_1715.7d84f40dbb4a.pmtiles',
