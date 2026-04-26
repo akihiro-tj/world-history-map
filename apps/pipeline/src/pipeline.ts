@@ -1,13 +1,10 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import path from 'node:path';
 import { EXIT_CODES, PATHS, UPSTREAM } from '@/config.ts';
 import { executeFetch, getCommitHash, parseYearsFromDirectory } from '@/stages/fetch.ts';
 import { runIndexGenStage } from '@/stages/index-gen.ts';
 import type { PipelineLogger } from '@/stages/types.ts';
-import { runUploadStage } from '@/stages/upload.ts';
 import { PipelineCheckpoint } from '@/state/checkpoint.ts';
 import { acquireLock, registerCleanupHandlers, releaseLock } from '@/state/lock.ts';
-import type { DeploymentManifest, ValidationResult } from '@/types/pipeline.ts';
+import type { ValidationResult } from '@/types/pipeline.ts';
 import { generateReport } from '@/validation/report.ts';
 import { YearProcessor } from '@/year-processor.ts';
 
@@ -16,7 +13,6 @@ export interface PipelineOptions {
   years?: { from: number; to: number } | undefined;
   restart?: boolean | undefined;
   dryRun?: boolean | undefined;
-  skipUpload?: boolean | undefined;
   verbose?: boolean | undefined;
 }
 
@@ -60,24 +56,11 @@ export async function runPipeline(
       return;
     }
 
-    const manifest: DeploymentManifest = loadManifest();
     const yearProcessor = new YearProcessor(checkpoint, logger);
     const validationResults: ValidationResult[] = [];
 
     for (const year of yearsToProcess) {
       const result = await yearProcessor.process(year);
-
-      if (result.prepareResult) {
-        manifest.files[String(year)] = result.prepareResult.hashedFilename;
-        if (!manifest.metadata) {
-          manifest.metadata = {};
-        }
-        manifest.metadata[String(year)] = {
-          hash: result.prepareResult.hash,
-          size: result.prepareResult.size,
-        };
-      }
-
       if (result.validationResult) {
         validationResults.push(result.validationResult);
       }
@@ -93,15 +76,6 @@ export async function runPipeline(
 
     logger.info('pipeline', '=== Stage: index-gen ===');
     await runIndexGenStage(yearsToProcess, logger);
-
-    if (!options.skipUpload) {
-      logger.info('pipeline', '=== Stage: upload ===');
-      await runUploadStage(manifest, logger);
-    } else {
-      logger.info('pipeline', 'Upload skipped (--skip-upload)');
-    }
-
-    saveManifest(manifest);
 
     checkpoint.complete();
 
@@ -135,28 +109,6 @@ function filterYears(allYears: number[], options: PipelineOptions): number[] {
     return allYears.filter((year) => year >= from && year <= to);
   }
   return allYears;
-}
-
-function loadManifest(): DeploymentManifest {
-  const manifestPath = path.join(PATHS.distPmtiles, 'manifest.json');
-  try {
-    if (existsSync(manifestPath)) {
-      return JSON.parse(readFileSync(manifestPath, 'utf-8')) as DeploymentManifest;
-    }
-  } catch {
-    // Fall through to create fresh manifest
-  }
-  return {
-    version: new Date().toISOString(),
-    files: {},
-  };
-}
-
-function saveManifest(manifest: DeploymentManifest): void {
-  const manifestPath = path.join(PATHS.distPmtiles, 'manifest.json');
-  mkdirSync(PATHS.distPmtiles, { recursive: true });
-  const output = { ...manifest, version: new Date().toISOString() };
-  writeFileSync(manifestPath, JSON.stringify(output, null, 2));
 }
 
 export class PipelineError extends Error {

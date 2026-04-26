@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { mkdir, mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -20,7 +20,6 @@ vi.mock('@/config.ts', async (importOriginal) => {
 
 import { generateYearIndex } from '@/stages/index-gen.ts';
 import { mergeByName } from '@/stages/merge.ts';
-import { prepareTile } from '@/stages/prepare.ts';
 import { PipelineCheckpoint } from '@/state/checkpoint.ts';
 import type { ValidationResult } from '@/types/pipeline.ts';
 import { validateGeoJSON } from '@/validation/geojson.ts';
@@ -37,13 +36,9 @@ describe('pipeline integration', () => {
     await rm(tempDir, { recursive: true, force: true });
   });
 
-  it('should process a year through merge → validate → prepare flow', async () => {
+  it('should process a year through merge → validate flow', async () => {
     const cacheDir = path.join(tempDir, '.cache', 'geojson');
-    const publicDir = path.join(tempDir, 'public', 'pmtiles');
-    const distDir = path.join(tempDir, 'dist', 'pmtiles');
     await mkdir(cacheDir, { recursive: true });
-    await mkdir(publicDir, { recursive: true });
-    await mkdir(distDir, { recursive: true });
 
     const sourceGeojson = {
       type: 'FeatureCollection',
@@ -114,16 +109,6 @@ describe('pipeline integration', () => {
     );
     expect(validationResult.passed).toBe(true);
     expect(validationResult.errors).toHaveLength(0);
-
-    const fakePmtilesPath = path.join(publicDir, 'world_1650.pmtiles');
-    writeFileSync(fakePmtilesPath, 'fake PMTiles binary content');
-
-    const prepareResult = await prepareTile(1650, fakePmtilesPath, distDir);
-    expect(prepareResult.hash).toMatch(/^[a-f0-9]{64}$/);
-    expect(prepareResult.hashedFilename).toMatch(/^world_1650\.[a-f0-9]{8}\.pmtiles$/);
-
-    const deployedFile = path.join(distDir, prepareResult.hashedFilename);
-    expect(existsSync(deployedFile)).toBe(true);
   });
 
   it('should generate validation report from multiple year results', () => {

@@ -22,8 +22,6 @@ export interface YearState {
   merge?: { hash: string; completedAt: string; featureCount: number; labelCount: number };
   validate?: { completedAt: string; warnings: number; errors: number };
   convert?: { hash: string; completedAt: string };
-  prepare?: { hash: string; hashedFilename: string; completedAt: string };
-  upload?: { completedAt: string; skipped: boolean };
 }
 
 export interface ValidationResult {
@@ -56,17 +54,6 @@ export interface RepairAction {
   type: 'clean_coords' | 'rewind' | 'buffer_zero' | 'unkink';
   featureIndex: number;
   featureName: string;
-}
-
-export interface DeploymentManifest {
-  version: string;
-  files: Record<string, string>;
-  metadata?: Record<string, ManifestMetadata> | undefined;
-}
-
-export interface ManifestMetadata {
-  hash: string;
-  size: number;
 }
 
 export interface ValidationReport {

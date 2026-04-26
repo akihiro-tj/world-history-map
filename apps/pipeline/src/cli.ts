@@ -6,7 +6,6 @@ import type { PipelineOptions } from '@/pipeline.ts';
 import { PipelineError, runPipeline } from '@/pipeline.ts';
 import { syncDescriptions } from '@/stages/sync-descriptions.ts';
 import { createLogger } from '@/stages/types.ts';
-import { publishManifest, runStandaloneUpload } from '@/stages/upload.ts';
 import { validateAllDescriptions } from '@/stages/validate-descriptions.ts';
 
 function parseArgs(argv: string[]): { command: string; options: PipelineOptions } {
@@ -53,9 +52,6 @@ function parseArgs(argv: string[]): { command: string; options: PipelineOptions 
       case '--dry-run':
         options.dryRun = true;
         break;
-      case '--skip-upload':
-        options.skipUpload = true;
-        break;
       case '--verbose':
         options.verbose = true;
         break;
@@ -82,12 +78,6 @@ async function main(): Promise<void> {
       break;
     case 'list':
       await listYears(logger);
-      break;
-    case 'upload':
-      await runStandaloneUpload(logger);
-      break;
-    case 'publish-manifest':
-      await publishManifest(logger);
       break;
     case 'territory-sync': {
       await syncDescriptions(
@@ -120,7 +110,6 @@ async function main(): Promise<void> {
     case 'merge':
     case 'validate':
     case 'convert':
-    case 'prepare':
     case 'index':
       logger.info('cli', `Running individual stage: ${command}`);
       await runPipeline(logger, options);
@@ -128,7 +117,7 @@ async function main(): Promise<void> {
     default:
       console.error(`Unknown command: ${command}`);
       console.error(
-        'Usage: pnpm pipeline <run|status|list|upload|publish-manifest|territory-sync|territory-validate> [options]',
+        'Usage: pnpm pipeline <run|status|list|territory-sync|territory-validate> [options]',
       );
       process.exit(EXIT_CODES.INVALID_ARGUMENTS);
   }

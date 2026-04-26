@@ -3,7 +3,6 @@ import { EXIT_CODES, YearPaths } from '@/config.ts';
 import { PipelineError } from '@/pipeline.ts';
 import { runConvertForYear } from '@/stages/convert.ts';
 import { runMergeForYear } from '@/stages/merge.ts';
-import { runPrepareForYear } from '@/stages/prepare.ts';
 import type { PipelineLogger } from '@/stages/types.ts';
 import { runValidateForYear } from '@/stages/validate.ts';
 import type { PipelineCheckpoint } from '@/state/checkpoint.ts';
@@ -11,7 +10,6 @@ import { hashContent, hashFile } from '@/state/hash.ts';
 import type { ValidationResult } from '@/types/pipeline.ts';
 
 export interface YearProcessResult {
-  prepareResult?: { hash: string; hashedFilename: string; size: number };
   validationResult?: ValidationResult;
 }
 
@@ -50,8 +48,6 @@ export class YearProcessor {
     const validationResult = await this.runValidate(year, yearPaths, sourceHash);
     if (validationResult) result.validationResult = validationResult;
     await this.runConvert(year, yearPaths, sourceHash);
-    const prepareResult = await this.runPrepare(year, yearPaths, sourceHash);
-    if (prepareResult) result.prepareResult = prepareResult;
     return result;
   }
 
@@ -65,7 +61,7 @@ export class YearProcessor {
   private async runStage<T>(
     year: number,
     sourceHash: string,
-    stageKey: 'merge' | 'validate' | 'convert' | 'prepare',
+    stageKey: 'merge' | 'validate' | 'convert',
     execute: () => Promise<T>,
   ): Promise<T | undefined> {
     if (this.checkpoint.shouldProcess(year, stageKey, sourceHash)) {
@@ -147,24 +143,6 @@ export class YearProcessor {
         completedAt: new Date().toISOString(),
       });
       this.logger.timing('convert', Date.now() - start);
-    });
-  }
-
-  private async runPrepare(
-    year: number,
-    yearPaths: YearPaths,
-    sourceHash: string,
-  ): Promise<{ hash: string; hashedFilename: string; size: number } | undefined> {
-    return this.runStage(year, sourceHash, 'prepare', async () => {
-      const result = await runPrepareForYear(year, yearPaths.pmtilesPath, this.logger);
-
-      this.checkpoint.updateYear(year, 'prepare', {
-        hash: result.hash,
-        hashedFilename: result.hashedFilename,
-        completedAt: new Date().toISOString(),
-      });
-
-      return { hash: result.hash, hashedFilename: result.hashedFilename, size: result.size };
     });
   }
 }
