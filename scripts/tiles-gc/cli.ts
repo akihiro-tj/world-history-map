@@ -1,12 +1,10 @@
-import { execFile } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { promisify } from 'node:util';
-import { asHashedFilename, type HashedFilename } from '@world-history-map/tiles';
+import type { HashedFilename } from '@world-history-map/tiles';
+import type { BucketName } from './src/bucket-name.ts';
 import { computeRetainedHashes, runGc } from './src/gc.ts';
 import { GitManifestHistoryRepository } from './src/manifest-history.ts';
-
-const execFileAsync = promisify(execFile);
+import { type R2BucketRepository, WranglerR2BucketRepository } from './src/r2-bucket.ts';
 
 const REPO_ROOT = path.resolve(fileURLToPath(import.meta.url), '../../..');
 const DRY_RUN = process.env['DRY_RUN'] !== 'false';
@@ -19,39 +17,18 @@ const BUCKETS: Record<string, string[]> = {
   both: ['world-history-map-tiles-dev', 'world-history-map-tiles-prod'],
 };
 
-async function listBucketObjects(bucket: string): Promise<string[]> {
-  try {
-    const { stdout } = await execFileAsync(
-      'wrangler',
-      ['r2', 'object', 'list', bucket, '--remote', '--json'],
-      { cwd: REPO_ROOT },
-    );
-    const parsed = JSON.parse(stdout) as { key: string }[];
-    return parsed.map((obj) => obj.key);
-  } catch {
-    console.warn(`Warning: could not list objects in ${bucket}. Skipping.`);
-    return [];
-  }
-}
-
-async function deleteObject(bucket: string, key: string): Promise<void> {
-  await execFileAsync('wrangler', ['r2', 'object', 'delete', `${bucket}/${key}`, '--remote'], {
-    cwd: REPO_ROOT,
-  });
-}
-
 async function runGcForBucket(
-  bucket: string,
+  bucket: BucketName,
   retained: ReadonlySet<HashedFilename>,
+  r2Repo: R2BucketRepository,
 ): Promise<void> {
-  const keys = await listBucketObjects(bucket);
-  const bucketObjects: HashedFilename[] = keys.map((key) => asHashedFilename(key));
+  const bucketObjects = await r2Repo.listObjects(bucket);
 
   const summary = await runGc({
     retained,
     bucketObjects,
     dryRun: DRY_RUN,
-    deleteObject: (key) => deleteObject(bucket, key),
+    deleteObject: (key) => r2Repo.deleteObject(bucket, key),
   });
 
   console.log(`\nBucket: ${bucket}`);
@@ -70,12 +47,13 @@ async function main(): Promise<void> {
   console.log(`Tiles GC — dry_run=${DRY_RUN}, window_size=${WINDOW_SIZE}, target=${TARGET_ENV}`);
 
   const historyRepo = new GitManifestHistoryRepository(REPO_ROOT);
+  const r2Repo = new WranglerR2BucketRepository(REPO_ROOT);
   const snapshots = await historyRepo.recentSnapshots(WINDOW_SIZE);
   const retained = computeRetainedHashes(snapshots);
   console.log(`\nRetained hashes from last ${WINDOW_SIZE} manifest commits: ${retained.size}`);
 
   for (const bucket of targets) {
-    await runGcForBucket(bucket, retained);
+    await runGcForBucket(bucket as BucketName, retained, r2Repo);
   }
 }
 
