@@ -21,22 +21,22 @@ export interface GcRunOutcome {
 }
 
 export class GcUseCase {
-  readonly #historyRepo: ManifestHistoryRepository;
+  readonly #historyRepository: ManifestHistoryRepository;
   readonly #objectLister: R2ObjectLister;
   readonly #gcExecution: GcExecution;
 
   constructor(
-    historyRepo: ManifestHistoryRepository,
+    historyRepository: ManifestHistoryRepository,
     objectLister: R2ObjectLister,
     gcExecution: GcExecution,
   ) {
-    this.#historyRepo = historyRepo;
+    this.#historyRepository = historyRepository;
     this.#objectLister = objectLister;
     this.#gcExecution = gcExecution;
   }
 
   async run(inputs: GcCliInputs): Promise<GcRunOutcome> {
-    const snapshots = await this.#historyRepo.recentSnapshots(inputs.windowSize);
+    const snapshots = await this.#historyRepository.recentSnapshots(inputs.windowSize);
     const retained = computeRetainedHashes(snapshots);
 
     const buckets: BucketGcOutcome[] = [];

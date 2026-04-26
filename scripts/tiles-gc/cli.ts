@@ -13,12 +13,12 @@ const REPO_ROOT = path.resolve(fileURLToPath(import.meta.url), '../../..');
 
 async function main(): Promise<void> {
   const inputs = GcCliInputs.fromEnv(process.env);
-  const historyRepo = new GitManifestHistoryRepository(REPO_ROOT);
+  const historyRepository = new GitManifestHistoryRepository(REPO_ROOT);
   const objectLister = new CloudflareApiObjectLister(CloudflareApiCredentials.fromEnv(process.env));
   const objectDeleter = new WranglerObjectDeleter(REPO_ROOT);
   const gcExecution = gcExecutionFor(inputs.dryRun, objectDeleter);
   const reporter = new ConsoleGcReporter();
-  const useCase = new GcUseCase(historyRepo, objectLister, gcExecution);
+  const useCase = new GcUseCase(historyRepository, objectLister, gcExecution);
 
   const outcome = await useCase.run(inputs);
 
