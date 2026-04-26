@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { CloudflareApiCredentials } from './src/cloudflare-credentials.ts';
 import { GcCliInputs } from './src/gc-cli-inputs.ts';
 import { gcExecutionFor } from './src/gc-execution.ts';
 import { ConsoleGcReporter } from './src/gc-reporter.ts';
@@ -12,7 +13,10 @@ const REPO_ROOT = path.resolve(fileURLToPath(import.meta.url), '../../..');
 async function main(): Promise<void> {
   const inputs = GcCliInputs.fromEnv(process.env);
   const historyRepo = new GitManifestHistoryRepository(REPO_ROOT);
-  const r2Repo = new WranglerR2BucketRepository(REPO_ROOT);
+  const r2Repo = new WranglerR2BucketRepository(
+    REPO_ROOT,
+    CloudflareApiCredentials.fromEnv(process.env),
+  );
   const gcExecution = gcExecutionFor(inputs.dryRun, r2Repo);
   const reporter = new ConsoleGcReporter();
   const useCase = new GcUseCase(historyRepo, r2Repo, gcExecution);
