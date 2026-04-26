@@ -20,6 +20,6 @@ export class DeletionPlan {
   }
 
   candidates(): readonly HashedFilename[] {
-    return this.#keys;
+    return [...this.#keys];
   }
 }
