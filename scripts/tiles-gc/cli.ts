@@ -2,7 +2,7 @@ import { execFile } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
-import { collectManifestSnapshots, computeRetainedHashes, runGc } from './gc.ts';
+import { collectManifestSnapshots, computeRetainedHashes, runGc } from './src/gc.ts';
 
 const execFileAsync = promisify(execFile);
 
