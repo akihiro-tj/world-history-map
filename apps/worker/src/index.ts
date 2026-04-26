@@ -3,7 +3,6 @@ interface Env {
   BUCKET: R2Bucket;
 }
 
-const MANIFEST_CACHE_CONTROL = 'public, max-age=300';
 const NOT_FOUND_CACHE_CONTROL = 'public, max-age=60';
 const IMMUTABLE_CACHE_CONTROL = 'public, max-age=31536000, immutable';
 
@@ -35,42 +34,6 @@ function applyCorsHeaders(headers: Headers, allowedOrigin: string): void {
   headers.set('Vary', 'Origin');
 }
 
-async function handleManifest(
-  request: Request,
-  env: Env,
-  ctx: ExecutionContext,
-  cache: Cache,
-): Promise<Response> {
-  const allowedOrigin = getAllowedOrigin(request, env);
-
-  const cached = await cache.match(request.url);
-  if (cached) {
-    const respHeaders = new Headers(cached.headers);
-    applyCorsHeaders(respHeaders, allowedOrigin);
-    return new Response(cached.body, { headers: respHeaders, status: cached.status });
-  }
-
-  const obj = await env.BUCKET.get('manifest.json');
-  if (!obj) {
-    const headers = new Headers();
-    headers.set('Cache-Control', 'no-store');
-    applyCorsHeaders(headers, allowedOrigin);
-    return new Response('Manifest not found', { headers, status: 404 });
-  }
-
-  const body = await obj.text();
-  const headers = new Headers();
-  headers.set('Content-Type', 'application/json');
-  headers.set('Cache-Control', MANIFEST_CACHE_CONTROL);
-
-  const cacheable = new Response(body, { headers, status: 200 });
-  ctx.waitUntil(cache.put(request.url, cacheable.clone()));
-
-  applyCorsHeaders(headers, allowedOrigin);
-
-  return new Response(body, { headers, status: 200 });
-}
-
 async function handlePMTilesFile(request: Request, env: Env, filename: string): Promise<Response> {
   const allowedOrigin = getAllowedOrigin(request, env);
 
@@ -92,7 +55,6 @@ async function handlePMTilesFile(request: Request, env: Env, filename: string): 
   const obj = await env.BUCKET.get(filename, range ? { range } : undefined);
   if (!obj) {
     const headers = new Headers();
-    // Short cache for 404 to prevent abuse while allowing quick recovery
     headers.set('Cache-Control', NOT_FOUND_CACHE_CONTROL);
     applyCorsHeaders(headers, allowedOrigin);
     return new Response('File not found', { headers, status: 404 });
@@ -101,7 +63,6 @@ async function handlePMTilesFile(request: Request, env: Env, filename: string): 
   const headers = new Headers();
   headers.set('Content-Type', 'application/octet-stream');
   headers.set('Accept-Ranges', 'bytes');
-  // PMTiles files are immutable (hash-based filenames)
   headers.set('Cache-Control', IMMUTABLE_CACHE_CONTROL);
   applyCorsHeaders(headers, allowedOrigin);
 
@@ -120,15 +81,10 @@ async function handlePMTilesFile(request: Request, env: Env, filename: string): 
 }
 
 export default {
-  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+  async fetch(request: Request, env: Env, _ctx: ExecutionContext): Promise<Response> {
     if (request.method.toUpperCase() === 'POST') return new Response(undefined, { status: 405 });
 
     const url = new URL(request.url);
-    const cache = caches.default;
-
-    if (url.pathname === '/manifest.json') {
-      return handleManifest(request, env, ctx, cache);
-    }
 
     const pmtilesMatch = url.pathname.match(/^\/(.+\.pmtiles)$/);
     if (pmtilesMatch) {

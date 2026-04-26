@@ -25,7 +25,7 @@ pnpm verify                 # typecheck + biome check (no tests)
 pnpm format                 # biome format --write .
 
 # Pipeline (data)
-pnpm pipeline <subcommand>  # Subcommands: run | status | list | fetch | merge | validate | convert | prepare | index | upload | publish-manifest | territory-sync | territory-validate
+pnpm pipeline <subcommand>  # Subcommands: run | status | list | fetch | merge | validate | convert | index | territory-sync | territory-validate
 pnpm pipeline run --year 1600          # Process a single year
 pnpm pipeline run --years 1600..1800   # Process a year range
 pnpm territory-sync         # Sync territory descriptions from Notion
@@ -89,10 +89,12 @@ Features move through: **specify → clarify → plan → tasks → implement �
 ## Gotchas
 
 - **Pipeline is incremental**: State lives in `.cache/pipeline-state.json`; only years whose source hash changed are reprocessed. Delete the file to force a full rebuild
-- **Tile URL differs by environment** (in progress — see `specs/002-tiles-deploy-redesign/`):
-  - Dev: `pmtiles:///pmtiles/world_{year}.{hash}.pmtiles` (served from `packages/tiles/dist/` via vite middleware)
-  - Prod: `pmtiles://{VITE_TILES_BASE_URL}/world_{year}.{hash}.pmtiles` (Worker → R2)
-  - manifest is **build-time embedded** via `@world-history-map/tiles` import — not runtime fetched
+- **Tile URL differs by environment**:
+  - Dev: `pmtiles:///pmtiles/world_{year}.{hash}.pmtiles` (vite middleware → `packages/tiles/dist/`)
+  - Preview: Worker `world-history-map-tiles-preview` → R2 `world-history-map-tiles-dev`
+  - Prod: Worker `world-history-map-tiles-production` → R2 `world-history-map-tiles-prod`
+  - manifest is **build-time embedded** via `@world-history-map/tiles` import — no runtime fetch
+- **Tile deployment is automated via CI**: PR → DEV upload; main merge → PROD upload + Pages Deploy Hook
 - **Types are duplicated across apps**: `apps/pipeline` and `apps/frontend` each define `TerritoryDescription`, `YearEntry`, etc. independently — there is no shared package. The JSON files in `public/data/` are the de-facto schema contract. Keep both sides in sync when changing shape
 - **Territory lookup is kebab-case**: GeoJSON `NAME` property is converted to kebab-case before indexing into `descriptions/{year}.json`
 - **Worker CORS**: `ALLOWED_ORIGINS` in `wrangler.toml` supports wildcard subdomain (`https://*.world-history-map.pages.dev`)
