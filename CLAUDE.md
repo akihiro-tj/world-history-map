@@ -93,8 +93,8 @@ Features move through: **specify → clarify → plan → tasks → implement �
   - Dev: `pmtiles:///pmtiles/world_{year}.{hash}.pmtiles` (vite middleware → `packages/tiles/dist/`)
   - Preview: Worker `world-history-map-tiles-preview` → R2 `world-history-map-tiles-dev`
   - Prod: Worker `world-history-map-tiles-production` → R2 `world-history-map-tiles-prod`
-  - manifest は **build-time embedded**（`@world-history-map/tiles` import）— runtime fetch なし
-- **Tile デプロイは CI 自動化済み**: PR → DEV upload、main マージ → PROD upload + Pages Deploy Hook
+  - manifest is **build-time embedded** via `@world-history-map/tiles` import — no runtime fetch
+- **Tile deployment is automated via CI**: PR → DEV upload; main merge → PROD upload + Pages Deploy Hook
 - **Types are duplicated across apps**: `apps/pipeline` and `apps/frontend` each define `TerritoryDescription`, `YearEntry`, etc. independently — there is no shared package. The JSON files in `public/data/` are the de-facto schema contract. Keep both sides in sync when changing shape
 - **Territory lookup is kebab-case**: GeoJSON `NAME` property is converted to kebab-case before indexing into `descriptions/{year}.json`
 - **Worker CORS**: `ALLOWED_ORIGINS` in `wrangler.toml` supports wildcard subdomain (`https://*.world-history-map.pages.dev`)
