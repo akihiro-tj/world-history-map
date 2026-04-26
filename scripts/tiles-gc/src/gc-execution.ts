@@ -1,6 +1,6 @@
 import type { BucketName } from './bucket-name.ts';
 import type { DeletionPlan } from './deletion-plan.ts';
-import type { R2BucketRepository } from './r2-bucket.ts';
+import type { R2ObjectDeleter } from './r2-object-deleter.ts';
 
 export interface GcExecutionResult {
   readonly deleted: number;
@@ -18,20 +18,20 @@ export class DryRunGcExecution implements GcExecution {
 }
 
 export class LiveGcExecution implements GcExecution {
-  readonly #r2Repo: R2BucketRepository;
+  readonly #objectDeleter: R2ObjectDeleter;
 
-  constructor(r2Repo: R2BucketRepository) {
-    this.#r2Repo = r2Repo;
+  constructor(objectDeleter: R2ObjectDeleter) {
+    this.#objectDeleter = objectDeleter;
   }
 
   async execute(bucket: BucketName, plan: DeletionPlan): Promise<GcExecutionResult> {
     for (const key of plan.candidates()) {
-      await this.#r2Repo.deleteObject(bucket, key);
+      await this.#objectDeleter.delete(bucket, key);
     }
     return { deleted: plan.size, mode: 'live' };
   }
 }
 
-export function gcExecutionFor(dryRun: boolean, r2Repo: R2BucketRepository): GcExecution {
-  return dryRun ? new DryRunGcExecution() : new LiveGcExecution(r2Repo);
+export function gcExecutionFor(dryRun: boolean, objectDeleter: R2ObjectDeleter): GcExecution {
+  return dryRun ? new DryRunGcExecution() : new LiveGcExecution(objectDeleter);
 }

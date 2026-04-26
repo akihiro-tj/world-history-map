@@ -9,7 +9,8 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "@world-history-map/tiles": "workspace:*"
+    "@world-history-map/tiles": "workspace:*",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",

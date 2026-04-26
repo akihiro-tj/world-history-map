@@ -33,6 +33,13 @@ export class HashedTileFilename {
     return new HashedTileFilename(asHistoricalYearString(yearStr), hashStr);
   }
 
+  static parseAll(keys: readonly string[]): readonly HashedTileFilename[] {
+    return keys.flatMap((key) => {
+      const tile = HashedTileFilename.parseHashed(key);
+      return tile !== null ? [tile] : [];
+    });
+  }
+
   static extractYearFromSource(filename: string): HistoricalYearString | null {
     const [, yearStr] = SOURCE_FILENAME_PATTERN.exec(filename) ?? [];
     if (!yearStr) return null;

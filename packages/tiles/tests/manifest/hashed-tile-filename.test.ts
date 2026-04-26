@@ -56,6 +56,36 @@ describe('HashedTileFilename.extractYearFromSource', () => {
   });
 });
 
+describe('HashedTileFilename.parseAll', () => {
+  it('returns parsed instances for valid keys', () => {
+    const result = HashedTileFilename.parseAll([
+      'world_1600.fedcba987654.pmtiles',
+      'world_-1.aaaaaaaaaaaa.pmtiles',
+    ]);
+    expect(result).toHaveLength(2);
+    expect(result[0]?.year).toBe('1600');
+    expect(result[1]?.year).toBe('-1');
+  });
+
+  it('excludes keys that do not match the hashed pattern', () => {
+    const result = HashedTileFilename.parseAll([
+      'world_1600.pmtiles',
+      'readme.txt',
+      'world_1600.fedcba987654.pmtiles',
+    ]);
+    expect(result).toHaveLength(1);
+    expect(result[0]?.year).toBe('1600');
+  });
+
+  it('returns empty array for empty input', () => {
+    expect(HashedTileFilename.parseAll([])).toEqual([]);
+  });
+
+  it('returns empty array when no keys match', () => {
+    expect(HashedTileFilename.parseAll(['readme.txt', 'world_1600.pmtiles'])).toEqual([]);
+  });
+});
+
 describe('HashedTileFilename.sourceExtension', () => {
   it('is .pmtiles', () => {
     expect(HashedTileFilename.sourceExtension).toBe('.pmtiles');
