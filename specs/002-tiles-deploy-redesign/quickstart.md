@@ -36,19 +36,31 @@ git push
 ### 運用者（事故が起きてロールバックしたい）
 
 ```bash
-# 1. 問題のコミットを特定
+# 1. 問題のコミットを特定（manifest.ts が変化したコミット単位で確認）
 git log --oneline packages/tiles/src/manifest.ts
 
 # 2. revert PR を作成
 git revert <bad-commit>
-git push -u origin revert-bad-commit
+git push -u origin revert-<bad-commit>
 
-# → PR の CI が DEV bucket に旧 hash の存在を確認
-# → マージ → main の CI が PROD bucket と Pages を旧状態に戻す
+# → PR: CI が DEV bucket に旧 hash が存在することを確認
+# → マージ: main の CI が PROD bucket を旧 hash で更新、Pages Deploy Hook を発火
 # → 5 分以内に本番が正常状態に復帰
 ```
 
-ロールバック窓 N=3 を超えた古いコミットへ戻したい場合は、GC で消えた hash を再 upload する必要がある（手順は別途検討、初版では window 内のみサポート）。
+**ロールバック窓について**
+
+ロールバック窓は「`packages/tiles/src/manifest.ts` が変化した main コミット」を N=3 件保持します。その N コミット分で参照されているハッシュは R2 に必ず残ります。
+
+- UI のみの変更など manifest が変わらないコミットはカウントされません
+- 窓外（直近 3 件の manifest 変更より古い）コミットに戻す場合、GC で当該ハッシュが既に削除されている可能性があります。その場合は `packages/tiles/dist/` から手動で再 upload してください：
+
+```bash
+# 当該年のファイルを再アップロード（例: 1600 年）
+apps/worker/node_modules/.bin/wrangler r2 object put \
+  "world-history-map-tiles-prod/world_1600.<hash>.pmtiles" \
+  --file packages/tiles/dist/world_1600.<hash>.pmtiles --remote
+```
 
 ### 運用者（ストレージを掃除したい）
 

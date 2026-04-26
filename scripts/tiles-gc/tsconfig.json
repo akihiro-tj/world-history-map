@@ -1,0 +1,8 @@
+{
+  "files": [],
+  "references": [{ "path": "./tsconfig.tiles-gc.json" }],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": { "@/*": ["./src/*"] }
+  }
+}

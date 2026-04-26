@@ -7,8 +7,15 @@
 # Pages Deploy Hook fires unconditionally on successful main runs so that
 # frontend-only merges also deploy to production (FR-013).
 #
-# Local dry-run:
-#   act pull_request -s CLOUDFLARE_API_TOKEN=<token> -s CLOUDFLARE_ACCOUNT_ID=<id>
+# Local dry-run with act (https://github.com/nektos/act):
+#   act pull_request \
+#     --secret CLOUDFLARE_API_TOKEN=<your-token> \
+#     --secret CLOUDFLARE_ACCOUNT_ID=<your-account-id> \
+#     --secret PAGES_DEPLOY_HOOK_PROD=https://example.com/fake-hook \
+#     --workflows .github/workflows/tiles-deploy.yml
+#
+# To simulate a tile-changing PR, ensure packages/tiles/src/ differs from the base branch.
+# The "Upload new tiles to DEV bucket" step runs only if tile changes are detected.
 #
 # Required Secrets:
 #   CLOUDFLARE_API_TOKEN   — R2 object read/write only

@@ -1,0 +1,20 @@
+{
+  "name": "@world-history-map/tiles-gc",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "gc": "tsx cli.ts",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@world-history-map/tiles": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "@vitest/coverage-v8": "^4.1.2",
+    "tsx": "^4.19.4",
+    "vitest": "^4.1.2"
+  }
+}

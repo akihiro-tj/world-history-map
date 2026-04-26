@@ -61,3 +61,80 @@ describe('manifest', () => {
     expect(manifest['-1']).toBe('world_-1.fedcba987654.pmtiles');
   });
 });
+
+describe('TilesManifest', () => {
+  it('fromRecord creates a manifest with the expected years', async () => {
+    const { TilesManifest } = await import('../src/index.ts');
+    const tilesManifest = TilesManifest.fromRecord({
+      '1600': 'world_1600.abc123def456.pmtiles',
+      '1700': 'world_1700.112233445566.pmtiles',
+    });
+    expect(tilesManifest.availableYears()).toContain('1600');
+    expect(tilesManifest.availableYears()).toContain('1700');
+  });
+
+  it('empty creates a manifest with no years', async () => {
+    const { TilesManifest } = await import('../src/index.ts');
+    const tilesManifest = TilesManifest.empty();
+    expect(tilesManifest.availableYears()).toHaveLength(0);
+  });
+
+  it('filenameFor returns the hashed filename for a known year', async () => {
+    const { TilesManifest, asHistoricalYearString } = await import('../src/index.ts');
+    const tilesManifest = TilesManifest.fromRecord({
+      '1600': 'world_1600.abc123def456.pmtiles',
+    });
+    expect(tilesManifest.filenameFor(asHistoricalYearString('1600'))).toBe(
+      'world_1600.abc123def456.pmtiles',
+    );
+  });
+
+  it('filenameFor returns null for an unknown year', async () => {
+    const { TilesManifest, asHistoricalYearString } = await import('../src/index.ts');
+    const tilesManifest = TilesManifest.fromRecord({ '1600': 'world_1600.abc123def456.pmtiles' });
+    expect(tilesManifest.filenameFor(asHistoricalYearString('9999'))).toBeNull();
+  });
+});
+
+describe('HashedTileFilename', () => {
+  it('parseHashed parses a valid hashed filename', async () => {
+    const { HashedTileFilename } = await import('../src/index.ts');
+    const parsed = HashedTileFilename.parseHashed('world_1600.abc123def456.pmtiles');
+    expect(parsed).not.toBeNull();
+    expect(parsed?.year).toBe('1600');
+    expect(parsed?.hash).toBe('abc123def456');
+  });
+
+  it('parseHashed returns null for an invalid filename', async () => {
+    const { HashedTileFilename } = await import('../src/index.ts');
+    expect(HashedTileFilename.parseHashed('world_1600.pmtiles')).toBeNull();
+  });
+
+  it('toString returns the hashed filename with a 12-character hash', async () => {
+    const { HashedTileFilename, asHistoricalYearString } = await import('../src/index.ts');
+    const filename = HashedTileFilename.build(asHistoricalYearString('1600'), 'abc123def456xxxx');
+    expect(filename.toString()).toBe('world_1600.abc123def456.pmtiles');
+  });
+});
+
+describe('asHashedFilename', () => {
+  it('returns a branded HashedFilename from a plain string', async () => {
+    const { asHashedFilename } = await import('../src/index.ts');
+    const result = asHashedFilename('world_1600.abc123def456.pmtiles');
+    expect(result).toBe('world_1600.abc123def456.pmtiles');
+  });
+});
+
+describe('asHistoricalYearString', () => {
+  it('returns a branded HistoricalYearString from a plain string', async () => {
+    const { asHistoricalYearString } = await import('../src/index.ts');
+    const result = asHistoricalYearString('1600');
+    expect(result).toBe('1600');
+  });
+
+  it('handles negative year strings (BC years)', async () => {
+    const { asHistoricalYearString } = await import('../src/index.ts');
+    const result = asHistoricalYearString('-500');
+    expect(result).toBe('-500');
+  });
+});
