@@ -2,15 +2,12 @@ import { asHashedFilename, type HashedFilename, TilesManifest } from '@world-his
 import { describe, expect, it, vi } from 'vitest';
 import { DEV_BUCKET } from './bucket-name.ts';
 import { DeletionPlan } from './deletion-plan.ts';
-import {
-  computeDeletionCandidates,
-  computeRetainedHashes,
-  extractHashedTileFilenames,
-} from './gc.ts';
+import { extractHashedTileFilenames } from './gc.ts';
 import { DryRunGcExecution, LiveGcExecution } from './gc-execution.ts';
 import type { R2ObjectDeleter } from './r2-object-deleter.ts';
+import { RetainedHashes } from './retained-hashes.ts';
 
-describe('computeRetainedHashes', () => {
+describe('RetainedHashes.fromSnapshots', () => {
   it('returns union of hashed filenames from all manifest snapshots', () => {
     const snapshots = [
       TilesManifest.fromRecord({
@@ -22,7 +19,7 @@ describe('computeRetainedHashes', () => {
         '1700': 'world_1700.bbb222.pmtiles',
       }),
     ];
-    const retained = computeRetainedHashes(snapshots);
+    const retained = RetainedHashes.fromSnapshots(snapshots);
     expect(retained.has(asHashedFilename('world_1600.aaa111.pmtiles'))).toBe(true);
     expect(retained.has(asHashedFilename('world_1600.ccc333.pmtiles'))).toBe(true);
     expect(retained.has(asHashedFilename('world_1700.bbb222.pmtiles'))).toBe(true);
@@ -30,12 +27,12 @@ describe('computeRetainedHashes', () => {
   });
 
   it('returns empty set when no snapshots are provided', () => {
-    expect(computeRetainedHashes([]).size).toBe(0);
+    expect(RetainedHashes.fromSnapshots([]).size).toBe(0);
   });
 
   it('handles a single snapshot', () => {
     const snapshots = [TilesManifest.fromRecord({ '1600': 'world_1600.abc123.pmtiles' })];
-    const retained = computeRetainedHashes(snapshots);
+    const retained = RetainedHashes.fromSnapshots(snapshots);
     expect(retained.has(asHashedFilename('world_1600.abc123.pmtiles'))).toBe(true);
     expect(retained.size).toBe(1);
   });
@@ -46,43 +43,46 @@ describe('computeRetainedHashes', () => {
       TilesManifest.fromRecord({ '1600': 'world_1600.same.pmtiles' }),
       TilesManifest.fromRecord({ '1600': 'world_1600.same.pmtiles' }),
     ];
-    expect(computeRetainedHashes(snapshots).size).toBe(1);
+    expect(RetainedHashes.fromSnapshots(snapshots).size).toBe(1);
   });
 });
 
-describe('computeDeletionCandidates', () => {
+describe('RetainedHashes#difference', () => {
   it('returns objects not in the retained set', () => {
-    const retained = new Set([
-      asHashedFilename('world_1600.aaa111.pmtiles'),
-      asHashedFilename('world_1700.bbb222.pmtiles'),
+    const retained = RetainedHashes.fromSnapshots([
+      TilesManifest.fromRecord({
+        '1600': 'world_1600.aaa111.pmtiles',
+        '1700': 'world_1700.bbb222.pmtiles',
+      }),
     ]);
-    const bucketObjects: HashedFilename[] = [
+    const candidates: HashedFilename[] = [
       asHashedFilename('world_1600.aaa111.pmtiles'),
       asHashedFilename('world_1600.old000.pmtiles'),
       asHashedFilename('world_1700.bbb222.pmtiles'),
       asHashedFilename('world_1900.orphan.pmtiles'),
     ];
-    const plan = computeDeletionCandidates(retained, bucketObjects);
-    const candidates = plan.candidates();
-    expect(candidates).toContain(asHashedFilename('world_1600.old000.pmtiles'));
-    expect(candidates).toContain(asHashedFilename('world_1900.orphan.pmtiles'));
-    expect(candidates).not.toContain(asHashedFilename('world_1600.aaa111.pmtiles'));
-    expect(candidates).not.toContain(asHashedFilename('world_1700.bbb222.pmtiles'));
+    const plan = retained.difference(candidates);
+    const keys = plan.candidates();
+    expect(keys).toContain(asHashedFilename('world_1600.old000.pmtiles'));
+    expect(keys).toContain(asHashedFilename('world_1900.orphan.pmtiles'));
+    expect(keys).not.toContain(asHashedFilename('world_1600.aaa111.pmtiles'));
+    expect(keys).not.toContain(asHashedFilename('world_1700.bbb222.pmtiles'));
   });
 
   it('returns empty plan when all objects are retained', () => {
-    const retained = new Set([asHashedFilename('world_1600.aaa.pmtiles')]);
-    const bucketObjects: HashedFilename[] = [asHashedFilename('world_1600.aaa.pmtiles')];
-    expect(computeDeletionCandidates(retained, bucketObjects).size).toBe(0);
+    const retained = RetainedHashes.fromSnapshots([
+      TilesManifest.fromRecord({ '1600': 'world_1600.aaa.pmtiles' }),
+    ]);
+    expect(retained.difference([asHashedFilename('world_1600.aaa.pmtiles')]).size).toBe(0);
   });
 
   it('returns all objects when retained set is empty', () => {
-    const retained = new Set<HashedFilename>();
-    const bucketObjects: HashedFilename[] = [
+    const retained = RetainedHashes.fromSnapshots([]);
+    const candidates: HashedFilename[] = [
       asHashedFilename('world_1600.aaa.pmtiles'),
       asHashedFilename('world_1700.bbb.pmtiles'),
     ];
-    expect(computeDeletionCandidates(retained, bucketObjects).size).toBe(2);
+    expect(retained.difference(candidates).size).toBe(2);
   });
 });
 
@@ -138,7 +138,7 @@ describe('LiveGcExecution', () => {
 describe('window size boundary conditions', () => {
   it('N=1: retains only the single most recent manifest', () => {
     const snapshots = [TilesManifest.fromRecord({ '1600': 'world_1600.newest.pmtiles' })];
-    const retained = computeRetainedHashes(snapshots);
+    const retained = RetainedHashes.fromSnapshots(snapshots);
     expect(retained.has(asHashedFilename('world_1600.newest.pmtiles'))).toBe(true);
     expect(retained.size).toBe(1);
   });
@@ -149,7 +149,7 @@ describe('window size boundary conditions', () => {
       TilesManifest.fromRecord({ '1600': 'world_1600.v2.pmtiles' }),
       TilesManifest.fromRecord({ '1600': 'world_1600.v1.pmtiles' }),
     ];
-    const retained = computeRetainedHashes(snapshots);
+    const retained = RetainedHashes.fromSnapshots(snapshots);
     expect(retained.size).toBe(3);
     expect(retained.has(asHashedFilename('world_1600.v1.pmtiles'))).toBe(true);
     expect(retained.has(asHashedFilename('world_1600.v3.pmtiles'))).toBe(true);
@@ -159,13 +159,13 @@ describe('window size boundary conditions', () => {
     const snapshots = Array.from({ length: 10 }, (_, i) =>
       TilesManifest.fromRecord({ '1600': `world_1600.v${i.toString().padStart(2, '0')}.pmtiles` }),
     );
-    const retained = computeRetainedHashes(snapshots);
+    const retained = RetainedHashes.fromSnapshots(snapshots);
     expect(retained.size).toBe(10);
   });
 
   it('N exceeds history: returns all available snapshots without error', () => {
     const snapshots = [TilesManifest.fromRecord({ '1600': 'world_1600.only.pmtiles' })];
-    const retained = computeRetainedHashes(snapshots);
+    const retained = RetainedHashes.fromSnapshots(snapshots);
     expect(retained.size).toBe(1);
   });
 });
