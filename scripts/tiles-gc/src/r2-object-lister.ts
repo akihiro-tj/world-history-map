@@ -7,13 +7,18 @@ const CLOUDFLARE_API_BASE_URL = 'https://api.cloudflare.com/client/v4';
 
 export type FetchFn = typeof fetch;
 
-const CloudflareR2ListResultSchema = z.object({
-  result: z.object({
-    objects: z.array(z.object({ key: z.string() })),
-    truncated: z.boolean(),
-    cursor: z.string().optional(),
-  }),
-});
+const CloudflareR2ListResultSchema = z
+  .object({
+    result: z.object({
+      objects: z.array(z.object({ key: z.string() })),
+      truncated: z.boolean(),
+      cursor: z.string().optional(),
+    }),
+  })
+  .transform((data) => ({
+    keys: data.result.objects.map((o) => o.key),
+    nextCursor: data.result.truncated ? data.result.cursor : undefined,
+  }));
 
 export interface R2ObjectLister {
   list(bucket: BucketName): Promise<readonly HashedFilename[]>;
@@ -56,23 +61,27 @@ export class CloudflareApiObjectLister implements R2ObjectLister {
     );
     if (cursor !== undefined) url.searchParams.set('cursor', cursor);
 
-    const response = await this.#fetchFn(url, {
-      headers: this.#credentials.authHeader(),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Failed to list ${bucket}: ${response.status} ${response.statusText}`);
-    }
-
-    const parsed = CloudflareR2ListResultSchema.safeParse(await response.json());
-    if (!parsed.success) {
-      throw new Error(`Failed to parse R2 list response: ${parsed.error.message}`);
-    }
-    return {
-      keys: parsed.data.result.objects.map((r2Object) => r2Object.key),
-      nextCursor: parsed.data.result.truncated ? parsed.data.result.cursor : undefined,
-    };
+    const response = await this.#fetchFn(url, { headers: this.#credentials.authHeader() });
+    ensureOk(response, bucket);
+    return parseListResult(await response.json());
   }
+}
+
+function ensureOk(response: Response, bucket: BucketName): void {
+  if (!response.ok) {
+    throw new Error(`Failed to list ${bucket}: ${response.status} ${response.statusText}`);
+  }
+}
+
+function parseListResult(json: unknown): {
+  readonly keys: readonly string[];
+  readonly nextCursor: string | undefined;
+} {
+  const parsed = CloudflareR2ListResultSchema.safeParse(json);
+  if (!parsed.success) {
+    throw new Error(`Failed to parse R2 list response: ${parsed.error.message}`);
+  }
+  return parsed.data;
 }
 
 function defaultFetch(...args: Parameters<FetchFn>): ReturnType<FetchFn> {
