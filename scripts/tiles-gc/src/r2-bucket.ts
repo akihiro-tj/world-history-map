@@ -8,6 +8,8 @@ const execFileAsync = promisify(execFile);
 
 export type ExecWrangler = (args: readonly string[], cwd: string) => Promise<string>;
 
+export type FetchFn = typeof fetch;
+
 interface CloudflareR2Object {
   readonly key: string;
 }
@@ -29,15 +31,18 @@ export class WranglerR2BucketRepository implements R2BucketRepository {
   readonly #repoRoot: string;
   readonly #credentials: CloudflareApiCredentials;
   readonly #execWrangler: ExecWrangler;
+  readonly #fetchFn: FetchFn;
 
   constructor(
     repoRoot: string,
     credentials: CloudflareApiCredentials,
     execWrangler?: ExecWrangler,
+    fetchFn?: FetchFn,
   ) {
     this.#repoRoot = repoRoot;
     this.#credentials = credentials;
     this.#execWrangler = execWrangler ?? defaultExecWrangler;
+    this.#fetchFn = fetchFn ?? defaultFetch;
   }
 
   async listObjects(bucket: BucketName): Promise<readonly HashedFilename[]> {
@@ -50,7 +55,7 @@ export class WranglerR2BucketRepository implements R2BucketRepository {
       );
       if (cursor) url.searchParams.set('cursor', cursor);
 
-      const response = await fetch(url, {
+      const response = await this.#fetchFn(url, {
         headers: this.#credentials.authHeader(),
       });
 
@@ -79,4 +84,8 @@ export class WranglerR2BucketRepository implements R2BucketRepository {
 
 function defaultExecWrangler(args: readonly string[], cwd: string): Promise<string> {
   return execFileAsync('wrangler', [...args], { cwd }).then(({ stdout }) => stdout);
+}
+
+function defaultFetch(...args: Parameters<FetchFn>): ReturnType<FetchFn> {
+  return fetch(...args);
 }
