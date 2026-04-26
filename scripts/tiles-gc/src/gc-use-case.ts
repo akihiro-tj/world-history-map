@@ -5,7 +5,7 @@ import { computeDeletionCandidates, computeRetainedHashes } from './gc.ts';
 import type { GcCliInputs } from './gc-cli-inputs.ts';
 import type { GcExecution, GcExecutionResult } from './gc-execution.ts';
 import type { ManifestHistoryRepository } from './manifest-history.ts';
-import type { R2BucketRepository } from './r2-bucket.ts';
+import type { R2ObjectLister } from './r2-object-lister.ts';
 
 export interface BucketGcOutcome {
   readonly bucket: BucketName;
@@ -22,16 +22,16 @@ export interface GcRunOutcome {
 
 export class GcUseCase {
   readonly #historyRepo: ManifestHistoryRepository;
-  readonly #r2Repo: R2BucketRepository;
+  readonly #objectLister: R2ObjectLister;
   readonly #gcExecution: GcExecution;
 
   constructor(
     historyRepo: ManifestHistoryRepository,
-    r2Repo: R2BucketRepository,
+    objectLister: R2ObjectLister,
     gcExecution: GcExecution,
   ) {
     this.#historyRepo = historyRepo;
-    this.#r2Repo = r2Repo;
+    this.#objectLister = objectLister;
     this.#gcExecution = gcExecution;
   }
 
@@ -41,7 +41,7 @@ export class GcUseCase {
 
     const buckets: BucketGcOutcome[] = [];
     for (const bucket of inputs.target.buckets()) {
-      const bucketObjects = await this.#r2Repo.listObjects(bucket);
+      const bucketObjects = await this.#objectLister.list(bucket);
       const plan = computeDeletionCandidates(retained, bucketObjects);
       const executionResult = await this.#gcExecution.execute(bucket, plan);
       buckets.push({ bucket, retained, plan, executionResult });

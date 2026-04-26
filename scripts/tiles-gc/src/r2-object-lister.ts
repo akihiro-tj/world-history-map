@@ -1,14 +1,8 @@
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
 import { type HashedFilename, HashedTileFilename } from '@world-history-map/tiles';
 import type { BucketName } from './bucket-name.ts';
 import type { CloudflareApiCredentials } from './cloudflare-credentials.ts';
 
-const execFileAsync = promisify(execFile);
-
 const CLOUDFLARE_API_BASE_URL = 'https://api.cloudflare.com/client/v4';
-
-export type ExecWrangler = (args: readonly string[], cwd: string) => Promise<string>;
 
 export type FetchFn = typeof fetch;
 
@@ -24,30 +18,20 @@ interface CloudflareR2ListResult {
   };
 }
 
-export interface R2BucketRepository {
-  listObjects(bucket: BucketName): Promise<readonly HashedFilename[]>;
-  deleteObject(bucket: BucketName, key: HashedFilename): Promise<void>;
+export interface R2ObjectLister {
+  list(bucket: BucketName): Promise<readonly HashedFilename[]>;
 }
 
-export class WranglerR2BucketRepository implements R2BucketRepository {
-  readonly #repoRoot: string;
+export class CloudflareApiObjectLister implements R2ObjectLister {
   readonly #credentials: CloudflareApiCredentials;
-  readonly #execWrangler: ExecWrangler;
   readonly #fetchFn: FetchFn;
 
-  constructor(
-    repoRoot: string,
-    credentials: CloudflareApiCredentials,
-    execWrangler?: ExecWrangler,
-    fetchFn?: FetchFn,
-  ) {
-    this.#repoRoot = repoRoot;
+  constructor(credentials: CloudflareApiCredentials, fetchFn?: FetchFn) {
     this.#credentials = credentials;
-    this.#execWrangler = execWrangler ?? defaultExecWrangler;
     this.#fetchFn = fetchFn ?? defaultFetch;
   }
 
-  async listObjects(bucket: BucketName): Promise<readonly HashedFilename[]> {
+  async list(bucket: BucketName): Promise<readonly HashedFilename[]> {
     const objectKeys = await this.#fetchAllObjectKeys(bucket);
     return HashedTileFilename.parseAll(objectKeys).map((tile) => tile.toString() as HashedFilename);
   }
@@ -88,17 +72,6 @@ export class WranglerR2BucketRepository implements R2BucketRepository {
       nextCursor: listResponse.result.truncated ? listResponse.result.cursor : undefined,
     };
   }
-
-  async deleteObject(bucket: BucketName, key: HashedFilename): Promise<void> {
-    await this.#execWrangler(
-      ['r2', 'object', 'delete', `${bucket}/${key}`, '--remote'],
-      this.#repoRoot,
-    );
-  }
-}
-
-function defaultExecWrangler(args: readonly string[], cwd: string): Promise<string> {
-  return execFileAsync('wrangler', [...args], { cwd }).then(({ stdout }) => stdout);
 }
 
 function defaultFetch(...args: Parameters<FetchFn>): ReturnType<FetchFn> {

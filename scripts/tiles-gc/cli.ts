@@ -6,20 +6,19 @@ import { gcExecutionFor } from './src/gc-execution.ts';
 import { ConsoleGcReporter } from './src/gc-reporter.ts';
 import { GcUseCase } from './src/gc-use-case.ts';
 import { GitManifestHistoryRepository } from './src/manifest-history.ts';
-import { WranglerR2BucketRepository } from './src/r2-bucket.ts';
+import { WranglerObjectDeleter } from './src/r2-object-deleter.ts';
+import { CloudflareApiObjectLister } from './src/r2-object-lister.ts';
 
 const REPO_ROOT = path.resolve(fileURLToPath(import.meta.url), '../../..');
 
 async function main(): Promise<void> {
   const inputs = GcCliInputs.fromEnv(process.env);
   const historyRepo = new GitManifestHistoryRepository(REPO_ROOT);
-  const r2Repo = new WranglerR2BucketRepository(
-    REPO_ROOT,
-    CloudflareApiCredentials.fromEnv(process.env),
-  );
-  const gcExecution = gcExecutionFor(inputs.dryRun, r2Repo);
+  const objectLister = new CloudflareApiObjectLister(CloudflareApiCredentials.fromEnv(process.env));
+  const objectDeleter = new WranglerObjectDeleter(REPO_ROOT);
+  const gcExecution = gcExecutionFor(inputs.dryRun, objectDeleter);
   const reporter = new ConsoleGcReporter();
-  const useCase = new GcUseCase(historyRepo, r2Repo, gcExecution);
+  const useCase = new GcUseCase(historyRepo, objectLister, gcExecution);
 
   const outcome = await useCase.run(inputs);
 

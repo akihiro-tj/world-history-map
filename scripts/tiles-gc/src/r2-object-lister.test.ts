@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 import { DEV_BUCKET } from './bucket-name.ts';
 import { CloudflareApiCredentials } from './cloudflare-credentials.ts';
-import type { FetchFn } from './r2-bucket.ts';
-import { WranglerR2BucketRepository } from './r2-bucket.ts';
+import type { FetchFn } from './r2-object-lister.ts';
+import { CloudflareApiObjectLister } from './r2-object-lister.ts';
 
 const TEST_CREDENTIALS = CloudflareApiCredentials.fromEnv({
   CLOUDFLARE_ACCOUNT_ID: 'test-account',
@@ -16,8 +16,8 @@ function makeListResponse(keys: string[], truncated: boolean, cursor?: string): 
   );
 }
 
-describe('WranglerR2BucketRepository', () => {
-  describe('listObjects', () => {
+describe('CloudflareApiObjectLister', () => {
+  describe('list', () => {
     it('returns hashed tile filenames from a single page', async () => {
       const mockFetch = vi
         .fn<FetchFn>()
@@ -28,8 +28,8 @@ describe('WranglerR2BucketRepository', () => {
           ),
         );
 
-      const repo = new WranglerR2BucketRepository('/', TEST_CREDENTIALS, undefined, mockFetch);
-      const result = await repo.listObjects(DEV_BUCKET);
+      const lister = new CloudflareApiObjectLister(TEST_CREDENTIALS, mockFetch);
+      const result = await lister.list(DEV_BUCKET);
 
       expect(result).toHaveLength(2);
       expect(result).toContain('world_1600.fedcba987654.pmtiles');
@@ -44,8 +44,8 @@ describe('WranglerR2BucketRepository', () => {
         )
         .mockResolvedValueOnce(makeListResponse(['world_1700.aabbcc112233.pmtiles'], false));
 
-      const repo = new WranglerR2BucketRepository('/', TEST_CREDENTIALS, undefined, mockFetch);
-      const result = await repo.listObjects(DEV_BUCKET);
+      const lister = new CloudflareApiObjectLister(TEST_CREDENTIALS, mockFetch);
+      const result = await lister.list(DEV_BUCKET);
 
       expect(result).toHaveLength(2);
       expect(mockFetch).toHaveBeenCalledTimes(2);
@@ -58,8 +58,8 @@ describe('WranglerR2BucketRepository', () => {
         .fn<FetchFn>()
         .mockResolvedValue(makeListResponse(['readme.txt', 'world_1600.pmtiles'], false));
 
-      const repo = new WranglerR2BucketRepository('/', TEST_CREDENTIALS, undefined, mockFetch);
-      const result = await repo.listObjects(DEV_BUCKET);
+      const lister = new CloudflareApiObjectLister(TEST_CREDENTIALS, mockFetch);
+      const result = await lister.list(DEV_BUCKET);
 
       expect(result).toHaveLength(0);
     });
@@ -69,8 +69,8 @@ describe('WranglerR2BucketRepository', () => {
         .fn<FetchFn>()
         .mockResolvedValue(new Response(null, { status: 403, statusText: 'Forbidden' }));
 
-      const repo = new WranglerR2BucketRepository('/', TEST_CREDENTIALS, undefined, mockFetch);
-      await expect(repo.listObjects(DEV_BUCKET)).rejects.toThrow(
+      const lister = new CloudflareApiObjectLister(TEST_CREDENTIALS, mockFetch);
+      await expect(lister.list(DEV_BUCKET)).rejects.toThrow(
         `Failed to list ${DEV_BUCKET}: 403 Forbidden`,
       );
     });
