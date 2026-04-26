@@ -2,6 +2,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { type HashedFilename, HashedTileFilename } from '@world-history-map/tiles';
 import type { BucketName } from './bucket-name.ts';
+import type { CloudflareApiCredentials } from './cloudflare-credentials.ts';
 
 const execFileAsync = promisify(execFile);
 
@@ -26,33 +27,31 @@ export interface R2BucketRepository {
 
 export class WranglerR2BucketRepository implements R2BucketRepository {
   readonly #repoRoot: string;
+  readonly #credentials: CloudflareApiCredentials;
   readonly #execWrangler: ExecWrangler;
 
-  constructor(repoRoot: string, execWrangler?: ExecWrangler) {
+  constructor(
+    repoRoot: string,
+    credentials: CloudflareApiCredentials,
+    execWrangler?: ExecWrangler,
+  ) {
     this.#repoRoot = repoRoot;
+    this.#credentials = credentials;
     this.#execWrangler = execWrangler ?? defaultExecWrangler;
   }
 
   async listObjects(bucket: BucketName): Promise<readonly HashedFilename[]> {
-    const accountId = process.env['CLOUDFLARE_ACCOUNT_ID'];
-    const apiToken = process.env['CLOUDFLARE_API_TOKEN'];
-    if (!accountId || !apiToken) {
-      throw new Error(
-        'CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN are required to list objects',
-      );
-    }
-
     const keys: string[] = [];
     let cursor: string | undefined;
 
     do {
       const url = new URL(
-        `https://api.cloudflare.com/client/v4/accounts/${accountId}/r2/buckets/${bucket}/objects`,
+        `https://api.cloudflare.com/client/v4/accounts/${this.#credentials.accountId}/r2/buckets/${bucket}/objects`,
       );
       if (cursor) url.searchParams.set('cursor', cursor);
 
       const response = await fetch(url, {
-        headers: { Authorization: `Bearer ${apiToken}` },
+        headers: this.#credentials.authHeader(),
       });
 
       if (!response.ok) {
