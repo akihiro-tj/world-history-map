@@ -1,0 +1,82 @@
+# Tiles GC Workflow
+#
+# Deletes hashed PMTiles from R2 that are no longer referenced by any of the
+# most recent N manifest-changing commits (the rollback window).
+#
+# Defaults to dry_run=true — outputs candidates without deleting.
+# Run with dry_run=false only after reviewing the dry-run output.
+#
+# Manual trigger:
+#   gh workflow run tiles-gc.yml \
+#     -f dry_run=true \
+#     -f window_size=3 \
+#     -f target_env=both
+#
+# Required Secrets:
+#   CLOUDFLARE_API_TOKEN   — R2 object read/write + delete permissions
+#   CLOUDFLARE_ACCOUNT_ID  — Cloudflare account identifier
+
+name: Tiles GC
+
+on:
+  schedule:
+    - cron: '0 3 1 * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (true = list candidates only, no deletion)'
+        required: false
+        default: 'true'
+        type: choice
+        options: ['true', 'false']
+      window_size:
+        description: 'Number of manifest-changing commits to retain'
+        required: false
+        default: '3'
+        type: string
+      target_env:
+        description: 'Target R2 environment'
+        required: false
+        default: 'both'
+        type: choice
+        options: ['dev', 'prod', 'both']
+
+env:
+  DEV_BUCKET: world-history-map-tiles-dev
+  PROD_BUCKET: world-history-map-tiles-prod
+
+jobs:
+  gc:
+    name: Tiles GC
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Add wrangler to PATH
+        run: echo "${{ github.workspace }}/apps/worker/node_modules/.bin" >> $GITHUB_PATH
+
+      - name: Run GC
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          DRY_RUN: ${{ inputs.dry_run || 'true' }}
+          WINDOW_SIZE: ${{ inputs.window_size || '3' }}
+          TARGET_ENV: ${{ inputs.target_env || 'both' }}
+        run: pnpm --filter @world-history-map/tiles-gc run gc
