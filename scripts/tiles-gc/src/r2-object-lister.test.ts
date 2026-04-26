@@ -74,5 +74,25 @@ describe('CloudflareApiObjectLister', () => {
         `Failed to list ${DEV_BUCKET}: 403 Forbidden`,
       );
     });
+
+    it('throws when the response body does not match the expected schema', async () => {
+      const mockFetch = vi
+        .fn<FetchFn>()
+        .mockResolvedValue(new Response(JSON.stringify({}), { status: 200 }));
+
+      const lister = new CloudflareApiObjectLister(TEST_CREDENTIALS, mockFetch);
+      await expect(lister.list(DEV_BUCKET)).rejects.toThrow('Failed to parse R2 list response');
+    });
+
+    it('throws when objects field is not an array', async () => {
+      const mockFetch = vi.fn<FetchFn>().mockResolvedValue(
+        new Response(JSON.stringify({ result: { objects: 'not-an-array', truncated: false } }), {
+          status: 200,
+        }),
+      );
+
+      const lister = new CloudflareApiObjectLister(TEST_CREDENTIALS, mockFetch);
+      await expect(lister.list(DEV_BUCKET)).rejects.toThrow('Failed to parse R2 list response');
+    });
   });
 });

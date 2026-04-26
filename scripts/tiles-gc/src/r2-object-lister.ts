@@ -1,4 +1,5 @@
 import { type HashedFilename, HashedTileFilename } from '@world-history-map/tiles';
+import { z } from 'zod';
 import type { BucketName } from './bucket-name.ts';
 import type { CloudflareApiCredentials } from './cloudflare-credentials.ts';
 
@@ -6,17 +7,13 @@ const CLOUDFLARE_API_BASE_URL = 'https://api.cloudflare.com/client/v4';
 
 export type FetchFn = typeof fetch;
 
-interface CloudflareR2Object {
-  readonly key: string;
-}
-
-interface CloudflareR2ListResult {
-  readonly result: {
-    readonly objects: readonly CloudflareR2Object[];
-    readonly truncated: boolean;
-    readonly cursor?: string;
-  };
-}
+const CloudflareR2ListResultSchema = z.object({
+  result: z.object({
+    objects: z.array(z.object({ key: z.string() })),
+    truncated: z.boolean(),
+    cursor: z.string().optional(),
+  }),
+});
 
 export interface R2ObjectLister {
   list(bucket: BucketName): Promise<readonly HashedFilename[]>;
@@ -66,10 +63,13 @@ export class CloudflareApiObjectLister implements R2ObjectLister {
       throw new Error(`Failed to list ${bucket}: ${response.status} ${response.statusText}`);
     }
 
-    const listResponse = (await response.json()) as CloudflareR2ListResult;
+    const parsed = CloudflareR2ListResultSchema.safeParse(await response.json());
+    if (!parsed.success) {
+      throw new Error(`Failed to parse R2 list response: ${parsed.error.message}`);
+    }
     return {
-      keys: listResponse.result.objects.map((r2Object) => r2Object.key),
-      nextCursor: listResponse.result.truncated ? listResponse.result.cursor : undefined,
+      keys: parsed.data.result.objects.map((r2Object) => r2Object.key),
+      nextCursor: parsed.data.result.truncated ? parsed.data.result.cursor : undefined,
     };
   }
 }
