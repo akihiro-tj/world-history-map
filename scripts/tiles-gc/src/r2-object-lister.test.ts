@@ -11,7 +11,7 @@ const TEST_CREDENTIALS = CloudflareApiCredentials.fromEnv({
 
 function makeListResponse(keys: string[], truncated: boolean, cursor?: string): Response {
   return new Response(
-    JSON.stringify({ result: { objects: keys.map((key) => ({ key })), truncated, cursor } }),
+    JSON.stringify({ objects: keys.map((key) => ({ key })), truncated, cursor }),
     { status: 200 },
   );
 }
@@ -76,7 +76,7 @@ describe('CloudflareApiObjectLister', () => {
 
     it('throws when objects field is not an array', async () => {
       const mockFetch = vi.fn<FetchFn>().mockResolvedValue(
-        new Response(JSON.stringify({ result: { objects: 'not-an-array', truncated: false } }), {
+        new Response(JSON.stringify({ objects: 'not-an-array', truncated: false }), {
           status: 200,
         }),
       );

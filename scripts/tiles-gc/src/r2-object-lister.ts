@@ -6,15 +6,13 @@ export type FetchFn = typeof fetch;
 
 const CloudflareR2ListResultSchema = z
   .object({
-    result: z.object({
-      objects: z.array(z.object({ key: z.string() })),
-      truncated: z.boolean(),
-      cursor: z.string().optional(),
-    }),
+    objects: z.array(z.object({ key: z.string() })),
+    truncated: z.boolean(),
+    cursor: z.string().optional(),
   })
   .transform((data) => ({
-    keys: data.result.objects.map((o) => o.key),
-    nextCursor: data.result.truncated ? data.result.cursor : undefined,
+    keys: data.objects.map((o) => o.key),
+    nextCursor: data.truncated ? data.cursor : undefined,
   }));
 
 export interface R2ObjectLister {
