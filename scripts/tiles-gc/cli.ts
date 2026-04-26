@@ -2,7 +2,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { HashedFilename } from '@world-history-map/tiles';
 import type { BucketName } from './src/bucket-name.ts';
-import { computeRetainedHashes, runGc } from './src/gc.ts';
+import { computeDeletionCandidates, computeRetainedHashes } from './src/gc.ts';
+import { type GcExecution, gcExecutionFor } from './src/gc-execution.ts';
 import { GitManifestHistoryRepository } from './src/manifest-history.ts';
 import { type R2BucketRepository, WranglerR2BucketRepository } from './src/r2-bucket.ts';
 
@@ -21,24 +22,20 @@ async function runGcForBucket(
   bucket: BucketName,
   retained: ReadonlySet<HashedFilename>,
   r2Repo: R2BucketRepository,
+  gcExecution: GcExecution,
 ): Promise<void> {
   const bucketObjects = await r2Repo.listObjects(bucket);
-
-  const summary = await runGc({
-    retained,
-    bucketObjects,
-    dryRun: DRY_RUN,
-    deleteObject: (key) => r2Repo.deleteObject(bucket, key),
-  });
+  const plan = computeDeletionCandidates(retained, bucketObjects);
+  const result = await gcExecution.execute(bucket, plan);
 
   console.log(`\nBucket: ${bucket}`);
-  console.log(`  Retained: ${summary.retained} hashes referenced in window`);
-  console.log(`  Candidates: ${summary.candidates.length}`);
-  for (const key of summary.candidates) {
-    console.log(`    ${DRY_RUN ? '[DRY RUN] would delete' : 'deleted'}: ${key}`);
+  console.log(`  Retained: ${retained.size} hashes referenced in window`);
+  console.log(`  Candidates: ${plan.size}`);
+  for (const key of plan.candidates()) {
+    console.log(`    ${result.mode === 'dry-run' ? '[DRY RUN] would delete' : 'deleted'}: ${key}`);
   }
-  if (!DRY_RUN) {
-    console.log(`  Deleted: ${summary.deleted}`);
+  if (result.mode === 'live') {
+    console.log(`  Deleted: ${result.deleted}`);
   }
 }
 
@@ -52,8 +49,9 @@ async function main(): Promise<void> {
   const retained = computeRetainedHashes(snapshots);
   console.log(`\nRetained hashes from last ${WINDOW_SIZE} manifest commits: ${retained.size}`);
 
+  const gcExecution = gcExecutionFor(DRY_RUN, r2Repo);
   for (const bucket of targets) {
-    await runGcForBucket(bucket as BucketName, retained, r2Repo);
+    await runGcForBucket(bucket as BucketName, retained, r2Repo, gcExecution);
   }
 }
 

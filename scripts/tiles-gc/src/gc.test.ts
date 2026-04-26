@@ -1,6 +1,10 @@
 import { asHashedFilename, type HashedFilename, TilesManifest } from '@world-history-map/tiles';
 import { describe, expect, it, vi } from 'vitest';
-import { computeDeletionCandidates, computeRetainedHashes, runGc } from './gc.ts';
+import { DEV_BUCKET } from './bucket-name.ts';
+import { DeletionPlan } from './deletion-plan.ts';
+import { computeDeletionCandidates, computeRetainedHashes } from './gc.ts';
+import { DryRunGcExecution, LiveGcExecution } from './gc-execution.ts';
+import type { R2BucketRepository } from './r2-bucket.ts';
 
 describe('computeRetainedHashes', () => {
   it('returns union of hashed filenames from all manifest snapshots', () => {
@@ -78,31 +82,34 @@ describe('computeDeletionCandidates', () => {
   });
 });
 
-describe('dry-run mode', () => {
-  it('does not invoke the delete function in dry-run mode', async () => {
-    const mockDelete = vi.fn().mockResolvedValue(undefined);
-    await runGc({
-      retained: new Set([asHashedFilename('world_1600.current.pmtiles')]),
-      bucketObjects: [asHashedFilename('world_1600.orphan.pmtiles')],
-      dryRun: true,
-      deleteObject: mockDelete,
-    });
+describe('DryRunGcExecution', () => {
+  it('returns deleted=0 and mode=dry-run without deleting', async () => {
+    const execution = new DryRunGcExecution();
+    const plan = DeletionPlan.fromCandidates([asHashedFilename('world_1600.orphan.pmtiles')]);
 
-    expect(mockDelete).not.toHaveBeenCalled();
+    const result = await execution.execute(DEV_BUCKET, plan);
+
+    expect(result.deleted).toBe(0);
+    expect(result.mode).toBe('dry-run');
   });
+});
 
-  it('invokes the delete function in non-dry-run mode', async () => {
-    const mockDelete = vi.fn().mockResolvedValue(undefined);
+describe('LiveGcExecution', () => {
+  it('calls deleteObject for each candidate and returns deleted count', async () => {
+    const mockR2Repo: R2BucketRepository = {
+      listObjects: vi.fn(),
+      deleteObject: vi.fn().mockResolvedValue(undefined),
+    };
+    const execution = new LiveGcExecution(mockR2Repo);
+    const orphanKey = asHashedFilename('world_1600.orphan.pmtiles');
+    const plan = DeletionPlan.fromCandidates([orphanKey]);
 
-    await runGc({
-      retained: new Set([asHashedFilename('world_1600.current.pmtiles')]),
-      bucketObjects: [asHashedFilename('world_1600.orphan.pmtiles')],
-      dryRun: false,
-      deleteObject: mockDelete,
-    });
+    const result = await execution.execute(DEV_BUCKET, plan);
 
-    expect(mockDelete).toHaveBeenCalledWith(asHashedFilename('world_1600.orphan.pmtiles'));
-    expect(mockDelete).toHaveBeenCalledTimes(1);
+    expect(mockR2Repo.deleteObject).toHaveBeenCalledWith(DEV_BUCKET, orphanKey);
+    expect(mockR2Repo.deleteObject).toHaveBeenCalledTimes(1);
+    expect(result.deleted).toBe(1);
+    expect(result.mode).toBe('live');
   });
 });
 
