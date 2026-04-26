@@ -1,4 +1,3 @@
-import { type HashedFilename, HashedTileFilename } from '@world-history-map/tiles';
 import { z } from 'zod';
 import type { BucketName } from './bucket-name.ts';
 import type { CloudflareApiCredentials } from './cloudflare-credentials.ts';
@@ -19,7 +18,7 @@ const CloudflareR2ListResultSchema = z
   }));
 
 export interface R2ObjectLister {
-  list(bucket: BucketName): Promise<readonly HashedFilename[]>;
+  list(bucket: BucketName): Promise<readonly string[]>;
 }
 
 export class CloudflareApiObjectLister implements R2ObjectLister {
@@ -31,9 +30,8 @@ export class CloudflareApiObjectLister implements R2ObjectLister {
     this.#fetchFn = fetchFn ?? defaultFetch;
   }
 
-  async list(bucket: BucketName): Promise<readonly HashedFilename[]> {
-    const objectKeys = await this.#fetchAllObjectKeys(bucket);
-    return HashedTileFilename.parseAll(objectKeys).map((tile) => tile.toString());
+  async list(bucket: BucketName): Promise<readonly string[]> {
+    return this.#fetchAllObjectKeys(bucket);
   }
 
   async #fetchAllObjectKeys(bucket: BucketName): Promise<readonly string[]> {

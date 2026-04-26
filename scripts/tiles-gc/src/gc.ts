@@ -1,4 +1,8 @@
-import type { HashedFilename, TilesManifest } from '@world-history-map/tiles';
+import {
+  type HashedFilename,
+  HashedTileFilename,
+  type TilesManifest,
+} from '@world-history-map/tiles';
 import { DeletionPlan } from './deletion-plan.ts';
 
 export function computeRetainedHashes(
@@ -22,4 +26,8 @@ export function computeDeletionCandidates(
 ): DeletionPlan {
   const candidates = bucketObjects.filter((key) => !retained.has(key));
   return DeletionPlan.fromCandidates(candidates);
+}
+
+export function extractHashedTileFilenames(keys: readonly string[]): readonly HashedFilename[] {
+  return HashedTileFilename.parseAll(keys).map((tile) => tile.toString());
 }

@@ -1,7 +1,11 @@
 import type { HashedFilename } from '@world-history-map/tiles';
 import type { BucketName } from './bucket-name.ts';
 import type { DeletionPlan } from './deletion-plan.ts';
-import { computeDeletionCandidates, computeRetainedHashes } from './gc.ts';
+import {
+  computeDeletionCandidates,
+  computeRetainedHashes,
+  extractHashedTileFilenames,
+} from './gc.ts';
 import type { GcCliInputs } from './gc-cli-inputs.ts';
 import type { GcExecution, GcExecutionResult } from './gc-execution.ts';
 import type { ManifestHistoryRepository } from './manifest-history.ts';
@@ -41,8 +45,9 @@ export class GcUseCase {
 
     const buckets: BucketGcOutcome[] = [];
     for (const bucket of inputs.target.buckets()) {
-      const bucketObjects = await this.#objectLister.list(bucket);
-      const plan = computeDeletionCandidates(retained, bucketObjects);
+      const objectKeys = await this.#objectLister.list(bucket);
+      const hashedTiles = extractHashedTileFilenames(objectKeys);
+      const plan = computeDeletionCandidates(retained, hashedTiles);
       const executionResult = await this.#gcExecution.execute(bucket, plan);
       buckets.push({ bucket, retained, plan, executionResult });
     }

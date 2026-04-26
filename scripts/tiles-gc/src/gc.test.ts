@@ -2,7 +2,11 @@ import { asHashedFilename, type HashedFilename, TilesManifest } from '@world-his
 import { describe, expect, it, vi } from 'vitest';
 import { DEV_BUCKET } from './bucket-name.ts';
 import { DeletionPlan } from './deletion-plan.ts';
-import { computeDeletionCandidates, computeRetainedHashes } from './gc.ts';
+import {
+  computeDeletionCandidates,
+  computeRetainedHashes,
+  extractHashedTileFilenames,
+} from './gc.ts';
 import { DryRunGcExecution, LiveGcExecution } from './gc-execution.ts';
 import type { R2ObjectDeleter } from './r2-object-deleter.ts';
 
@@ -79,6 +83,25 @@ describe('computeDeletionCandidates', () => {
       asHashedFilename('world_1700.bbb.pmtiles'),
     ];
     expect(computeDeletionCandidates(retained, bucketObjects).size).toBe(2);
+  });
+});
+
+describe('extractHashedTileFilenames', () => {
+  it('returns only keys that match the hashed tile pattern', () => {
+    const keys = [
+      'world_1600.fedcba987654.pmtiles',
+      'readme.txt',
+      'world_1700.pmtiles',
+      'world_1800.aabbcc112233.pmtiles',
+    ];
+    const result = extractHashedTileFilenames(keys);
+    expect(result).toHaveLength(2);
+    expect(result).toContain('world_1600.fedcba987654.pmtiles');
+    expect(result).toContain('world_1800.aabbcc112233.pmtiles');
+  });
+
+  it('returns empty array when no keys match', () => {
+    expect(extractHashedTileFilenames(['readme.txt', 'world_1600.pmtiles'])).toHaveLength(0);
   });
 });
 

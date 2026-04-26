@@ -18,7 +18,7 @@ function makeListResponse(keys: string[], truncated: boolean, cursor?: string): 
 
 describe('CloudflareApiObjectLister', () => {
   describe('list', () => {
-    it('returns hashed tile filenames from a single page', async () => {
+    it('returns all object keys from a single page', async () => {
       const mockFetch = vi
         .fn<FetchFn>()
         .mockResolvedValue(
@@ -31,9 +31,10 @@ describe('CloudflareApiObjectLister', () => {
       const lister = new CloudflareApiObjectLister(TEST_CREDENTIALS, mockFetch);
       const result = await lister.list(DEV_BUCKET);
 
-      expect(result).toHaveLength(2);
+      expect(result).toHaveLength(3);
       expect(result).toContain('world_1600.fedcba987654.pmtiles');
       expect(result).toContain('world_1700.aabbcc112233.pmtiles');
+      expect(result).toContain('readme.txt');
     });
 
     it('iterates through multiple pages using cursor', async () => {
@@ -51,17 +52,6 @@ describe('CloudflareApiObjectLister', () => {
       expect(mockFetch).toHaveBeenCalledTimes(2);
       const secondCallUrl = mockFetch.mock.calls[1]?.[0] as URL;
       expect(secondCallUrl.searchParams.get('cursor')).toBe('cursor-abc');
-    });
-
-    it('excludes keys that do not match the hashed tile pattern', async () => {
-      const mockFetch = vi
-        .fn<FetchFn>()
-        .mockResolvedValue(makeListResponse(['readme.txt', 'world_1600.pmtiles'], false));
-
-      const lister = new CloudflareApiObjectLister(TEST_CREDENTIALS, mockFetch);
-      const result = await lister.list(DEV_BUCKET);
-
-      expect(result).toHaveLength(0);
     });
 
     it('throws when the API returns a non-ok status', async () => {
