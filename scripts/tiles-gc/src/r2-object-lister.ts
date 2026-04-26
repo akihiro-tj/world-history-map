@@ -30,18 +30,19 @@ export class CloudflareApiObjectLister implements R2ObjectLister {
 
   async list(bucket: BucketName): Promise<readonly HashedFilename[]> {
     const objectKeys = await this.#fetchAllObjectKeys(bucket);
-    return HashedTileFilename.parseAll(objectKeys).map((tile) => tile.toString() as HashedFilename);
+    return HashedTileFilename.parseAll(objectKeys).map((tile) => tile.toString());
   }
 
   async #fetchAllObjectKeys(bucket: BucketName): Promise<readonly string[]> {
     const objectKeys: string[] = [];
-    let nextPageCursor: string | undefined;
+    let cursor: string | undefined;
 
-    do {
-      const page = await this.#fetchObjectsPage(bucket, nextPageCursor);
+    while (true) {
+      const page = await this.#fetchObjectsPage(bucket, cursor);
       objectKeys.push(...page.keys);
-      nextPageCursor = page.nextCursor;
-    } while (nextPageCursor !== undefined);
+      if (page.nextCursor === undefined) break;
+      cursor = page.nextCursor;
+    }
 
     return objectKeys;
   }
