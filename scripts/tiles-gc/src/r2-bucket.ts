@@ -7,6 +7,18 @@ const execFileAsync = promisify(execFile);
 
 export type ExecWrangler = (args: readonly string[], cwd: string) => Promise<string>;
 
+interface CloudflareR2Object {
+  readonly key: string;
+}
+
+interface CloudflareR2ListResult {
+  readonly result: {
+    readonly objects: readonly CloudflareR2Object[];
+    readonly truncated: boolean;
+    readonly cursor?: string;
+  };
+}
+
 export interface R2BucketRepository {
   listObjects(bucket: BucketName): Promise<readonly HashedFilename[]>;
   deleteObject(bucket: BucketName, key: HashedFilename): Promise<void>;
@@ -22,14 +34,39 @@ export class WranglerR2BucketRepository implements R2BucketRepository {
   }
 
   async listObjects(bucket: BucketName): Promise<readonly HashedFilename[]> {
-    const output = await this.#execWrangler(
-      ['r2', 'object', 'list', bucket, '--remote', '--json'],
-      this.#repoRoot,
-    );
-    const parsed = JSON.parse(output) as { key: string }[];
-    return parsed.flatMap((entry) => {
-      const tile = HashedTileFilename.parseHashed(entry.key);
-      return tile !== null ? [tile.toString()] : [];
+    const accountId = process.env['CLOUDFLARE_ACCOUNT_ID'];
+    const apiToken = process.env['CLOUDFLARE_API_TOKEN'];
+    if (!accountId || !apiToken) {
+      throw new Error(
+        'CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN are required to list objects',
+      );
+    }
+
+    const keys: string[] = [];
+    let cursor: string | undefined;
+
+    do {
+      const url = new URL(
+        `https://api.cloudflare.com/client/v4/accounts/${accountId}/r2/buckets/${bucket}/objects`,
+      );
+      if (cursor) url.searchParams.set('cursor', cursor);
+
+      const response = await fetch(url, {
+        headers: { Authorization: `Bearer ${apiToken}` },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to list ${bucket}: ${response.status} ${response.statusText}`);
+      }
+
+      const data = (await response.json()) as CloudflareR2ListResult;
+      keys.push(...data.result.objects.map((o) => o.key));
+      cursor = data.result.truncated ? data.result.cursor : undefined;
+    } while (cursor !== undefined);
+
+    return keys.flatMap((key) => {
+      const tile = HashedTileFilename.parseHashed(key);
+      return tile !== null ? [tile.toString() as HashedFilename] : [];
     });
   }
 
