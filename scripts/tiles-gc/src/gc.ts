@@ -1,11 +1,5 @@
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
 import type { HashedFilename, TilesManifest } from '@world-history-map/tiles';
 import { DeletionPlan } from './deletion-plan.ts';
-
-const execFileAsync = promisify(execFile);
-
-export type ManifestSnapshot = Record<string, string>;
 
 export interface RunGcOptions {
   readonly retained: ReadonlySet<HashedFilename>;
@@ -58,34 +52,4 @@ export async function runGc(options: RunGcOptions): Promise<GcSummary> {
     deleted: dryRun ? 0 : plan.size,
     candidates: plan.candidates(),
   };
-}
-
-export async function parseManifestSnapshot(
-  commitHash: string,
-  repoRoot: string,
-): Promise<ManifestSnapshot> {
-  try {
-    const { stdout } = await execFileAsync(
-      'git',
-      ['show', `${commitHash}:packages/tiles/src/manifest.ts`],
-      { cwd: repoRoot },
-    );
-    const matches = [...stdout.matchAll(/'([^']+)':\s*'(world_[^']+\.pmtiles)'/g)];
-    return Object.fromEntries(matches.map(([, year, filename]) => [year, filename]));
-  } catch {
-    return {};
-  }
-}
-
-export async function collectManifestSnapshots(
-  windowSize: number,
-  repoRoot: string,
-): Promise<ManifestSnapshot[]> {
-  const { stdout } = await execFileAsync(
-    'git',
-    ['log', `-n`, String(windowSize), '--format=%H', '--', 'packages/tiles/src/manifest.ts'],
-    { cwd: repoRoot },
-  );
-  const commits = stdout.trim().split('\n').filter(Boolean);
-  return Promise.all(commits.map((hash) => parseManifestSnapshot(hash, repoRoot)));
 }

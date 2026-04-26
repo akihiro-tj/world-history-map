@@ -2,8 +2,9 @@ import { execFile } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
-import { asHashedFilename, type HashedFilename, TilesManifest } from '@world-history-map/tiles';
-import { collectManifestSnapshots, computeRetainedHashes, runGc } from './src/gc.ts';
+import { asHashedFilename, type HashedFilename } from '@world-history-map/tiles';
+import { computeRetainedHashes, runGc } from './src/gc.ts';
+import { GitManifestHistoryRepository } from './src/manifest-history.ts';
 
 const execFileAsync = promisify(execFile);
 
@@ -68,8 +69,9 @@ async function main(): Promise<void> {
   const targets = BUCKETS[TARGET_ENV] ?? (BUCKETS['both'] as string[]);
   console.log(`Tiles GC — dry_run=${DRY_RUN}, window_size=${WINDOW_SIZE}, target=${TARGET_ENV}`);
 
-  const snapshots = await collectManifestSnapshots(WINDOW_SIZE, REPO_ROOT);
-  const retained = computeRetainedHashes(snapshots.map((s) => TilesManifest.fromRecord(s)));
+  const historyRepo = new GitManifestHistoryRepository(REPO_ROOT);
+  const snapshots = await historyRepo.recentSnapshots(WINDOW_SIZE);
+  const retained = computeRetainedHashes(snapshots);
   console.log(`\nRetained hashes from last ${WINDOW_SIZE} manifest commits: ${retained.size}`);
 
   for (const bucket of targets) {
