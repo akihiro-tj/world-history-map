@@ -9,23 +9,29 @@ const TEST_CREDENTIALS = CloudflareApiCredentials.fromEnv({
   CLOUDFLARE_API_TOKEN: 'test-token',
 });
 
-function makeListResponse(keys: string[], truncated: boolean, cursor?: string): Response {
+function makeListResponse(keys: string[]): Response {
   return new Response(
-    JSON.stringify({ result: { objects: keys.map((key) => ({ key })), truncated, cursor } }),
+    JSON.stringify({
+      success: true,
+      errors: [],
+      messages: [],
+      result: keys.map((key) => ({ key })),
+    }),
     { status: 200 },
   );
 }
 
 describe('CloudflareApiObjectLister', () => {
   describe('list', () => {
-    it('returns all object keys from a single page', async () => {
+    it('returns all object keys from the response', async () => {
       const mockFetch = vi
         .fn<FetchFn>()
         .mockResolvedValue(
-          makeListResponse(
-            ['world_1600.fedcba987654.pmtiles', 'world_1700.aabbcc112233.pmtiles', 'readme.txt'],
-            false,
-          ),
+          makeListResponse([
+            'world_1600.fedcba987654.pmtiles',
+            'world_1700.aabbcc112233.pmtiles',
+            'readme.txt',
+          ]),
         );
 
       const lister = new CloudflareApiObjectLister(TEST_CREDENTIALS, mockFetch);
@@ -37,21 +43,13 @@ describe('CloudflareApiObjectLister', () => {
       expect(result).toContain('readme.txt');
     });
 
-    it('iterates through multiple pages using cursor', async () => {
-      const mockFetch = vi
-        .fn<FetchFn>()
-        .mockResolvedValueOnce(
-          makeListResponse(['world_1600.fedcba987654.pmtiles'], true, 'cursor-abc'),
-        )
-        .mockResolvedValueOnce(makeListResponse(['world_1700.aabbcc112233.pmtiles'], false));
+    it('returns an empty list when the bucket is empty', async () => {
+      const mockFetch = vi.fn<FetchFn>().mockResolvedValue(makeListResponse([]));
 
       const lister = new CloudflareApiObjectLister(TEST_CREDENTIALS, mockFetch);
       const result = await lister.list(DEV_BUCKET);
 
-      expect(result).toHaveLength(2);
-      expect(mockFetch).toHaveBeenCalledTimes(2);
-      const secondCallUrl = mockFetch.mock.calls[1]?.[0] as URL;
-      expect(secondCallUrl.searchParams.get('cursor')).toBe('cursor-abc');
+      expect(result).toHaveLength(0);
     });
 
     it('throws when the API returns a non-ok status', async () => {
@@ -74,9 +72,9 @@ describe('CloudflareApiObjectLister', () => {
       await expect(lister.list(DEV_BUCKET)).rejects.toThrow('Failed to parse R2 list response');
     });
 
-    it('throws when objects field is not an array', async () => {
+    it('throws when result field is not an array', async () => {
       const mockFetch = vi.fn<FetchFn>().mockResolvedValue(
-        new Response(JSON.stringify({ result: { objects: 'not-an-array', truncated: false } }), {
+        new Response(JSON.stringify({ success: true, errors: [], result: 'not-an-array' }), {
           status: 200,
         }),
       );
