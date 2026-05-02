@@ -84,8 +84,8 @@ export function MapView() {
         data-testid="map-error"
       >
         <div className="text-center">
-          <p className="text-lg text-red-400">Failed to load map data</p>
-          <p className="text-sm text-red-300">{error}</p>
+          <p className="text-lg text-role-error">Failed to load map data</p>
+          <p className="text-sm text-role-error/80">{error}</p>
         </div>
       </div>
     );
@@ -110,7 +110,7 @@ export function MapView() {
           <div className="flex flex-col items-center">
             <div className="relative h-16 w-16">
               <svg
-                className="h-16 w-16 animate-spin text-blue-400"
+                className="h-16 w-16 animate-spin text-role-state"
                 style={{ animationDuration: LOADING_SPIN_DURATION }}
                 viewBox="0 0 24 24"
                 fill="none"

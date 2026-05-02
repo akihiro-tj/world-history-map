@@ -65,13 +65,13 @@ function PanelHeader({
 function LoadingBody() {
   return (
     <div className="flex items-center justify-center py-8">
-      <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
+      <div className="h-8 w-8 animate-spin rounded-full border-4 border-role-state border-t-transparent" />
     </div>
   );
 }
 
 function ErrorBody({ error }: { error: string | null }) {
-  return <p className="p-4 text-red-400">{error}</p>;
+  return <p className="m-3 rounded p-3 bg-role-error/10 text-role-error">{error}</p>;
 }
 
 function NoDescriptionBody() {
