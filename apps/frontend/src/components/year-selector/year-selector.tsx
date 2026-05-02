@@ -154,7 +154,7 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
               className={cn(
                 'flex shrink-0 items-center justify-center border-r border-gray-600 py-3 font-medium transition-colors last:border-r-0',
                 isSelected
-                  ? 'min-w-[5rem] bg-blue-600 px-5 text-xl text-white'
+                  ? 'min-w-[5rem] bg-surface-raise px-5 text-xl font-bold text-white'
                   : 'min-w-[4rem] px-3 text-base text-gray-300 hover:bg-gray-600 hover:text-white',
               )}
             >

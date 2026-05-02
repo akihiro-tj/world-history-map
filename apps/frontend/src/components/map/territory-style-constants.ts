@@ -44,8 +44,10 @@ export const LABEL_ANCHOR: ('center' | 'top' | 'bottom' | 'left' | 'right')[] = 
 
 export const TERRITORY_FILL_OPACITY = 0.7;
 
-export const HIGHLIGHT_COLOR = '#ffffff';
-export const HIGHLIGHT_FILL_OPACITY = 0.15;
+// Mirrors --color-role-selected from index.css.
+// MapLibre paint props cannot reference CSS variables.
+export const HIGHLIGHT_COLOR = '#f43f5e';
+export const HIGHLIGHT_FILL_OPACITY = 0.2;
 export const HIGHLIGHT_LINE_WIDTH = 3.5;
 
 export const LOADING_SPIN_DURATION = '3s';

@@ -7,9 +7,35 @@ import { cn } from '@/lib/utils';
 import { useAppState } from '../../contexts/app-state-context';
 import { BottomSheet } from '../bottom-sheet/bottom-sheet';
 import { CloseButton } from '../close-button/close-button';
+import { RoleErrorMessage } from '../feedback/role-error-message';
+import { RoleSpinner } from '../feedback/role-spinner';
 import { useTerritoryDescription } from './hooks/use-territory-description';
+import { SELECTED_ACCENT_CLASS, SelectedAccent } from './selected-accent';
 import { TerritoryProfile } from './territory-profile';
 import { TerritoryTimeline } from './territory-timeline';
+
+type PanelState =
+  | { kind: 'loading'; name: string }
+  | { kind: 'error'; message: string }
+  | { kind: 'empty'; name: string }
+  | { kind: 'loaded'; description: TerritoryDescription };
+
+interface ContentProps {
+  description: TerritoryDescription | null;
+  isLoading: boolean;
+  error: string | null;
+  selectedTerritory: string | null;
+  selectedYear: HistoricalYear;
+  onClose: () => void;
+}
+
+function panelState(props: ContentProps): PanelState {
+  const { description, isLoading, error, selectedTerritory } = props;
+  if (isLoading) return { kind: 'loading', name: selectedTerritory ?? '読み込み中…' };
+  if (error) return { kind: 'error', message: error };
+  if (!description) return { kind: 'empty', name: selectedTerritory ?? '領土情報' };
+  return { kind: 'loaded', description };
+}
 
 function PanelWrapper({
   children,
@@ -28,6 +54,7 @@ function PanelWrapper({
       aria-busy={busy || undefined}
       className={cn(
         'absolute left-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] rounded-lg bg-gray-700/95 p-4 shadow-xl backdrop-blur-sm',
+        SELECTED_ACCENT_CLASS,
         scrollable && 'max-h-[calc(100vh-2rem)] overflow-y-auto',
       )}
     >
@@ -62,18 +89,6 @@ function PanelHeader({
   );
 }
 
-function LoadingBody() {
-  return (
-    <div className="flex items-center justify-center py-8">
-      <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-400 border-t-transparent" />
-    </div>
-  );
-}
-
-function ErrorBody({ error }: { error: string | null }) {
-  return <p className="p-4 text-red-400">{error}</p>;
-}
-
 function NoDescriptionBody() {
   return (
     <div data-testid="no-description-message" className="p-4 text-center text-gray-300">
@@ -100,91 +115,76 @@ function DescriptionBody({
   );
 }
 
-interface ContentProps {
-  description: TerritoryDescription | null;
-  isLoading: boolean;
-  error: string | null;
-  selectedTerritory: string | null;
-  selectedYear: HistoricalYear;
-  onClose: () => void;
+function DesktopContent(props: ContentProps) {
+  const { onClose, selectedYear } = props;
+  const state = panelState(props);
+
+  switch (state.kind) {
+    case 'loading':
+      return (
+        <PanelWrapper busy>
+          <PanelHeader name={state.name} onClose={onClose} />
+          <RoleSpinner />
+        </PanelWrapper>
+      );
+    case 'error':
+      return (
+        <PanelWrapper>
+          <PanelHeader name="エラー" onClose={onClose} />
+          <RoleErrorMessage>{state.message}</RoleErrorMessage>
+        </PanelWrapper>
+      );
+    case 'empty':
+      return (
+        <PanelWrapper>
+          <PanelHeader name={state.name} onClose={onClose} />
+          <NoDescriptionBody />
+        </PanelWrapper>
+      );
+    case 'loaded':
+      return (
+        <PanelWrapper scrollable>
+          <PanelHeader
+            name={state.description.name}
+            era={state.description.era}
+            onClose={onClose}
+          />
+          <DescriptionBody description={state.description} selectedYear={selectedYear} />
+        </PanelWrapper>
+      );
+  }
 }
 
-function DesktopContent({
-  description,
-  isLoading,
-  error,
-  selectedTerritory,
-  selectedYear,
-  onClose,
-}: ContentProps) {
-  if (isLoading) {
-    return (
-      <PanelWrapper busy>
-        <PanelHeader name={selectedTerritory ?? '読み込み中…'} onClose={onClose} />
-        <LoadingBody />
-      </PanelWrapper>
-    );
-  }
-  if (error) {
-    return (
-      <PanelWrapper>
-        <PanelHeader name="エラー" onClose={onClose} />
-        <ErrorBody error={error} />
-      </PanelWrapper>
-    );
-  }
-  if (!description) {
-    return (
-      <PanelWrapper>
-        <PanelHeader name={selectedTerritory ?? '領土情報'} onClose={onClose} />
-        <NoDescriptionBody />
-      </PanelWrapper>
-    );
-  }
-  return (
-    <PanelWrapper scrollable>
-      <PanelHeader name={description.name} era={description.era} onClose={onClose} />
-      <DescriptionBody description={description} selectedYear={selectedYear} />
-    </PanelWrapper>
-  );
-}
-
-function MobileContent({
-  description,
-  isLoading,
-  error,
-  selectedTerritory,
-  selectedYear,
-  onClose,
-}: ContentProps) {
-  const headerName = isLoading
-    ? (selectedTerritory ?? '読み込み中…')
-    : error
-      ? 'エラー'
-      : description
-        ? description.name
-        : (selectedTerritory ?? '領土情報');
-  const headerEra = description && !isLoading && !error ? description.era : undefined;
+function MobileContent(props: ContentProps) {
+  const { onClose, selectedYear } = props;
+  const state = panelState(props);
+  const headerName =
+    state.kind === 'loaded'
+      ? state.description.name
+      : state.kind === 'error'
+        ? 'エラー'
+        : state.name;
+  const headerEra = state.kind === 'loaded' ? state.description.era : undefined;
 
   return (
     <BottomSheet
       isOpen
       onClose={onClose}
       header={
-        <div className="px-4">
+        <SelectedAccent className="px-4">
           <PanelHeader name={headerName} era={headerEra} onClose={onClose} />
-        </div>
+        </SelectedAccent>
       }
       aria-labelledby="territory-info-title"
     >
-      {isLoading ? (
-        <LoadingBody />
-      ) : error ? (
-        <ErrorBody error={error} />
-      ) : !description ? (
+      {state.kind === 'loading' ? (
+        <RoleSpinner />
+      ) : state.kind === 'error' ? (
+        <RoleErrorMessage>{state.message}</RoleErrorMessage>
+      ) : state.kind === 'empty' ? (
         <NoDescriptionBody />
       ) : (
-        <DescriptionBody description={description} selectedYear={selectedYear} />
+        <DescriptionBody description={state.description} selectedYear={selectedYear} />
       )}
     </BottomSheet>
   );

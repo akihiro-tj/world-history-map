@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import type { KeyEvent } from '@/domain/territory/types';
 import { createHistoricalYear } from '@/domain/year/historical-year';
 import { TerritoryTimeline } from './territory-timeline';
+import { CURRENT_YEAR_LABEL } from './timeline-row-style';
 
 describe('TerritoryTimeline', () => {
   const sampleEvents: KeyEvent[] = [
@@ -14,7 +15,7 @@ describe('TerritoryTimeline', () => {
     { year: 1789, event: 'フランス革命' },
   ];
 
-  it('applies opacity/muted styling classes to past events', () => {
+  it('applies opacity styling to past events', () => {
     render(
       <TerritoryTimeline keyEvents={sampleEvents} selectedYear={createHistoricalYear(1700)} />,
     );
@@ -40,7 +41,7 @@ describe('TerritoryTimeline', () => {
     expect(currentItem?.className).toMatch(/font-semibold|font-bold/);
   });
 
-  it('applies dashed/muted style to future events', () => {
+  it('applies opacity to future events', () => {
     render(
       <TerritoryTimeline keyEvents={sampleEvents} selectedYear={createHistoricalYear(1700)} />,
     );
@@ -50,10 +51,9 @@ describe('TerritoryTimeline', () => {
     const futureItem = items.find((item) => item.textContent?.includes('1789'));
 
     expect(futureItem?.className).toMatch(/opacity/);
-    expect(futureItem?.className).toMatch(/dashed|border-dashed/);
   });
 
-  it('shows year marker at the correct position when no exact match event exists', () => {
+  it('inserts a current-year placeholder row when no exact event matches', () => {
     const eventsNoMatch: KeyEvent[] = [
       { year: 1643, event: 'ルイ14世即位' },
       { year: 1789, event: 'フランス革命' },
@@ -63,9 +63,13 @@ describe('TerritoryTimeline', () => {
       <TerritoryTimeline keyEvents={eventsNoMatch} selectedYear={createHistoricalYear(1700)} />,
     );
 
-    const marker = screen.getByRole('separator');
-    expect(marker).toBeInTheDocument();
-    expect(marker).toHaveAttribute('aria-label', expect.stringContaining('1700'));
+    const list = screen.getByRole('list');
+    const items = within(list).getAllByRole('listitem');
+    const placeholder = items.find((item) => item.getAttribute('aria-current') === 'true');
+
+    expect(placeholder).toBeInTheDocument();
+    expect(placeholder?.textContent).toContain('1700');
+    expect(placeholder?.textContent).toContain(CURRENT_YEAR_LABEL);
   });
 
   it('renders nothing when keyEvents is undefined', () => {
@@ -85,7 +89,7 @@ describe('TerritoryTimeline', () => {
     expect(list).toHaveAttribute('aria-label', '主な出来事');
   });
 
-  it('places marker at the end when all events are past', () => {
+  it('places placeholder row last when all events are past', () => {
     const pastEvents: KeyEvent[] = [
       { year: 1600, event: '過去A' },
       { year: 1650, event: '過去B' },
@@ -94,15 +98,14 @@ describe('TerritoryTimeline', () => {
     render(<TerritoryTimeline keyEvents={pastEvents} selectedYear={createHistoricalYear(1700)} />);
 
     const list = screen.getByRole('list');
-    const marker = within(list).getByRole('separator');
-    expect(marker).toBeInTheDocument();
+    const items = within(list).getAllByRole('listitem');
+    const lastItem = items[items.length - 1];
 
-    const markerLi = marker.closest('li');
-    const children = Array.from(list.children);
-    expect(children[children.length - 1]).toBe(markerLi);
+    expect(lastItem).toHaveAttribute('aria-current', 'true');
+    expect(lastItem?.textContent).toContain(CURRENT_YEAR_LABEL);
   });
 
-  it('places marker at the beginning when all events are future', () => {
+  it('places placeholder row first when all events are future', () => {
     const futureEvents: KeyEvent[] = [
       { year: 1800, event: '未来A' },
       { year: 1900, event: '未来B' },
@@ -113,11 +116,10 @@ describe('TerritoryTimeline', () => {
     );
 
     const list = screen.getByRole('list');
-    const marker = within(list).getByRole('separator');
-    expect(marker).toBeInTheDocument();
+    const items = within(list).getAllByRole('listitem');
+    const firstItem = items[0];
 
-    const markerLi = marker.closest('li');
-    const children = Array.from(list.children);
-    expect(children[0]).toBe(markerLi);
+    expect(firstItem).toHaveAttribute('aria-current', 'true');
+    expect(firstItem?.textContent).toContain(CURRENT_YEAR_LABEL);
   });
 });
