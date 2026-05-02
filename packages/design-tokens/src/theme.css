@@ -19,7 +19,7 @@
 
   --color-surface-base: oklch(0.16 0.01 250);
   --color-surface-panel: oklch(0.30 0.01 250 / 0.95);
-  --color-surface-raise: oklch(1 0 0 / 0.14);
+  --color-surface-raised: oklch(1 0 0 / 0.14);
   --color-surface-border: oklch(0.40 0.01 250);
 
   --color-text-primary: oklch(1 0 0);
