@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import type { KeyEvent } from '@/domain/territory/types';
 import { createHistoricalYear } from '@/domain/year/historical-year';
 import { TerritoryTimeline } from './territory-timeline';
+import { CURRENT_YEAR_LABEL } from './timeline-row-style';
 
 describe('TerritoryTimeline', () => {
   const sampleEvents: KeyEvent[] = [
@@ -68,7 +69,7 @@ describe('TerritoryTimeline', () => {
 
     expect(placeholder).toBeInTheDocument();
     expect(placeholder?.textContent).toContain('1700');
-    expect(placeholder?.textContent).toContain('現在');
+    expect(placeholder?.textContent).toContain(CURRENT_YEAR_LABEL);
   });
 
   it('renders nothing when keyEvents is undefined', () => {
@@ -101,7 +102,7 @@ describe('TerritoryTimeline', () => {
     const lastItem = items[items.length - 1];
 
     expect(lastItem).toHaveAttribute('aria-current', 'true');
-    expect(lastItem?.textContent).toContain('現在');
+    expect(lastItem?.textContent).toContain(CURRENT_YEAR_LABEL);
   });
 
   it('places placeholder row first when all events are future', () => {
@@ -119,6 +120,6 @@ describe('TerritoryTimeline', () => {
     const firstItem = items[0];
 
     expect(firstItem).toHaveAttribute('aria-current', 'true');
-    expect(firstItem?.textContent).toContain('現在');
+    expect(firstItem?.textContent).toContain(CURRENT_YEAR_LABEL);
   });
 });
