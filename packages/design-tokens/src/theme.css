@@ -16,6 +16,8 @@
   --color-role-warn: oklch(0.78 0.16 75);
   --color-role-error: oklch(0.65 0.22 27);
   --color-role-focus: oklch(0.55 0.18 250);
+  --color-role-label-text: oklch(0.95 0 0);
+  --color-role-label-halo: oklch(0.20 0 0);
 
   --color-surface-base: oklch(0.16 0.01 250);
   --color-surface-panel: oklch(0.30 0.01 250 / 0.95);
