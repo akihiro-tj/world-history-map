@@ -38,9 +38,9 @@ export class RoleColorsBuilder {
   private readonly cssPath: string;
   private readonly outputPath: string;
 
-  constructor(cssPath: string, outputPath: string) {
-    this.cssPath = cssPath;
-    this.outputPath = outputPath;
+  constructor(paths: { cssPath: string; outputPath: string }) {
+    this.cssPath = paths.cssPath;
+    this.outputPath = paths.outputPath;
   }
 
   async generateSource(): Promise<string> {

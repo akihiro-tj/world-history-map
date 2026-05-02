@@ -72,7 +72,7 @@ describe('RoleColorsBuilder', () => {
   });
 
   it('generateSource returns TypeScript source containing all 5 role colors', async () => {
-    const builder = new RoleColorsBuilder(cssPath, outputPath);
+    const builder = new RoleColorsBuilder({ cssPath, outputPath });
     const source = await builder.generateSource();
     expect(source).toContain("selected: 'oklch(0.65 0.22 15)'");
     expect(source).toContain("loading: 'oklch(0.78 0.14 165)'");
@@ -82,19 +82,19 @@ describe('RoleColorsBuilder', () => {
   });
 
   it('isFresh returns false when output file does not exist', async () => {
-    const builder = new RoleColorsBuilder(cssPath, outputPath);
+    const builder = new RoleColorsBuilder({ cssPath, outputPath });
     expect(await builder.isFresh()).toBe(false);
   });
 
   it('isFresh returns true after writing the generated source', async () => {
-    const builder = new RoleColorsBuilder(cssPath, outputPath);
+    const builder = new RoleColorsBuilder({ cssPath, outputPath });
     const source = await builder.generateSource();
     await fs.writeFile(outputPath, source);
     expect(await builder.isFresh()).toBe(true);
   });
 
   it('isFresh returns false when CSS is modified after generation', async () => {
-    const builder = new RoleColorsBuilder(cssPath, outputPath);
+    const builder = new RoleColorsBuilder({ cssPath, outputPath });
     const source = await builder.generateSource();
     await fs.writeFile(outputPath, source);
 
