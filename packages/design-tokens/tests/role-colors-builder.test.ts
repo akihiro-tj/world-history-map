@@ -47,9 +47,9 @@ describe('extractRoleColors', () => {
 });
 
 describe('toTypeScriptSource', () => {
-  it('generates valid TypeScript source with as const', () => {
+  it('generates valid TypeScript source with as const and hex-converted values', () => {
     const source = toTypeScriptSource({ selected: 'oklch(0.65 0.22 15)' });
-    expect(source).toContain("selected: 'oklch(0.65 0.22 15)'");
+    expect(source).toContain("selected: '#f73d62'");
     expect(source).toContain('} as const;');
     expect(source).toContain('export type RoleColorKey');
   });
@@ -71,14 +71,14 @@ describe('RoleColorsBuilder', () => {
     await fs.rm(temporaryDir, { recursive: true, force: true });
   });
 
-  it('generateSource returns TypeScript source containing all 5 role colors', async () => {
+  it('generateSource returns TypeScript source containing all 5 role colors as hex', async () => {
     const builder = new RoleColorsBuilder({ cssPath, outputPath });
     const source = await builder.generateSource();
-    expect(source).toContain("selected: 'oklch(0.65 0.22 15)'");
-    expect(source).toContain("loading: 'oklch(0.78 0.14 165)'");
-    expect(source).toContain("warn: 'oklch(0.78 0.16 75)'");
-    expect(source).toContain("error: 'oklch(0.65 0.22 27)'");
-    expect(source).toContain("focus: 'oklch(0.55 0.18 250)'");
+    expect(source).toContain("selected: '#f73d62'");
+    expect(source).toContain("loading: '#49d3a1'");
+    expect(source).toContain("warn: '#f2a618'");
+    expect(source).toContain("error: '#f9423d'");
+    expect(source).toContain("focus: '#0072d5'");
   });
 
   it('isFresh returns false when output file does not exist', async () => {
