@@ -12,10 +12,10 @@ import { useMapHover } from './hooks/use-map-hover';
 import { useMapKeyboard } from './hooks/use-map-keyboard';
 import { usePMTilesProtocol } from './hooks/use-pmtiles-protocol';
 import { useProjection } from './hooks/use-projection';
+import { LOADING_SPIN_DURATION } from './loading-animation-constants';
 import { TerritoryHighlightLayer } from './territory-highlight-layer';
 import { TerritoryLabel } from './territory-label';
 import { TERRITORY_LAYER_IDS, TerritoryLayer } from './territory-layer';
-import { LOADING_SPIN_DURATION } from './territory-style-constants';
 
 const SOURCE_ID = 'territories';
 const SOURCE_LAYER_TERRITORIES = 'territories';

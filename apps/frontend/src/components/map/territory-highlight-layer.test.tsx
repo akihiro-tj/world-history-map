@@ -1,12 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import { TerritoryHighlightLayer } from './territory-highlight-layer';
-import { TERRITORY_LABEL_ID } from './territory-label';
 import {
   HIGHLIGHT_COLOR,
   HIGHLIGHT_FILL_OPACITY,
   HIGHLIGHT_LINE_WIDTH,
-} from './territory-style-constants';
+} from './highlight-style-constants';
+import { TerritoryHighlightLayer } from './territory-highlight-layer';
+import { TERRITORY_LABEL_ID } from './territory-label';
 
 vi.mock('react-map-gl/maplibre', () => ({
   Layer: vi.fn((props) => (
