@@ -1,3 +1,4 @@
+import { roleColors } from '@world-history-map/design-tokens';
 import type { ExpressionSpecification } from 'maplibre-gl';
 
 export const LABEL_TEXT_COLOR = '#f0f0f0';
@@ -44,9 +45,7 @@ export const LABEL_ANCHOR: ('center' | 'top' | 'bottom' | 'left' | 'right')[] = 
 
 export const TERRITORY_FILL_OPACITY = 0.7;
 
-// Mirrors --color-role-selected from index.css.
-// MapLibre paint props cannot reference CSS variables.
-export const HIGHLIGHT_COLOR = '#f43f5e';
+export const HIGHLIGHT_COLOR = roleColors.selected;
 export const HIGHLIGHT_FILL_OPACITY = 0.2;
 export const HIGHLIGHT_LINE_WIDTH = 3.5;
 

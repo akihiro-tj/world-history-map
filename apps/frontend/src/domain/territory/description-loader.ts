@@ -18,7 +18,7 @@ function getYearFetcher(year: HistoricalYear): CachedFetcher<YearDescriptionBund
       }
 
       const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) return null;
+      if (!contentType?.includes('application/json')) return null;
 
       return response.json() as Promise<YearDescriptionBundle>;
     },
