@@ -60,14 +60,14 @@ export const CurrentYearAfterAll: Story = {
   },
 };
 
-export const EmptyEventList: Story = {
+export const KeyEventsEmpty: Story = {
   args: {
     keyEvents: [],
     selectedYear: createHistoricalYear(1700),
   },
 };
 
-export const NoEvents: Story = {
+export const KeyEventsUndefined: Story = {
   args: {
     keyEvents: undefined,
     selectedYear: createHistoricalYear(1700),
