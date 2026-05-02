@@ -59,8 +59,8 @@ describe('TerritoryHighlightLayer', () => {
     const paint = JSON.parse(fillLayer.getAttribute('data-paint') ?? '');
 
     expect(paint).toEqual({
-      'fill-color': '#ffffff',
-      'fill-opacity': 0.15,
+      'fill-color': '#f43f5e',
+      'fill-opacity': 0.2,
     });
   });
 
@@ -71,7 +71,7 @@ describe('TerritoryHighlightLayer', () => {
     const paint = JSON.parse(outlineLayer.getAttribute('data-paint') ?? '');
 
     expect(paint).toEqual({
-      'line-color': '#ffffff',
+      'line-color': '#f43f5e',
       'line-width': 3.5,
     });
   });

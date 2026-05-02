@@ -27,7 +27,7 @@ function PanelWrapper({
       aria-labelledby="territory-info-title"
       aria-busy={busy || undefined}
       className={cn(
-        'absolute left-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] rounded-lg bg-gray-700/95 p-4 shadow-xl backdrop-blur-sm',
+        'absolute left-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] rounded-lg border-l-4 border-role-selected bg-gray-700/95 p-4 shadow-xl backdrop-blur-sm',
         scrollable && 'max-h-[calc(100vh-2rem)] overflow-y-auto',
       )}
     >
@@ -171,7 +171,7 @@ function MobileContent({
       isOpen
       onClose={onClose}
       header={
-        <div className="px-4">
+        <div className="border-l-4 border-role-selected px-4">
           <PanelHeader name={headerName} era={headerEra} onClose={onClose} />
         </div>
       }

@@ -62,6 +62,7 @@ export function TerritoryTimeline({
             className={cn(
               'relative flex items-center gap-2.5',
               isCurrent ? 'py-2 font-semibold' : 'py-1.5',
+              !isCurrent && row.temporal === 'past' && 'opacity-70',
               isFuture && 'opacity-60',
             )}
           >
