@@ -1,8 +1,36 @@
-import { Fragment, useMemo } from 'react';
+import { useMemo } from 'react';
 import { classifyEvents } from '@/domain/territory/classify-events';
-import type { KeyEvent } from '@/domain/territory/types';
+import type { ClassifiedKeyEvent, KeyEvent } from '@/domain/territory/types';
 import type { HistoricalYear } from '@/domain/year/historical-year';
 import { cn } from '@/lib/utils';
+
+type EventRow =
+  | (ClassifiedKeyEvent & { kind: 'classified' })
+  | { kind: 'placeholder'; year: number; event: string; temporal: 'current' };
+
+function buildRows(keyEvents: KeyEvent[], selectedYear: HistoricalYear): EventRow[] {
+  if (keyEvents.length === 0) {
+    return [{ kind: 'placeholder', year: selectedYear, event: '現在', temporal: 'current' }];
+  }
+
+  const classified = classifyEvents(keyEvents, selectedYear);
+  const hasCurrent = classified.some((e) => e.temporal === 'current');
+
+  if (hasCurrent) {
+    return classified.map((e) => ({ ...e, kind: 'classified' as const }));
+  }
+
+  const rows: EventRow[] = classified.map((e) => ({ ...e, kind: 'classified' as const }));
+  const insertIndex = classified.findIndex((e) => e.temporal === 'future');
+  const placeholder: EventRow = {
+    kind: 'placeholder',
+    year: selectedYear,
+    event: '現在',
+    temporal: 'current',
+  };
+  rows.splice(insertIndex === -1 ? rows.length : insertIndex, 0, placeholder);
+  return rows;
+}
 
 export function TerritoryTimeline({
   keyEvents,
@@ -11,68 +39,56 @@ export function TerritoryTimeline({
   keyEvents: KeyEvent[] | undefined;
   selectedYear: HistoricalYear;
 }) {
-  const classified = useMemo(
-    () => (keyEvents ? classifyEvents(keyEvents, selectedYear) : []),
+  const rows = useMemo(
+    () => (keyEvents ? buildRows(keyEvents, selectedYear) : []),
     [keyEvents, selectedYear],
   );
 
-  if (!keyEvents || keyEvents.length === 0) return null;
-
-  const hasCurrent = classified.some((event) => event.temporal === 'current');
-
-  const markerIndex = hasCurrent
-    ? -1
-    : classified.findIndex((event) => event.temporal === 'future');
-
-  const resolvedMarkerIndex = markerIndex === -1 && !hasCurrent ? classified.length : markerIndex;
-
-  const yearMarker = !hasCurrent && (
-    <li key="year-marker" role="none" className="py-2">
-      <hr aria-label={`${selectedYear}年`} className="flex items-center gap-2 border-0" />
-      <span className="flex items-center gap-2">
-        <span className="h-px flex-1 bg-gray-500" />
-        <span className="shrink-0 text-xs font-medium text-gray-400">{selectedYear}年</span>
-        <span className="h-px flex-1 bg-gray-500" />
-      </span>
-    </li>
-  );
+  if (!keyEvents) return null;
 
   return (
-    <ol aria-label="主な出来事" className="space-y-1">
-      {classified.map((event, i) => {
-        const isPast = event.temporal === 'past';
-        const isCurrent = event.temporal === 'current';
-        const isFuture = event.temporal === 'future';
-
+    <ol aria-label="主な出来事" className="relative list-none pl-3.5">
+      <span
+        aria-hidden
+        className="pointer-events-none absolute bottom-2 left-[3px] top-2 w-px bg-surface-border"
+      />
+      {rows.map((row) => {
+        const isCurrent = row.temporal === 'current';
+        const isFuture = row.temporal === 'future';
         return (
-          <Fragment key={`${event.year}-${event.event}`}>
-            {resolvedMarkerIndex === i && yearMarker}
-            <li
-              aria-current={isCurrent ? 'true' : undefined}
+          <li
+            key={`${row.kind}-${row.year}-${row.event}`}
+            aria-current={isCurrent ? 'true' : undefined}
+            className={cn(
+              'relative flex items-center gap-2.5',
+              isCurrent ? 'py-2 font-semibold' : 'py-1.5',
+              isFuture && 'opacity-60',
+            )}
+          >
+            <span
+              aria-hidden
               className={cn(
-                'flex items-start gap-3 py-1.5',
-                isPast && 'opacity-75',
-                isCurrent && 'font-semibold',
-                isFuture && 'opacity-60 border-dashed',
+                'absolute top-1/2 -translate-y-1/2 shrink-0 rounded-full',
+                isCurrent
+                  ? '-left-[15px] size-[9px] border-2 border-surface-panel bg-role-selected'
+                  : '-left-3 size-[3px] bg-text-quiet',
+              )}
+              style={isCurrent ? { boxShadow: '0 0 8px var(--color-role-selected)' } : undefined}
+            />
+            <span
+              className={cn(
+                'shrink-0 text-xs tabular-nums',
+                isCurrent ? 'text-role-selected' : 'text-text-tertiary',
               )}
             >
-              <span
-                className={cn(
-                  'mt-1.5 inline-block size-2.5 shrink-0 rounded-full',
-                  isPast && 'bg-slate-400',
-                  isCurrent && 'ring-2 ring-white bg-white',
-                  isFuture && 'border border-dashed border-slate-400',
-                )}
-              />
-              <span className="shrink-0 text-sm tabular-nums text-gray-300">{event.year}</span>
-              <span className={cn('text-sm', isCurrent ? 'text-white' : 'text-gray-300')}>
-                {event.event}
-              </span>
-            </li>
-          </Fragment>
+              {row.year}
+            </span>
+            <span className={cn('text-sm', isCurrent ? 'text-white' : 'text-text-secondary')}>
+              {row.event}
+            </span>
+          </li>
         );
       })}
-      {resolvedMarkerIndex === classified.length && yearMarker}
     </ol>
   );
 }

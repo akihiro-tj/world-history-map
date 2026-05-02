@@ -32,31 +32,38 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const SelectedYearInMiddle: Story = {
-  args: {
-    keyEvents: sampleEvents,
-    selectedYear: createHistoricalYear(1700),
-  },
-};
-
-export const SelectedYearMatchesEvent: Story = {
+export const CurrentYearMatchesEvent: Story = {
   args: {
     keyEvents: sampleEvents,
     selectedYear: createHistoricalYear(1682),
   },
 };
 
-export const SelectedYearBeforeAll: Story = {
+export const CurrentYearBetweenEvents: Story = {
+  args: {
+    keyEvents: sampleEvents,
+    selectedYear: createHistoricalYear(1700),
+  },
+};
+
+export const CurrentYearBeforeAll: Story = {
   args: {
     keyEvents: sampleEvents,
     selectedYear: createHistoricalYear(1600),
   },
 };
 
-export const SelectedYearAfterAll: Story = {
+export const CurrentYearAfterAll: Story = {
   args: {
     keyEvents: sampleEvents,
     selectedYear: createHistoricalYear(1900),
+  },
+};
+
+export const EmptyEventList: Story = {
+  args: {
+    keyEvents: [],
+    selectedYear: createHistoricalYear(1700),
   },
 };
 
