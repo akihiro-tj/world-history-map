@@ -24,6 +24,7 @@ export function toTypeScriptSource(colors: RoleColors): string {
     .join('\n');
   return [
     '// Generated from packages/design-tokens/src/theme.css. Do not edit by hand.',
+    '// Run `pnpm --filter @world-history-map/design-tokens run build` to regenerate.',
     'export const roleColors = {',
     entries,
     '} as const;',
