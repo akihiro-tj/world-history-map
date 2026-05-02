@@ -2,6 +2,11 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { TerritoryHighlightLayer } from './territory-highlight-layer';
 import { TERRITORY_LABEL_ID } from './territory-label';
+import {
+  HIGHLIGHT_COLOR,
+  HIGHLIGHT_FILL_OPACITY,
+  HIGHLIGHT_LINE_WIDTH,
+} from './territory-style-constants';
 
 vi.mock('react-map-gl/maplibre', () => ({
   Layer: vi.fn((props) => (
@@ -59,8 +64,8 @@ describe('TerritoryHighlightLayer', () => {
     const paint = JSON.parse(fillLayer.getAttribute('data-paint') ?? '');
 
     expect(paint).toEqual({
-      'fill-color': '#f43f5e',
-      'fill-opacity': 0.2,
+      'fill-color': HIGHLIGHT_COLOR,
+      'fill-opacity': HIGHLIGHT_FILL_OPACITY,
     });
   });
 
@@ -71,8 +76,8 @@ describe('TerritoryHighlightLayer', () => {
     const paint = JSON.parse(outlineLayer.getAttribute('data-paint') ?? '');
 
     expect(paint).toEqual({
-      'line-color': '#f43f5e',
-      'line-width': 3.5,
+      'line-color': HIGHLIGHT_COLOR,
+      'line-width': HIGHLIGHT_LINE_WIDTH,
     });
   });
 
