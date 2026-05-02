@@ -17,7 +17,7 @@
   --color-primary-950: oklch(0.20 0.06 250);
 
   --color-role-selected: oklch(0.65 0.22 15);
-  --color-role-state: oklch(0.78 0.14 165);
+  --color-role-loading: oklch(0.78 0.14 165);
   --color-role-warn: oklch(0.78 0.16 75);
   --color-role-error: oklch(0.65 0.22 27);
   --color-role-focus: oklch(0.55 0.18 250);

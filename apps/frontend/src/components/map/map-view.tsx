@@ -110,7 +110,7 @@ export function MapView() {
           <div className="flex flex-col items-center">
             <div className="relative h-16 w-16">
               <svg
-                className="h-16 w-16 animate-spin text-role-state"
+                className="h-16 w-16 animate-spin text-role-loading"
                 style={{ animationDuration: LOADING_SPIN_DURATION }}
                 viewBox="0 0 24 24"
                 fill="none"
