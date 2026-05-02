@@ -14,6 +14,29 @@ import { SELECTED_ACCENT_CLASS, SelectedAccent } from './selected-accent';
 import { TerritoryProfile } from './territory-profile';
 import { TerritoryTimeline } from './territory-timeline';
 
+type PanelState =
+  | { kind: 'loading'; name: string }
+  | { kind: 'error'; message: string }
+  | { kind: 'empty'; name: string }
+  | { kind: 'loaded'; description: TerritoryDescription };
+
+interface ContentProps {
+  description: TerritoryDescription | null;
+  isLoading: boolean;
+  error: string | null;
+  selectedTerritory: string | null;
+  selectedYear: HistoricalYear;
+  onClose: () => void;
+}
+
+function panelState(props: ContentProps): PanelState {
+  const { description, isLoading, error, selectedTerritory } = props;
+  if (isLoading) return { kind: 'loading', name: selectedTerritory ?? '読み込み中…' };
+  if (error) return { kind: 'error', message: error };
+  if (!description) return { kind: 'empty', name: selectedTerritory ?? '領土情報' };
+  return { kind: 'loaded', description };
+}
+
 function PanelWrapper({
   children,
   scrollable,
@@ -92,71 +115,56 @@ function DescriptionBody({
   );
 }
 
-interface ContentProps {
-  description: TerritoryDescription | null;
-  isLoading: boolean;
-  error: string | null;
-  selectedTerritory: string | null;
-  selectedYear: HistoricalYear;
-  onClose: () => void;
+function DesktopContent(props: ContentProps) {
+  const { onClose, selectedYear } = props;
+  const state = panelState(props);
+
+  switch (state.kind) {
+    case 'loading':
+      return (
+        <PanelWrapper busy>
+          <PanelHeader name={state.name} onClose={onClose} />
+          <RoleSpinner />
+        </PanelWrapper>
+      );
+    case 'error':
+      return (
+        <PanelWrapper>
+          <PanelHeader name="エラー" onClose={onClose} />
+          <RoleErrorMessage>{state.message}</RoleErrorMessage>
+        </PanelWrapper>
+      );
+    case 'empty':
+      return (
+        <PanelWrapper>
+          <PanelHeader name={state.name} onClose={onClose} />
+          <NoDescriptionBody />
+        </PanelWrapper>
+      );
+    case 'loaded':
+      return (
+        <PanelWrapper scrollable>
+          <PanelHeader
+            name={state.description.name}
+            era={state.description.era}
+            onClose={onClose}
+          />
+          <DescriptionBody description={state.description} selectedYear={selectedYear} />
+        </PanelWrapper>
+      );
+  }
 }
 
-function DesktopContent({
-  description,
-  isLoading,
-  error,
-  selectedTerritory,
-  selectedYear,
-  onClose,
-}: ContentProps) {
-  if (isLoading) {
-    return (
-      <PanelWrapper busy>
-        <PanelHeader name={selectedTerritory ?? '読み込み中…'} onClose={onClose} />
-        <RoleSpinner />
-      </PanelWrapper>
-    );
-  }
-  if (error) {
-    return (
-      <PanelWrapper>
-        <PanelHeader name="エラー" onClose={onClose} />
-        <RoleErrorMessage>{error}</RoleErrorMessage>
-      </PanelWrapper>
-    );
-  }
-  if (!description) {
-    return (
-      <PanelWrapper>
-        <PanelHeader name={selectedTerritory ?? '領土情報'} onClose={onClose} />
-        <NoDescriptionBody />
-      </PanelWrapper>
-    );
-  }
-  return (
-    <PanelWrapper scrollable>
-      <PanelHeader name={description.name} era={description.era} onClose={onClose} />
-      <DescriptionBody description={description} selectedYear={selectedYear} />
-    </PanelWrapper>
-  );
-}
-
-function MobileContent({
-  description,
-  isLoading,
-  error,
-  selectedTerritory,
-  selectedYear,
-  onClose,
-}: ContentProps) {
-  const headerName = isLoading
-    ? (selectedTerritory ?? '読み込み中…')
-    : error
-      ? 'エラー'
-      : description
-        ? description.name
-        : (selectedTerritory ?? '領土情報');
-  const headerEra = description && !isLoading && !error ? description.era : undefined;
+function MobileContent(props: ContentProps) {
+  const { onClose, selectedYear } = props;
+  const state = panelState(props);
+  const headerName =
+    state.kind === 'loaded'
+      ? state.description.name
+      : state.kind === 'error'
+        ? 'エラー'
+        : state.name;
+  const headerEra = state.kind === 'loaded' ? state.description.era : undefined;
 
   return (
     <BottomSheet
@@ -169,14 +177,14 @@ function MobileContent({
       }
       aria-labelledby="territory-info-title"
     >
-      {isLoading ? (
+      {state.kind === 'loading' ? (
         <RoleSpinner />
-      ) : error ? (
-        <RoleErrorMessage>{error}</RoleErrorMessage>
-      ) : !description ? (
+      ) : state.kind === 'error' ? (
+        <RoleErrorMessage>{state.message}</RoleErrorMessage>
+      ) : state.kind === 'empty' ? (
         <NoDescriptionBody />
       ) : (
-        <DescriptionBody description={description} selectedYear={selectedYear} />
+        <DescriptionBody description={state.description} selectedYear={selectedYear} />
       )}
     </BottomSheet>
   );
