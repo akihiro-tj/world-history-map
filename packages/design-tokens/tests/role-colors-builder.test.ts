@@ -3,9 +3,12 @@ import os from 'node:os';
 import path from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
-  extractRoleColors,
+  type CssSource,
+  RoleColorModuleEmitter,
   RoleColorsBuilder,
-  toTypeScriptSource,
+  RoleColorToken,
+  RoleColorTokenParser,
+  RoleColorTokenSet,
 } from '../src/build/role-colors-builder.ts';
 
 const SAMPLE_CSS = `
@@ -18,16 +21,68 @@ const SAMPLE_CSS = `
 }
 `;
 
-describe('extractRoleColors', () => {
-  it('extracts all --color-role-* values from CSS', () => {
-    const colors = extractRoleColors(SAMPLE_CSS);
-    expect(colors).toEqual({
-      selected: 'oklch(0.65 0.22 15)',
-      loading: 'oklch(0.78 0.14 165)',
-      warn: 'oklch(0.78 0.16 75)',
-      error: 'oklch(0.65 0.22 27)',
-      focus: 'oklch(0.55 0.18 250)',
-    });
+const SAMPLE_CSS_MODIFIED = SAMPLE_CSS.replace('oklch(0.65 0.22 15)', 'oklch(0.70 0.25 20)');
+
+const mockCssSource: CssSource = { read: async () => SAMPLE_CSS };
+
+describe('RoleColorToken', () => {
+  it('accepts valid lowercase name and non-empty value', () => {
+    const token = new RoleColorToken('selected', 'oklch(0.65 0.22 15)');
+    expect(token.name).toBe('selected');
+    expect(token.value).toBe('oklch(0.65 0.22 15)');
+  });
+
+  it('throws for name with uppercase letters', () => {
+    expect(() => new RoleColorToken('Selected', 'oklch(0.65 0.22 15)')).toThrow();
+  });
+
+  it('throws for name with digits', () => {
+    expect(() => new RoleColorToken('selected1', 'oklch(0.65 0.22 15)')).toThrow();
+  });
+
+  it('throws for name with hyphens', () => {
+    expect(() => new RoleColorToken('my-token', 'oklch(0.65 0.22 15)')).toThrow();
+  });
+
+  it('throws for empty value', () => {
+    expect(() => new RoleColorToken('selected', '')).toThrow();
+  });
+
+  it('throws for whitespace-only value', () => {
+    expect(() => new RoleColorToken('selected', '   ')).toThrow();
+  });
+});
+
+describe('RoleColorTokenSet', () => {
+  it('throws when constructed with empty array', () => {
+    expect(() => new RoleColorTokenSet([])).toThrow();
+  });
+
+  it('throws for duplicate token names', () => {
+    const tokens = [
+      new RoleColorToken('selected', 'oklch(0.65 0.22 15)'),
+      new RoleColorToken('selected', 'oklch(0.70 0.25 20)'),
+    ];
+    expect(() => new RoleColorTokenSet(tokens)).toThrow();
+  });
+
+  it('toArray returns all tokens', () => {
+    const token = new RoleColorToken('selected', 'oklch(0.65 0.22 15)');
+    const tokenSet = new RoleColorTokenSet([token]);
+    expect(tokenSet.toArray()).toHaveLength(1);
+    expect(tokenSet.toArray()[0].name).toBe('selected');
+  });
+});
+
+describe('RoleColorTokenParser', () => {
+  const parser = new RoleColorTokenParser();
+
+  it('parses all --color-role-* values from CSS', () => {
+    const tokenSet = parser.parse(SAMPLE_CSS);
+    const tokens = tokenSet.toArray();
+    expect(tokens).toHaveLength(5);
+    expect(tokens.find((t) => t.name === 'selected')?.value).toBe('oklch(0.65 0.22 15)');
+    expect(tokens.find((t) => t.name === 'loading')?.value).toBe('oklch(0.78 0.14 165)');
   });
 
   it('ignores non-role color variables', () => {
@@ -35,20 +90,24 @@ describe('extractRoleColors', () => {
       --color-primary-50: oklch(0.97 0.01 250);
       --color-role-selected: oklch(0.65 0.22 15);
     `;
-    const colors = extractRoleColors(css);
-    expect(Object.keys(colors)).toEqual(['selected']);
+    const tokenSet = parser.parse(css);
+    expect(tokenSet.toArray()).toHaveLength(1);
+    expect(tokenSet.toArray()[0].name).toBe('selected');
   });
 
   it('throws when no --color-role-* definitions are found', () => {
-    expect(() => extractRoleColors('--color-primary-50: red;')).toThrow(
+    expect(() => parser.parse('--color-primary-50: red;')).toThrow(
       'No --color-role-* definitions found in CSS',
     );
   });
 });
 
-describe('toTypeScriptSource', () => {
+describe('RoleColorModuleEmitter', () => {
+  const emitter = new RoleColorModuleEmitter();
+
   it('generates valid TypeScript source with as const and hex-converted values', () => {
-    const source = toTypeScriptSource({ selected: 'oklch(0.65 0.22 15)' });
+    const tokenSet = new RoleColorTokenSet([new RoleColorToken('selected', 'oklch(0.65 0.22 15)')]);
+    const source = emitter.emit(tokenSet);
     expect(source).toContain("selected: '#f73d62'");
     expect(source).toContain('} as const;');
     expect(source).toContain('export type RoleColorKey');
@@ -57,14 +116,11 @@ describe('toTypeScriptSource', () => {
 
 describe('RoleColorsBuilder', () => {
   let temporaryDir: string;
-  let cssPath: string;
   let outputPath: string;
 
   beforeAll(async () => {
     temporaryDir = await fs.mkdtemp(path.join(os.tmpdir(), 'design-tokens-test-'));
-    cssPath = path.join(temporaryDir, 'theme.css');
     outputPath = path.join(temporaryDir, 'role-colors.generated.ts');
-    await fs.writeFile(cssPath, SAMPLE_CSS);
   });
 
   afterAll(async () => {
@@ -72,7 +128,7 @@ describe('RoleColorsBuilder', () => {
   });
 
   it('generateSource returns TypeScript source containing all 5 role colors as hex', async () => {
-    const builder = new RoleColorsBuilder({ cssPath, outputPath });
+    const builder = new RoleColorsBuilder({ cssSource: mockCssSource, outputPath });
     const source = await builder.generateSource();
     expect(source).toContain("selected: '#f73d62'");
     expect(source).toContain("loading: '#49d3a1'");
@@ -82,26 +138,28 @@ describe('RoleColorsBuilder', () => {
   });
 
   it('isFresh returns false when output file does not exist', async () => {
-    const builder = new RoleColorsBuilder({ cssPath, outputPath });
-    expect(await builder.isFresh()).toBe(false);
+    const builder = new RoleColorsBuilder({ cssSource: mockCssSource, outputPath });
+    const source = await builder.generateSource();
+    expect(await builder.isFresh(source)).toBe(false);
   });
 
-  it('isFresh returns true after writing the generated source', async () => {
-    const builder = new RoleColorsBuilder({ cssPath, outputPath });
+  it('isFresh returns true when generated source matches output file', async () => {
+    const builder = new RoleColorsBuilder({ cssSource: mockCssSource, outputPath });
     const source = await builder.generateSource();
     await fs.writeFile(outputPath, source);
-    expect(await builder.isFresh()).toBe(true);
+    expect(await builder.isFresh(source)).toBe(true);
   });
 
-  it('isFresh returns false when CSS is modified after generation', async () => {
-    const builder = new RoleColorsBuilder({ cssPath, outputPath });
+  it('isFresh returns false when generated source differs from output file', async () => {
+    const builder = new RoleColorsBuilder({ cssSource: mockCssSource, outputPath });
     const source = await builder.generateSource();
     await fs.writeFile(outputPath, source);
 
-    await fs.writeFile(cssPath, SAMPLE_CSS.replace('oklch(0.65 0.22 15)', 'oklch(0.70 0.25 20)'));
-
-    expect(await builder.isFresh()).toBe(false);
-
-    await fs.writeFile(cssPath, SAMPLE_CSS);
+    const modifiedBuilder = new RoleColorsBuilder({
+      cssSource: { read: async () => SAMPLE_CSS_MODIFIED },
+      outputPath,
+    });
+    const modifiedSource = await modifiedBuilder.generateSource();
+    expect(await builder.isFresh(modifiedSource)).toBe(false);
   });
 });
