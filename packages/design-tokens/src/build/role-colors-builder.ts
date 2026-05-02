@@ -2,16 +2,15 @@ import { readFile } from 'node:fs/promises';
 
 const ROLE_COLOR_VAR_PREFIX = '--color-role-';
 
-export type RoleColors = Record<string, string>;
+export type RoleColors = Readonly<Record<string, string>>;
 
 export function extractRoleColors(css: string): RoleColors {
   const pattern = new RegExp(`${ROLE_COLOR_VAR_PREFIX}([a-z]+)\\s*:\\s*([^;]+?)\\s*;`, 'g');
-  const colors: RoleColors = {};
+  const colors: Record<string, string> = {};
   for (const match of css.matchAll(pattern)) {
     const [, name, value] = match;
-    if (name !== undefined && value !== undefined) {
-      colors[name] = value;
-    }
+    if (!name || !value) continue;
+    colors[name] = value;
   }
   if (Object.keys(colors).length === 0) {
     throw new Error(`No ${ROLE_COLOR_VAR_PREFIX}* definitions found in CSS`);
