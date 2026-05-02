@@ -15,6 +15,7 @@ dist
 dist-ssr
 build
 !packages/tiles/src/build
+!packages/design-tokens/src/build
 
 # Local env files
 *.local
