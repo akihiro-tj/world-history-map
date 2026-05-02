@@ -3,6 +3,7 @@
   "references": [
     { "path": "./apps/frontend" },
     { "path": "./apps/pipeline" },
+    { "path": "./packages/design-tokens" },
     { "path": "./packages/tiles" },
     { "path": "./scripts/tiles-gc" }
   ]
