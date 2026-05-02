@@ -1,0 +1,23 @@
+{
+  "name": "@world-history-map/design-tokens",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./theme.css": "./src/theme.css"
+  },
+  "scripts": {
+    "build": "tsx src/build/cli.ts",
+    "build:check": "tsx src/build/cli.ts --check",
+    "predev": "pnpm run build",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "@vitest/coverage-v8": "^4.1.5",
+    "tsx": "^4.19.4",
+    "vitest": "^4.1.5"
+  }
+}
