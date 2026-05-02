@@ -7,7 +7,10 @@ import { cn } from '@/lib/utils';
 import { useAppState } from '../../contexts/app-state-context';
 import { BottomSheet } from '../bottom-sheet/bottom-sheet';
 import { CloseButton } from '../close-button/close-button';
+import { RoleErrorMessage } from '../feedback/role-error-message';
+import { RoleSpinner } from '../feedback/role-spinner';
 import { useTerritoryDescription } from './hooks/use-territory-description';
+import { SELECTED_ACCENT_CLASS, SelectedAccent } from './selected-accent';
 import { TerritoryProfile } from './territory-profile';
 import { TerritoryTimeline } from './territory-timeline';
 
@@ -27,7 +30,8 @@ function PanelWrapper({
       aria-labelledby="territory-info-title"
       aria-busy={busy || undefined}
       className={cn(
-        'absolute left-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] rounded-lg border-l-4 border-role-selected bg-gray-700/95 p-4 shadow-xl backdrop-blur-sm',
+        'absolute left-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] rounded-lg bg-gray-700/95 p-4 shadow-xl backdrop-blur-sm',
+        SELECTED_ACCENT_CLASS,
         scrollable && 'max-h-[calc(100vh-2rem)] overflow-y-auto',
       )}
     >
@@ -60,18 +64,6 @@ function PanelHeader({
       <CloseButton onClick={onClose} aria-label="閉じる" />
     </div>
   );
-}
-
-function LoadingBody() {
-  return (
-    <div className="flex items-center justify-center py-8">
-      <div className="h-8 w-8 animate-spin rounded-full border-4 border-role-loading border-t-transparent" />
-    </div>
-  );
-}
-
-function ErrorBody({ error }: { error: string | null }) {
-  return <p className="m-3 rounded p-3 bg-role-error/10 text-role-error">{error}</p>;
 }
 
 function NoDescriptionBody() {
@@ -121,7 +113,7 @@ function DesktopContent({
     return (
       <PanelWrapper busy>
         <PanelHeader name={selectedTerritory ?? '読み込み中…'} onClose={onClose} />
-        <LoadingBody />
+        <RoleSpinner />
       </PanelWrapper>
     );
   }
@@ -129,7 +121,7 @@ function DesktopContent({
     return (
       <PanelWrapper>
         <PanelHeader name="エラー" onClose={onClose} />
-        <ErrorBody error={error} />
+        <RoleErrorMessage>{error}</RoleErrorMessage>
       </PanelWrapper>
     );
   }
@@ -171,16 +163,16 @@ function MobileContent({
       isOpen
       onClose={onClose}
       header={
-        <div className="border-l-4 border-role-selected px-4">
+        <SelectedAccent className="px-4">
           <PanelHeader name={headerName} era={headerEra} onClose={onClose} />
-        </div>
+        </SelectedAccent>
       }
       aria-labelledby="territory-info-title"
     >
       {isLoading ? (
-        <LoadingBody />
+        <RoleSpinner />
       ) : error ? (
-        <ErrorBody error={error} />
+        <RoleErrorMessage>{error}</RoleErrorMessage>
       ) : !description ? (
         <NoDescriptionBody />
       ) : (
