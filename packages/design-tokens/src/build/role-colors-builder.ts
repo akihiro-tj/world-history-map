@@ -32,55 +32,98 @@ function oklchToHex(cssValue: string): string {
   return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${bv.toString(16).padStart(2, '0')}`;
 }
 
-export type RoleColors = Readonly<Record<string, string>>;
+export class RoleColorToken {
+  readonly name: string;
+  readonly value: string;
 
-export function extractRoleColors(css: string): RoleColors {
-  const pattern = new RegExp(`${ROLE_COLOR_VAR_PREFIX}([a-z]+)\\s*:\\s*([^;]+?)\\s*;`, 'g');
-  const colors: Record<string, string> = {};
-  for (const match of css.matchAll(pattern)) {
-    const [, name, value] = match;
-    if (!name || !value) continue;
-    colors[name] = value;
+  constructor(name: string, value: string) {
+    if (!/^[a-z]+$/.test(name)) {
+      throw new Error(`Invalid token name: "${name}". Token names must contain only lowercase letters.`);
+    }
+    if (!value.trim()) {
+      throw new Error('Token value must not be empty');
+    }
+    this.name = name;
+    this.value = value;
   }
-  if (Object.keys(colors).length === 0) {
-    throw new Error(`No ${ROLE_COLOR_VAR_PREFIX}* definitions found in CSS`);
-  }
-  return colors;
 }
 
-export function toTypeScriptSource(colors: RoleColors): string {
-  const entries = Object.entries(colors)
-    .map(([name, value]) => `  ${name}: '${oklchToHex(value)}',`)
-    .join('\n');
-  return [
-    '// Generated from packages/design-tokens/src/theme.css. Do not edit by hand.',
-    '// Run `pnpm --filter @world-history-map/design-tokens run build` to regenerate.',
-    'export const roleColors = {',
-    entries,
-    '} as const;',
-    '',
-    'export type RoleColorKey = keyof typeof roleColors;',
-    '',
-  ].join('\n');
+export class RoleColorTokenSet {
+  private readonly tokens: ReadonlyArray<RoleColorToken>;
+
+  constructor(tokens: RoleColorToken[]) {
+    if (tokens.length === 0) {
+      throw new Error('RoleColorTokenSet must contain at least one token');
+    }
+    const names = tokens.map((t) => t.name);
+    if (new Set(names).size !== names.length) {
+      throw new Error('Duplicate token names are not allowed in RoleColorTokenSet');
+    }
+    this.tokens = [...tokens];
+  }
+
+  toArray(): ReadonlyArray<RoleColorToken> {
+    return this.tokens;
+  }
+}
+
+export interface CssSource {
+  read(): Promise<string>;
+}
+
+export class RoleColorTokenParser {
+  parse(css: string): RoleColorTokenSet {
+    const pattern = new RegExp(`${ROLE_COLOR_VAR_PREFIX}([a-z]+)\\s*:\\s*([^;]+?)\\s*;`, 'g');
+    const tokens: RoleColorToken[] = [];
+    for (const match of css.matchAll(pattern)) {
+      const [, name, value] = match;
+      if (!name || !value) continue;
+      tokens.push(new RoleColorToken(name, value));
+    }
+    if (tokens.length === 0) {
+      throw new Error(`No ${ROLE_COLOR_VAR_PREFIX}* definitions found in CSS`);
+    }
+    return new RoleColorTokenSet(tokens);
+  }
+}
+
+export class RoleColorModuleEmitter {
+  emit(tokenSet: RoleColorTokenSet): string {
+    const entries = tokenSet
+      .toArray()
+      .map((token) => `  ${token.name}: '${oklchToHex(token.value)}',`)
+      .join('\n');
+    return [
+      '// Generated from packages/design-tokens/src/theme.css. Do not edit by hand.',
+      '// Run `pnpm --filter @world-history-map/design-tokens run build` to regenerate.',
+      'export const roleColors = {',
+      entries,
+      '} as const;',
+      '',
+      'export type RoleColorKey = keyof typeof roleColors;',
+      '',
+    ].join('\n');
+  }
 }
 
 export class RoleColorsBuilder {
-  private readonly cssPath: string;
+  private readonly cssSource: CssSource;
   private readonly outputPath: string;
 
-  constructor(paths: { cssPath: string; outputPath: string }) {
-    this.cssPath = paths.cssPath;
-    this.outputPath = paths.outputPath;
+  constructor(params: { cssSource: CssSource; outputPath: string }) {
+    this.cssSource = params.cssSource;
+    this.outputPath = params.outputPath;
   }
 
   async generateSource(): Promise<string> {
-    const css = await readFile(this.cssPath, 'utf-8');
-    return toTypeScriptSource(extractRoleColors(css));
+    const css = await this.cssSource.read();
+    const parser = new RoleColorTokenParser();
+    const emitter = new RoleColorModuleEmitter();
+    return emitter.emit(parser.parse(css));
   }
 
-  async isFresh(): Promise<boolean> {
-    const newSource = await this.generateSource();
+  async isFresh(generatedSource: string): Promise<boolean> {
     const existingSource = await readFile(this.outputPath, 'utf-8').catch(() => null);
-    return existingSource === newSource;
+    return existingSource === generatedSource;
   }
 }
