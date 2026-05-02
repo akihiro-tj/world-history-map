@@ -1,6 +1,6 @@
 import { Layer } from 'react-map-gl/maplibre';
 import { createMatchColorExpression } from './color-scheme';
-import { TERRITORY_FILL_OPACITY } from './territory-style-constants';
+import { TERRITORY_FILL_OPACITY } from './territory-fill-constants';
 
 interface TerritoryLayerProps {
   sourceId: string;

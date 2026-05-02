@@ -1,6 +1,11 @@
 import { readFile } from 'node:fs/promises';
 
 const ROLE_COLOR_VAR_PREFIX = '--color-role-';
+const TOKEN_NAME_PATTERN = /^[a-z]+(?:-[a-z]+)*$/;
+
+function kebabToCamel(name: string): string {
+  return name.replace(/-([a-z])/g, (_, letter: string) => letter.toUpperCase());
+}
 
 function oklchToHex(cssValue: string): string {
   const match = cssValue.match(/oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*\)/);
@@ -37,8 +42,10 @@ export class RoleColorToken {
   readonly value: string;
 
   constructor(name: string, value: string) {
-    if (!/^[a-z]+$/.test(name)) {
-      throw new Error(`Invalid token name: "${name}". Token names must contain only lowercase letters.`);
+    if (!TOKEN_NAME_PATTERN.test(name)) {
+      throw new Error(
+        `Invalid token name: "${name}". Token names must be lowercase letters separated by single hyphens.`,
+      );
     }
     if (!value.trim()) {
       throw new Error('Token value must not be empty');
@@ -73,7 +80,10 @@ export interface CssSource {
 
 export class RoleColorTokenParser {
   parse(css: string): RoleColorTokenSet {
-    const pattern = new RegExp(`${ROLE_COLOR_VAR_PREFIX}([a-z]+)\\s*:\\s*([^;]+?)\\s*;`, 'g');
+    const pattern = new RegExp(
+      `${ROLE_COLOR_VAR_PREFIX}([a-z]+(?:-[a-z]+)*)\\s*:\\s*([^;]+?)\\s*;`,
+      'g',
+    );
     const tokens: RoleColorToken[] = [];
     for (const match of css.matchAll(pattern)) {
       const [, name, value] = match;
@@ -91,7 +101,7 @@ export class RoleColorModuleEmitter {
   emit(tokenSet: RoleColorTokenSet): string {
     const entries = tokenSet
       .toArray()
-      .map((token) => `  ${token.name}: '${oklchToHex(token.value)}',`)
+      .map((token) => `  ${kebabToCamel(token.name)}: '${oklchToHex(token.value)}',`)
       .join('\n');
     return [
       '// Generated from packages/design-tokens/src/theme.css. Do not edit by hand.',

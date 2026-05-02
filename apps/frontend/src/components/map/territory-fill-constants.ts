@@ -1,0 +1,1 @@
+export const TERRITORY_FILL_OPACITY = 0.7;

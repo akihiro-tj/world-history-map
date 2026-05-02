@@ -40,8 +40,21 @@ describe('RoleColorToken', () => {
     expect(() => new RoleColorToken('selected1', 'oklch(0.65 0.22 15)')).toThrow();
   });
 
-  it('throws for name with hyphens', () => {
-    expect(() => new RoleColorToken('my-token', 'oklch(0.65 0.22 15)')).toThrow();
+  it('accepts kebab-case name', () => {
+    const token = new RoleColorToken('label-text', 'oklch(0.95 0 0)');
+    expect(token.name).toBe('label-text');
+  });
+
+  it('throws for name with leading hyphen', () => {
+    expect(() => new RoleColorToken('-selected', 'oklch(0.65 0.22 15)')).toThrow();
+  });
+
+  it('throws for name with trailing hyphen', () => {
+    expect(() => new RoleColorToken('selected-', 'oklch(0.65 0.22 15)')).toThrow();
+  });
+
+  it('throws for name with consecutive hyphens', () => {
+    expect(() => new RoleColorToken('label--text', 'oklch(0.95 0 0)')).toThrow();
   });
 
   it('throws for empty value', () => {
@@ -95,6 +108,18 @@ describe('RoleColorTokenParser', () => {
     expect(tokenSet.toArray()[0].name).toBe('selected');
   });
 
+  it('parses kebab-case role token names', () => {
+    const css = `
+      --color-role-label-text: oklch(0.95 0 0);
+      --color-role-label-halo: oklch(0.20 0 0);
+    `;
+    const tokenSet = parser.parse(css);
+    const tokens = tokenSet.toArray();
+    expect(tokens).toHaveLength(2);
+    expect(tokens.find((t) => t.name === 'label-text')?.value).toBe('oklch(0.95 0 0)');
+    expect(tokens.find((t) => t.name === 'label-halo')?.value).toBe('oklch(0.20 0 0)');
+  });
+
   it('throws when no --color-role-* definitions are found', () => {
     expect(() => parser.parse('--color-primary-50: red;')).toThrow(
       'No --color-role-* definitions found in CSS',
@@ -111,6 +136,18 @@ describe('RoleColorModuleEmitter', () => {
     expect(source).toContain("selected: '#f73d62'");
     expect(source).toContain('} as const;');
     expect(source).toContain('export type RoleColorKey');
+  });
+
+  it('emits kebab-case names as camelCase keys', () => {
+    const tokenSet = new RoleColorTokenSet([
+      new RoleColorToken('label-text', 'oklch(0.95 0 0)'),
+      new RoleColorToken('label-halo', 'oklch(0.20 0 0)'),
+    ]);
+    const source = emitter.emit(tokenSet);
+    expect(source).toContain('labelText:');
+    expect(source).toContain('labelHalo:');
+    expect(source).not.toContain('label-text:');
+    expect(source).not.toContain('label-halo:');
   });
 });
 

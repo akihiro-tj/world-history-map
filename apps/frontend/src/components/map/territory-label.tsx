@@ -5,12 +5,12 @@ import {
   LABEL_HALO_COLOR,
   LABEL_HALO_WIDTH,
   LABEL_MAX_WIDTH,
-  LABEL_OPACITY_STOPS,
+  LABEL_OPACITY_EXPRESSION,
   LABEL_PADDING,
   LABEL_RADIAL_OFFSET,
   LABEL_TEXT_COLOR,
-  LABEL_TEXT_SIZE_STOPS,
-} from './territory-style-constants';
+  LABEL_TEXT_SIZE_EXPRESSION,
+} from './label-style-constants';
 
 interface TerritoryLabelProps {
   sourceId: string;
@@ -32,7 +32,7 @@ export function TerritoryLabel({ sourceId, sourceLayer }: TerritoryLabelProps) {
       layout={{
         'text-field': ['get', 'name_ja'],
         'text-font': ['Noto Sans Regular'],
-        'text-size': LABEL_TEXT_SIZE_STOPS,
+        'text-size': LABEL_TEXT_SIZE_EXPRESSION,
         'text-max-width': LABEL_MAX_WIDTH,
         'text-variable-anchor': LABEL_ANCHOR,
         'text-radial-offset': LABEL_RADIAL_OFFSET,
@@ -45,7 +45,7 @@ export function TerritoryLabel({ sourceId, sourceLayer }: TerritoryLabelProps) {
         'text-halo-color': LABEL_HALO_COLOR,
         'text-halo-width': LABEL_HALO_WIDTH,
         'text-halo-blur': LABEL_HALO_BLUR,
-        'text-opacity': LABEL_OPACITY_STOPS,
+        'text-opacity': LABEL_OPACITY_EXPRESSION,
       }}
     />
   );
