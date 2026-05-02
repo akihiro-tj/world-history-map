@@ -56,19 +56,19 @@ describe('toTypeScriptSource', () => {
 });
 
 describe('RoleColorsBuilder', () => {
-  let tmpDir: string;
+  let temporaryDir: string;
   let cssPath: string;
   let outputPath: string;
 
   beforeAll(async () => {
-    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'design-tokens-test-'));
-    cssPath = path.join(tmpDir, 'theme.css');
-    outputPath = path.join(tmpDir, 'role-colors.generated.ts');
+    temporaryDir = await fs.mkdtemp(path.join(os.tmpdir(), 'design-tokens-test-'));
+    cssPath = path.join(temporaryDir, 'theme.css');
+    outputPath = path.join(temporaryDir, 'role-colors.generated.ts');
     await fs.writeFile(cssPath, SAMPLE_CSS);
   });
 
   afterAll(async () => {
-    await fs.rm(tmpDir, { recursive: true, force: true });
+    await fs.rm(temporaryDir, { recursive: true, force: true });
   });
 
   it('generateSource returns TypeScript source containing all 5 role colors', async () => {

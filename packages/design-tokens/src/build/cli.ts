@@ -21,7 +21,7 @@ async function runCheck(): Promise<void> {
 }
 
 const isCheckMode = process.argv.includes('--check');
-(isCheckMode ? runCheck() : runBuild()).catch((err) => {
-  console.error(err);
+(isCheckMode ? runCheck() : runBuild()).catch((error) => {
+  console.error(error);
   process.exit(1);
 });
