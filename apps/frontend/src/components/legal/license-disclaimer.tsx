@@ -87,7 +87,7 @@ export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
           <section>
             <h3 className="mb-3 text-base font-semibold text-white">ライセンス</h3>
             <p className="text-sm leading-relaxed text-gray-300">
-              本サイトで使用している地図データは{' '}
+              本サイトで使用している地図データは André Ourednik 氏による{' '}
               <a
                 href="https://github.com/aourednik/historical-basemaps"
                 target="_blank"
