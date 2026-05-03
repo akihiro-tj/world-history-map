@@ -32,7 +32,7 @@ function AppContent() {
   }, []);
 
   return (
-    <main className="relative h-dvh w-screen overflow-hidden">
+    <main className="relative h-dvh w-screen overflow-hidden select-none">
       <MapView />
       <TerritoryInfoPanel />
       <div className="absolute top-4 left-1/2 z-20 -translate-x-1/2">
