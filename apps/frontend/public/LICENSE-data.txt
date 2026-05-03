@@ -29,6 +29,12 @@ Attribution
 When using this data, please credit:
 "Map data based on historical-basemaps by André Ourednik (GPL-3.0)"
 
+Changes Made to Original Data
+------------------------------
+The original GeoJSON data was processed for web use: converted to PMTiles
+format, properties reduced, geometries simplified, and territory
+descriptions added from an external source.
+
 Contact
 -------
 For questions about the original data, please visit:
