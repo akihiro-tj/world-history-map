@@ -27,7 +27,6 @@ export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
 
   const handleDialogClick = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
-      // biome-ignore lint/a11y/useKeyWithClickEvents: Keyboard events are handled by the document-level Escape key listener
       if (event.target === event.currentTarget) {
         onClose();
       }
