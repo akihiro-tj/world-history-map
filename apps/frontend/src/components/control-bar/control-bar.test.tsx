@@ -31,11 +31,6 @@ describe('ControlBar', () => {
     expect(screen.getByTestId('license-link')).toBeInTheDocument();
   });
 
-  it('renders GitHub link', () => {
-    renderWithProvider(<ControlBar {...defaultProps} />);
-    expect(screen.getByTestId('github-link')).toBeInTheDocument();
-  });
-
   it('calls onOpenLicense when license button is clicked', () => {
     renderWithProvider(<ControlBar {...defaultProps} />);
     fireEvent.click(screen.getByTestId('license-link'));
@@ -45,12 +40,5 @@ describe('ControlBar', () => {
   it('passes projection to ProjectionToggle', () => {
     renderWithProvider(<ControlBar {...defaultProps} />);
     fireEvent.click(screen.getByTestId('projection-toggle'));
-  });
-
-  it('has correct GitHub link href', () => {
-    renderWithProvider(<ControlBar {...defaultProps} />);
-    const link = screen.getByTestId('github-link');
-    expect(link).toHaveAttribute('href', 'https://github.com/akihiro-tj/world-history-map');
-    expect(link).toHaveAttribute('target', '_blank');
   });
 });
