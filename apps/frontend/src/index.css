@@ -56,8 +56,10 @@ body {
 }
 
 /* Prevent text-selection, tap-highlight, and iOS callout from triggering
-   during map gestures such as double-tap-and-drag zoom. */
-.maplibregl-canvas {
+   during map gestures such as double-tap-and-drag zoom.
+   Target .maplibregl-map (root) instead of only the canvas so that
+   selection originating from ancestor elements is also suppressed on iOS. */
+.maplibregl-map {
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
