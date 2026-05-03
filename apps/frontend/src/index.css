@@ -55,6 +55,15 @@ body {
   cursor: grabbing !important;
 }
 
+/* Prevent text-selection, tap-highlight, and iOS callout from triggering
+   during map gestures such as double-tap-and-drag zoom. */
+.maplibregl-canvas {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Reduced motion - respect user preference */
 @media (prefers-reduced-motion: reduce) {
   *,
