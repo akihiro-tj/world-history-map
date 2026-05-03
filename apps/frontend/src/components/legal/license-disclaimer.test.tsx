@@ -32,7 +32,7 @@ describe('LicenseDisclaimer', () => {
 
       const title = screen.getByRole('heading', { level: 2 });
       expect(title).toBeInTheDocument();
-      expect(title).toHaveTextContent(/ライセンス|免責事項/);
+      expect(title).toHaveTextContent('このサイトについて');
     });
 
     it('renders close button', () => {
@@ -53,38 +53,31 @@ describe('LicenseDisclaimer', () => {
     it('displays historical-basemaps attribution', () => {
       render(<LicenseDisclaimer {...defaultProps} />);
 
-      expect(screen.getByText(/historical-basemaps/)).toBeInTheDocument();
+      expect(screen.getAllByText(/historical-basemaps/)[0]).toBeInTheDocument();
     });
 
-    it('displays link to original repository', () => {
+    it('displays links to original repository', () => {
       render(<LicenseDisclaimer {...defaultProps} />);
 
-      const link = screen.getByRole('link', { name: /historical-basemaps/i });
-      expect(link).toBeInTheDocument();
-      expect(link).toHaveAttribute('href', 'https://github.com/aourednik/historical-basemaps');
-    });
-  });
-
-  describe('Disclaimer Content', () => {
-    it('displays data accuracy disclaimer section', () => {
-      render(<LicenseDisclaimer {...defaultProps} />);
-
-      const dataDisclaimer = screen.getByTestId('data-disclaimer');
-      expect(dataDisclaimer).toBeInTheDocument();
+      const links = screen.getAllByRole('link', { name: /historical-basemaps/i });
+      expect(links).toHaveLength(2);
+      for (const link of links) {
+        expect(link).toHaveAttribute('href', 'https://github.com/aourednik/historical-basemaps');
+      }
     });
 
-    it('displays historical borders disclaimer section', () => {
+    it('displays link to license full text', () => {
       render(<LicenseDisclaimer {...defaultProps} />);
 
-      const bordersDisclaimer = screen.getByTestId('borders-disclaimer');
-      expect(bordersDisclaimer).toBeInTheDocument();
+      const link = screen.getByRole('link', { name: /ライセンス全文/i });
+      expect(link).toHaveAttribute('href', '/LICENSE-data.txt');
     });
 
-    it('displays disputed territories disclaimer section', () => {
+    it('displays link to source code repository', () => {
       render(<LicenseDisclaimer {...defaultProps} />);
 
-      const disputedDisclaimer = screen.getByTestId('disputed-disclaimer');
-      expect(disputedDisclaimer).toBeInTheDocument();
+      const link = screen.getByRole('link', { name: /GitHub/i });
+      expect(link).toHaveAttribute('href', 'https://github.com/akihiro-tj/world-history-map');
     });
   });
 
