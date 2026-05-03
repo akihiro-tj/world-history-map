@@ -38,29 +38,6 @@ export function ControlBar({ onOpenLicense }: ControlBarProps) {
         </svg>
         <span className="sr-only">このサイトについて</span>
       </button>
-      <a
-        href="https://github.com/akihiro-tj/world-history-map"
-        target="_blank"
-        rel="noopener noreferrer"
-        data-testid="github-link"
-        className="rounded-lg bg-gray-700/95 p-3 text-white/60 shadow-lg backdrop-blur-sm transition-colors hover:text-white"
-      >
-        <svg
-          className="h-6 w-6"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          aria-hidden="true"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5"
-          />
-        </svg>
-        <span className="sr-only">ソースコードを見る</span>
-      </a>
     </div>
   );
 }
