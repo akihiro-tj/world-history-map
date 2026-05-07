@@ -29,28 +29,50 @@ echo '{ "year": 1500, "regions": [...] }' > public/data/era-summaries/1500.json
 pnpm dev
 ```
 
-## 手順 2：データを Pipeline で生成する（実装後）
+## 手順 2：Notion DB を作って sync する（正規フロー）
 
-**用途**: 全年代を一括整備 / 領土データ更新後の再生成
+**用途**: 一次ソースである Notion DB から JSON を取得・反映する。本 plan のスコープでは **1650 年の代表データ 1 件** を Notion に投入し、sync を通すことで動作確認する。
 
-1. `apps/pipeline` の era-summary-generate サブコマンドを使う：
+### 2-1. Notion DB の作成（一回限り）
+
+1. Notion 上に "Era Summary" データベースを作成
+2. [contracts/era-summary-data.md](./contracts/era-summary-data.md) の **Notion DB スキーマ** に従ってプロパティを設定：
+   - `Year`（Number）
+   - `Region`（Select：8 値の enum）
+   - `Title`（Title）
+   - `Context`（Rich text）
+   - `References`（Rich text、JSON 文字列）
+3. 1Password にデータベース ID を登録（既存 territory-descriptions と同じ規約）：
+   ```
+   op://dev/world-history-map-pipeline/era-summary-database-id
+   ```
+
+### 2-2. 1650 年の代表データを投入
+
+[contracts/era-summary-data.md](./contracts/era-summary-data.md) の「サンプル：1650 年」を参考に、各地域カードに対応する Notion ページを 1 つずつ作成（地域カード数だけページが増える、1650 年は 6 件想定）。
+
+### 2-3. sync コマンドで JSON 化
 
 ```bash
-# 単一年
-pnpm pipeline era-summary-generate --year 1500
-
-# 範囲
-pnpm pipeline era-summary-generate --years 1300..1700
-
-# 全年代（インクリメンタル：領土データに変更がある年だけ再生成）
-pnpm pipeline era-summary-generate --all
+pnpm pipeline era-summary-sync
 ```
 
-2. 生成された JSON は `apps/frontend/public/data/era-summaries/{year}.json` に書き出される
-3. 確認は手順 1 と同様
+このコマンドは：
 
-> Pipeline の Cache: 領土データ（`descriptions/{year}.json`）の hash が変わった年のみ再処理される。
-> 強制再生成したい場合は `.cache/pipeline-state.json` の該当エントリを削除する。
+1. 1Password CLI で Notion DB ID を取得
+2. Notion API でデータベース全エントリを query
+3. `Year` でグループ化
+4. `apps/frontend/public/data/era-summaries/{year}.json` に書き出し
+
+`era-summaries/1650.json` が生成されることを確認。
+
+### 2-4. ブラウザで確認
+
+```bash
+pnpm dev
+```
+
+年代セレクターで 1650 年を選び、サマリーパネルが代表データで描画されることを確認。
 
 ## 手順 3：パネルを視覚的に確認する（Storybook）
 

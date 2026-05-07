@@ -9,15 +9,20 @@
 既存の領土詳細パネル（`territory-info-panel`）と **全デバイスで後勝ち排他** で動作し、
 領土詳細パネル内には「{year} 年の世界を見る」遷移帯を常時表示してサマリーへ 1 操作で復帰できる動線を設ける。
 
-データは年代単位の専用 JSON（`era-summaries/{year}.json`）として整備し、
-事前生成して静的同梱する。生成は `apps/pipeline` の新規サブコマンドとして追加する。
+データの一次ソースは **Notion 上の "Era Summary" データベース**（既存 Territory Description データベースと対称）。
+`apps/pipeline` の新規サブコマンド `era-summary-sync` で Notion → JSON に変換し、
+`era-summaries/{year}.json` として `apps/frontend` に静的同梱する。
+
+本 plan のスコープには Notion DB 作成と、動作確認用の代表データ 1 件（**1650 年**：既存アプリのデフォルト表示年）の投入までを含む。
+残りの年代の整備はコンテンツ運用工数として本 plan の範囲外。
 
 ## Technical Context
 
 **Language/Version**: TypeScript 5.x（既存ワークスペース）
 **Primary Dependencies**:
 - Frontend: React 18+, MapLibre GL JS, react-map-gl, Tailwind CSS, Vite, Vitest, Storybook
-- Pipeline: Node.js（既存サブコマンド `territory-sync` と同等の構成）
+- Pipeline: Node.js, `@notionhq/client`（既存サブコマンド `territory-sync` と同等の構成）
+- データソース: Notion 上の "Era Summary" データベース（新規作成）
 - 共通: pnpm workspace, Biome（format / lint）
 
 **Storage**:
@@ -114,9 +119,13 @@ apps/frontend/
 
 apps/pipeline/
 └── src/
-    └── commands/
-        └── era-summary-generate.ts               # 新規：AI で era-summaries/{year}.json を生成
+    ├── cli.ts                                    # 改修：`era-summary-sync` ケースを追加
+    └── stages/
+        └── sync-era-summaries.ts                 # 新規：Notion → era-summaries/{year}.json
+        └── sync-era-summaries.test.ts            # 新規：Notion レスポンスのモック → JSON 出力検証
 ```
+
+加えて **Notion 上に "Era Summary" データベースを作成** し、動作確認用に **1650 年の代表データ 1 件**（地域カード 6〜8 件）を投入する。Notion DB のプロパティ構造は [contracts/era-summary-data.md](./contracts/era-summary-data.md) で確定。
 
 **Structure Decision**:
 本機能は **frontend + pipeline の 2 コンポーネントへの追加** で完結する。`apps/worker`、`packages/tiles`
@@ -136,7 +145,7 @@ apps/pipeline/
 1. **地域区分の具体集合**：spec で例示した 7 区分（ヨーロッパ／東アジア／南アジア／中東・北アフリカ／サブサハラ・アフリカ／南北アメリカ／オセアニア）を確定するか、調整するか
 2. **後勝ち排他の reducer 設計**：既存 `SELECT_TERRITORY` の自動 `isInfoPanelOpen: true` を踏まえて、サマリー開閉と排他の動きを 1 つの状態機械にまとめる方法
 3. **遷移帯の年代表記の動的更新**：年代切替時に領土詳細パネルが開いている場合、遷移帯ラベル「{year} 年の世界を見る」をどう更新するか
-4. **Pipeline の era-summary 生成戦略**：AI モデル選択（Claude / GPT 等）、プロンプト構造、コスト見積もり、再現性（temperature / seed）
+4. **Pipeline の era-summary 連携戦略**：Notion を一次ソースとし、`era-summary-sync` で取得・変換する流れ（既存 `territory-sync` と対称）。AI 一次生成は Notion 投入前のオフライン作業として分離
 5. **データ未提供時の表示**（FR-007）：fallback UI の文言・既存パターン（`RoleErrorMessage`）の流用可否
 6. **モバイル bottom-sheet との統合**：既存 `BottomSheet` コンポーネントが summary / territory どちらにも使われる際の制御フロー（同時に出ない・後勝ち排他を bottom-sheet レベルで担保するか、上位で担保するか）
 

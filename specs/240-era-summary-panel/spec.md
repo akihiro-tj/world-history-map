@@ -157,5 +157,6 @@ issue #138 では「ホバーツールチップ」と「年代サマリーパネ
 ## Dependencies
 
 - 既存の年代選択機能（year-selector）— サマリーの「対象年」を決定するソース
-- 既存の領土別 description データ（`descriptions/{year}.json`）— サマリー素材としての参照可能性
+- 既存の領土別 description データ（`descriptions/{year}.json`）— サマリー本文中の領土参照（FR-009）の解決対象
 - 既存の領土詳細パネル（territory-info-panel）— 後勝ち排他の対象であり、サマリーへの遷移帯（FR-011）を追加する改修対象
+- **Notion 上の "Era Summary" データベース**（新規）— 年代サマリーデータの一次ソース。コンテンツは人間が Notion 上で編集・管理し、Pipeline が読み取り専用で取得する（既存 Territory Description データベースと対称な構成）

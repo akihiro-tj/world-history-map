@@ -106,40 +106,64 @@ const label = `${formatYearLabel(year)}の世界を見る`;
 - **遷移帯ラベルを固定文言「サマリーを開く」にする**：年代表記が変動しない分シンプルだが、利用者が「何年のサマリーに切り替わるか」を予測できない。今の世界像との関連が薄れる
 - **年代切替時に遷移帯を一時的にハイライトする**：気付きを高めるが、視覚ノイズになる。MVP では平静な再描画で十分
 
-## 4. Pipeline の era-summary 生成戦略
+## 4. Pipeline の era-summary 連携戦略（Notion ソース）
 
 ### Decision
 
-`apps/pipeline` に新規サブコマンド `era-summary-generate` を追加：
+データの **一次ソースは Notion DB**（"Era Summary" データベース）。`apps/pipeline` には既存の `territory-sync` と対称的な新規サブコマンド `era-summary-sync` を追加し、Notion → JSON への変換のみを担う。
 
 ```bash
-pnpm pipeline era-summary-generate --year 1500          # 単一年
-pnpm pipeline era-summary-generate --years 1300..1700   # 範囲
-pnpm pipeline era-summary-generate --all                # 全年代
+pnpm pipeline era-summary-sync          # Notion DB の全エントリを取得し、年代単位の JSON に書き出す
 ```
 
-生成フロー：
+データフロー：
 
-1. 入力：対象年 + 当該年の `descriptions/{year}.json`（領土別 context / keyEvents）
-2. AI に **構造化プロンプト** を投げる：「以下の領土別情報から、世界全体を地域 7 区分で 1〜2 文に要約してください。出力は JSON 形式で…」
-3. 出力 JSON のバリデーション（地域数、文字数上限、必須フィールド）
+```
+   [人間がコンテンツ整備]      [Pipeline で取得・変換]      [Frontend で表示]
+   AI 一次生成（CSV）  ─→  Notion DB（Era Summary）  ─→  era-summaries/{year}.json  ─→  EraSummaryPanel
+   ↑                       ↑                            ↑
+   prj-era-summary-data    一次ソース                    静的同梱（既存 description と同じ運用）
+   （別スキルで対応）
+```
+
+実装は既存 `apps/pipeline/src/stages/sync-descriptions.ts` のパターンを踏襲：
+
+1. Notion API（`@notionhq/client`）でデータベースを query
+2. 各ページ（年×地域カード）を取得し、年単位にグループ化
+3. 1 年分の `regions[]` を [contracts/era-summary-data.md](./contracts/era-summary-data.md) のスキーマに沿った JSON にマップ
 4. `apps/frontend/public/data/era-summaries/{year}.json` に書き出し
-5. 既存 pipeline の状態キャッシュ（`.cache/pipeline-state.json`）に hash を記録
 
-AI モデルは **Claude Sonnet 4.6** または **Claude Opus 4.7** を使用（プロジェクト全体での AI 利用方針に準拠）。
+本 plan のスコープでは **動作確認用の代表データ 1 件（1650 年）** を Notion DB に投入する。残りの年代の整備は本 plan の範囲外（コンテンツ整備工数として別途扱う）。
 
 ### Rationale
 
-- 既存の `territory-sync` コマンド（Notion → 領土別 description）と類似のパターン。コマンド命名・引数仕様を揃えることで利用者の学習コストが低い
-- 領土別 description を入力にすることで、サマリーと領土詳細の **記述の一貫性** が担保される（同じソースから派生）
-- 単発バッチで済ますことで、ランタイム AI 呼び出しを排除（spec Assumption と整合）
-- インクリメンタル処理（hash 比較）により、領土データが変わった年だけ再生成可能
+- **真のソース＝ Notion** とすることで、コンテンツ修正・追加・運用が UI 上で完結。Pipeline は読み取り専用の変換器
+- 既存 `territory-sync` の流儀と対称：CLI 引数・stage ファイル名・JSON 書き出し先のいずれも対応関係が明確で、開発者の学習コストがゼロに近い
+- AI 一次生成を Notion 投入前のオフライン作業として分離（プロジェクト原則「Data-flow integrity」と整合：データの直線的フローと source-of-truth が明確）
+- ランタイム AI 呼び出しを排除（spec Assumption と整合）
+- 1650 年は既存アプリのデフォルト表示年。代表データ 1 件で初回アクセス体験の動作確認が成立
 
 ### Alternatives Considered
 
-- **手動執筆**：品質は最高だが、35〜40 年分の整備コストが大きい。MVP では AI 一次生成 + 必要に応じた手動修正が現実的
-- **領土データから機械的に集約（AI なし）**：「ヨーロッパに属する領土の context を結合する」式の集約。文脈の重複や論理的飛躍が出やすく、利用者にとって読みづらい
+- **Pipeline で AI 生成（旧 plan）**：データソースが Pipeline 内部にあり、Notion 経由の編集動線が失われる。コンテンツ運用の柔軟性が下がる
 - **ランタイム AI 生成**：spec の Assumption で否定済み
+- **領土データから機械的に集約（AI なし）**：「ヨーロッパに属する領土の context を結合」式の集約は文脈の重複や論理的飛躍を生み読みづらい
+
+### Notion DB のプロパティ構造（producer side の契約）
+
+Notion 上の "Era Summary" データベースは以下のプロパティを持つ：
+
+| プロパティ名 | Notion 型 | 説明 | 必須 |
+|------------|---------|------|----|
+| `Year` | Number（整数） | 対象年。負号で紀元前を表す | ✓ |
+| `Region` | Select（enum） | 地域識別子（`europe` / `east-asia` / `southeast-asia` / `south-asia` / `middle-east-north-africa` / `sub-saharan-africa` / `americas` / `oceania`） | ✓ |
+| `Title` | Title（テキスト） | 表示見出し（例：「ヨーロッパ」） | ✓ |
+| `Context` | Rich text | 概況本文（1〜500 文字） | ✓ |
+| `References` | Rich text（JSON 文字列） | リンク参照を JSON 配列の文字列として格納（例：`[{"kind":"territory","target":"portugal","text":"ポルトガル"}]`）。空または未入力は空配列扱い | 任意 |
+
+**1 ページ ＝ 1 年・1 地域** のレコード。1 つの年代に対して 1〜8 ページ（地域カード）が紐付く。
+
+`References` を Rich text の JSON 文字列として持つ判断：Notion のリレーションプロパティで領土・年代を参照する設計は柔軟だが、別 DB（Territory Description）への外部キー管理が複雑化するため、MVP では文字列ベースで割り切る。Pipeline 側でパースしてバリデーションする。
 
 ## 5. データ未提供時の表示
 
@@ -208,7 +232,7 @@ AppState の `isSummaryPanelOpen` / `isInfoPanelOpen` のどちらかが `true` 
 | 1. 地域区分 | ✅ Resolved（7 区分、東南アジア独立、オセアニア統合許容） |
 | 2. 後勝ち排他 reducer | ✅ Resolved（AppState 拡張、新規 OPEN_SUMMARY/CLOSE_SUMMARY） |
 | 3. 遷移帯の年代表記 | ✅ Resolved（既存フォーマッタ流用、`selectedYear` 購読） |
-| 4. Pipeline 生成戦略 | ✅ Resolved（新規サブコマンド、AI による単発バッチ、増分処理） |
+| 4. Pipeline 連携戦略 | ✅ Resolved（Notion を一次ソース、`era-summary-sync` で取得・変換、AI 一次生成は Notion 投入前のオフライン作業） |
 | 5. データ未提供時表示 | ✅ Resolved（既存 RoleErrorMessage パターン流用、role="status"） |
 | 6. bottom-sheet 統合 | ✅ Resolved（既存コンポーネント流用、排他は AppState 側） |
 

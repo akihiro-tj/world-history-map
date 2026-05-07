@@ -174,7 +174,7 @@ export function useEraSummary(year: HistoricalYear): {
 
 | 層 | 担当 | ルール |
 |----|------|------|
-| Pipeline 生成時 | `apps/pipeline/src/commands/era-summary-generate.ts` | スキーマ全項目の必須・型・長さ・enum 一致を担保 |
+| Pipeline 取得・変換時 | `apps/pipeline/src/stages/sync-era-summaries.ts` | Notion API レスポンスをスキーマ全項目（必須・型・長さ・enum 一致）でバリデーション。`References` の JSON 文字列パースもここで実施 |
 | ランタイム読込時 | `domain/era-summary/load.ts` | 緩いガード（必須フィールドの存在確認）+ 例外時は `null` |
 | コンポーネント描画時 | `region-card.tsx` 等 | 表示 fallback（reference 解決失敗時はリンクなしで描画） |
 
