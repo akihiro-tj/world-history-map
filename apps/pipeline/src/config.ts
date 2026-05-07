@@ -34,6 +34,13 @@ export const NOTION = {
       { encoding: 'utf-8' },
     ).trim();
   },
+  getEraSummaryDataSourceId: (): string => {
+    return execFileSync(
+      'op',
+      ['read', 'op://dev/world-history-map-pipeline/era-summary-datasource-id'],
+      { encoding: 'utf-8' },
+    ).trim();
+  },
   getToken: (): string => {
     return execFileSync('op', ['read', 'op://dev/world-history-map-pipeline/credential'], {
       encoding: 'utf-8',
@@ -51,6 +58,7 @@ export const PATHS = {
   publicPmtiles: path.join(ROOT_DIR, '..', 'frontend', 'public', 'pmtiles'),
   distPmtiles: path.join(ROOT_DIR, 'dist', 'pmtiles'),
   descriptionsDir: path.resolve(ROOT_DIR, '..', 'frontend', 'public', 'data', 'descriptions'),
+  eraSummariesDir: path.resolve(ROOT_DIR, '..', 'frontend', 'public', 'data', 'era-summaries'),
 } as const;
 
 export const UPSTREAM = {

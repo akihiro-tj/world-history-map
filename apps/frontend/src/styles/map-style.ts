@@ -1,5 +1,5 @@
 export const MAP_CONFIG = {
-  initialLongitude: 40,
+  initialLongitude: 10,
   initialLatitude: 30,
   initialZoom: 2,
   minZoom: 1,

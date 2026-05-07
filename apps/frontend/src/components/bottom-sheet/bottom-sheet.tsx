@@ -91,7 +91,7 @@ export function BottomSheet({ isOpen, onClose, header, children, ...props }: Bot
           <div
             aria-hidden="true"
             className={cn(
-              'pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-gray-800 to-transparent transition-opacity duration-200',
+              'pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-gray-800 to-transparent transition-opacity duration-200',
               showFade ? 'opacity-100' : 'opacity-0',
             )}
           />

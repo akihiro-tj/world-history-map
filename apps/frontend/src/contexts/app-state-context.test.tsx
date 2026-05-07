@@ -8,6 +8,7 @@ const initialState = {
   selectedYear: createHistoricalYear(1700),
   selectedTerritory: null as string | null,
   isInfoPanelOpen: false,
+  isSummaryPanelOpen: false,
   mapView: { longitude: 0, latitude: 30, zoom: 2 },
 };
 
@@ -32,18 +33,36 @@ describe('AppStateProvider + useAppState', () => {
     expect(result.current.state.selectedYear).toBe(1800);
   });
 
-  it('SELECT_TERRITORY updates selectedTerritory and opens panel', () => {
+  it('SET_SELECTED_YEAR does not affect panel state', () => {
     const { result } = renderHook(() => useAppState(), { wrapper });
 
+    act(() => {
+      result.current.actions.openSummary();
+    });
+    act(() => {
+      result.current.actions.setSelectedYear(createHistoricalYear(1800));
+    });
+
+    expect(result.current.state.isSummaryPanelOpen).toBe(true);
+    expect(result.current.state.isInfoPanelOpen).toBe(false);
+  });
+
+  it('SELECT_TERRITORY updates selectedTerritory, opens info panel, and closes summary panel', () => {
+    const { result } = renderHook(() => useAppState(), { wrapper });
+
+    act(() => {
+      result.current.actions.openSummary();
+    });
     act(() => {
       result.current.actions.selectTerritory('France');
     });
 
     expect(result.current.state.selectedTerritory).toBe('France');
     expect(result.current.state.isInfoPanelOpen).toBe(true);
+    expect(result.current.state.isSummaryPanelOpen).toBe(false);
   });
 
-  it('CLEAR_SELECTION clears territory and closes panel', () => {
+  it('CLEAR_SELECTION clears territory and closes info panel', () => {
     const { result } = renderHook(() => useAppState(), { wrapper });
 
     act(() => {
@@ -72,5 +91,70 @@ describe('AppStateProvider + useAppState', () => {
     expect(() => {
       renderHook(() => useAppState());
     }).toThrow('useAppState must be used within an AppStateProvider');
+  });
+
+  it('OPEN_SUMMARY sets isSummaryPanelOpen=true, isInfoPanelOpen=false, selectedTerritory=null', () => {
+    const { result } = renderHook(() => useAppState(), { wrapper });
+
+    act(() => {
+      result.current.actions.selectTerritory('France');
+    });
+    act(() => {
+      result.current.actions.openSummary();
+    });
+
+    expect(result.current.state.isSummaryPanelOpen).toBe(true);
+    expect(result.current.state.isInfoPanelOpen).toBe(false);
+    expect(result.current.state.selectedTerritory).toBeNull();
+  });
+
+  it('CLOSE_SUMMARY sets isSummaryPanelOpen=false without affecting territory', () => {
+    const { result } = renderHook(() => useAppState(), { wrapper });
+
+    act(() => {
+      result.current.actions.openSummary();
+    });
+    act(() => {
+      result.current.actions.closeSummary();
+    });
+
+    expect(result.current.state.isSummaryPanelOpen).toBe(false);
+    expect(result.current.state.selectedTerritory).toBeNull();
+  });
+
+  it('OPEN_SUMMARY is idempotent', () => {
+    const { result } = renderHook(() => useAppState(), { wrapper });
+
+    act(() => {
+      result.current.actions.openSummary();
+    });
+    act(() => {
+      result.current.actions.openSummary();
+    });
+
+    expect(result.current.state.isSummaryPanelOpen).toBe(true);
+    expect(result.current.state.isInfoPanelOpen).toBe(false);
+  });
+
+  it('after-wins exclusion: OPEN_SUMMARY → SELECT_TERRITORY → OPEN_SUMMARY cycle maintains invariant', () => {
+    const { result } = renderHook(() => useAppState(), { wrapper });
+
+    act(() => {
+      result.current.actions.openSummary();
+    });
+    expect(result.current.state.isSummaryPanelOpen).toBe(true);
+    expect(result.current.state.isInfoPanelOpen).toBe(false);
+
+    act(() => {
+      result.current.actions.selectTerritory('France');
+    });
+    expect(result.current.state.isSummaryPanelOpen).toBe(false);
+    expect(result.current.state.isInfoPanelOpen).toBe(true);
+
+    act(() => {
+      result.current.actions.openSummary();
+    });
+    expect(result.current.state.isSummaryPanelOpen).toBe(true);
+    expect(result.current.state.isInfoPanelOpen).toBe(false);
   });
 });

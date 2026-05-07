@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { TerritoryDescription } from '@/domain/territory/types';
 import type { HistoricalYear } from '@/domain/year/historical-year';
 import { useEscapeKey } from '@/hooks/use-escape-key';
@@ -6,11 +6,11 @@ import { useIsMobile } from '@/hooks/use-is-mobile';
 import { cn } from '@/lib/utils';
 import { useAppState } from '../../contexts/app-state-context';
 import { BottomSheet } from '../bottom-sheet/bottom-sheet';
-import { CloseButton } from '../close-button/close-button';
 import { RoleErrorMessage } from '../feedback/role-error-message';
 import { RoleSpinner } from '../feedback/role-spinner';
 import { useTerritoryDescription } from './hooks/use-territory-description';
 import { SELECTED_ACCENT_CLASS, SelectedAccent } from './selected-accent';
+import { SummaryNavStrip } from './summary-nav-strip';
 import { TerritoryProfile } from './territory-profile';
 import { TerritoryTimeline } from './territory-timeline';
 
@@ -53,9 +53,9 @@ function PanelWrapper({
       aria-labelledby="territory-info-title"
       aria-busy={busy || undefined}
       className={cn(
-        'absolute left-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] rounded-lg bg-gray-700/95 p-4 shadow-xl backdrop-blur-sm',
+        'absolute left-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] flex flex-col overflow-hidden rounded-lg bg-gray-700/95 shadow-xl backdrop-blur-sm',
         SELECTED_ACCENT_CLASS,
-        scrollable && 'max-h-[calc(100vh-2rem)] overflow-y-auto',
+        scrollable && 'max-h-[calc(100vh-2rem)]',
       )}
     >
       {children}
@@ -63,28 +63,45 @@ function PanelWrapper({
   );
 }
 
-function PanelHeader({
-  name,
-  era,
-  onClose,
-  className,
-}: {
-  name: string;
-  era?: string | undefined;
-  onClose: () => void;
-  className?: string;
-}) {
+function NavRow({ onClose }: { onClose: () => void }) {
   return (
-    <div
-      className={cn('flex items-start justify-between border-b border-gray-600 pb-3', className)}
-    >
-      <div className="min-w-0 flex-1">
+    <div className="flex items-stretch border-b border-gray-600">
+      <SummaryNavStrip />
+      <button
+        type="button"
+        aria-label="閉じる"
+        onClick={onClose}
+        className="flex shrink-0 items-center px-3 text-gray-300 transition-colors hover:bg-gray-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gray-400"
+      >
+        <svg
+          className="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+        <span className="sr-only">閉じる</span>
+      </button>
+    </div>
+  );
+}
+
+function PanelHeader({ name, era }: { name: string; era?: string | undefined }) {
+  return (
+    <div className="border-b border-gray-600">
+      <div className="px-4 pt-3 pb-3">
         <h2 id="territory-info-title" className="text-lg font-semibold text-white">
           {name}
         </h2>
         {era && <p className="mt-0.5 text-sm text-gray-300">{era}</p>}
       </div>
-      <CloseButton onClick={onClose} aria-label="閉じる" />
     </div>
   );
 }
@@ -118,38 +135,77 @@ function DescriptionBody({
 function DesktopContent(props: ContentProps) {
   const { onClose, selectedYear } = props;
   const state = panelState(props);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollDown, setCanScrollDown] = useState(false);
+  const isLoaded = state.kind === 'loaded';
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el || !isLoaded) return;
+
+    const check = () => {
+      setCanScrollDown(el.scrollHeight - el.scrollTop - el.clientHeight > 1);
+    };
+
+    check();
+    el.addEventListener('scroll', check, { passive: true });
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(check) : null;
+    ro?.observe(el);
+
+    return () => {
+      el.removeEventListener('scroll', check);
+      ro?.disconnect();
+    };
+  }, [isLoaded]);
 
   switch (state.kind) {
     case 'loading':
       return (
         <PanelWrapper busy>
-          <PanelHeader name={state.name} onClose={onClose} />
+          <div className="shrink-0">
+            <NavRow onClose={onClose} />
+            <PanelHeader name={state.name} />
+          </div>
           <RoleSpinner />
         </PanelWrapper>
       );
     case 'error':
       return (
         <PanelWrapper>
-          <PanelHeader name="エラー" onClose={onClose} />
+          <div className="shrink-0">
+            <NavRow onClose={onClose} />
+            <PanelHeader name="エラー" />
+          </div>
           <RoleErrorMessage>{state.message}</RoleErrorMessage>
         </PanelWrapper>
       );
     case 'empty':
       return (
         <PanelWrapper>
-          <PanelHeader name={state.name} onClose={onClose} />
+          <div className="shrink-0">
+            <NavRow onClose={onClose} />
+            <PanelHeader name={state.name} />
+          </div>
           <NoDescriptionBody />
         </PanelWrapper>
       );
     case 'loaded':
       return (
         <PanelWrapper scrollable>
-          <PanelHeader
-            name={state.description.name}
-            era={state.description.era}
-            onClose={onClose}
+          <div className="shrink-0">
+            <NavRow onClose={onClose} />
+            <PanelHeader name={state.description.name} era={state.description.era} />
+          </div>
+          <div ref={scrollRef} className="overflow-y-auto">
+            <DescriptionBody description={state.description} selectedYear={selectedYear} />
+          </div>
+          <div
+            aria-hidden="true"
+            className={cn(
+              'pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-gray-700 to-transparent transition-opacity duration-200',
+              canScrollDown ? 'opacity-100' : 'opacity-0',
+            )}
           />
-          <DescriptionBody description={state.description} selectedYear={selectedYear} />
         </PanelWrapper>
       );
   }
@@ -171,9 +227,43 @@ function MobileContent(props: ContentProps) {
       isOpen
       onClose={onClose}
       header={
-        <SelectedAccent className="px-4">
-          <PanelHeader name={headerName} era={headerEra} onClose={onClose} />
-        </SelectedAccent>
+        <>
+          <div className="flex items-stretch border-b border-gray-600">
+            <SummaryNavStrip />
+            <button
+              type="button"
+              aria-label="閉じる"
+              onClick={onClose}
+              className="flex shrink-0 items-center px-3 text-gray-300 transition-colors hover:bg-gray-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gray-400"
+            >
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+              <span className="sr-only">閉じる</span>
+            </button>
+          </div>
+          <SelectedAccent>
+            <div className="border-b border-gray-600">
+              <div className="pl-3 pr-4 pt-3 pb-3">
+                <h2 id="territory-info-title" className="text-lg font-semibold text-white">
+                  {headerName}
+                </h2>
+                {headerEra && <p className="mt-0.5 text-sm text-gray-300">{headerEra}</p>}
+              </div>
+            </div>
+          </SelectedAccent>
+        </>
       }
       aria-labelledby="territory-info-title"
     >

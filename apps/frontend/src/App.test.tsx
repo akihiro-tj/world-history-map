@@ -28,10 +28,6 @@ vi.mock('./components/control-bar/control-bar', () => ({
   ControlBar: () => <div data-testid="mock-control-bar" />,
 }));
 
-vi.mock('./components/year-display/year-display', () => ({
-  YearDisplay: ({ year }: { year: number }) => <div data-testid="mock-year-display">{year}</div>,
-}));
-
 vi.mock('./components/year-selector/year-selector', () => ({
   YearSelector: () => <div data-testid="mock-year-selector" />,
 }));
@@ -88,11 +84,5 @@ describe('App', () => {
     render(<App />);
 
     expect(screen.getByTestId('mock-control-bar')).toBeInTheDocument();
-  });
-
-  it('renders YearDisplay with selected year', () => {
-    render(<App />);
-
-    expect(screen.getByTestId('mock-year-display')).toBeInTheDocument();
   });
 });

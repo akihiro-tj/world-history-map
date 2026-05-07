@@ -14,14 +14,18 @@ beforeAll(() => {
   });
 });
 
+import { createHistoricalYear } from '@/domain/year/historical-year';
+
 const mockClearSelection = vi.fn();
 const mockSelectTerritory = vi.fn();
 const mockSetSelectedYear = vi.fn();
+const mockOpenSummary = vi.fn();
+let mockSelectedYear = createHistoricalYear(1700);
 
 vi.mock('@/contexts/app-state-context', () => ({
   useAppState: () => ({
     state: {
-      selectedYear: 1700,
+      selectedYear: mockSelectedYear,
       selectedTerritory: 'France',
       isInfoPanelOpen: true,
     },
@@ -29,6 +33,7 @@ vi.mock('@/contexts/app-state-context', () => ({
       clearSelection: mockClearSelection,
       selectTerritory: mockSelectTerritory,
       setSelectedYear: mockSetSelectedYear,
+      openSummary: mockOpenSummary,
     },
   }),
 }));
@@ -77,6 +82,7 @@ import { TerritoryInfoPanel } from './territory-info-panel';
 describe('TerritoryInfoPanel', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockSelectedYear = createHistoricalYear(1700);
     mockDescriptionValue = richDescription;
     mockIsLoading = false;
     mockError = null;
@@ -203,23 +209,67 @@ describe('TerritoryInfoPanel - US-2: buildPanelContent states', () => {
     expect(screen.getByText('絶対王政期')).toBeInTheDocument();
   });
 
-  it('renders scrollable panel wrapper for successful description', () => {
+  it('renders height-constrained panel wrapper for successful description', () => {
     mockIsLoading = false;
     mockError = null;
     mockDescriptionValue = richDescription;
     render(<TerritoryInfoPanel />);
 
     const panel = screen.getByTestId('territory-info-panel');
-    expect(panel.className).toContain('overflow-y-auto');
+    expect(panel.className).toContain('max-h-');
   });
 
-  it('does not render scrollable panel for loading state', () => {
+  it('does not render height-constrained panel for loading state', () => {
     mockIsLoading = true;
     mockDescriptionValue = null;
     mockError = null;
     render(<TerritoryInfoPanel />);
 
     const panel = screen.getByTestId('territory-info-panel');
-    expect(panel.className).not.toContain('overflow-y-auto');
+    expect(panel.className).not.toContain('max-h-');
+  });
+});
+
+describe('TerritoryInfoPanel - US-3: SummaryNavStrip integration', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockSelectedYear = createHistoricalYear(1700);
+    mockDescriptionValue = richDescription;
+    mockIsLoading = false;
+    mockError = null;
+  });
+
+  it('renders summary nav strip', () => {
+    render(<TerritoryInfoPanel />);
+
+    expect(screen.getByText('1700年の世界を見る')).toBeInTheDocument();
+  });
+
+  it('close button is in the nav-strip row (both rendered)', () => {
+    render(<TerritoryInfoPanel />);
+
+    expect(screen.getByRole('button', { name: /閉じる/i })).toBeInTheDocument();
+    expect(screen.getByText('1700年の世界を見る')).toBeInTheDocument();
+  });
+
+  it('title row does not contain close button', () => {
+    render(<TerritoryInfoPanel />);
+
+    const heading = screen.getByRole('heading', { level: 2 });
+    const titleRow = heading.closest('div');
+    expect(titleRow?.querySelector('button')).toBeNull();
+  });
+
+  it('nav-strip label and description both follow year change', () => {
+    const { rerender } = render(<TerritoryInfoPanel />);
+
+    expect(screen.getByText('1700年の世界を見る')).toBeInTheDocument();
+
+    mockSelectedYear = createHistoricalYear(1800);
+    mockDescriptionValue = { ...richDescription, name: '1800 年のフランス' };
+    rerender(<TerritoryInfoPanel />);
+
+    expect(screen.getByText('1800年の世界を見る')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('1800 年のフランス');
   });
 });

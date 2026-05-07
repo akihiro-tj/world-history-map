@@ -33,6 +33,7 @@ describe('YearSelector', () => {
           selectedYear: createHistoricalYear(initialYear),
           selectedTerritory: null,
           isInfoPanelOpen: false,
+          isSummaryPanelOpen: false,
           mapView: { longitude: 0, latitude: 30, zoom: 2 },
         }}
       >

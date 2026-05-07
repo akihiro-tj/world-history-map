@@ -5,6 +5,7 @@ import { EXIT_CODES, PATHS } from '@/config.ts';
 import type { PipelineOptions } from '@/pipeline.ts';
 import { PipelineError, runPipeline } from '@/pipeline.ts';
 import { syncDescriptions } from '@/stages/sync-descriptions.ts';
+import { syncEraSummaries } from '@/stages/sync-era-summaries.ts';
 import { createLogger } from '@/stages/types.ts';
 import { validateAllDescriptions } from '@/stages/validate-descriptions.ts';
 
@@ -87,6 +88,14 @@ async function main(): Promise<void> {
       );
       break;
     }
+    case 'era-summary-sync': {
+      await syncEraSummaries(
+        PATHS.eraSummariesDir,
+        logger,
+        options.year !== undefined ? { year: options.year } : undefined,
+      );
+      break;
+    }
     case 'territory-validate': {
       const results = await validateAllDescriptions(PATHS.descriptionsDir);
       let hasErrors = false;
@@ -117,7 +126,7 @@ async function main(): Promise<void> {
     default:
       console.error(`Unknown command: ${command}`);
       console.error(
-        'Usage: pnpm pipeline <run|status|list|territory-sync|territory-validate> [options]',
+        'Usage: pnpm pipeline <run|status|list|territory-sync|territory-validate|era-summary-sync> [options]',
       );
       process.exit(EXIT_CODES.INVALID_ARGUMENTS);
   }

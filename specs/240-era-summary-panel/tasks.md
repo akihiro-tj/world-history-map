@@ -31,9 +31,9 @@ description: "Task list for 年代サマリーパネル feature implementation"
 
 **Purpose**: ディレクトリ作成・Pipeline CLI スキャフォールディング
 
-- [ ] T001 Create directory `apps/frontend/src/components/era-summary-panel/` with subdirectory `hooks/`
-- [ ] T002 Create directory `apps/frontend/src/domain/era-summary/`
-- [ ] T003 Add `era-summary-sync` case stub to `apps/pipeline/src/cli.ts` (route to new stage, no implementation yet)
+- [x] T001 Create directory `apps/frontend/src/components/era-summary-panel/` with subdirectory `hooks/`
+- [x] T002 Create directory `apps/frontend/src/domain/era-summary/`
+- [x] T003 Add `era-summary-sync` case stub to `apps/pipeline/src/cli.ts` (route to new stage, no implementation yet)
 
 ---
 
@@ -45,31 +45,31 @@ description: "Task list for 年代サマリーパネル feature implementation"
 
 ### 2-A. Notion 一次ソースの整備（手作業）
 
-- [ ] T004 Notion 上に "Era Summary" データベースを作成し、`specs/240-era-summary-panel/contracts/era-summary-data.md` の Notion DB スキーマに従ってプロパティ（`Year` / `Region` / `Title` / `Context` / `References`）を設定する。`Region` の Select オプション 8 値を登録
-- [ ] T005 1Password に Notion DB ID を登録する：`op://dev/world-history-map-pipeline/era-summary-database-id`
-- [ ] T006 1650 年の代表データを Notion に投入（地域カード 6 件）。`specs/240-era-summary-panel/contracts/era-summary-data.md` の「サンプル：1650 年」を参照して各地域を 1 ページずつ作成
+- [x] T004 Notion 上に "Era Summary" データベースを作成し、`specs/240-era-summary-panel/contracts/era-summary-data.md` の Notion DB スキーマに従ってプロパティ（`Year` / `Region` / `Title` / `Context` / `References`）を設定する。`Region` の Select オプション 8 値を登録
+- [x] T005 1Password に Notion DB ID を登録する：`op://dev/world-history-map-pipeline/era-summary-database-id`
+- [x] T006 1650 年の代表データを Notion に投入（地域カード 6 件）。`specs/240-era-summary-panel/contracts/era-summary-data.md` の「サンプル：1650 年」を参照して各地域を 1 ページずつ作成
 
 ### 2-B. 型定義とデータローダ
 
-- [ ] T007 [P] Create `apps/frontend/src/domain/era-summary/types.ts` with `EraSummary`, `RegionCard`, `RegionId`, `EraSummaryReference` types per `specs/240-era-summary-panel/data-model.md`
-- [ ] T008 [P] Create `apps/frontend/src/domain/era-summary/load.ts` with `loadEraSummary(year)` returning `Promise<EraSummary | null>`. Returns `null` on 404, throws on parse failure
-- [ ] T009 [P] Create `apps/frontend/src/domain/era-summary/load.test.ts` covering: success / 404 → null / malformed JSON → throw
+- [x] T007 [P] Create `apps/frontend/src/domain/era-summary/types.ts` with `EraSummary`, `RegionCard`, `RegionId`, `EraSummaryReference` types per `specs/240-era-summary-panel/data-model.md`
+- [x] T008 [P] Create `apps/frontend/src/domain/era-summary/load.ts` with `loadEraSummary(year)` returning `Promise<EraSummary | null>`. Returns `null` on 404, throws on parse failure
+- [x] T009 [P] Create `apps/frontend/src/domain/era-summary/load.test.ts` covering: success / 404 → null / malformed JSON → throw
 
 ### 2-C. Pipeline sync 実装
 
-- [ ] T010 [P] Create `apps/pipeline/src/stages/sync-era-summaries.ts` modeled on `apps/pipeline/src/stages/sync-descriptions.ts`. Query Notion DB → group by `Year` → validate per contract → write `apps/frontend/public/data/era-summaries/{year}.json`
-- [ ] T011 Create `apps/pipeline/src/stages/sync-era-summaries.test.ts` with mocked Notion response covering: happy path / missing required field / invalid Region enum / malformed References JSON / duplicate Year×Region
-- [ ] T012 Wire `era-summary-sync` command in `apps/pipeline/src/cli.ts` to invoke `sync-era-summaries.ts` (replace stub from T003)
+- [x] T010 [P] Create `apps/pipeline/src/stages/sync-era-summaries.ts` modeled on `apps/pipeline/src/stages/sync-descriptions.ts`. Query Notion DB → group by `Year` → validate per contract → write `apps/frontend/public/data/era-summaries/{year}.json`
+- [x] T011 Create `apps/pipeline/src/stages/sync-era-summaries.test.ts` with mocked Notion response covering: happy path / missing required field / invalid Region enum / malformed References JSON / duplicate Year×Region
+- [x] T012 Wire `era-summary-sync` command in `apps/pipeline/src/cli.ts` to invoke `sync-era-summaries.ts` (replace stub from T003)
 
 ### 2-D. 初回 sync の実行（動作確認）
 
-- [ ] T013 Run `pnpm pipeline era-summary-sync` and verify `apps/frontend/public/data/era-summaries/1650.json` is generated and validates against the schema in `specs/240-era-summary-panel/contracts/era-summary-data.md`
+- [x] T013 Run `pnpm pipeline era-summary-sync` and verify `apps/frontend/public/data/era-summaries/1650.json` is generated and validates against the schema in `specs/240-era-summary-panel/contracts/era-summary-data.md`
 
 ### 2-E. AppState 拡張（後勝ち排他 reducer）
 
-- [ ] T014 Extend `apps/frontend/src/types/app-state.ts` with `isSummaryPanelOpen: boolean` field and update `initialAppState`. Add new actions `OPEN_SUMMARY` and `CLOSE_SUMMARY` to `AppStateActions` interface
-- [ ] T015 Update reducer in `apps/frontend/src/contexts/app-state-context.tsx`: implement `OPEN_SUMMARY` (sets `isSummaryPanelOpen: true`, `isInfoPanelOpen: false`, `selectedTerritory: null`) and `CLOSE_SUMMARY` (sets `isSummaryPanelOpen: false`). Update `SELECT_TERRITORY` to also set `isSummaryPanelOpen: false`
-- [ ] T016 Create `apps/frontend/src/contexts/app-state-context.test.tsx` (or update existing) verifying invariant `NOT (isSummaryPanelOpen AND isInfoPanelOpen)` across all action sequences
+- [x] T014 Extend `apps/frontend/src/types/app-state.ts` with `isSummaryPanelOpen: boolean` field and update `initialAppState`. Add new actions `OPEN_SUMMARY` and `CLOSE_SUMMARY` to `AppStateActions` interface
+- [x] T015 Update reducer in `apps/frontend/src/contexts/app-state-context.tsx`: implement `OPEN_SUMMARY` (sets `isSummaryPanelOpen: true`, `isInfoPanelOpen: false`, `selectedTerritory: null`) and `CLOSE_SUMMARY` (sets `isSummaryPanelOpen: false`). Update `SELECT_TERRITORY` to also set `isSummaryPanelOpen: false`
+- [x] T016 Create `apps/frontend/src/contexts/app-state-context.test.tsx` (or update existing) verifying invariant `NOT (isSummaryPanelOpen AND isInfoPanelOpen)` across all action sequences
 
 **Checkpoint**: Foundation ready. データフロー（Notion → JSON → frontend）と排他状態機械が動作する状態。User story 着手可能。
 
@@ -83,16 +83,16 @@ description: "Task list for 年代サマリーパネル feature implementation"
 
 ### 実装
 
-- [ ] T017 [P] [US1] Create `apps/frontend/src/components/era-summary-panel/hooks/use-era-summary.ts` with signature `useEraSummary(year): { summary, isLoading, error }`. Uses `loadEraSummary` from T008
-- [ ] T018 [P] [US1] Create `apps/frontend/src/components/era-summary-panel/region-card.tsx` rendering one `RegionCard` (title + context). References rendering is deferred to US3
-- [ ] T019 [P] [US1] Create `apps/frontend/src/components/era-summary-panel/region-card.test.tsx` covering: title and context rendered / accepts an optional className
-- [ ] T020 [US1] Create `apps/frontend/src/components/era-summary-panel/era-summary-panel.tsx` rendering `useEraSummary(selectedYear)` result. Desktop variant: `<aside>` matching v2 mock styling (`bg-gray-700/95`, header with year + close button, scrollable region cards). Mobile variant: existing `BottomSheet` wrapper. Branch by `useIsMobile()`. Returns `null` when `!isSummaryPanelOpen`
-- [ ] T021 [US1] Mount `<EraSummaryPanel />` inside `apps/frontend/src/App.tsx` so it appears alongside other floating UI elements
-- [ ] T022 [US1] Implement empty state in `era-summary-panel.tsx`: when `summary === null` (FR-007), render placeholder with `role="status"` and message "この年代のサマリーは準備中です。" (per research.md decision 5)
-- [ ] T023 [US1] Implement loading state: when `isLoading`, render existing `RoleSpinner` component
-- [ ] T024 [US1] Implement error state: when `error`, render existing `RoleErrorMessage` component
-- [ ] T025 [US1] Create `apps/frontend/src/components/era-summary-panel/era-summary-panel.test.tsx` covering: renders title with selected year / renders region cards from data / shows empty state on null / shows loading on isLoading / updates content when year changes
-- [ ] T026 [P] [US1] Create `apps/frontend/src/components/era-summary-panel/era-summary-panel.stories.tsx` with stories: Default (1650 data), Empty (data missing), Loading, Error, Mobile
+- [x] T017 [P] [US1] Create `apps/frontend/src/components/era-summary-panel/hooks/use-era-summary.ts` with signature `useEraSummary(year): { summary, isLoading, error }`. Uses `loadEraSummary` from T008
+- [x] T018 [P] [US1] Create `apps/frontend/src/components/era-summary-panel/region-card.tsx` rendering one `RegionCard` (title + context). References rendering is deferred to US3
+- [x] T019 [P] [US1] Create `apps/frontend/src/components/era-summary-panel/region-card.test.tsx` covering: title and context rendered / accepts an optional className
+- [x] T020 [US1] Create `apps/frontend/src/components/era-summary-panel/era-summary-panel.tsx` rendering `useEraSummary(selectedYear)` result. Desktop variant: `<aside>` matching v2 mock styling (`bg-gray-700/95`, header with year + close button, scrollable region cards). Mobile variant: existing `BottomSheet` wrapper. Branch by `useIsMobile()`. Returns `null` when `!isSummaryPanelOpen`
+- [x] T021 [US1] Mount `<EraSummaryPanel />` inside `apps/frontend/src/App.tsx` so it appears alongside other floating UI elements
+- [x] T022 [US1] Implement empty state in `era-summary-panel.tsx`: when `summary === null` (FR-007), render placeholder with `role="status"` and message "この年代のサマリーは準備中です。" (per research.md decision 5)
+- [x] T023 [US1] Implement loading state: when `isLoading`, render existing `RoleSpinner` component
+- [x] T024 [US1] Implement error state: when `error`, render existing `RoleErrorMessage` component
+- [x] T025 [US1] Create `apps/frontend/src/components/era-summary-panel/era-summary-panel.test.tsx` covering: renders title with selected year / renders region cards from data / shows empty state on null / shows loading on isLoading / updates content when year changes
+- [x] T026 [P] [US1] Create `apps/frontend/src/components/era-summary-panel/era-summary-panel.stories.tsx` with stories: Default (1650 data), Empty (data missing), Loading, Error, Mobile
 
 **Checkpoint**: US1 単独で MVP として成立。1650 年のサマリーが地図と並んで表示される
 
@@ -106,15 +106,15 @@ description: "Task list for 年代サマリーパネル feature implementation"
 
 ### 実装
 
-- [ ] T027 [P] [US2] Create `apps/frontend/src/components/era-summary-panel/summary-trigger.tsx` with two variants:
+- [x] T027 [P] [US2] Create `apps/frontend/src/components/era-summary-panel/summary-trigger.tsx` with two variants:
   - Desktop: rounded tab `bg-gray-700/95 px-3 py-2` with list-bullet SVG icon + "{year} 年の世界" text
   - Mobile: rounded-full FAB `px-4 py-2.5` with list-bullet SVG icon + "サマリー" text
   Both `dispatch(OPEN_SUMMARY)` on click. Returns `null` when `isSummaryPanelOpen`
-- [ ] T028 [P] [US2] Create `apps/frontend/src/components/era-summary-panel/summary-trigger.test.tsx` covering: desktop renders with year label / mobile renders compact / hidden when summary open / dispatches OPEN_SUMMARY on click / has `aria-label="サマリーを開く"`
-- [ ] T029 [US2] Update `apps/frontend/src/types/app-state.ts` to derive `isSummaryPanelOpen` initial value from device: desktop `true`, mobile `false`. Implement via `AppStateProvider` accepting `initialIsMobile` prop or computing inside provider using `useIsMobile()` (refactor as needed)
-- [ ] T030 [US2] Mount `<SummaryTrigger />` in `apps/frontend/src/App.tsx`. Desktop: top-left `absolute left-4 top-4 z-30`. Mobile: bottom-right `absolute bottom-20 right-4 z-30`. Branch by `useIsMobile()`
-- [ ] T031 [US2] Update `apps/frontend/src/contexts/app-state-context.test.tsx`: add scenarios verifying after-wins-exclusion when `SELECT_TERRITORY → OPEN_SUMMARY → SELECT_TERRITORY` cycles occur, and that initial state matches device
-- [ ] T032 [US2] Manual regression check: verify map zoom/pan and existing territory-info-panel still work with summary panel mounted (SC-003). Document findings in `quickstart.md` if needed
+- [x] T028 [P] [US2] Create `apps/frontend/src/components/era-summary-panel/summary-trigger.test.tsx` covering: desktop renders with year label / mobile renders compact / hidden when summary open / dispatches OPEN_SUMMARY on click / has `aria-label="サマリーを開く"`
+- [x] T029 [US2] Update `apps/frontend/src/types/app-state.ts` to derive `isSummaryPanelOpen` initial value from device: desktop `true`, mobile `false`. Implement via `AppStateProvider` accepting `initialIsMobile` prop or computing inside provider using `useIsMobile()` (refactor as needed)
+- [x] T030 [US2] Mount `<SummaryTrigger />` in `apps/frontend/src/App.tsx`. Desktop: top-left `absolute left-4 top-4 z-30`. Mobile: bottom-right `absolute bottom-20 right-4 z-30`. Branch by `useIsMobile()`
+- [x] T031 [US2] Update `apps/frontend/src/contexts/app-state-context.test.tsx`: add scenarios verifying after-wins-exclusion when `SELECT_TERRITORY → OPEN_SUMMARY → SELECT_TERRITORY` cycles occur, and that initial state matches device
+- [x] T032 [US2] Manual regression check: verify map zoom/pan and existing territory-info-panel still work with summary panel mounted (SC-003). Document findings in `quickstart.md` if needed
 
 **Checkpoint**: パネルの開閉 UX が完成。デバイス別の初期状態と後勝ち排他が機能する
 
@@ -128,13 +128,13 @@ description: "Task list for 年代サマリーパネル feature implementation"
 
 ### 実装
 
-- [ ] T033 [P] [US3] Create `apps/frontend/src/components/era-summary-panel/summary-references.tsx`. Given `context: string` and `references: EraSummaryReference[]`, render the text with each `text` occurrence wrapped in an `<a>` (or `<button>` for non-navigation semantics). Click handlers: `kind === "territory"` → `dispatch(SELECT_TERRITORY, target)`; `kind === "year"` → `dispatch(SET_SELECTED_YEAR, target)`. Underline styling per v2 mock (`underline decoration-gray-500 underline-offset-2 hover:decoration-white`)
-- [ ] T034 [P] [US3] Create `apps/frontend/src/components/era-summary-panel/summary-references.test.tsx` covering: text renders verbatim when no references / first occurrence wrapped per reference / unmatched `text` rendered without link / territory click dispatches SELECT_TERRITORY / year click dispatches SET_SELECTED_YEAR
-- [ ] T035 [US3] Update `apps/frontend/src/components/era-summary-panel/region-card.tsx` to use `summary-references.tsx` for context rendering when `references` is non-empty
-- [ ] T036 [US3] Create `apps/frontend/src/components/territory-info/summary-nav-strip.tsx` rendering a full-width button with list-bullet SVG icon + "{year} 年の世界を見る" label (year from `useAppState().state.selectedYear`, formatted via existing year-display formatter). On click `dispatch(OPEN_SUMMARY)`. Styling per v2 mock final layout: same row as close button, `flex-1 min-w-0 truncate` for label, `border-b border-gray-600` on parent row container
-- [ ] T037 [US3] Update `apps/frontend/src/components/territory-info/territory-info-panel.tsx` to render `<SummaryNavStrip />` at the top. **Existing `PanelHeader` から `<CloseButton>` を削除し、SummaryNavStrip と同じ行（最右上）に統合する**。タイトル行は `<h2>` + 副題のみ。レイアウトは `flex items-stretch` の親 `<div>` に nav strip（`flex-1 min-w-0`）+ close（`shrink-0`）+ 共通の `border-b border-gray-600` で構成。Apply to both Desktop `PanelWrapper` and Mobile `BottomSheet` variants（モバイルでは `BottomSheet` の `header` prop に渡される構造内で同じ統合を行う）
-- [ ] T038 [US3] Create `apps/frontend/src/components/territory-info/summary-nav-strip.test.tsx` covering: renders with selected year label / dispatches OPEN_SUMMARY on click / has `aria-label` for screen readers / handles year switch (label updates)
-- [ ] T039 [US3] Update `apps/frontend/src/components/territory-info/territory-info-panel.test.tsx`: verify (a) nav strip is rendered, (b) close button is in nav strip row, (c) title row no longer contains close button, (d) **年代切替時に nav-strip ラベルと領土詳細本文（`useTerritoryDescription(year)` 由来）の両方が新しい年代に追従する**（spec Edge Case「領土詳細パネル表示中に年代を切り替えた場合の更新挙動」を担保）
+- [x] T033 [P] [US3] Create `apps/frontend/src/components/era-summary-panel/summary-references.tsx`. Given `context: string` and `references: EraSummaryReference[]`, render the text with each `text` occurrence wrapped in an `<a>` (or `<button>` for non-navigation semantics). Click handlers: `kind === "territory"` → `dispatch(SELECT_TERRITORY, target)`; `kind === "year"` → `dispatch(SET_SELECTED_YEAR, target)`. Underline styling per v2 mock (`underline decoration-gray-500 underline-offset-2 hover:decoration-white`)
+- [x] T034 [P] [US3] Create `apps/frontend/src/components/era-summary-panel/summary-references.test.tsx` covering: text renders verbatim when no references / first occurrence wrapped per reference / unmatched `text` rendered without link / territory click dispatches SELECT_TERRITORY / year click dispatches SET_SELECTED_YEAR
+- [x] T035 [US3] Update `apps/frontend/src/components/era-summary-panel/region-card.tsx` to use `summary-references.tsx` for context rendering when `references` is non-empty
+- [x] T036 [US3] Create `apps/frontend/src/components/territory-info/summary-nav-strip.tsx` rendering a full-width button with list-bullet SVG icon + "{year} 年の世界を見る" label (year from `useAppState().state.selectedYear`, formatted via existing year-display formatter). On click `dispatch(OPEN_SUMMARY)`. Styling per v2 mock final layout: same row as close button, `flex-1 min-w-0 truncate` for label, `border-b border-gray-600` on parent row container
+- [x] T037 [US3] Update `apps/frontend/src/components/territory-info/territory-info-panel.tsx` to render `<SummaryNavStrip />` at the top. **Existing `PanelHeader` から `<CloseButton>` を削除し、SummaryNavStrip と同じ行（最右上）に統合する**。タイトル行は `<h2>` + 副題のみ。レイアウトは `flex items-stretch` の親 `<div>` に nav strip（`flex-1 min-w-0`）+ close（`shrink-0`）+ 共通の `border-b border-gray-600` で構成。Apply to both Desktop `PanelWrapper` and Mobile `BottomSheet` variants（モバイルでは `BottomSheet` の `header` prop に渡される構造内で同じ統合を行う）
+- [x] T038 [US3] Create `apps/frontend/src/components/territory-info/summary-nav-strip.test.tsx` covering: renders with selected year label / dispatches OPEN_SUMMARY on click / has `aria-label` for screen readers / handles year switch (label updates)
+- [x] T039 [US3] Update `apps/frontend/src/components/territory-info/territory-info-panel.test.tsx`: verify (a) nav strip is rendered, (b) close button is in nav strip row, (c) title row no longer contains close button, (d) **年代切替時に nav-strip ラベルと領土詳細本文（`useTerritoryDescription(year)` 由来）の両方が新しい年代に追従する**（spec Edge Case「領土詳細パネル表示中に年代を切り替えた場合の更新挙動」を担保）
 
 **Checkpoint**: 「俯瞰 → 詳細 → 俯瞰」の往復が 1 タップずつで完結。全 user story の機能が成立
 
@@ -144,13 +144,13 @@ description: "Task list for 年代サマリーパネル feature implementation"
 
 **Purpose**: 制約原則の達成確認と living documentation の更新
 
-- [ ] T040 [P] Accessibility audit per FR-010: keyboard-only navigation through summary panel, summary trigger, references, summary nav strip, close buttons. Verify `role="dialog"` + `aria-labelledby` for both panels, `aria-label` on icon-only buttons, focus visible on all clickable elements. Document findings; fix issues in respective component files
-- [ ] T041 [P] Performance check covering (a) SC-002：`useEraSummary` を計装し、年代切替 → render 完了までの体感待ち時間を typical broadband で測定（< 1s 確認）、(b) パネルの開閉アニメーションが 60 fps を維持することを Chrome DevTools Performance タブで確認、(c) bundle size の増加が plan.md Constraints の +10KB 上限を超えていないことを `pnpm build` 後の dist サイズで比較。結果を `apps/frontend/docs/performance.md` または feature notes に記録
-- [ ] T042 Run `pnpm test && pnpm check && pnpm typecheck` from repo root and ensure all gates pass (Constitution Principle II)
-- [ ] T043 Walk through `specs/240-era-summary-panel/quickstart.md` end-to-end (steps 1〜6) and update any drift between docs and actual behavior
-- [ ] T044 Update `docs/frontend.md` per project constitution Principle "Living Documentation": add EraSummaryPanel to the component catalog, document the after-wins-exclusion state machine, reference the new pipeline subcommand `era-summary-sync`. Add link to `era-summaries/` data path
-- [ ] T045 [P] Update `apps/frontend/src/components/era-summary-panel/era-summary-panel.stories.tsx` and `apps/frontend/src/components/territory-info/territory-info-panel.stories.tsx` (if exists) with the new mobile/desktop variants
-- [ ] T046 [P] Layout verification per SC-004: confirm map center area remains visible at viewport widths 360px (mobile portrait) and 1280px+ (desktop) when summary panel and/or territory-info-panel are open. Use Storybook viewport addon (`mobile1` / `desktop` viewports) or browser DevTools manual check across `apps/frontend/src/components/era-summary-panel/era-summary-panel.stories.tsx`
+- [x] T040 [P] Accessibility audit per FR-010: keyboard-only navigation through summary panel, summary trigger, references, summary nav strip, close buttons. Verify `role="dialog"` + `aria-labelledby` for both panels, `aria-label` on icon-only buttons, focus visible on all clickable elements. Document findings; fix issues in respective component files
+- [x] T041 [P] Performance check covering (a) SC-002：`useEraSummary` を計装し、年代切替 → render 完了までの体感待ち時間を typical broadband で測定（< 1s 確認）、(b) パネルの開閉アニメーションが 60 fps を維持することを Chrome DevTools Performance タブで確認、(c) bundle size の増加が plan.md Constraints の +10KB 上限を超えていないことを `pnpm build` 後の dist サイズで比較。結果を `apps/frontend/docs/performance.md` または feature notes に記録
+- [x] T042 Run `pnpm test && pnpm check && pnpm typecheck` from repo root and ensure all gates pass (Constitution Principle II)
+- [x] T043 Walk through `specs/240-era-summary-panel/quickstart.md` end-to-end (steps 1〜6) and update any drift between docs and actual behavior
+- [x] T044 Update `docs/frontend.md` per project constitution Principle "Living Documentation": add EraSummaryPanel to the component catalog, document the after-wins-exclusion state machine, reference the new pipeline subcommand `era-summary-sync`. Add link to `era-summaries/` data path
+- [x] T045 [P] Update `apps/frontend/src/components/era-summary-panel/era-summary-panel.stories.tsx` and `apps/frontend/src/components/territory-info/territory-info-panel.stories.tsx` (if exists) with the new mobile/desktop variants
+- [x] T046 [P] Layout verification per SC-004: confirm map center area remains visible at viewport widths 360px (mobile portrait) and 1280px+ (desktop) when summary panel and/or territory-info-panel are open. Use Storybook viewport addon (`mobile1` / `desktop` viewports) or browser DevTools manual check across `apps/frontend/src/components/era-summary-panel/era-summary-panel.stories.tsx`
 
 ---
 

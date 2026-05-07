@@ -10,19 +10,22 @@ React + MapLibre GL JS の SPA。任意の歴史年を選ぶとその年の世�
 ## 状態設計
 
 ```
- ┌────────────────────────────────────────────────┐
- │ AppStateProvider                               │
- │   state: selectedYear / selectedTerritory /    │
- │          isInfoPanelOpen / mapView             │
- │                                                │
- │   ┌──────────────────────────────────────────┐ │
- │   │ ProjectionProvider                       │ │
- │   │   projection: 'mercator' | 'globe'       │ │
- │   │                                          │ │
- │   │   AppContent  ──>  MapView, YearSelector,│ │
- │   │                    TerritoryInfoPanel …  │ │
- │   └──────────────────────────────────────────┘ │
- └────────────────────────────────────────────────┘
+ ┌────────────────────────────────────────────────────┐
+ │ AppStateProvider                                   │
+ │   state: selectedYear / selectedTerritory /        │
+ │          isInfoPanelOpen / isSummaryPanelOpen /     │
+ │          mapView                                   │
+ │                                                    │
+ │   ┌────────────────────────────────────────────┐   │
+ │   │ ProjectionProvider                         │   │
+ │   │   projection: 'mercator' | 'globe'         │   │
+ │   │                                            │   │
+ │   │   AppContent  ──>  MapView, YearSelector,  │   │
+ │   │                    TerritoryInfoPanel,      │   │
+ │   │                    EraSummaryPanel,         │   │
+ │   │                    SummaryTrigger …        │   │
+ │   └────────────────────────────────────────────┘   │
+ └────────────────────────────────────────────────────┘
 
  MapView 内:
    useMapData(year)       → manifest / index / colorScheme / pmtilesUrl
@@ -35,7 +38,20 @@ React + MapLibre GL JS の SPA。任意の歴史年を選ぶとその年の世�
 
 ## Context と hooks
 
-`AppStateContext` (`useAppState`) — `useReducer` ベースの UI 状態管理。アクションは `setSelectedYear` / `selectTerritory` / `clearSelection` / `setMapView`。`selectTerritory` は `isInfoPanelOpen` を自動で立てる。
+`AppStateContext` (`useAppState`) — `useReducer` ベースの UI 状態管理。アクションは `setSelectedYear` / `selectTerritory` / `clearSelection` / `setMapView` / `openSummary` / `closeSummary`。
+
+**後勝ち排他状態機械**: `isSummaryPanelOpen` と `isInfoPanelOpen` は同時に `true` にならない不変条件を reducer が保証する。`openSummary` は `isInfoPanelOpen: false` + `selectedTerritory: null` を同時に設定し、`selectTerritory` は `isSummaryPanelOpen: false` を設定する。
+
+```
+none ─── OPEN_SUMMARY ──→ summaryOpen
+none ─── SELECT_TERRITORY ──→ territoryOpen
+summaryOpen ─── SELECT_TERRITORY ──→ territoryOpen  (後勝ち排他)
+territoryOpen ─── OPEN_SUMMARY ──→ summaryOpen       (後勝ち排他)
+summaryOpen ─── CLOSE_SUMMARY ──→ none
+territoryOpen ─── CLEAR_SELECTION ──→ none
+```
+
+初期状態: デスクトップは `isSummaryPanelOpen: true`（`App` コンポーネントが `useIsMobile()` の結果を `initialState` に反映）、モバイルは `false`。
 
 `ProjectionContext` (`useProjectionContext`) — `mercator` / `globe` のトグルを保持するだけの軽量 Context。MapLibre との橋渡しは `useProjection` が担う。
 
@@ -47,6 +63,7 @@ React + MapLibre GL JS の SPA。任意の歴史年を選ぶとその年の世�
 - `useMapHover` — ホバー中のカーソル形状と cursor を切替
 - `useMapKeyboard(mapRef)` — 矢印・`+`/`-` キーでパン・ズームを補助
 - `useTerritoryDescription(name, year)` — `description-loader` を介して `descriptions/{year}.json` から 1 領土分を解決
+- `useEraSummary(year)` — `domain/era-summary/load.ts` を介して `era-summaries/{year}.json` を取得。404 は `null` 返却（準備中 fallback）、parse 失敗は throw
 
 `lib/cached-fetcher.ts` の `CachedFetcher` がこれらの「1 回だけ fetch」パターンを抽象化している — color scheme / 年ごとの説明 JSON それぞれが単一インスタンスで保持される。
 
@@ -89,3 +106,40 @@ React + MapLibre GL JS の SPA。任意の歴史年を選ぶとその年の世�
 - `App` が `selectedYear` 変化時に `prefetchYearDescriptions` を呼ぶ
 - `CachedFetcher` が年別のシングルトンを持つため、領土クリック時には既にバンドルがメモリ上にあり即応する
 - 404 の場合は null を返し、パネルは最小表示に落ちる
+
+## 年代サマリーパネル
+
+選択中の年代における世界全体の概況を地域別カードで俯瞰するパネル。
+
+### コンポーネント構成
+
+```
+EraSummaryPanel          apps/frontend/src/components/era-summary-panel/
+├── era-summary-panel.tsx        # ルート: Desktop <aside> / Mobile <BottomSheet> 分岐
+├── region-card.tsx              # 1 地域カード (title + context / SummaryReferences)
+├── summary-trigger.tsx          # サマリー閉時の起動 UI (Desktop タブ / Mobile FAB)
+├── summary-references.tsx       # context 内テキストをリンクボタンに置換
+└── hooks/
+    └── use-era-summary.ts       # fetch + state 管理 hook
+
+SummaryNavStrip          apps/frontend/src/components/territory-info/
+└── summary-nav-strip.tsx        # 領土詳細パネル上端の遷移帯 ({year} 年の世界を見る)
+```
+
+### データフロー
+
+```
+Notion DB "Era Summary"
+  ↓ pnpm pipeline era-summary-sync
+apps/frontend/public/data/era-summaries/{year}.json
+  ↓ loadEraSummary(year)
+useEraSummary(year) → { summary, isLoading, error }
+  ↓
+EraSummaryPanel → RegionCard × N → SummaryReferences (リンク解決)
+```
+
+データパス: `apps/frontend/public/data/era-summaries/{year}.json`（静的同梱）。Pipeline サブコマンド `era-summary-sync` で Notion DB から生成。
+
+### 参照リンク（SummaryReferences）
+
+`RegionCard.references[]` の各エントリは `{ kind: 'territory' | 'year', target, text }` 形式。`SummaryReferences` が `context` 文字列内の `text` 出現位置を探し、最初のマッチをボタンに置換する。territory クリックで `selectTerritory(target)`、year クリックで `setSelectedYear(createHistoricalYear(parseInt(target, 10)))` を dispatch。
