@@ -132,9 +132,9 @@ description: "Task list for 年代サマリーパネル feature implementation"
 - [ ] T034 [P] [US3] Create `apps/frontend/src/components/era-summary-panel/summary-references.test.tsx` covering: text renders verbatim when no references / first occurrence wrapped per reference / unmatched `text` rendered without link / territory click dispatches SELECT_TERRITORY / year click dispatches SET_SELECTED_YEAR
 - [ ] T035 [US3] Update `apps/frontend/src/components/era-summary-panel/region-card.tsx` to use `summary-references.tsx` for context rendering when `references` is non-empty
 - [ ] T036 [US3] Create `apps/frontend/src/components/territory-info/summary-nav-strip.tsx` rendering a full-width button with list-bullet SVG icon + "{year} 年の世界を見る" label (year from `useAppState().state.selectedYear`, formatted via existing year-display formatter). On click `dispatch(OPEN_SUMMARY)`. Styling per v2 mock final layout: same row as close button, `flex-1 min-w-0 truncate` for label, `border-b border-gray-600` on parent row container
-- [ ] T037 [US3] Update `apps/frontend/src/components/territory-info/territory-info-panel.tsx` to render `<SummaryNavStrip />` at the top. Layout change: nav strip + close button on the same row (replacing the existing close button in the title row). Title row no longer contains the close button. Apply to both Desktop `PanelWrapper` and Mobile `BottomSheet` variants
+- [ ] T037 [US3] Update `apps/frontend/src/components/territory-info/territory-info-panel.tsx` to render `<SummaryNavStrip />` at the top. **Existing `PanelHeader` から `<CloseButton>` を削除し、SummaryNavStrip と同じ行（最右上）に統合する**。タイトル行は `<h2>` + 副題のみ。レイアウトは `flex items-stretch` の親 `<div>` に nav strip（`flex-1 min-w-0`）+ close（`shrink-0`）+ 共通の `border-b border-gray-600` で構成。Apply to both Desktop `PanelWrapper` and Mobile `BottomSheet` variants（モバイルでは `BottomSheet` の `header` prop に渡される構造内で同じ統合を行う）
 - [ ] T038 [US3] Create `apps/frontend/src/components/territory-info/summary-nav-strip.test.tsx` covering: renders with selected year label / dispatches OPEN_SUMMARY on click / has `aria-label` for screen readers / handles year switch (label updates)
-- [ ] T039 [US3] Update `apps/frontend/src/components/territory-info/territory-info-panel.test.tsx`: verify nav strip is rendered, close button is in nav strip row, title row no longer contains close button
+- [ ] T039 [US3] Update `apps/frontend/src/components/territory-info/territory-info-panel.test.tsx`: verify (a) nav strip is rendered, (b) close button is in nav strip row, (c) title row no longer contains close button, (d) **年代切替時に nav-strip ラベルと領土詳細本文（`useTerritoryDescription(year)` 由来）の両方が新しい年代に追従する**（spec Edge Case「領土詳細パネル表示中に年代を切り替えた場合の更新挙動」を担保）
 
 **Checkpoint**: 「俯瞰 → 詳細 → 俯瞰」の往復が 1 タップずつで完結。全 user story の機能が成立
 
@@ -145,11 +145,12 @@ description: "Task list for 年代サマリーパネル feature implementation"
 **Purpose**: 制約原則の達成確認と living documentation の更新
 
 - [ ] T040 [P] Accessibility audit per FR-010: keyboard-only navigation through summary panel, summary trigger, references, summary nav strip, close buttons. Verify `role="dialog"` + `aria-labelledby` for both panels, `aria-label` on icon-only buttons, focus visible on all clickable elements. Document findings; fix issues in respective component files
-- [ ] T041 [P] Performance check per SC-002: instrument `useEraSummary` to measure year-switch-to-render time on a typical broadband connection. Confirm < 1s. Document in `apps/frontend/docs/performance.md` or feature notes
+- [ ] T041 [P] Performance check covering (a) SC-002：`useEraSummary` を計装し、年代切替 → render 完了までの体感待ち時間を typical broadband で測定（< 1s 確認）、(b) パネルの開閉アニメーションが 60 fps を維持することを Chrome DevTools Performance タブで確認、(c) bundle size の増加が plan.md Constraints の +10KB 上限を超えていないことを `pnpm build` 後の dist サイズで比較。結果を `apps/frontend/docs/performance.md` または feature notes に記録
 - [ ] T042 Run `pnpm test && pnpm check && pnpm typecheck` from repo root and ensure all gates pass (Constitution Principle II)
 - [ ] T043 Walk through `specs/240-era-summary-panel/quickstart.md` end-to-end (steps 1〜6) and update any drift between docs and actual behavior
 - [ ] T044 Update `docs/frontend.md` per project constitution Principle "Living Documentation": add EraSummaryPanel to the component catalog, document the after-wins-exclusion state machine, reference the new pipeline subcommand `era-summary-sync`. Add link to `era-summaries/` data path
 - [ ] T045 [P] Update `apps/frontend/src/components/era-summary-panel/era-summary-panel.stories.tsx` and `apps/frontend/src/components/territory-info/territory-info-panel.stories.tsx` (if exists) with the new mobile/desktop variants
+- [ ] T046 [P] Layout verification per SC-004: confirm map center area remains visible at viewport widths 360px (mobile portrait) and 1280px+ (desktop) when summary panel and/or territory-info-panel are open. Use Storybook viewport addon (`mobile1` / `desktop` viewports) or browser DevTools manual check across `apps/frontend/src/components/era-summary-panel/era-summary-panel.stories.tsx`
 
 ---
 
@@ -165,10 +166,12 @@ Phase 1 (Setup) ─→ Phase 2 (Foundational) ─→ Phase 3 (US1) ─→ Phase 
 
 ### Within each phase
 
-- **Phase 2 internal**: T004→T005→T006 (Notion setup is sequential). T007/T008/T009/T010 are independent ([P]). T011 depends on T010. T012 depends on T010. T013 depends on T004-T012 all done. T014→T015→T016 (AppState is sequential).
-- **Phase 3 (US1)**: T017/T018/T019 are independent ([P]). T020 depends on T017+T018. T021 depends on T020. T022/T023/T024 depend on T020. T025 depends on T020+T022+T023+T024. T026 depends on T020.
-- **Phase 4 (US2)**: T027/T028 are independent ([P]). T029 must come before T030. T031 depends on T015 from Phase 2. T032 is verification, last in phase.
-- **Phase 5 (US3)**: T033/T034/T036/T038 can run in parallel. T035 depends on T033. T037 depends on T036. T039 depends on T037.
+- **Phase 2 internal**: T004→T005→T006 (Notion setup is sequential). T007/T008/T009 are independent ([P]). T010 **must be preceded by failing test T011** (write failing Notion-mock test first, then sync impl). T012 depends on T010. T013 depends on T004–T012 all done. T015 **must be preceded by failing test T016** (write failing reducer invariant test first, then update reducer). T014 depends on no test (type-only addition).
+- **Phase 3 (US1)**: T017/T018/T019 are independent ([P]). T020 **must be preceded by failing test T025** (write failing panel render/year-switch tests first, then impl). T022/T023/T024 are state branches added during T020 impl. T021 depends on T020. T026 depends on T020.
+- **Phase 4 (US2)**: T027/T028 are independent ([P]). T029/T030 **must be preceded by failing test T031** (write failing exclusion/initial-state tests first, then impl). T032 is manual verification, last in phase.
+- **Phase 5 (US3)**: T033/T034/T036/T038 can run in parallel. T035 depends on T033. T037 **must be preceded by failing test T039** (write failing nav-strip + year-switch follow-through tests first, then territory-info-panel改修 impl).
+
+> **Behavior-First Testing (Constitution III)**: Task ID 順は識別の便宜であり実行順ではない。`*.test.*` task は対応する impl task より **前** に書かれた失敗テストとして存在することが Constitution III の MUST 要件。CI / レビューでこの順序が破られていれば差し戻し対象。
 
 ### Story-level independence verification
 

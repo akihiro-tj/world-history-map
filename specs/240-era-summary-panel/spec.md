@@ -2,7 +2,7 @@
 
 **Feature Branch**: `240-era-summary-panel`
 **Created**: 2026-05-06
-**Status**: Draft
+**Status**: Planned
 **Input**: User description: "issue #138 の『2. 年代サマリーパネル』を実現したい — 地図の利用者として、年代を選んだときに同時代の世界の状況（横のつながり）を一目で把握したい"
 **Source Issue**: [#138](https://github.com/akihiro-tj/world-history-map/issues/138)
 

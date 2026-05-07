@@ -41,13 +41,13 @@
 **Performance Goals**（spec 由来 + 既存実態）:
 - 年代切替 → サマリー内容更新の体感待ち時間：通常ネットワークで **1 秒以内**（SC-002）
 - 既存機能（地図ズーム / パン / 領土クリック）の操作性に regression を出さない（SC-003）
-- パネルの開閉アニメーション：60 fps を維持
+- パネルの開閉アニメーション：60 fps を維持（T041 の performance check で測定対象に含める）
 
 **Constraints**:
 - ランタイムでの AI 推論禁止（spec Out of Scope）
 - 既存スタイル言語（`bg-gray-700/95`、`backdrop-blur-sm`、`system-ui` 等）を厳守
 - a11y 最低ライン（FR-010）：キーボード操作可・状態のスクリーンリーダー認識可
-- bundle size：パネル 1 つの追加で意味のある増加を起こさない（既存 territory-info-panel と同等規模を目安）
+- bundle size：新規パネル + hook + reducer 拡張による gzipped 増加を **+10KB 以下** に保つ（既存 territory-info-panel が ~5KB 規模であることを参考とした上限。超過時は plan を見直す）
 
 **Scale/Scope**:
 - 対象年代：`historical-basemaps` 対応の全年代（既存 `descriptions/` で約 35〜40 年）
@@ -142,7 +142,7 @@ apps/pipeline/
 
 以下のトピックを `research.md` で解決する：
 
-1. **地域区分の具体集合**：spec で例示した 7 区分（ヨーロッパ／東アジア／南アジア／中東・北アフリカ／サブサハラ・アフリカ／南北アメリカ／オセアニア）を確定するか、調整するか
+1. **地域区分の具体集合**：spec で例示した区分群を見直し、世界史の俯瞰に適した区分集合を確定する（オセアニアを独立区分にするか、東南アジアを独立区分にするか等）。確定版は research.md 決定 1 を参照
 2. **後勝ち排他の reducer 設計**：既存 `SELECT_TERRITORY` の自動 `isInfoPanelOpen: true` を踏まえて、サマリー開閉と排他の動きを 1 つの状態機械にまとめる方法
 3. **遷移帯の年代表記の動的更新**：年代切替時に領土詳細パネルが開いている場合、遷移帯ラベル「{year} 年の世界を見る」をどう更新するか
 4. **Pipeline の era-summary 連携戦略**：Notion を一次ソースとし、`era-summary-sync` で取得・変換する流れ（既存 `territory-sync` と対称）。AI 一次生成は Notion 投入前のオフライン作業として分離
