@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef } from 'react';
 import type { TerritoryDescription } from '@/domain/territory/types';
 import type { HistoricalYear } from '@/domain/year/historical-year';
+import { useCanScrollDown } from '@/hooks/use-can-scroll-down';
 import { useEscapeKey } from '@/hooks/use-escape-key';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { cn } from '@/lib/utils';
@@ -9,6 +10,7 @@ import { BottomSheet } from '../bottom-sheet/bottom-sheet';
 import { CloseButton } from '../close-button/close-button';
 import { RoleErrorMessage } from '../feedback/role-error-message';
 import { RoleSpinner } from '../feedback/role-spinner';
+import { ScrollFadeOverlay } from '../scroll-fade-overlay/scroll-fade-overlay';
 import { useTerritoryDescription } from './hooks/use-territory-description';
 import { SELECTED_ACCENT_CLASS, SelectedAccent } from './selected-accent';
 import { SummaryNavStrip } from './summary-nav-strip';
@@ -119,27 +121,8 @@ function DesktopContent(props: ContentProps) {
   const { onClose, selectedYear } = props;
   const state = panelState(props);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [canScrollDown, setCanScrollDown] = useState(false);
   const isLoaded = state.kind === 'loaded';
-
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el || !isLoaded) return;
-
-    const check = () => {
-      setCanScrollDown(el.scrollHeight - el.scrollTop - el.clientHeight > 1);
-    };
-
-    check();
-    el.addEventListener('scroll', check, { passive: true });
-    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(check) : null;
-    ro?.observe(el);
-
-    return () => {
-      el.removeEventListener('scroll', check);
-      ro?.disconnect();
-    };
-  }, [isLoaded]);
+  const canScrollDown = useCanScrollDown(scrollRef, isLoaded);
 
   switch (state.kind) {
     case 'loading':
@@ -182,13 +165,7 @@ function DesktopContent(props: ContentProps) {
           <div ref={scrollRef} className="overflow-y-auto">
             <DescriptionBody description={state.description} selectedYear={selectedYear} />
           </div>
-          <div
-            aria-hidden="true"
-            className={cn(
-              'pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-gray-700 to-transparent transition-opacity duration-200',
-              canScrollDown ? 'opacity-100' : 'opacity-0',
-            )}
-          />
+          <ScrollFadeOverlay show={canScrollDown} />
         </PanelWrapper>
       );
   }

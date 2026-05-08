@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef } from 'react';
 import type { EraSummary } from '@/domain/era-summary/types';
 import { formatHistoricalYear } from '@/domain/year/historical-year';
+import { useCanScrollDown } from '@/hooks/use-can-scroll-down';
 import { useEscapeKey } from '@/hooks/use-escape-key';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { cn } from '@/lib/utils';
@@ -9,6 +10,7 @@ import { BottomSheet } from '../bottom-sheet/bottom-sheet';
 import { CloseButton } from '../close-button/close-button';
 import { RoleErrorMessage } from '../feedback/role-error-message';
 import { RoleSpinner } from '../feedback/role-spinner';
+import { ScrollFadeOverlay } from '../scroll-fade-overlay/scroll-fade-overlay';
 import { useEraSummary } from './hooks/use-era-summary';
 import { RegionCard } from './region-card';
 
@@ -79,26 +81,7 @@ function DesktopContent({ state, yearLabel, onClose }: ContentProps) {
   const isLoading = state.kind === 'loading';
   const isLoaded = state.kind === 'loaded';
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [canScrollDown, setCanScrollDown] = useState(false);
-
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el || !isLoaded) return;
-
-    const check = () => {
-      setCanScrollDown(el.scrollHeight - el.scrollTop - el.clientHeight > 1);
-    };
-
-    check();
-    el.addEventListener('scroll', check, { passive: true });
-    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(check) : null;
-    ro?.observe(el);
-
-    return () => {
-      el.removeEventListener('scroll', check);
-      ro?.disconnect();
-    };
-  }, [isLoaded]);
+  const canScrollDown = useCanScrollDown(scrollRef, isLoaded);
 
   return (
     <aside
@@ -121,15 +104,7 @@ function DesktopContent({ state, yearLabel, onClose }: ContentProps) {
           <PanelBody state={state} />
         </div>
       )}
-      {isLoaded && (
-        <div
-          aria-hidden="true"
-          className={cn(
-            'pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-gray-700 to-transparent transition-opacity duration-200',
-            canScrollDown ? 'opacity-100' : 'opacity-0',
-          )}
-        />
-      )}
+      {isLoaded && <ScrollFadeOverlay show={canScrollDown} />}
     </aside>
   );
 }

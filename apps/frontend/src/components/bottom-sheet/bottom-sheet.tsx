@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { useCanScrollDown } from '@/hooks/use-can-scroll-down';
 import { useEscapeKey } from '@/hooks/use-escape-key';
 import { useFocusTrap } from '@/hooks/use-focus-trap';
 import { cn } from '@/lib/utils';
+import { ScrollFadeOverlay } from '../scroll-fade-overlay/scroll-fade-overlay';
 import { useBottomSheetSnap } from './hooks/use-bottom-sheet-snap';
 
 interface BottomSheetProps {
@@ -17,7 +19,6 @@ export function BottomSheet({ isOpen, onClose, header, children, ...props }: Bot
   const sheetRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [canScrollDown, setCanScrollDown] = useState(false);
 
   const { snap, sheetStyle, isDragging } = useBottomSheetSnap({
     isActive: isOpen,
@@ -26,26 +27,7 @@ export function BottomSheet({ isOpen, onClose, header, children, ...props }: Bot
     onClose,
   });
 
-  useEffect(() => {
-    const scrollContainer = scrollRef.current;
-    if (!scrollContainer) return;
-
-    const checkScroll = () => {
-      setCanScrollDown(
-        scrollContainer.scrollHeight - scrollContainer.scrollTop - scrollContainer.clientHeight > 1,
-      );
-    };
-
-    checkScroll();
-    scrollContainer.addEventListener('scroll', checkScroll, { passive: true });
-    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(checkScroll) : null;
-    ro?.observe(scrollContainer);
-
-    return () => {
-      scrollContainer.removeEventListener('scroll', checkScroll);
-      ro?.disconnect();
-    };
-  }, []);
+  const canScrollDown = useCanScrollDown(scrollRef, isOpen);
 
   useEscapeKey(isOpen, onClose);
   useFocusTrap(snap === 'expanded', sheetRef);
@@ -88,13 +70,7 @@ export function BottomSheet({ isOpen, onClose, header, children, ...props }: Bot
           >
             {children}
           </div>
-          <div
-            aria-hidden="true"
-            className={cn(
-              'pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-gray-800 to-transparent transition-opacity duration-200',
-              showFade ? 'opacity-100' : 'opacity-0',
-            )}
-          />
+          <ScrollFadeOverlay show={showFade} fromColor="from-gray-800" />
         </div>
       </div>
     </>,
