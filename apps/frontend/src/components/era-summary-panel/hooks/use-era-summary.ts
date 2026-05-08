@@ -27,11 +27,11 @@ export function useEraSummary(year: HistoricalYear): UseEraSummaryResult {
         if (cancelled) return;
 
         setSummary(data);
-      } catch (err) {
+      } catch (caughtError) {
         if (cancelled) return;
 
-        console.error('Error fetching era summary:', err);
-        setError(err instanceof Error ? err.message : 'Unknown error');
+        console.error('Error fetching era summary:', caughtError);
+        setError(caughtError instanceof Error ? caughtError.message : 'Failed to load era summary');
         setSummary(null);
       } finally {
         if (!cancelled) {

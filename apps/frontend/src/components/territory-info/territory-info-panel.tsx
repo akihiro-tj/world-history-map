@@ -32,11 +32,14 @@ interface ContentProps {
   onClose: () => void;
 }
 
+const FALLBACK_LOADING_LABEL = '読み込み中…';
+const FALLBACK_PANEL_TITLE = '領土情報';
+
 function derivePanelState(props: ContentProps): PanelState {
   const { description, isLoading, error, selectedTerritory } = props;
-  if (isLoading) return { kind: 'loading', name: selectedTerritory ?? '読み込み中…' };
+  if (isLoading) return { kind: 'loading', name: selectedTerritory ?? FALLBACK_LOADING_LABEL };
   if (error) return { kind: 'error', message: error };
-  if (!description) return { kind: 'empty', name: selectedTerritory ?? '領土情報' };
+  if (!description) return { kind: 'empty', name: selectedTerritory ?? FALLBACK_PANEL_TITLE };
   return { kind: 'loaded', description };
 }
 

@@ -111,6 +111,9 @@ export class YearPaths {
   readonly year: number;
 
   constructor(year: number) {
+    if (!Number.isInteger(year)) {
+      throw new RangeError(`YearPaths year must be an integer, got ${year}`);
+    }
     this.year = year;
   }
 

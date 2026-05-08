@@ -69,8 +69,8 @@ function PanelBody({ state }: { state: PanelState }) {
     case 'loaded':
       return (
         <div className="space-y-4">
-          {state.summary.regions.map((card) => (
-            <RegionCard key={card.region} card={card} />
+          {state.summary.regions.map((regionCard) => (
+            <RegionCard key={regionCard.region} regionCard={regionCard} />
           ))}
         </div>
       );

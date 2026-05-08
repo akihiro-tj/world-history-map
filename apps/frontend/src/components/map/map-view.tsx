@@ -47,17 +47,14 @@ export function MapView({ onReady }: MapViewProps) {
 
   const handleClick = useCallback(
     (event: MapLayerMouseEvent) => {
-      const features = event.features;
-      if (!features || features.length === 0) {
+      const feature = event.features?.[0];
+      if (!feature) {
         actions.clearSelection();
         return;
       }
 
-      const feature = features[0];
-      if (!feature) return;
-      const properties = feature.properties as TerritoryProperties;
-
-      const territoryName = resolveTerritoryName(properties);
+      const territoryProperties = feature.properties as TerritoryProperties;
+      const territoryName = resolveTerritoryName(territoryProperties);
 
       if (territoryName) {
         actions.selectTerritory(territoryName);

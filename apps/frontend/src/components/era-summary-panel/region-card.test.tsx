@@ -11,14 +11,14 @@ const sampleCard = {
 
 describe('RegionCard', () => {
   it('renders title and context', () => {
-    render(<RegionCard card={sampleCard} />);
+    render(<RegionCard regionCard={sampleCard} />);
 
     expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent('ヨーロッパ');
     expect(screen.getByText('三十年戦争が終結し、主権国家体制が成立。')).toBeInTheDocument();
   });
 
   it('accepts an optional className', () => {
-    const { container } = render(<RegionCard card={sampleCard} className="custom-class" />);
+    const { container } = render(<RegionCard regionCard={sampleCard} className="custom-class" />);
 
     expect(container.firstChild).toHaveClass('custom-class');
   });
