@@ -20,7 +20,7 @@ type PanelState =
   | { kind: 'empty' }
   | { kind: 'loaded'; summary: EraSummary };
 
-function panelState({
+function derivePanelState({
   summary,
   isLoading,
   error,
@@ -148,7 +148,7 @@ export function EraSummaryPanel() {
     return null;
   }
 
-  const currentState = panelState({ summary, isLoading, error });
+  const currentState = derivePanelState({ summary, isLoading, error });
   const yearLabel = formatHistoricalYear(selectedYear);
 
   if (isMobile) {

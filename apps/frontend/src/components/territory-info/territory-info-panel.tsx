@@ -32,7 +32,7 @@ interface ContentProps {
   onClose: () => void;
 }
 
-function panelState(props: ContentProps): PanelState {
+function derivePanelState(props: ContentProps): PanelState {
   const { description, isLoading, error, selectedTerritory } = props;
   if (isLoading) return { kind: 'loading', name: selectedTerritory ?? '読み込み中…' };
   if (error) return { kind: 'error', message: error };
@@ -119,7 +119,7 @@ function DescriptionBody({
 
 function DesktopContent(props: ContentProps) {
   const { onClose, selectedYear } = props;
-  const state = panelState(props);
+  const state = derivePanelState(props);
   const scrollRef = useRef<HTMLDivElement>(null);
   const isLoaded = state.kind === 'loaded';
   const canScrollDown = useCanScrollDown(scrollRef, isLoaded);
@@ -171,16 +171,40 @@ function DesktopContent(props: ContentProps) {
   }
 }
 
+function getHeaderLabel(state: PanelState): { name: string; era: string | undefined } {
+  switch (state.kind) {
+    case 'loaded':
+      return { name: state.description.name, era: state.description.era };
+    case 'error':
+      return { name: 'エラー', era: undefined };
+    default:
+      return { name: state.name, era: undefined };
+  }
+}
+
+function MobilePanelBody({
+  state,
+  selectedYear,
+}: {
+  state: PanelState;
+  selectedYear: HistoricalYear;
+}) {
+  switch (state.kind) {
+    case 'loading':
+      return <RoleSpinner />;
+    case 'error':
+      return <RoleErrorMessage>{state.message}</RoleErrorMessage>;
+    case 'empty':
+      return <NoDescriptionBody />;
+    case 'loaded':
+      return <DescriptionBody description={state.description} selectedYear={selectedYear} />;
+  }
+}
+
 function MobileContent(props: ContentProps) {
   const { onClose, selectedYear } = props;
-  const state = panelState(props);
-  const headerName =
-    state.kind === 'loaded'
-      ? state.description.name
-      : state.kind === 'error'
-        ? 'エラー'
-        : state.name;
-  const headerEra = state.kind === 'loaded' ? state.description.era : undefined;
+  const state = derivePanelState(props);
+  const { name: headerName, era: headerEra } = getHeaderLabel(state);
 
   return (
     <BottomSheet
@@ -207,15 +231,7 @@ function MobileContent(props: ContentProps) {
       }
       aria-labelledby="territory-info-title"
     >
-      {state.kind === 'loading' ? (
-        <RoleSpinner />
-      ) : state.kind === 'error' ? (
-        <RoleErrorMessage>{state.message}</RoleErrorMessage>
-      ) : state.kind === 'empty' ? (
-        <NoDescriptionBody />
-      ) : (
-        <DescriptionBody description={state.description} selectedYear={selectedYear} />
-      )}
+      <MobilePanelBody state={state} selectedYear={selectedYear} />
     </BottomSheet>
   );
 }
