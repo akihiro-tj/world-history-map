@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { useCanScrollDown } from '@/hooks/use-can-scroll-down';
 import { useEscapeKey } from '@/hooks/use-escape-key';
 import { useFocusTrap } from '@/hooks/use-focus-trap';
 import { cn } from '@/lib/utils';
+import { ScrollFadeOverlay } from '../scroll-fade-overlay/scroll-fade-overlay';
 import { useBottomSheetSnap } from './hooks/use-bottom-sheet-snap';
 
 interface BottomSheetProps {
@@ -17,7 +19,6 @@ export function BottomSheet({ isOpen, onClose, header, children, ...props }: Bot
   const sheetRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [canScrollDown, setCanScrollDown] = useState(false);
 
   const { snap, sheetStyle, isDragging } = useBottomSheetSnap({
     isActive: isOpen,
@@ -26,26 +27,7 @@ export function BottomSheet({ isOpen, onClose, header, children, ...props }: Bot
     onClose,
   });
 
-  useEffect(() => {
-    const scrollContainer = scrollRef.current;
-    if (!scrollContainer) return;
-
-    const checkScroll = () => {
-      setCanScrollDown(
-        scrollContainer.scrollHeight - scrollContainer.scrollTop - scrollContainer.clientHeight > 1,
-      );
-    };
-
-    checkScroll();
-    scrollContainer.addEventListener('scroll', checkScroll, { passive: true });
-    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(checkScroll) : null;
-    ro?.observe(scrollContainer);
-
-    return () => {
-      scrollContainer.removeEventListener('scroll', checkScroll);
-      ro?.disconnect();
-    };
-  }, []);
+  const canScrollDown = useCanScrollDown(scrollRef, isOpen);
 
   useEscapeKey(isOpen, onClose);
   useFocusTrap(snap === 'expanded', sheetRef);
@@ -59,7 +41,7 @@ export function BottomSheet({ isOpen, onClose, header, children, ...props }: Bot
       {snap === 'expanded' && (
         <button
           type="button"
-          className="fixed inset-0 z-40 cursor-default border-none bg-black/50"
+          className="fixed inset-0 z-30 cursor-default border-none bg-black/50"
           data-testid="bottom-sheet-backdrop"
           onClick={onClose}
           aria-label="Close"
@@ -70,13 +52,13 @@ export function BottomSheet({ isOpen, onClose, header, children, ...props }: Bot
         role="dialog"
         aria-labelledby={props['aria-labelledby']}
         style={sheetStyle}
-        className="fixed inset-x-0 bottom-0 z-50 flex flex-col rounded-t-2xl bg-gray-800 shadow-xl"
+        className="fixed inset-x-0 bottom-0 z-40 flex flex-col rounded-t-2xl bg-gray-800 shadow-xl"
       >
         <div
           ref={headerRef}
           className={cn('shrink-0 touch-none', isDragging ? 'cursor-grabbing' : 'cursor-grab')}
         >
-          <div className="flex justify-center py-2">
+          <div className="flex justify-center pt-2 pb-1">
             <div className="h-1 w-10 rounded-full bg-gray-500" data-testid="bottom-sheet-handle" />
           </div>
           {header}
@@ -88,13 +70,7 @@ export function BottomSheet({ isOpen, onClose, header, children, ...props }: Bot
           >
             {children}
           </div>
-          <div
-            aria-hidden="true"
-            className={cn(
-              'pointer-events-none absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-gray-800 to-transparent transition-opacity duration-200',
-              showFade ? 'opacity-100' : 'opacity-0',
-            )}
-          />
+          <ScrollFadeOverlay show={showFade} fromColor="from-gray-800" />
         </div>
       </div>
     </>,

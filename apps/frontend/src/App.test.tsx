@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 let mockYears: { year: number; filename: string; countries: string[] }[] = [];
@@ -17,7 +17,10 @@ vi.mock('./components/territory-info/hooks/use-territory-description', () => ({
 }));
 
 vi.mock('./components/map/map-view', () => ({
-  MapView: () => <div data-testid="mock-map-view" />,
+  MapView: ({ onReady }: { onReady?: () => void }) => {
+    queueMicrotask(() => onReady?.());
+    return <div data-testid="mock-map-view" />;
+  },
 }));
 
 vi.mock('./components/territory-info/territory-info-panel', () => ({
@@ -26,10 +29,6 @@ vi.mock('./components/territory-info/territory-info-panel', () => ({
 
 vi.mock('./components/control-bar/control-bar', () => ({
   ControlBar: () => <div data-testid="mock-control-bar" />,
-}));
-
-vi.mock('./components/year-display/year-display', () => ({
-  YearDisplay: ({ year }: { year: number }) => <div data-testid="mock-year-display">{year}</div>,
 }));
 
 vi.mock('./components/year-selector/year-selector', () => ({
@@ -57,42 +56,40 @@ describe('App', () => {
     mockIsLoading = false;
   });
 
-  it('renders MapView and TerritoryInfoPanel', () => {
+  it('renders MapView and TerritoryInfoPanel after map is ready', async () => {
     render(<App />);
 
     expect(screen.getByTestId('mock-map-view')).toBeInTheDocument();
-    expect(screen.getByTestId('mock-territory-info-panel')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByTestId('mock-territory-info-panel')).toBeInTheDocument(),
+    );
   });
 
-  it('renders YearSelector when years are loaded', () => {
+  it('renders YearSelector when map is ready and years are loaded', async () => {
     render(<App />);
 
-    expect(screen.getByTestId('mock-year-selector')).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByTestId('mock-year-selector')).toBeInTheDocument());
   });
 
-  it('does not render YearSelector while loading', () => {
-    mockIsLoading = true;
-    render(<App />);
-
-    expect(screen.queryByTestId('mock-year-selector')).not.toBeInTheDocument();
-  });
-
-  it('does not render YearSelector when years array is empty', () => {
+  it('does not render YearSelector when years array is empty', async () => {
     mockYears = [];
     render(<App />);
 
+    await waitFor(() => expect(screen.getByTestId('mock-map-view')).toBeInTheDocument());
     expect(screen.queryByTestId('mock-year-selector')).not.toBeInTheDocument();
   });
 
-  it('renders ControlBar', () => {
+  it('renders ControlBar after map is ready', async () => {
     render(<App />);
 
-    expect(screen.getByTestId('mock-control-bar')).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByTestId('mock-control-bar')).toBeInTheDocument());
   });
 
-  it('renders YearDisplay with selected year', () => {
+  it('hides UI panels before map is ready', () => {
     render(<App />);
 
-    expect(screen.getByTestId('mock-year-display')).toBeInTheDocument();
+    expect(screen.queryByTestId('mock-territory-info-panel')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('mock-control-bar')).not.toBeInTheDocument();
+    expect(screen.getByTestId('mock-map-view')).toBeInTheDocument();
   });
 });

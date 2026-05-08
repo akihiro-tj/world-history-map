@@ -1,0 +1,75 @@
+{
+  "year": 1650,
+  "regions": [
+    {
+      "region": "europe",
+      "title": "ヨーロッパ",
+      "context": "三十年戦争が終結（1648年ウェストファリア条約）し、主権国家体制が成立。フランスでは絶対王政が確立しつつあり、イングランドは内戦からピューリタン革命の只中。",
+      "references": [
+        {
+          "kind": "year",
+          "target": "1648",
+          "text": "1648年"
+        },
+        {
+          "kind": "territory",
+          "target": "france",
+          "text": "フランス"
+        }
+      ]
+    },
+    {
+      "region": "americas",
+      "title": "南北アメリカ",
+      "context": "スペイン領植民地（ヌエバ・エスパーニャ／ペルー副王領）が銀の採掘で世界経済を支える。北米東岸ではイギリス植民地（バージニア・ニューイングランド）が拡大。",
+      "references": []
+    },
+    {
+      "region": "south-asia",
+      "title": "南アジア",
+      "context": "ムガル帝国がシャー・ジャハーンの治世下で最盛期を迎える。タージマハル建造の時代。",
+      "references": [
+        {
+          "kind": "territory",
+          "target": "mughal-empire",
+          "text": "ムガル帝国"
+        }
+      ]
+    },
+    {
+      "region": "middle-east-north-africa",
+      "title": "中東・北アフリカ",
+      "context": "オスマン帝国は最盛期を過ぎ停滞期に入る。サファヴィー朝はアッバース 2 世の治世で文化的繁栄を維持。",
+      "references": [
+        {
+          "kind": "territory",
+          "target": "ottoman-empire",
+          "text": "オスマン帝国"
+        }
+      ]
+    },
+    {
+      "region": "sub-saharan-africa",
+      "title": "サブサハラ・アフリカ",
+      "context": "大西洋奴隷貿易が本格化。コンゴ王国・ベニン王国などがヨーロッパ諸国との交易・抗争に関わる。",
+      "references": []
+    },
+    {
+      "region": "east-asia",
+      "title": "東アジア",
+      "context": "明朝が李自成の乱と清軍の南下により滅亡（1644 年）、清が中国本土を支配。日本では江戸幕府が鎖国体制を確立。",
+      "references": [
+        {
+          "kind": "territory",
+          "target": "qing",
+          "text": "清"
+        },
+        {
+          "kind": "territory",
+          "target": "japan",
+          "text": "日本"
+        }
+      ]
+    }
+  ]
+}

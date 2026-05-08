@@ -16,7 +16,8 @@
       "!apps/frontend/public",
       "!apps/frontend/src/index.css",
       "!packages/design-tokens/src/theme.css",
-      "!.claude/worktrees"
+      "!.claude/worktrees",
+      "!design-mocks"
     ]
   },
   "formatter": {

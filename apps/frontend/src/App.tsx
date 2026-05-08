@@ -5,19 +5,24 @@ const LicenseDisclaimer = lazy(() =>
 );
 
 import { prefetchYearDescriptions } from '@/domain/territory/description-loader';
+import { useIsMobile } from '@/hooks/use-is-mobile';
 import { useYearIndex } from '@/hooks/use-year-index';
 import { ControlBar } from './components/control-bar/control-bar';
+import { EraSummaryPanel } from './components/era-summary-panel/era-summary-panel';
+import { SummaryTrigger } from './components/era-summary-panel/summary-trigger';
 import { MapView } from './components/map/map-view';
 import { TerritoryInfoPanel } from './components/territory-info/territory-info-panel';
-import { YearDisplay } from './components/year-display/year-display';
 import { YearSelector } from './components/year-selector/year-selector';
 import { AppStateProvider, useAppState } from './contexts/app-state-context';
 import { ProjectionProvider } from './contexts/projection-context';
+import { initialAppState } from './types/app-state';
 
 function AppContent() {
   const { state } = useAppState();
-  const { years, isLoading } = useYearIndex();
+  const { years } = useYearIndex();
+  const isMobile = useIsMobile();
   const [isLicenseOpen, setIsLicenseOpen] = useState(false);
+  const [isMapReady, setIsMapReady] = useState(false);
 
   useEffect(() => {
     prefetchYearDescriptions(state.selectedYear);
@@ -31,15 +36,30 @@ function AppContent() {
     setIsLicenseOpen(false);
   }, []);
 
+  const handleMapReady = useCallback(() => {
+    setIsMapReady(true);
+  }, []);
+
   return (
     <main className="relative h-dvh w-screen overflow-hidden select-none">
-      <MapView />
-      <TerritoryInfoPanel />
-      <div className="absolute top-4 left-1/2 z-20 -translate-x-1/2">
-        <YearDisplay year={state.selectedYear} />
-      </div>
-      <ControlBar onOpenLicense={handleOpenLicense} />
-      {!isLoading && years.length > 0 && (
+      <MapView onReady={handleMapReady} />
+      {isMapReady && (
+        <>
+          <TerritoryInfoPanel />
+          <EraSummaryPanel />
+          {isMobile ? (
+            <div className="absolute bottom-20 right-4 z-30">
+              <SummaryTrigger />
+            </div>
+          ) : (
+            <div className="absolute left-4 top-4 z-30">
+              <SummaryTrigger />
+            </div>
+          )}
+          <ControlBar onOpenLicense={handleOpenLicense} />
+        </>
+      )}
+      {isMapReady && years.length > 0 && (
         <div className="absolute inset-x-4 bottom-4 z-20 mx-auto max-w-2xl overflow-hidden rounded-lg bg-gray-700/95 shadow-lg backdrop-blur-sm">
           <YearSelector years={years} />
         </div>
@@ -52,8 +72,15 @@ function AppContent() {
 }
 
 function App() {
+  const isMobile = useIsMobile();
+
   return (
-    <AppStateProvider>
+    <AppStateProvider
+      initialState={{
+        ...initialAppState,
+        activePanel: isMobile ? { kind: 'none' } : { kind: 'summary' },
+      }}
+    >
       <ProjectionProvider>
         <AppContent />
       </ProjectionProvider>

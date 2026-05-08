@@ -11,17 +11,20 @@ export interface MapView {
   zoom: number;
 }
 
+export type ActivePanel =
+  | { kind: 'none' }
+  | { kind: 'summary' }
+  | { kind: 'territory'; selectedTerritory: string };
+
 export interface AppState {
   selectedYear: HistoricalYear;
-  selectedTerritory: string | null;
-  isInfoPanelOpen: boolean;
+  activePanel: ActivePanel;
   mapView: MapView;
 }
 
 export const initialAppState: AppState = {
   selectedYear: createHistoricalYear(INITIAL_YEAR),
-  selectedTerritory: null,
-  isInfoPanelOpen: false,
+  activePanel: { kind: 'none' },
   mapView: {
     longitude: MAP_CONFIG.initialLongitude,
     latitude: MAP_CONFIG.initialLatitude,
@@ -34,4 +37,6 @@ export interface AppStateActions {
   selectTerritory: (territory: string) => void;
   clearSelection: () => void;
   setMapView: (view: MapView) => void;
+  openSummary: () => void;
+  closePanel: () => void;
 }

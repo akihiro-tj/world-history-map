@@ -26,11 +26,32 @@ export const DESCRIPTION_CONSTRAINTS = {
   CONTEXT_MAX_LENGTH: 200,
 } as const;
 
+export const ERA_SUMMARY_CONSTRAINTS = {
+  TITLE_MAX_LENGTH: 30,
+  CONTEXT_MAX_LENGTH: 500,
+  MAX_REGIONS_PER_ERA: 8,
+} as const;
+
+export const NOTION_ERA_SUMMARY_PROPERTY = {
+  YEAR: 'Year',
+  REGION: 'Region',
+  TITLE: 'Title',
+  CONTEXT: 'Context',
+  REFERENCES: 'References',
+} as const;
+
 export const NOTION = {
   getDataSourceId: (): string => {
     return execFileSync(
       'op',
       ['read', 'op://dev/world-history-map-pipeline/territory-descriptions-datasource-id'],
+      { encoding: 'utf-8' },
+    ).trim();
+  },
+  getEraSummaryDataSourceId: (): string => {
+    return execFileSync(
+      'op',
+      ['read', 'op://dev/world-history-map-pipeline/era-summary-datasource-id'],
       { encoding: 'utf-8' },
     ).trim();
   },
@@ -51,6 +72,7 @@ export const PATHS = {
   publicPmtiles: path.join(ROOT_DIR, '..', 'frontend', 'public', 'pmtiles'),
   distPmtiles: path.join(ROOT_DIR, 'dist', 'pmtiles'),
   descriptionsDir: path.resolve(ROOT_DIR, '..', 'frontend', 'public', 'data', 'descriptions'),
+  eraSummariesDir: path.resolve(ROOT_DIR, '..', 'frontend', 'public', 'data', 'era-summaries'),
 } as const;
 
 export const UPSTREAM = {
@@ -89,6 +111,9 @@ export class YearPaths {
   readonly year: number;
 
   constructor(year: number) {
+    if (!Number.isInteger(year)) {
+      throw new RangeError(`YearPaths year must be an integer, got ${year}`);
+    }
     this.year = year;
   }
 

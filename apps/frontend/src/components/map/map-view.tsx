@@ -1,6 +1,6 @@
 import 'maplibre-gl/dist/maplibre-gl.css';
 
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { MapLayerMouseEvent, MapRef } from 'react-map-gl/maplibre';
 import MapGL, { Source } from 'react-map-gl/maplibre';
 import { resolveTerritoryName } from '@/domain/territory/resolve-territory-name';
@@ -21,7 +21,11 @@ const SOURCE_ID = 'territories';
 const SOURCE_LAYER_TERRITORIES = 'territories';
 const SOURCE_LAYER_LABELS = 'labels';
 
-export function MapView() {
+interface MapViewProps {
+  onReady?: () => void;
+}
+
+export function MapView({ onReady }: MapViewProps) {
   const mapRef = useRef<MapRef>(null);
   const { state, actions } = useAppState();
   const { pmtilesUrl, colorScheme, isLoading, error } = useMapData(state.selectedYear);
@@ -31,23 +35,26 @@ export function MapView() {
 
   usePMTilesProtocol();
 
+  useEffect(() => {
+    if (!isLoading && mapLoaded) {
+      onReady?.();
+    }
+  }, [isLoading, mapLoaded, onReady]);
+
   const handleLoad = useCallback(() => {
     setMapLoaded(true);
   }, []);
 
   const handleClick = useCallback(
     (event: MapLayerMouseEvent) => {
-      const features = event.features;
-      if (!features || features.length === 0) {
+      const feature = event.features?.[0];
+      if (!feature) {
         actions.clearSelection();
         return;
       }
 
-      const feature = features[0];
-      if (!feature) return;
-      const properties = feature.properties as TerritoryProperties;
-
-      const territoryName = resolveTerritoryName(properties);
+      const territoryProperties = feature.properties as TerritoryProperties;
+      const territoryName = resolveTerritoryName(territoryProperties);
 
       if (territoryName) {
         actions.selectTerritory(territoryName);
@@ -154,11 +161,11 @@ export function MapView() {
               sourceLayer={SOURCE_LAYER_TERRITORIES}
               colorScheme={colorScheme}
             />
-            {state.selectedTerritory && (
+            {state.activePanel.kind === 'territory' && (
               <TerritoryHighlightLayer
                 sourceId={SOURCE_ID}
                 sourceLayer={SOURCE_LAYER_TERRITORIES}
-                selectedTerritory={state.selectedTerritory}
+                selectedTerritory={state.activePanel.selectedTerritory}
               />
             )}
             <TerritoryLabel sourceId={SOURCE_ID} sourceLayer={SOURCE_LAYER_LABELS} />

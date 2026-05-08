@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>年代サマリーパネル — Design Mock v2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      html {
+        font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+      }
+      body {
+        font-feature-settings: "palt";
+      }
+      .panel-scroll::-webkit-scrollbar {
+        width: 6px;
+      }
+      .panel-scroll::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.15);
+        border-radius: 9999px;
+      }
+      .panel-scroll::-webkit-scrollbar-track {
+        background-color: transparent;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-900 antialiased">
+    <!-- ============================================================ -->
+    <!-- Spec page header                                              -->
+    <!-- ============================================================ -->
+    <header class="border-b border-gray-200 bg-white">
+      <div class="mx-auto max-w-6xl px-6 py-10">
+        <p class="text-xs font-medium uppercase tracking-widest text-gray-500">
+          world-history-map · Design Mock v2
+        </p>
+        <h1 class="mt-2 text-3xl font-semibold tracking-tight">年代サマリーパネル</h1>
+        <p class="mt-3 max-w-3xl text-base leading-relaxed text-gray-600">
+          v1 からの変更：（1）デスクトップも後勝ち排他に統一し、サマリーと領土詳細の同時表示を廃止。
+          （2）領土詳細パネルの上端に「1500 年の世界を見る」遷移帯を追加し、サマリーへの戻り動線をパネル内で完結させる。
+        </p>
+        <div class="mt-5 flex flex-wrap gap-2 text-sm">
+          <span class="inline-flex items-center rounded-md border border-gray-200 bg-white px-3 py-1 text-gray-700">
+            <span class="mr-1.5 text-gray-400">spec</span>
+            specs/240-era-summary-panel/spec.md
+          </span>
+          <span class="inline-flex items-center rounded-md border border-gray-200 bg-white px-3 py-1 text-gray-700">
+            <span class="mr-1.5 text-gray-400">issue</span>
+            #138
+          </span>
+          <span class="inline-flex items-center rounded-md border border-gray-200 bg-white px-3 py-1 text-gray-700">
+            <span class="mr-1.5 text-gray-400">sample year</span>
+            1500
+          </span>
+          <a class="inline-flex items-center rounded-md border border-gray-200 bg-white px-3 py-1 text-indigo-600 hover:bg-indigo-50"
+             href="../v1/index.html">
+            <span class="mr-1.5 text-gray-400">v1</span>
+            前バージョンを見る
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <nav class="sticky top-0 z-10 border-b border-gray-200 bg-white/90 backdrop-blur">
+      <div class="mx-auto flex max-w-6xl flex-wrap gap-x-5 gap-y-2 px-6 py-3 text-sm">
+        <a href="#d1" class="text-gray-700 hover:text-indigo-600">D1 · 初期状態</a>
+        <a href="#d2" class="text-gray-700 hover:text-indigo-600">D2 · 詳細優先</a>
+        <a href="#d3" class="text-gray-700 hover:text-indigo-600">D3 · パネル閉</a>
+        <span class="border-l border-gray-300"></span>
+        <a href="#m1" class="text-gray-700 hover:text-indigo-600">M1 · 初期状態</a>
+        <a href="#m2" class="text-gray-700 hover:text-indigo-600">M2 · パネル開</a>
+        <a href="#m3" class="text-gray-700 hover:text-indigo-600">M3 · 詳細優先</a>
+      </div>
+    </nav>
+
+    <!-- ============================================================ -->
+    <!-- Reusable templates (cloned via DOM API, no innerHTML)         -->
+    <!-- ============================================================ -->
+
+    <!-- Map background SVG (no highlight) -->
+    <template id="tpl-map-bg">
+      <svg class="absolute inset-0 h-full w-full" viewBox="0 0 1280 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+            <path d="M 80 0 L 0 0 0 80" fill="none" stroke="rgba(120, 113, 108, 0.08)" stroke-width="1" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid)" />
+        <path d="M 80 200 Q 140 140 240 160 L 320 200 Q 360 280 320 360 L 240 400 Q 160 380 120 320 Z" fill="rgb(214 211 209)" opacity="0.85" />
+        <path d="M 280 460 Q 320 440 360 480 L 380 580 Q 360 660 320 700 Q 280 680 270 600 Z" fill="rgb(214 211 209)" opacity="0.85" />
+        <path d="M 540 220 Q 600 180 660 200 L 720 220 Q 740 260 720 300 Q 660 320 600 300 Q 560 280 540 240 Z" fill="rgb(214 211 209)" opacity="0.85" />
+        <path d="M 580 340 Q 660 320 720 360 L 740 480 Q 720 600 660 640 Q 600 620 580 540 Z" fill="rgb(214 211 209)" opacity="0.85" />
+        <path d="M 740 180 Q 880 140 1020 200 L 1120 240 Q 1140 320 1080 380 Q 940 400 820 360 Q 760 320 740 260 Z" fill="rgb(214 211 209)" opacity="0.85" />
+        <path d="M 980 420 Q 1020 410 1060 430 L 1080 470 Q 1040 490 1000 470 Z" fill="rgb(214 211 209)" opacity="0.85" />
+        <path d="M 1060 540 Q 1120 520 1180 560 L 1200 620 Q 1140 640 1080 620 Q 1060 600 1060 560 Z" fill="rgb(214 211 209)" opacity="0.85" />
+      </svg>
+    </template>
+
+    <!-- Map background SVG with portugal highlight (D2, M3) -->
+    <template id="tpl-map-bg-highlight">
+      <svg class="absolute inset-0 h-full w-full" viewBox="0 0 1280 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <pattern id="grid-h" width="80" height="80" patternUnits="userSpaceOnUse">
+            <path d="M 80 0 L 0 0 0 80" fill="none" stroke="rgba(120, 113, 108, 0.08)" stroke-width="1" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid-h)" />
+        <path d="M 80 200 Q 140 140 240 160 L 320 200 Q 360 280 320 360 L 240 400 Q 160 380 120 320 Z" fill="rgb(214 211 209)" opacity="0.85" />
+        <path d="M 280 460 Q 320 440 360 480 L 380 580 Q 360 660 320 700 Q 280 680 270 600 Z" fill="rgb(214 211 209)" opacity="0.85" />
+        <path d="M 540 220 Q 600 180 660 200 L 720 220 Q 740 260 720 300 Q 660 320 600 300 Q 560 280 540 240 Z" fill="rgb(165 158 156)" opacity="0.95" />
+        <path d="M 580 340 Q 660 320 720 360 L 740 480 Q 720 600 660 640 Q 600 620 580 540 Z" fill="rgb(214 211 209)" opacity="0.85" />
+        <path d="M 740 180 Q 880 140 1020 200 L 1120 240 Q 1140 320 1080 380 Q 940 400 820 360 Q 760 320 740 260 Z" fill="rgb(214 211 209)" opacity="0.85" />
+        <path d="M 980 420 Q 1020 410 1060 430 L 1080 470 Q 1040 490 1000 470 Z" fill="rgb(214 211 209)" opacity="0.85" />
+        <path d="M 1060 540 Q 1120 520 1180 560 L 1200 620 Q 1140 640 1080 620 Q 1060 600 1060 560 Z" fill="rgb(214 211 209)" opacity="0.85" />
+        <circle cx="565" cy="260" r="6" fill="rgb(99 102 241)" opacity="0.95" />
+        <circle cx="565" cy="260" r="14" fill="none" stroke="rgb(99 102 241)" stroke-width="2" opacity="0.55" />
+      </svg>
+    </template>
+
+    <!-- Summary panel desktop (open) — used in D1 -->
+    <template id="tpl-summary-panel-desktop">
+      <div class="flex shrink-0 items-start justify-between border-b border-gray-600 px-4 pb-3 pt-4">
+        <div class="min-w-0 flex-1">
+          <h2 class="text-lg font-semibold text-white" data-panel-title>1500 年の世界</h2>
+          <p class="mt-0.5 text-sm text-gray-300">同時代の世界の概況</p>
+        </div>
+        <button type="button" aria-label="閉じる"
+          class="ml-2 cursor-pointer rounded-lg p-1.5 text-gray-300 transition-colors hover:bg-gray-600 hover:text-white">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="overflow-y-auto px-4 pb-4 pt-3">
+        <ul class="space-y-3">
+          <li class="rounded-md border border-gray-600/60 bg-gray-700/40 p-3">
+            <h3 class="text-sm font-semibold text-white">ヨーロッパ</h3>
+            <p class="mt-1 text-sm leading-relaxed text-gray-300">
+              大航海時代の幕開け。<a href="#" class="text-white underline decoration-gray-500 underline-offset-2 hover:decoration-white focus:outline-none focus:decoration-white">ポルトガル</a>とスペインがインド航路と新大陸到達を競い、イタリアではルネサンス文化が最盛期。
+            </p>
+          </li>
+          <li class="rounded-md border border-gray-600/60 bg-gray-700/40 p-3">
+            <h3 class="text-sm font-semibold text-white">東アジア</h3>
+            <p class="mt-1 text-sm leading-relaxed text-gray-300">
+              <a href="#" class="text-white underline decoration-gray-500 underline-offset-2 hover:decoration-white">明</a>朝の成熟期。日本は応仁の乱後の戦国時代に突入し、朝鮮では儒教統治が揺らぐ。
+            </p>
+          </li>
+          <li class="rounded-md border border-gray-600/60 bg-gray-700/40 p-3">
+            <h3 class="text-sm font-semibold text-white">南アジア</h3>
+            <p class="mt-1 text-sm leading-relaxed text-gray-300">
+              デリー・スルタン朝の末期。各地に地方勢力が台頭し、ムガル帝国成立前夜の混乱期にあたる。
+            </p>
+          </li>
+          <li class="rounded-md border border-gray-600/60 bg-gray-700/40 p-3">
+            <h3 class="text-sm font-semibold text-white">中東・北アフリカ</h3>
+            <p class="mt-1 text-sm leading-relaxed text-gray-300">
+              <a href="#" class="text-white underline decoration-gray-500 underline-offset-2 hover:decoration-white">オスマン帝国</a>がバルカン・アナトリアを統合。サファヴィー朝が建国直前の混乱期。
+            </p>
+          </li>
+          <li class="rounded-md border border-gray-600/60 bg-gray-700/40 p-3">
+            <h3 class="text-sm font-semibold text-white">サブサハラ・アフリカ</h3>
+            <p class="mt-1 text-sm leading-relaxed text-gray-300">
+              ソンガイ帝国がサヘル交易を支配。コンゴ王国がポルトガルと接触を開始し、大西洋世界との関係が始まる。
+            </p>
+          </li>
+          <li class="rounded-md border border-gray-600/60 bg-gray-700/40 p-3">
+            <h3 class="text-sm font-semibold text-white">南北アメリカ</h3>
+            <p class="mt-1 text-sm leading-relaxed text-gray-300">
+              <a href="#" class="text-white underline decoration-gray-500 underline-offset-2 hover:decoration-white">インカ帝国</a>が最大版図、アステカ帝国が中央メキシコを支配。ヨーロッパ人到達前夜。
+            </p>
+          </li>
+          <li class="rounded-md border border-gray-600/60 bg-gray-700/40 p-3">
+            <h3 class="text-sm font-semibold text-white">オセアニア</h3>
+            <p class="mt-1 text-sm leading-relaxed text-gray-300">
+              先住民社会が独自の文化圏を形成。外部世界との接触はまだ限定的。
+            </p>
+          </li>
+        </ul>
+        <p class="mt-4 text-xs text-gray-400">
+          領土名・年代の下線リンクから詳細表示や年代切替に遷移できます。
+        </p>
+      </div>
+    </template>
+
+    <!-- Territory info panel desktop (open, with summary nav strip + close button) — used in D2 -->
+    <template id="tpl-territory-panel-desktop">
+      <div class="flex shrink-0 items-stretch border-b border-gray-600">
+        <button type="button"
+          class="flex min-w-0 flex-1 cursor-pointer items-center gap-2 px-4 py-2.5 text-sm text-gray-300 transition-colors hover:bg-gray-600/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gray-400">
+          <svg class="h-4 w-4 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
+          </svg>
+          <span class="truncate">1500 年の世界を見る</span>
+        </button>
+        <button type="button" aria-label="閉じる"
+          class="flex shrink-0 cursor-pointer items-center px-3 text-gray-300 transition-colors hover:bg-gray-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gray-400">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="flex shrink-0 flex-col border-b border-gray-600 px-4 pb-3 pt-4">
+        <h2 class="text-lg font-semibold text-white" data-panel-title>ポルトガル</h2>
+        <p class="mt-0.5 text-sm text-gray-300">アヴィシュ朝</p>
+      </div>
+      <div class="overflow-y-auto px-4 pb-4 pt-3">
+        <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm">
+          <dt class="text-gray-400">首都</dt><dd class="text-white">リスボン</dd>
+          <dt class="text-gray-400">政体</dt><dd class="text-white">王政</dd>
+          <dt class="text-gray-400">王朝</dt><dd class="text-white">アヴィシュ朝</dd>
+          <dt class="text-gray-400">君主</dt><dd class="text-white">マヌエル1世</dd>
+          <dt class="text-gray-400">宗教</dt><dd class="text-white">カトリック</dd>
+        </dl>
+        <p class="mt-3 text-sm leading-relaxed text-gray-300">
+          1500 年のポルトガルはマヌエル1世の治世下にあり、海外進出が最盛期を迎えていた。
+          1498 年のヴァスコ・ダ・ガマによるインド航路発見、1500 年のカブラルによるブラジル到達と、
+          世界に植民地ネットワークを広げつつあった。
+        </p>
+        <div class="mt-4">
+          <h3 class="text-sm font-semibold text-white">主要イベント</h3>
+          <ul class="mt-2 space-y-1.5 text-sm">
+            <li class="flex gap-3"><span class="w-12 shrink-0 text-gray-400">1488</span><span class="text-gray-300">喜望峰到達</span></li>
+            <li class="flex gap-3"><span class="w-12 shrink-0 text-gray-400">1498</span><span class="text-gray-300">インド航路発見</span></li>
+            <li class="flex gap-3"><span class="w-12 shrink-0 font-semibold text-white">1500</span><span class="font-semibold text-white">カブラルがブラジルに到達</span></li>
+            <li class="flex gap-3"><span class="w-12 shrink-0 text-gray-400">1543</span><span class="text-gray-300">種子島漂着</span></li>
+          </ul>
+        </div>
+      </div>
+    </template>
+
+    <!-- Bottom-sheet (mobile) — summary, M2 -->
+    <template id="tpl-bottom-sheet-summary">
+      <div class="flex shrink-0 cursor-grab justify-center py-2">
+        <div class="h-1 w-10 rounded-full bg-gray-500"></div>
+      </div>
+      <div class="flex shrink-0 items-start justify-between border-b border-gray-600 px-4 pb-3 pt-1">
+        <div class="min-w-0 flex-1">
+          <h2 class="text-lg font-semibold text-white" data-panel-title>1500 年の世界</h2>
+          <p class="mt-0.5 text-sm text-gray-300">同時代の世界の概況</p>
+        </div>
+        <button type="button" aria-label="閉じる"
+          class="ml-2 cursor-pointer rounded-lg p-1.5 text-gray-300 transition-colors hover:bg-gray-600 hover:text-white">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="overflow-y-auto px-4 pb-4 pt-3">
+        <ul class="space-y-3">
+          <li>
+            <h3 class="text-sm font-semibold text-white">ヨーロッパ</h3>
+            <p class="mt-1 text-sm leading-relaxed text-gray-300">
+              大航海時代の幕開け。<a href="#" class="text-white underline decoration-gray-500 underline-offset-2 hover:decoration-white">ポルトガル</a>とスペインがインド航路と新大陸到達を競い、イタリアではルネサンス文化が最盛期。
+            </p>
+          </li>
+          <li>
+            <h3 class="text-sm font-semibold text-white">東アジア</h3>
+            <p class="mt-1 text-sm leading-relaxed text-gray-300">
+              <a href="#" class="text-white underline decoration-gray-500 underline-offset-2 hover:decoration-white">明</a>朝の成熟期。日本は応仁の乱後の戦国時代に突入し、朝鮮では儒教統治が揺らぐ。
+            </p>
+          </li>
+          <li>
+            <h3 class="text-sm font-semibold text-white">南アジア</h3>
+            <p class="mt-1 text-sm leading-relaxed text-gray-300">
+              デリー・スルタン朝の末期。各地に地方勢力が台頭し、ムガル帝国成立前夜の混乱期にあたる。
+            </p>
+          </li>
+          <li>
+            <h3 class="text-sm font-semibold text-white">中東・北アフリカ</h3>
+            <p class="mt-1 text-sm leading-relaxed text-gray-300">
+              <a href="#" class="text-white underline decoration-gray-500 underline-offset-2 hover:decoration-white">オスマン帝国</a>がバルカン・アナトリアを統合。サファヴィー朝が建国直前の混乱期。
+            </p>
+          </li>
+          <li>
+            <h3 class="text-sm font-semibold text-white">サブサハラ・アフリカ</h3>
+            <p class="mt-1 text-sm leading-relaxed text-gray-300">
+              ソンガイ帝国がサヘル交易を支配。コンゴ王国がポルトガルと接触を開始。
+            </p>
+          </li>
+          <li>
+            <h3 class="text-sm font-semibold text-white">南北アメリカ</h3>
+            <p class="mt-1 text-sm leading-relaxed text-gray-300">
+              <a href="#" class="text-white underline decoration-gray-500 underline-offset-2 hover:decoration-white">インカ帝国</a>が最大版図、アステカ帝国が中央メキシコを支配。
+            </p>
+          </li>
+          <li>
+            <h3 class="text-sm font-semibold text-white">オセアニア</h3>
+            <p class="mt-1 text-sm leading-relaxed text-gray-300">
+              先住民社会が独自の文化圏を形成。外部世界との接触はまだ限定的。
+            </p>
+          </li>
+        </ul>
+      </div>
+    </template>
+
+    <!-- Bottom-sheet (mobile) — territory, M3 (with summary nav strip + close button on same row) -->
+    <template id="tpl-bottom-sheet-territory">
+      <div class="flex shrink-0 cursor-grab justify-center py-2">
+        <div class="h-1 w-10 rounded-full bg-gray-500"></div>
+      </div>
+      <div class="flex shrink-0 items-stretch border-b border-gray-600">
+        <button type="button"
+          class="flex min-w-0 flex-1 cursor-pointer items-center gap-2 px-4 py-2.5 text-sm text-gray-300 transition-colors hover:bg-gray-600/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gray-400">
+          <svg class="h-4 w-4 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
+          </svg>
+          <span class="truncate">1500 年の世界を見る</span>
+        </button>
+        <button type="button" aria-label="閉じる"
+          class="flex shrink-0 cursor-pointer items-center px-3 text-gray-300 transition-colors hover:bg-gray-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gray-400">
+          <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="flex shrink-0 flex-col border-b border-gray-600 px-4 pb-3 pt-3">
+        <h2 class="text-lg font-semibold text-white" data-panel-title>ポルトガル</h2>
+        <p class="mt-0.5 text-sm text-gray-300">アヴィシュ朝</p>
+      </div>
+      <div class="overflow-y-auto px-4 pb-4 pt-3">
+        <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm">
+          <dt class="text-gray-400">首都</dt><dd class="text-white">リスボン</dd>
+          <dt class="text-gray-400">政体</dt><dd class="text-white">王政</dd>
+          <dt class="text-gray-400">王朝</dt><dd class="text-white">アヴィシュ朝</dd>
+          <dt class="text-gray-400">君主</dt><dd class="text-white">マヌエル1世</dd>
+          <dt class="text-gray-400">宗教</dt><dd class="text-white">カトリック</dd>
+        </dl>
+        <p class="mt-3 text-sm leading-relaxed text-gray-300">
+          1500 年のポルトガルはマヌエル1世の治世下にあり、海外進出が最盛期を迎えていた。
+          1498 年のヴァスコ・ダ・ガマによるインド航路発見、1500 年のカブラルによるブラジル到達と、
+          世界に植民地ネットワークを広げつつあった。
+        </p>
+        <div class="mt-4">
+          <h3 class="text-sm font-semibold text-white">主要イベント</h3>
+          <ul class="mt-2 space-y-1.5 text-sm">
+            <li class="flex gap-3"><span class="w-12 shrink-0 text-gray-400">1488</span><span class="text-gray-300">喜望峰到達</span></li>
+            <li class="flex gap-3"><span class="w-12 shrink-0 text-gray-400">1498</span><span class="text-gray-300">インド航路発見</span></li>
+            <li class="flex gap-3"><span class="w-12 shrink-0 font-semibold text-white">1500</span><span class="font-semibold text-white">カブラルがブラジルに到達</span></li>
+            <li class="flex gap-3"><span class="w-12 shrink-0 text-gray-400">1543</span><span class="text-gray-300">種子島漂着</span></li>
+          </ul>
+        </div>
+      </div>
+    </template>
+
+    <!-- Control bar desktop -->
+    <template id="tpl-control-bar">
+      <button type="button" aria-label="投影方式を切り替える"
+        class="cursor-pointer rounded-lg bg-gray-700/95 p-3 text-white/60 shadow-lg backdrop-blur-sm transition-colors hover:text-white">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 100-18 9 9 0 000 18zm0 0a8.949 8.949 0 003.6-.75M12 21a8.949 8.949 0 01-3.6-.75M21 12H3M12 3v18M19.07 4.93a15 15 0 010 14.14M4.93 4.93a15 15 0 000 14.14" />
+        </svg>
+      </button>
+      <button type="button" aria-label="このサイトについて"
+        class="cursor-pointer rounded-lg bg-gray-700/95 p-3 text-white/60 shadow-lg backdrop-blur-sm transition-colors hover:text-white">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+        </svg>
+      </button>
+    </template>
+
+    <!-- Control bar mobile (smaller) -->
+    <template id="tpl-control-bar-mobile">
+      <button type="button" aria-label="投影方式を切り替える"
+        class="cursor-pointer rounded-lg bg-gray-700/95 p-2 text-white/60 shadow-lg backdrop-blur-sm transition-colors hover:text-white">
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 100-18 9 9 0 000 18zm0 0a8.949 8.949 0 003.6-.75M12 21a8.949 8.949 0 01-3.6-.75M21 12H3M12 3v18M19.07 4.93a15 15 0 010 14.14M4.93 4.93a15 15 0 000 14.14" />
+        </svg>
+      </button>
+      <button type="button" aria-label="このサイトについて"
+        class="cursor-pointer rounded-lg bg-gray-700/95 p-2 text-white/60 shadow-lg backdrop-blur-sm transition-colors hover:text-white">
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+        </svg>
+      </button>
+    </template>
+
+    <!-- Year selector desktop -->
+    <template id="tpl-year-selector">
+      <div role="tablist" aria-label="年代を選択"
+        class="flex items-center gap-1 rounded-lg bg-gray-700/95 p-1.5 shadow-xl backdrop-blur-sm">
+        <button type="button" role="tab" aria-selected="false" class="cursor-pointer rounded-md px-3 py-1.5 text-sm text-gray-300 transition-colors hover:bg-gray-600/50 hover:text-white">BC 2000</button>
+        <button type="button" role="tab" aria-selected="false" class="cursor-pointer rounded-md px-3 py-1.5 text-sm text-gray-300 transition-colors hover:bg-gray-600/50 hover:text-white">BC 1000</button>
+        <button type="button" role="tab" aria-selected="false" class="cursor-pointer rounded-md px-3 py-1.5 text-sm text-gray-300 transition-colors hover:bg-gray-600/50 hover:text-white">0</button>
+        <button type="button" role="tab" aria-selected="false" class="cursor-pointer rounded-md px-3 py-1.5 text-sm text-gray-300 transition-colors hover:bg-gray-600/50 hover:text-white">500</button>
+        <button type="button" role="tab" aria-selected="false" class="cursor-pointer rounded-md px-3 py-1.5 text-sm text-gray-300 transition-colors hover:bg-gray-600/50 hover:text-white">1000</button>
+        <button type="button" role="tab" aria-selected="false" class="cursor-pointer rounded-md px-3 py-1.5 text-sm text-gray-300 transition-colors hover:bg-gray-600/50 hover:text-white">1300</button>
+        <button type="button" role="tab" aria-selected="true" class="cursor-pointer rounded-md bg-gray-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm">1500</button>
+        <button type="button" role="tab" aria-selected="false" class="cursor-pointer rounded-md px-3 py-1.5 text-sm text-gray-300 transition-colors hover:bg-gray-600/50 hover:text-white">1700</button>
+        <button type="button" role="tab" aria-selected="false" class="cursor-pointer rounded-md px-3 py-1.5 text-sm text-gray-300 transition-colors hover:bg-gray-600/50 hover:text-white">1900</button>
+      </div>
+    </template>
+
+    <!-- Year selector mobile (shorter list) -->
+    <template id="tpl-year-selector-mobile">
+      <div role="tablist" aria-label="年代を選択"
+        class="flex items-center gap-1 rounded-lg bg-gray-700/95 p-1 shadow-xl backdrop-blur-sm">
+        <button type="button" role="tab" aria-selected="false" class="cursor-pointer rounded-md px-2.5 py-1 text-xs text-gray-300 transition-colors hover:bg-gray-600/50 hover:text-white">1000</button>
+        <button type="button" role="tab" aria-selected="false" class="cursor-pointer rounded-md px-2.5 py-1 text-xs text-gray-300 transition-colors hover:bg-gray-600/50 hover:text-white">1300</button>
+        <button type="button" role="tab" aria-selected="true" class="cursor-pointer rounded-md bg-gray-600 px-2.5 py-1 text-xs font-semibold text-white shadow-sm">1500</button>
+        <button type="button" role="tab" aria-selected="false" class="cursor-pointer rounded-md px-2.5 py-1 text-xs text-gray-300 transition-colors hover:bg-gray-600/50 hover:text-white">1700</button>
+        <button type="button" role="tab" aria-selected="false" class="cursor-pointer rounded-md px-2.5 py-1 text-xs text-gray-300 transition-colors hover:bg-gray-600/50 hover:text-white">1900</button>
+      </div>
+    </template>
+
+    <!-- Summary trigger desktop (closed state) -->
+    <template id="tpl-summary-trigger-desktop">
+      <button type="button" aria-label="サマリーを開く" aria-expanded="false"
+        class="inline-flex cursor-pointer items-center gap-2 rounded-lg bg-gray-700/95 px-3 py-2 text-sm text-white shadow-lg backdrop-blur-sm transition-colors hover:bg-gray-600">
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
+        </svg>
+        <span>1500 年の世界</span>
+      </button>
+    </template>
+
+    <!-- Summary trigger mobile (FAB-style with text) -->
+    <template id="tpl-summary-trigger-mobile">
+      <button type="button" aria-label="サマリーを開く" aria-expanded="false"
+        class="inline-flex cursor-pointer items-center gap-2 rounded-full bg-gray-700/95 px-4 py-2.5 text-sm text-white shadow-xl backdrop-blur-sm transition-colors hover:bg-gray-600">
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3.75 6.75h16.5M3.75 12h16.5M3.75 17.25h16.5" />
+        </svg>
+        <span>サマリー</span>
+      </button>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- States                                                        -->
+    <!-- ============================================================ -->
+    <main class="mx-auto max-w-6xl space-y-20 px-6 py-12">
+      <!-- D1 ------------------------------------------------------- -->
+      <section id="d1">
+        <header class="mb-5">
+          <p class="text-xs font-bold uppercase tracking-widest text-indigo-600">Desktop · D1</p>
+          <h2 class="mt-1 text-xl font-semibold tracking-tight">
+            初期状態（サマリー開、領土詳細閉）
+          </h2>
+          <p class="mt-2 max-w-3xl text-sm text-gray-600">
+            1280 × 800 — デスクトップでは年代サマリーパネルが開いた状態でスタートし、利用者は即座に
+            「同時代の世界」を俯瞰できる。地図上の領土はまだ選択されていない。v1 から変更なし。
+          </p>
+        </header>
+        <div class="overflow-x-auto rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-200">
+          <div class="relative mx-auto overflow-hidden rounded-xl bg-stone-200" style="width: 1280px; height: 800px">
+            <div data-slot="map-bg"></div>
+            <aside class="panel-scroll absolute left-4 top-4 z-30 flex max-h-[calc(100%-2rem)] w-96 flex-col overflow-hidden rounded-lg bg-gray-700/95 shadow-xl backdrop-blur-sm"
+              role="dialog" aria-modal="false" data-slot="summary-panel-desktop"></aside>
+            <div class="absolute right-4 top-4 z-20 flex flex-col gap-2" data-slot="control-bar"></div>
+            <div class="absolute bottom-4 left-1/2 z-20 -translate-x-1/2" data-slot="year-selector"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- D2 ------------------------------------------------------- -->
+      <section id="d2">
+        <header class="mb-5">
+          <p class="text-xs font-bold uppercase tracking-widest text-indigo-600">Desktop · D2</p>
+          <h2 class="mt-1 text-xl font-semibold tracking-tight">
+            領土詳細優先（後勝ち排他、サマリー閉）
+          </h2>
+          <p class="mt-2 max-w-3xl text-sm text-gray-600">
+            利用者がサマリー内のリンクをタップ、または地図上の領土をクリックすると、サマリーパネルは完全に閉じ、
+            領土詳細パネルが左上に開く（モバイルと同じ後勝ち排他）。
+            <strong class="text-gray-900">v2 の変更点</strong>:
+            v1 の「並列共存」を廃止。代わりに領土詳細パネル上端に「1500 年の世界を見る」遷移帯を追加し、
+            サマリーへ 1 タップで戻れる動線をパネル内で完結させる。
+          </p>
+        </header>
+        <div class="overflow-x-auto rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-200">
+          <div class="relative mx-auto overflow-hidden rounded-xl bg-stone-200" style="width: 1280px; height: 800px">
+            <div data-slot="map-bg-highlight"></div>
+            <aside class="panel-scroll absolute left-4 top-4 z-30 flex max-h-[calc(100%-2rem)] w-96 flex-col overflow-hidden rounded-lg bg-gray-700/95 shadow-xl backdrop-blur-sm"
+              role="dialog" aria-modal="false" data-slot="territory-panel-desktop"></aside>
+            <div class="absolute right-4 top-4 z-20 flex flex-col gap-2" data-slot="control-bar"></div>
+            <div class="absolute bottom-4 left-1/2 z-20 -translate-x-1/2" data-slot="year-selector"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- D3 ------------------------------------------------------- -->
+      <section id="d3">
+        <header class="mb-5">
+          <p class="text-xs font-bold uppercase tracking-widest text-indigo-600">Desktop · D3</p>
+          <h2 class="mt-1 text-xl font-semibold tracking-tight">パネル全閉</h2>
+          <p class="mt-2 max-w-3xl text-sm text-gray-600">
+            利用者が明示的にサマリーまたは領土詳細パネルを閉じた状態。地図領域がほぼ全面に広がり、左上に
+            「サマリーを開く」トリガーが残る。v1 から変更なし。
+          </p>
+        </header>
+        <div class="overflow-x-auto rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-200">
+          <div class="relative mx-auto overflow-hidden rounded-xl bg-stone-200" style="width: 1280px; height: 800px">
+            <div data-slot="map-bg"></div>
+            <div class="absolute left-4 top-4 z-30" data-slot="summary-trigger-desktop"></div>
+            <div class="absolute right-4 top-4 z-20 flex flex-col gap-2" data-slot="control-bar"></div>
+            <div class="absolute bottom-4 left-1/2 z-20 -translate-x-1/2" data-slot="year-selector"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- M1 ------------------------------------------------------- -->
+      <section id="m1">
+        <header class="mb-5">
+          <p class="text-xs font-bold uppercase tracking-widest text-indigo-600">Mobile · M1</p>
+          <h2 class="mt-1 text-xl font-semibold tracking-tight">初期状態（サマリー閉）</h2>
+          <p class="mt-2 max-w-3xl text-sm text-gray-600">
+            375 × 667 — モバイルでは初期状態でサマリーパネルが閉じており、地図領域を最大化する。右下にサマリー開閉トリガー（FAB
+            風ボタン）が常駐する。v1 から変更なし。
+          </p>
+        </header>
+        <div class="flex justify-center">
+          <div class="relative overflow-hidden rounded-3xl border-8 border-gray-900 bg-stone-200 shadow-xl"
+            style="width: 375px; height: 667px">
+            <div data-slot="map-bg"></div>
+            <div class="absolute right-3 top-3 z-20 flex flex-col gap-2" data-slot="control-bar-mobile"></div>
+            <div class="absolute bottom-20 right-4 z-30" data-slot="summary-trigger-mobile"></div>
+            <div class="absolute bottom-4 left-1/2 z-20 -translate-x-1/2" data-slot="year-selector-mobile"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- M2 ------------------------------------------------------- -->
+      <section id="m2">
+        <header class="mb-5">
+          <p class="text-xs font-bold uppercase tracking-widest text-indigo-600">Mobile · M2</p>
+          <h2 class="mt-1 text-xl font-semibold tracking-tight">サマリーパネル開（bottom-sheet）</h2>
+          <p class="mt-2 max-w-3xl text-sm text-gray-600">
+            利用者がトリガーをタップするとサマリーが bottom-sheet として立ち上がり、画面下半分から地域別カードを表示する。
+            上端のドラッグハンドルで折りたたみ／展開を操作できる。v1 から変更なし。
+          </p>
+        </header>
+        <div class="flex justify-center">
+          <div class="relative overflow-hidden rounded-3xl border-8 border-gray-900 bg-stone-200 shadow-xl"
+            style="width: 375px; height: 667px">
+            <div data-slot="map-bg"></div>
+            <div class="absolute right-3 top-3 z-20 flex flex-col gap-2" data-slot="control-bar-mobile"></div>
+            <div class="absolute bottom-4 left-1/2 z-10 -translate-x-1/2" data-slot="year-selector-mobile"></div>
+            <div class="absolute inset-0 z-40 bg-black/50" aria-hidden="true"></div>
+            <div class="panel-scroll absolute inset-x-0 bottom-0 z-50 flex max-h-[80%] flex-col overflow-hidden rounded-t-2xl bg-gray-800 shadow-xl"
+              role="dialog" aria-modal="true" data-slot="bottom-sheet-summary"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- M3 ------------------------------------------------------- -->
+      <section id="m3">
+        <header class="mb-5">
+          <p class="text-xs font-bold uppercase tracking-widest text-indigo-600">Mobile · M3</p>
+          <h2 class="mt-1 text-xl font-semibold tracking-tight">
+            領土詳細優先（後勝ち排他、サマリー閉）
+          </h2>
+          <p class="mt-2 max-w-3xl text-sm text-gray-600">
+            利用者が地図上の領土をタップ、またはサマリー内のリンクをタップすると、領土詳細パネルが
+            bottom-sheet として開き、サマリーは完全に閉じる。
+            <strong class="text-gray-900">v2 の変更点</strong>:
+            ドラッグハンドル直下に「1500 年の世界を見る」遷移帯が常時表示され、1 タップでサマリーへ戻れる。
+          </p>
+        </header>
+        <div class="flex justify-center">
+          <div class="relative overflow-hidden rounded-3xl border-8 border-gray-900 bg-stone-200 shadow-xl"
+            style="width: 375px; height: 667px">
+            <div data-slot="map-bg-highlight"></div>
+            <div class="absolute right-3 top-3 z-20 flex flex-col gap-2" data-slot="control-bar-mobile"></div>
+            <div class="absolute bottom-4 left-1/2 z-10 -translate-x-1/2" data-slot="year-selector-mobile"></div>
+            <div class="absolute inset-0 z-40 bg-black/50" aria-hidden="true"></div>
+            <div class="panel-scroll absolute inset-x-0 bottom-0 z-50 flex max-h-[78%] flex-col overflow-hidden rounded-t-2xl bg-gray-800 shadow-xl"
+              role="dialog" aria-modal="true" data-slot="bottom-sheet-territory"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================== -->
+      <!-- Spec notes                                                  -->
+      <!-- ========================================================== -->
+      <section class="rounded-2xl border border-gray-200 bg-white p-8">
+        <h2 class="text-lg font-semibold tracking-tight">v2 で変更した点</h2>
+        <ul class="mt-4 space-y-3 text-sm leading-relaxed text-gray-600">
+          <li>
+            <strong class="text-gray-900">後勝ち排他をデバイス間で統一:</strong>
+            v1 の「デスクトップは並列共存／モバイルは後勝ち排他」を廃止し、デバイスを問わず後勝ち排他に統一。
+            領土詳細パネルが開くとサマリーは完全に閉じる。状態数が減り、操作モデルが一貫する。
+          </li>
+          <li>
+            <strong class="text-gray-900">パネル内遷移帯（中立文言、常時表示）:</strong>
+            領土詳細パネルの上端に「<code class="rounded bg-gray-100 px-1 py-0.5 text-xs">1500 年の世界を見る</code>」帯を常時表示。
+            遷移元（サマリー / 地図）に依存しない中立文言とすることで、状態管理が単純になり、利用者から見て文言が変動しない。
+            「←」記号は使わず、サマリートリガーと同じ list アイコンで「サマリー側に切り替える」意図を表現。
+          </li>
+          <li>
+            <strong class="text-gray-900">閉じるボタンの位置（最右上）:</strong>
+            遷移帯と同じ行の右端に閉じるボタン（×）を配置。dialog / sheet の慣習（パネル右上 = 閉じる）に従い、利用者の認知負荷を下げる。
+            遷移帯（テキスト＋アイコン、横長）と × （単独アイコン、固定幅）はサイズと形で視覚階層が分離され、役割の混同を防ぐ。
+            タイトル行からは × を取り除き、上端 1 行を「操作領域」、本文を「コンテンツ領域」と階層を整理。
+          </li>
+          <li>
+            <strong class="text-gray-900">spec への波及:</strong>
+            spec FR-006「デスクトップ：両パネルは並列で同時表示可能」を「全デバイスで後勝ち排他」へ変更する必要あり。
+            FR-009 の「参照リンク → 詳細表示」の体験は、遷移帯と組み合わせることで「サマリー → 詳細 → サマリー」の往復が
+            ボタン 1 タップで完結する。
+          </li>
+        </ul>
+        <h3 class="mt-6 text-sm font-semibold tracking-tight text-gray-900">スタイル整合性</h3>
+        <ul class="mt-3 space-y-2 text-sm leading-relaxed text-gray-600">
+          <li>
+            遷移帯は既存トーン（<code class="rounded bg-gray-100 px-1 py-0.5 text-xs">text-gray-300</code>
+            <code class="rounded bg-gray-100 px-1 py-0.5 text-xs">hover:bg-gray-600/50</code>）のみで構成。装飾追加なし。
+          </li>
+          <li>
+            list アイコン SVG は既存の summary トリガーと同一の path を使用し、視覚的なつながりを担保。
+          </li>
+          <li>
+            <code class="rounded bg-gray-100 px-1 py-0.5 text-xs">role="dialog"</code> +
+            <code class="rounded bg-gray-100 px-1 py-0.5 text-xs">aria-labelledby</code> +
+            閉じるボタン
+            <code class="rounded bg-gray-100 px-1 py-0.5 text-xs">aria-label</code>
+            は v1 と同様。遷移帯ボタンは
+            <code class="rounded bg-gray-100 px-1 py-0.5 text-xs">focus-visible:ring-2</code>
+            でキーボードフォーカスが視認可能。
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="border-t border-gray-200 bg-white">
+      <div class="mx-auto max-w-6xl px-6 py-6 text-xs text-gray-500">
+        Design Mock for world-history-map · Generated by /design-mock · v2
+      </div>
+    </footer>
+
+    <!-- Hydrate slots from templates via DOM cloning (no innerHTML) -->
+    <script>
+      (function () {
+        const slotToTemplate = {
+          'map-bg': 'tpl-map-bg',
+          'map-bg-highlight': 'tpl-map-bg-highlight',
+          'summary-panel-desktop': 'tpl-summary-panel-desktop',
+          'territory-panel-desktop': 'tpl-territory-panel-desktop',
+          'bottom-sheet-summary': 'tpl-bottom-sheet-summary',
+          'bottom-sheet-territory': 'tpl-bottom-sheet-territory',
+          'control-bar': 'tpl-control-bar',
+          'control-bar-mobile': 'tpl-control-bar-mobile',
+          'year-selector': 'tpl-year-selector',
+          'year-selector-mobile': 'tpl-year-selector-mobile',
+          'summary-trigger-desktop': 'tpl-summary-trigger-desktop',
+          'summary-trigger-mobile': 'tpl-summary-trigger-mobile',
+        };
+        let dialogSeq = 0;
+        document.querySelectorAll('[data-slot]').forEach(function (host) {
+          const slot = host.dataset.slot;
+          const tpl = document.getElementById(slotToTemplate[slot]);
+          if (!tpl) return;
+          const fragment = tpl.content.cloneNode(true);
+          // Wire up unique aria-labelledby for dialogs
+          const titleEl = fragment.querySelector('[data-panel-title]');
+          if (titleEl && host.getAttribute('role') === 'dialog') {
+            const id = 'dialog-title-' + ++dialogSeq;
+            titleEl.id = id;
+            host.setAttribute('aria-labelledby', id);
+          }
+          host.appendChild(fragment);
+        });
+      })();
+    </script>
+  </body>
+</html>
