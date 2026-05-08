@@ -1,9 +1,9 @@
 import { existsSync } from 'node:fs';
 import { EXIT_CODES, YearPaths } from '@/config.ts';
 import { PipelineError } from '@/pipeline.ts';
+import type { PipelineLogger } from '@/shared/logger.ts';
 import { runConvertForYear } from '@/stages/convert.ts';
 import { runMergeForYear } from '@/stages/merge.ts';
-import type { PipelineLogger } from '@/stages/types.ts';
 import { runValidateForYear } from '@/stages/validate.ts';
 import type { PipelineCheckpoint } from '@/state/checkpoint.ts';
 import { hashContent, hashFile } from '@/state/hash.ts';

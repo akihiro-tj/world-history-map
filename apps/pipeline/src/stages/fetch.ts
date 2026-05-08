@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import { readdir } from 'node:fs/promises';
 import { PATHS, UPSTREAM, YearPaths } from '@/config.ts';
 import { execFileAsync } from '@/exec.ts';
-import type { PipelineLogger } from '@/stages/types.ts';
+import type { PipelineLogger } from '@/shared/logger.ts';
 
 export async function executeFetch(
   repoDir: string,

@@ -1,5 +1,5 @@
 import { PATHS } from '@/config.ts';
-import type { PipelineLogger } from '@/stages/types.ts';
+import type { PipelineLogger } from '@/shared/logger.ts';
 import { PipelineCheckpoint } from '@/state/checkpoint.ts';
 
 interface StatusColumn {

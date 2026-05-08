@@ -2,7 +2,7 @@ import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { PATHS, TIMEOUTS, TIPPECANOE } from '@/config.ts';
 import { execFileAsync } from '@/exec.ts';
-import type { PipelineLogger } from '@/stages/types.ts';
+import type { PipelineLogger } from '@/shared/logger.ts';
 
 export function buildTippecanoeArgs(
   layer: 'territories' | 'labels',

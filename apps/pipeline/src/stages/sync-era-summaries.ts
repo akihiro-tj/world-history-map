@@ -4,7 +4,7 @@ import { Client } from '@notionhq/client';
 import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import { NOTION_ERA_SUMMARY_PROPERTY } from '@/config.ts';
 import { REGION_IDS, type RegionId } from '@/domain/era-summary/region-id.ts';
-import type { PipelineLogger } from '@/stages/types.ts';
+import type { PipelineLogger } from '@/shared/logger.ts';
 import { validateEraSummaryFile } from '@/stages/validate-era-summaries.ts';
 
 interface EraSummaryReference {

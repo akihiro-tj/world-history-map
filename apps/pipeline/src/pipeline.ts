@@ -1,7 +1,7 @@
 import { EXIT_CODES, PATHS, UPSTREAM } from '@/config.ts';
+import type { PipelineLogger } from '@/shared/logger.ts';
 import { executeFetch, getCommitHash, parseYearsFromDirectory } from '@/stages/fetch.ts';
 import { runIndexGenStage } from '@/stages/index-gen.ts';
-import type { PipelineLogger } from '@/stages/types.ts';
 import { PipelineCheckpoint } from '@/state/checkpoint.ts';
 import { acquireLock, registerCleanupHandlers, releaseLock } from '@/state/lock.ts';
 import type { ValidationResult } from '@/types/pipeline.ts';
