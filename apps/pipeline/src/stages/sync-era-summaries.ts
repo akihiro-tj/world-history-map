@@ -3,29 +3,9 @@ import path from 'node:path';
 import { Client } from '@notionhq/client';
 import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import { NOTION_ERA_SUMMARY_PROPERTY } from '@/config.ts';
+import { REGION_IDS, type RegionId } from '@/domain/era-summary/region-id.ts';
 import type { PipelineLogger } from '@/stages/types.ts';
 import { validateEraSummaryFile } from '@/stages/validate-era-summaries.ts';
-
-type RegionId =
-  | 'europe'
-  | 'east-asia'
-  | 'southeast-asia'
-  | 'south-asia'
-  | 'middle-east-north-africa'
-  | 'sub-saharan-africa'
-  | 'americas'
-  | 'oceania';
-
-const VALID_REGION_IDS: readonly RegionId[] = [
-  'europe',
-  'east-asia',
-  'southeast-asia',
-  'south-asia',
-  'middle-east-north-africa',
-  'sub-saharan-africa',
-  'americas',
-  'oceania',
-];
 
 interface EraSummaryReference {
   kind: 'territory' | 'year';
@@ -92,7 +72,7 @@ function parseReferences(raw: string | undefined, pageId: string): EraSummaryRef
 }
 
 function isValidRegionId(value: string): value is RegionId {
-  return (VALID_REGION_IDS as readonly string[]).includes(value);
+  return (REGION_IDS as readonly string[]).includes(value);
 }
 
 export function transformNotionPage(page: PageObjectResponse): TransformedRegionEntry {

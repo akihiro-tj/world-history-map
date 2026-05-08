@@ -1,17 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { z } from 'zod';
 import { ERA_SUMMARY_CONSTRAINTS } from '@/config.ts';
-
-const regionIdSchema = z.enum([
-  'europe',
-  'east-asia',
-  'southeast-asia',
-  'south-asia',
-  'middle-east-north-africa',
-  'sub-saharan-africa',
-  'americas',
-  'oceania',
-]);
+import { regionIdSchema } from '@/domain/era-summary/region-id.ts';
 
 const referenceSchema = z.object({
   kind: z.enum(['territory', 'year']),
