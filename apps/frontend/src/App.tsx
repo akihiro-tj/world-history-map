@@ -19,9 +19,10 @@ import { initialAppState } from './types/app-state';
 
 function AppContent() {
   const { state } = useAppState();
-  const { years, isLoading } = useYearIndex();
+  const { years } = useYearIndex();
   const isMobile = useIsMobile();
   const [isLicenseOpen, setIsLicenseOpen] = useState(false);
+  const [isMapReady, setIsMapReady] = useState(false);
 
   useEffect(() => {
     prefetchYearDescriptions(state.selectedYear);
@@ -35,22 +36,30 @@ function AppContent() {
     setIsLicenseOpen(false);
   }, []);
 
+  const handleMapReady = useCallback(() => {
+    setIsMapReady(true);
+  }, []);
+
   return (
     <main className="relative h-dvh w-screen overflow-hidden select-none">
-      <MapView />
-      <TerritoryInfoPanel />
-      <EraSummaryPanel />
-      {isMobile ? (
-        <div className="absolute bottom-20 right-4 z-30">
-          <SummaryTrigger />
-        </div>
-      ) : (
-        <div className="absolute left-4 top-4 z-30">
-          <SummaryTrigger />
-        </div>
+      <MapView onReady={handleMapReady} />
+      {isMapReady && (
+        <>
+          <TerritoryInfoPanel />
+          <EraSummaryPanel />
+          {isMobile ? (
+            <div className="absolute bottom-20 right-4 z-30">
+              <SummaryTrigger />
+            </div>
+          ) : (
+            <div className="absolute left-4 top-4 z-30">
+              <SummaryTrigger />
+            </div>
+          )}
+          <ControlBar onOpenLicense={handleOpenLicense} />
+        </>
       )}
-      <ControlBar onOpenLicense={handleOpenLicense} />
-      {!isLoading && years.length > 0 && (
+      {isMapReady && years.length > 0 && (
         <div className="absolute inset-x-4 bottom-4 z-20 mx-auto max-w-2xl overflow-hidden rounded-lg bg-gray-700/95 shadow-lg backdrop-blur-sm">
           <YearSelector years={years} />
         </div>

@@ -1,6 +1,6 @@
 import 'maplibre-gl/dist/maplibre-gl.css';
 
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { MapLayerMouseEvent, MapRef } from 'react-map-gl/maplibre';
 import MapGL, { Source } from 'react-map-gl/maplibre';
 import { resolveTerritoryName } from '@/domain/territory/resolve-territory-name';
@@ -21,7 +21,11 @@ const SOURCE_ID = 'territories';
 const SOURCE_LAYER_TERRITORIES = 'territories';
 const SOURCE_LAYER_LABELS = 'labels';
 
-export function MapView() {
+interface MapViewProps {
+  onReady?: () => void;
+}
+
+export function MapView({ onReady }: MapViewProps) {
   const mapRef = useRef<MapRef>(null);
   const { state, actions } = useAppState();
   const { pmtilesUrl, colorScheme, isLoading, error } = useMapData(state.selectedYear);
@@ -30,6 +34,12 @@ export function MapView() {
   useProjection(mapRef, mapLoaded);
 
   usePMTilesProtocol();
+
+  useEffect(() => {
+    if (!isLoading && mapLoaded) {
+      onReady?.();
+    }
+  }, [isLoading, mapLoaded, onReady]);
 
   const handleLoad = useCallback(() => {
     setMapLoaded(true);
