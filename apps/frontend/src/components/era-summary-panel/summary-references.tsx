@@ -1,97 +1,60 @@
 import type { ReactNode } from 'react';
+import { AnnotatedContext, type ContextSegment } from '@/domain/era-summary/annotated-context';
 import type { EraSummaryReference } from '@/domain/era-summary/types';
 import { createHistoricalYear } from '@/domain/year/historical-year';
-import { useYearIndex } from '@/hooks/use-year-index';
 import { useAppState } from '../../contexts/app-state-context';
+import { useAvailableYears } from './hooks/use-available-years';
 
 interface SummaryReferencesProps {
   context: string;
   references: readonly EraSummaryReference[];
 }
 
-function toTerritoryDisplayName(kebabTarget: string): string {
-  return kebabTarget
-    .split('-')
-    .map((w) => (w.length > 0 ? w[0]!.toUpperCase() + w.slice(1) : w))
-    .join(' ');
-}
-
-function buildNodes(
-  context: string,
-  references: readonly EraSummaryReference[],
-  availableYears: Set<number>,
-  onTerritoryClick: (target: string) => void,
-  onYearClick: (year: number) => void,
-): ReactNode[] {
-  const positioned = references
-    .map((ref) => ({ ref, index: context.indexOf(ref.text) }))
-    .filter(({ index }) => index !== -1)
-    .sort((a, b) => a.index - b.index);
-
-  const nodes: ReactNode[] = [];
-  let cursor = 0;
-
-  for (const { ref } of positioned) {
-    const matchStart = context.indexOf(ref.text, cursor);
-    if (matchStart === -1) continue;
-
-    if (matchStart > cursor) {
-      nodes.push(context.slice(cursor, matchStart));
-    }
-
-    const key = `${ref.kind}-${ref.target}-${matchStart}`;
-
-    if (ref.kind === 'territory') {
-      nodes.push(
+function renderSegment(
+  segment: ContextSegment,
+  key: string,
+  actions: ReturnType<typeof useAppState>['actions'],
+): ReactNode {
+  switch (segment.kind) {
+    case 'plain':
+    case 'year-plain':
+      return segment.text;
+    case 'territory':
+      return (
         <button
           key={key}
           type="button"
-          onClick={() => onTerritoryClick(ref.target)}
+          onClick={() => actions.selectTerritory(segment.displayName)}
           className="underline hover:no-underline"
         >
-          {ref.text}
-        </button>,
+          {segment.text}
+        </button>
       );
-    } else {
-      const year = parseInt(ref.target, 10);
-      if (Number.isNaN(year) || !availableYears.has(year)) {
-        nodes.push(ref.text);
-      } else {
-        nodes.push(
-          <button
-            key={key}
-            type="button"
-            onClick={() => onYearClick(year)}
-            className="underline hover:no-underline"
-          >
-            {ref.text}
-          </button>,
-        );
-      }
-    }
-
-    cursor = matchStart + ref.text.length;
+    case 'year-link':
+      return (
+        <button
+          key={key}
+          type="button"
+          onClick={() => actions.setSelectedYear(createHistoricalYear(segment.year))}
+          className="underline hover:no-underline"
+        >
+          {segment.text}
+        </button>
+      );
   }
-
-  if (cursor < context.length) {
-    nodes.push(context.slice(cursor));
-  }
-
-  return nodes;
 }
 
 export function SummaryReferences({ context, references }: SummaryReferencesProps) {
   const { actions } = useAppState();
-  const { years } = useYearIndex();
-  const availableYears = new Set(years.map((y) => y.year as number));
+  const availableYears = useAvailableYears();
+  const annotated = new AnnotatedContext(context, references);
+  const segments = annotated.segments(availableYears);
 
-  const nodes = buildNodes(
-    context,
-    references,
-    availableYears,
-    (target) => actions.selectTerritory(toTerritoryDisplayName(target)),
-    (year) => actions.setSelectedYear(createHistoricalYear(year)),
+  return (
+    <p className="mt-1 text-sm leading-relaxed text-gray-300">
+      {segments.map((segment, index) =>
+        renderSegment(segment, `${segment.kind}-${index}`, actions),
+      )}
+    </p>
   );
-
-  return <p className="mt-1 text-sm leading-relaxed text-gray-300">{nodes}</p>;
 }
