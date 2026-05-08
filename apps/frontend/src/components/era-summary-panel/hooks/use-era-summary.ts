@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { loadEraSummary } from '@/domain/era-summary/load';
+import { loadEraSummary } from '@/domain/era-summary/era-summary-loader';
 import type { EraSummary } from '@/domain/era-summary/types';
 import type { HistoricalYear } from '@/domain/year/historical-year';
 

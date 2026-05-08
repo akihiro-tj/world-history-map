@@ -4,7 +4,7 @@ const mockFetch = vi.fn();
 global.fetch = mockFetch;
 
 import { createHistoricalYear } from '../year/historical-year';
-import { loadEraSummary } from './load';
+import { clearEraSummaryCache, loadEraSummary } from './era-summary-loader';
 
 function createMockHeaders(contentType: string | null) {
   return {
@@ -27,6 +27,7 @@ const mockEraSummary1650 = {
 describe('loadEraSummary', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    clearEraSummaryCache();
   });
 
   it('returns EraSummary on successful fetch', async () => {
