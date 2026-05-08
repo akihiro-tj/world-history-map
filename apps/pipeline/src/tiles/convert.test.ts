@@ -6,7 +6,7 @@ vi.mock('@/exec.ts', () => ({
 
 import { execFileAsync } from '@/exec.ts';
 import type { PipelineLogger } from '@/shared/logger.ts';
-import { buildTippecanoeArgs, executeConvert } from '@/stages/convert.ts';
+import { buildTippecanoeArgs, executeConvert } from '@/tiles/convert.ts';
 
 const mockExecFileAsync = vi.mocked(execFileAsync);
 

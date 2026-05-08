@@ -1,6 +1,6 @@
 import { PATHS } from '@/config.ts';
 import type { PipelineLogger } from '@/shared/logger.ts';
-import { parseYearsFromDirectory } from '@/stages/fetch.ts';
+import { parseYearsFromDirectory } from '@/tiles/fetch.ts';
 
 export async function listYears(logger: PipelineLogger): Promise<void> {
   const years = await parseYearsFromDirectory(PATHS.sourceGeojson);

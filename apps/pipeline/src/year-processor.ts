@@ -2,11 +2,11 @@ import { existsSync } from 'node:fs';
 import { EXIT_CODES, YearPaths } from '@/config.ts';
 import { PipelineError } from '@/pipeline.ts';
 import type { PipelineLogger } from '@/shared/logger.ts';
-import { runConvertForYear } from '@/stages/convert.ts';
-import { runMergeForYear } from '@/stages/merge.ts';
-import { runValidateForYear } from '@/stages/validate.ts';
 import type { PipelineCheckpoint } from '@/state/checkpoint.ts';
 import { hashContent, hashFile } from '@/state/hash.ts';
+import { runConvertForYear } from '@/tiles/convert.ts';
+import { runMergeForYear } from '@/tiles/merge.ts';
+import { runValidateForYear } from '@/tiles/validate.ts';
 import type { ValidationResult } from '@/types/pipeline.ts';
 
 export interface YearProcessResult {

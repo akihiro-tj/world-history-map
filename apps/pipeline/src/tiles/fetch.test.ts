@@ -9,7 +9,7 @@ vi.mock('@/exec.ts', () => ({
 }));
 
 import { execFileAsync } from '@/exec.ts';
-import { executeFetch, parseYearsFromDirectory } from '@/stages/fetch.ts';
+import { executeFetch, parseYearsFromDirectory } from '@/tiles/fetch.ts';
 
 const mockExecFileAsync = vi.mocked(execFileAsync);
 
