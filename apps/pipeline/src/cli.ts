@@ -6,9 +6,9 @@ import type { PipelineOptions } from '@/pipeline.ts';
 import { PipelineError, runPipeline } from '@/pipeline.ts';
 import type { PipelineLogger } from '@/shared/logger.ts';
 import { createLogger } from '@/shared/logger.ts';
-import { syncDescriptions } from '@/stages/sync-descriptions.ts';
 import { syncEraSummaries } from '@/stages/sync-era-summaries.ts';
-import { validateAllDescriptions } from '@/stages/validate-descriptions.ts';
+import { syncDescriptions } from '@/territory/sync.ts';
+import { validateAllDescriptions } from '@/territory/validate.ts';
 
 function parseYearOption(raw: string): number {
   const year = Number(raw);

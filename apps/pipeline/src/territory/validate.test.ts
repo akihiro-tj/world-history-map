@@ -2,10 +2,7 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import {
-  validateAllDescriptions,
-  validateDescriptionFile,
-} from '@/stages/validate-descriptions.ts';
+import { validateAllDescriptions, validateDescriptionFile } from '@/territory/validate.ts';
 
 describe('validate-descriptions', () => {
   let tempDir: string;

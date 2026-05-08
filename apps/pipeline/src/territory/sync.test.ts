@@ -1,6 +1,6 @@
 import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import { describe, expect, it } from 'vitest';
-import { groupByYear, parseKeyEvents, transformNotionPage } from '@/stages/sync-descriptions.ts';
+import { groupByYear, parseKeyEvents, transformNotionPage } from '@/territory/sync.ts';
 
 function richText(content: string): PageObjectResponse['properties'][string] {
   return {

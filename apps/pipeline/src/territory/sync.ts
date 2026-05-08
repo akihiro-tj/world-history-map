@@ -3,7 +3,7 @@ import path from 'node:path';
 import { Client } from '@notionhq/client';
 import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import type { PipelineLogger } from '@/shared/logger.ts';
-import { validateDescriptionFile } from '@/stages/validate-descriptions.ts';
+import { validateDescriptionFile } from '@/territory/validate.ts';
 
 interface TerritoryProfile {
   capital?: string;
