@@ -25,7 +25,7 @@ interface EraSummary {
   regions: RegionCard[];
 }
 
-export interface TransformedRegionEntry {
+export interface RegionEntry {
   year: number;
   regionCard: RegionCard;
 }
@@ -35,11 +35,11 @@ function extractPlainText(
 ): string | undefined {
   if (!prop) return undefined;
   if (prop.type === 'title') {
-    const text = prop.title.map((t) => t.plain_text).join('');
+    const text = prop.title.map((richTextItem) => richTextItem.plain_text).join('');
     return text || undefined;
   }
   if (prop.type === 'rich_text') {
-    const text = prop.rich_text.map((t) => t.plain_text).join('');
+    const text = prop.rich_text.map((richTextItem) => richTextItem.plain_text).join('');
     return text || undefined;
   }
   return undefined;
@@ -59,14 +59,18 @@ function extractSelect(prop: PageObjectResponse['properties'][string] | undefine
   return null;
 }
 
-function parseReferences(raw: string | undefined, pageId: string): EraSummaryReference[] {
+function parseReferences(
+  raw: string | undefined,
+  pageId: string,
+  logger: Pick<PipelineLogger, 'warn'>,
+): EraSummaryReference[] {
   if (!raw) return [];
   try {
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
     return parsed as EraSummaryReference[];
   } catch {
-    console.warn(`sync-era-summaries: malformed References JSON on page ${pageId}, using []`);
+    logger.warn('sync-era-summaries', `malformed References JSON on page ${pageId}, using []`);
     return [];
   }
 }
@@ -75,25 +79,30 @@ function isValidRegionId(value: string): value is RegionId {
   return (REGION_IDS as readonly string[]).includes(value);
 }
 
-export function transformNotionPage(page: PageObjectResponse): TransformedRegionEntry {
-  const props = page.properties;
+export function transformNotionPage(
+  page: PageObjectResponse,
+  logger: Pick<PipelineLogger, 'warn'> = {
+    warn: (_stage, message) => console.warn(message),
+  },
+): RegionEntry {
+  const notionProperties = page.properties;
 
-  const year = extractNumber(props[NOTION_ERA_SUMMARY_PROPERTY.YEAR]);
+  const year = extractNumber(notionProperties[NOTION_ERA_SUMMARY_PROPERTY.YEAR]);
   if (year === null) throw new Error(`Page ${page.id} has no Year`);
 
-  const regionRaw = extractSelect(props[NOTION_ERA_SUMMARY_PROPERTY.REGION]);
+  const regionRaw = extractSelect(notionProperties[NOTION_ERA_SUMMARY_PROPERTY.REGION]);
   if (!regionRaw) throw new Error(`Page ${page.id} has no Region`);
   if (!isValidRegionId(regionRaw))
     throw new Error(`Page ${page.id} has invalid Region: ${regionRaw}`);
 
-  const title = extractPlainText(props[NOTION_ERA_SUMMARY_PROPERTY.TITLE]);
+  const title = extractPlainText(notionProperties[NOTION_ERA_SUMMARY_PROPERTY.TITLE]);
   if (!title) throw new Error(`Page ${page.id} has no Title`);
 
-  const context = extractPlainText(props[NOTION_ERA_SUMMARY_PROPERTY.CONTEXT]);
+  const context = extractPlainText(notionProperties[NOTION_ERA_SUMMARY_PROPERTY.CONTEXT]);
   if (!context) throw new Error(`Page ${page.id} has no Context`);
 
-  const referencesRaw = extractPlainText(props[NOTION_ERA_SUMMARY_PROPERTY.REFERENCES]);
-  const references = parseReferences(referencesRaw, page.id);
+  const referencesRaw = extractPlainText(notionProperties[NOTION_ERA_SUMMARY_PROPERTY.REFERENCES]);
+  const references = parseReferences(referencesRaw, page.id, logger);
 
   return {
     year,
@@ -101,17 +110,18 @@ export function transformNotionPage(page: PageObjectResponse): TransformedRegion
   };
 }
 
-export function groupByYear(entries: TransformedRegionEntry[]): EraSummary[] {
-  const map = new Map<number, RegionCard[]>();
+export class EraSummaryRegions {
+  readonly #cardsByYear = new Map<number, RegionCard[]>();
 
-  for (const { year, regionCard } of entries) {
-    if (!map.has(year)) {
-      map.set(year, []);
+  add(entry: RegionEntry): void {
+    const { year, regionCard } = entry;
+    if (!this.#cardsByYear.has(year)) {
+      this.#cardsByYear.set(year, []);
     }
-    const cards = map.get(year);
-    if (!cards) continue;
+    const cards = this.#cardsByYear.get(year);
+    if (!cards) return;
 
-    const isDuplicate = cards.some((c) => c.region === regionCard.region);
+    const isDuplicate = cards.some((card) => card.region === regionCard.region);
     if (isDuplicate) {
       throw new Error(`Duplicate Year×Region: year=${year}, region=${regionCard.region}`);
     }
@@ -119,22 +129,16 @@ export function groupByYear(entries: TransformedRegionEntry[]): EraSummary[] {
     cards.push(regionCard);
   }
 
-  return Array.from(map.entries()).map(([year, regions]) => ({ year, regions }));
+  build(): EraSummary[] {
+    return Array.from(this.#cardsByYear.entries()).map(([year, regions]) => ({ year, regions }));
+  }
 }
 
-export async function syncEraSummaries(
-  outputDir: string,
-  logger: PipelineLogger,
-  options?: { year?: number },
-): Promise<void> {
-  const { NOTION } = await import('@/config.ts');
-  const token = NOTION.getToken();
-  const dataSourceId = NOTION.getEraSummaryDataSourceId();
-
-  const notion = new Client({ auth: token });
-
-  logger.info('sync-era-summaries', 'Fetching pages from Notion Era Summary data source...');
-
+async function fetchAllPages(
+  notion: Client,
+  dataSourceId: string,
+  yearFilter?: number,
+): Promise<PageObjectResponse[]> {
   const pages: PageObjectResponse[] = [];
   let cursor: string | undefined;
 
@@ -142,8 +146,8 @@ export async function syncEraSummaries(
     const response = await notion.dataSources.query({
       data_source_id: dataSourceId,
       ...(cursor !== undefined && { start_cursor: cursor }),
-      ...(options?.year !== undefined && {
-        filter: { property: 'Year', number: { equals: options.year } },
+      ...(yearFilter !== undefined && {
+        filter: { property: 'Year', number: { equals: yearFilter } },
       }),
     });
 
@@ -156,26 +160,30 @@ export async function syncEraSummaries(
     cursor = response.has_more ? (response.next_cursor ?? undefined) : undefined;
   } while (cursor);
 
-  logger.info('sync-era-summaries', `Fetched ${pages.length} pages`);
+  return pages;
+}
 
-  const entries: TransformedRegionEntry[] = [];
-  const transformErrors: string[] = [];
+function transformPages(
+  pages: PageObjectResponse[],
+  logger: PipelineLogger,
+): { entries: RegionEntry[]; errorCount: number } {
+  const entries: RegionEntry[] = [];
+  let errorCount = 0;
 
   for (const page of pages) {
     try {
-      entries.push(transformNotionPage(page));
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      transformErrors.push(msg);
-      logger.error('sync-era-summaries', msg);
+      entries.push(transformNotionPage(page, logger));
+    } catch (caughtError) {
+      const errorMessage = caughtError instanceof Error ? caughtError.message : String(caughtError);
+      errorCount++;
+      logger.error('sync-era-summaries', errorMessage);
     }
   }
 
-  if (transformErrors.length > 0) {
-    logger.warn('sync-era-summaries', `${transformErrors.length} pages failed to transform`);
-  }
+  return { entries, errorCount };
+}
 
-  const summaries = groupByYear(entries);
+function writeSummaries(summaries: EraSummary[], outputDir: string, logger: PipelineLogger): void {
   mkdirSync(outputDir, { recursive: true });
 
   let validationErrors = 0;
@@ -187,8 +195,8 @@ export async function syncEraSummaries(
     const validation = validateEraSummaryFile(filePath);
     if (!validation.valid) {
       validationErrors++;
-      for (const err of validation.errors) {
-        logger.error('sync-era-summaries', `${summary.year}.json: ${err}`);
+      for (const validationError of validation.errors) {
+        logger.error('sync-era-summaries', `${summary.year}.json: ${validationError}`);
       }
     }
   }
@@ -198,4 +206,30 @@ export async function syncEraSummaries(
   if (validationErrors > 0) {
     throw new Error(`Validation failed for ${validationErrors} file(s). Check logs for details.`);
   }
+}
+
+export async function syncEraSummaries(
+  outputDir: string,
+  logger: PipelineLogger,
+  options?: { year?: number },
+): Promise<void> {
+  const { NOTION } = await import('@/config.ts');
+  const notion = new Client({ auth: NOTION.getToken() });
+  const dataSourceId = NOTION.getEraSummaryDataSourceId();
+
+  logger.info('sync-era-summaries', 'Fetching pages from Notion Era Summary data source...');
+  const pages = await fetchAllPages(notion, dataSourceId, options?.year);
+  logger.info('sync-era-summaries', `Fetched ${pages.length} pages`);
+
+  const { entries, errorCount } = transformPages(pages, logger);
+  if (errorCount > 0) {
+    logger.warn('sync-era-summaries', `${errorCount} pages failed to transform`);
+  }
+
+  const regions = new EraSummaryRegions();
+  for (const entry of entries) {
+    regions.add(entry);
+  }
+
+  writeSummaries(regions.build(), outputDir, logger);
 }

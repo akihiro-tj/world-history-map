@@ -1,6 +1,6 @@
 import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import { describe, expect, it, vi } from 'vitest';
-import { groupByYear, transformNotionPage } from '@/stages/sync-era-summaries.ts';
+import { EraSummaryRegions, transformNotionPage } from '@/stages/sync-era-summaries.ts';
 
 function richText(content: string): PageObjectResponse['properties'][string] {
   return {
@@ -171,39 +171,23 @@ describe('sync-era-summaries', () => {
     });
   });
 
-  describe('groupByYear', () => {
+  describe('EraSummaryRegions', () => {
     it('groups entries into EraSummary objects by year', () => {
-      const entries = [
-        {
-          year: 1650,
-          regionCard: {
-            region: 'europe' as const,
-            title: 'ヨーロッパ',
-            context: 'ctx',
-            references: [],
-          },
-        },
-        {
-          year: 1650,
-          regionCard: {
-            region: 'east-asia' as const,
-            title: '東アジア',
-            context: 'ctx',
-            references: [],
-          },
-        },
-        {
-          year: 1700,
-          regionCard: {
-            region: 'europe' as const,
-            title: 'ヨーロッパ',
-            context: 'ctx',
-            references: [],
-          },
-        },
-      ];
+      const regions = new EraSummaryRegions();
+      regions.add({
+        year: 1650,
+        regionCard: { region: 'europe', title: 'ヨーロッパ', context: 'ctx', references: [] },
+      });
+      regions.add({
+        year: 1650,
+        regionCard: { region: 'east-asia', title: '東アジア', context: 'ctx', references: [] },
+      });
+      regions.add({
+        year: 1700,
+        regionCard: { region: 'europe', title: 'ヨーロッパ', context: 'ctx', references: [] },
+      });
 
-      const summaries = groupByYear(entries);
+      const summaries = regions.build();
 
       expect(summaries).toHaveLength(2);
       const s1650 = summaries.find((s) => s.year === 1650);
@@ -211,28 +195,18 @@ describe('sync-era-summaries', () => {
     });
 
     it('throws when the same Year × Region combination appears more than once', () => {
-      const entries = [
-        {
-          year: 1650,
-          regionCard: {
-            region: 'europe' as const,
-            title: 'ヨーロッパ A',
-            context: 'ctx',
-            references: [],
-          },
-        },
-        {
-          year: 1650,
-          regionCard: {
-            region: 'europe' as const,
-            title: 'ヨーロッパ B',
-            context: 'ctx',
-            references: [],
-          },
-        },
-      ];
+      const regions = new EraSummaryRegions();
+      regions.add({
+        year: 1650,
+        regionCard: { region: 'europe', title: 'ヨーロッパ A', context: 'ctx', references: [] },
+      });
 
-      expect(() => groupByYear(entries)).toThrow(/duplicate/i);
+      expect(() =>
+        regions.add({
+          year: 1650,
+          regionCard: { region: 'europe', title: 'ヨーロッパ B', context: 'ctx', references: [] },
+        }),
+      ).toThrow(/duplicate/i);
     });
   });
 });
