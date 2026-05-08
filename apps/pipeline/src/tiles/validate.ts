@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import type { PipelineLogger } from '@/stages/types.ts';
+import type { PipelineLogger } from '@/shared/logger.ts';
 import type { ValidationResult } from '@/types/pipeline.ts';
 import { validateGeoJSON } from '@/validation/geojson.ts';
 

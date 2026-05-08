@@ -2,14 +2,14 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { PipelineLogger } from '@/stages/types.ts';
+import type { PipelineLogger } from '@/shared/logger.ts';
 
 vi.mock('@/exec.ts', () => ({
   execFileAsync: vi.fn(),
 }));
 
 import { execFileAsync } from '@/exec.ts';
-import { executeFetch, parseYearsFromDirectory } from '@/stages/fetch.ts';
+import { executeFetch, parseYearsFromDirectory } from '@/tiles/fetch.ts';
 
 const mockExecFileAsync = vi.mocked(execFileAsync);
 

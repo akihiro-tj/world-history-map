@@ -2,13 +2,13 @@ import path from 'node:path';
 import { listYears } from '@/commands/list-years.ts';
 import { showStatus } from '@/commands/status.ts';
 import { EXIT_CODES, PATHS } from '@/config.ts';
+import { syncEraSummaries } from '@/era-summary/sync.ts';
 import type { PipelineOptions } from '@/pipeline.ts';
 import { PipelineError, runPipeline } from '@/pipeline.ts';
-import { syncDescriptions } from '@/stages/sync-descriptions.ts';
-import { syncEraSummaries } from '@/stages/sync-era-summaries.ts';
-import type { PipelineLogger } from '@/stages/types.ts';
-import { createLogger } from '@/stages/types.ts';
-import { validateAllDescriptions } from '@/stages/validate-descriptions.ts';
+import type { PipelineLogger } from '@/shared/logger.ts';
+import { createLogger } from '@/shared/logger.ts';
+import { syncDescriptions } from '@/territory/sync.ts';
+import { validateAllDescriptions } from '@/territory/validate.ts';
 
 function parseYearOption(raw: string): number {
   const year = Number(raw);

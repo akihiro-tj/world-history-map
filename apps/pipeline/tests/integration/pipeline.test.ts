@@ -18,9 +18,9 @@ vi.mock('@/config.ts', async (importOriginal) => {
   };
 });
 
-import { generateYearIndex } from '@/stages/index-gen.ts';
-import { mergeByName } from '@/stages/merge.ts';
 import { PipelineCheckpoint } from '@/state/checkpoint.ts';
+import { generateYearIndex } from '@/tiles/index-gen.ts';
+import { mergeByName } from '@/tiles/merge.ts';
 import type { ValidationResult } from '@/types/pipeline.ts';
 import { validateGeoJSON } from '@/validation/geojson.ts';
 import { generateReport } from '@/validation/report.ts';

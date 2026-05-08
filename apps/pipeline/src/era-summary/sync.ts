@@ -4,8 +4,8 @@ import { Client } from '@notionhq/client';
 import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import { NOTION_ERA_SUMMARY_PROPERTY } from '@/config.ts';
 import { REGION_IDS, type RegionId } from '@/domain/era-summary/region-id.ts';
-import type { PipelineLogger } from '@/stages/types.ts';
-import { validateEraSummaryFile } from '@/stages/validate-era-summaries.ts';
+import { validateEraSummaryFile } from '@/era-summary/validate.ts';
+import type { PipelineLogger } from '@/shared/logger.ts';
 
 interface EraSummaryReference {
   kind: 'territory' | 'year';

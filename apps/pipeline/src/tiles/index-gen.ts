@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { PATHS, YearPaths } from '@/config.ts';
-import type { PipelineLogger } from '@/stages/types.ts';
+import type { PipelineLogger } from '@/shared/logger.ts';
 import type { YearIndex } from '@/types/year.ts';
 
 interface MergedFeature {

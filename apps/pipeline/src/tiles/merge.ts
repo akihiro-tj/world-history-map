@@ -2,7 +2,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
 import * as turf from '@turf/turf';
 import { PATHS, YearPaths } from '@/config.ts';
-import type { PipelineLogger } from '@/stages/types.ts';
+import type { PipelineLogger } from '@/shared/logger.ts';
 import type { FeatureCollection, GeoJSONFeature } from '@/types/geojson.ts';
 
 const KEPT_PROPERTIES = new Set(['NAME', 'SUBJECTO']);

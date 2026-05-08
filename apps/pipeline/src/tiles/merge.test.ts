@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { mergeByName } from '@/stages/merge.ts';
+import { mergeByName } from '@/tiles/merge.ts';
 
 const FIXTURES = path.join(process.cwd(), 'tests', 'fixtures');
 

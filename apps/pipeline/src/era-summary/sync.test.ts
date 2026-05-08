@@ -1,6 +1,6 @@
 import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import { describe, expect, it, vi } from 'vitest';
-import { EraSummaryRegions, transformNotionPage } from '@/stages/sync-era-summaries.ts';
+import { EraSummaryRegions, transformNotionPage } from '@/era-summary/sync.ts';
 
 function richText(content: string): PageObjectResponse['properties'][string] {
   return {

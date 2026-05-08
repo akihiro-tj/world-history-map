@@ -3,8 +3,8 @@ import { mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { PipelineLogger } from '@/stages/types.ts';
-import { runValidateForYear } from '@/stages/validate.ts';
+import type { PipelineLogger } from '@/shared/logger.ts';
+import { runValidateForYear } from '@/tiles/validate.ts';
 
 const FIXTURES = path.join(process.cwd(), 'tests', 'fixtures');
 
