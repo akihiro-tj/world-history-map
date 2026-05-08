@@ -75,7 +75,12 @@ function App() {
   const isMobile = useIsMobile();
 
   return (
-    <AppStateProvider initialState={{ ...initialAppState, isSummaryPanelOpen: !isMobile }}>
+    <AppStateProvider
+      initialState={{
+        ...initialAppState,
+        activePanel: isMobile ? { kind: 'none' } : { kind: 'summary' },
+      }}
+    >
       <ProjectionProvider>
         <AppContent />
       </ProjectionProvider>

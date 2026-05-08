@@ -164,11 +164,11 @@ export function MapView({ onReady }: MapViewProps) {
               sourceLayer={SOURCE_LAYER_TERRITORIES}
               colorScheme={colorScheme}
             />
-            {state.selectedTerritory && (
+            {state.activePanel.kind === 'territory' && (
               <TerritoryHighlightLayer
                 sourceId={SOURCE_ID}
                 sourceLayer={SOURCE_LAYER_TERRITORIES}
-                selectedTerritory={state.selectedTerritory}
+                selectedTerritory={state.activePanel.selectedTerritory}
               />
             )}
             <TerritoryLabel sourceId={SOURCE_ID} sourceLayer={SOURCE_LAYER_LABELS} />

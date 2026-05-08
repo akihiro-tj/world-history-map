@@ -25,32 +25,22 @@ type AppStateAction =
   | { type: 'CLEAR_SELECTION' }
   | { type: 'SET_MAP_VIEW'; view: MapView }
   | { type: 'OPEN_SUMMARY' }
-  | { type: 'CLOSE_SUMMARY' };
+  | { type: 'CLOSE_PANEL' };
 
 function appStateReducer(state: AppState, action: AppStateAction): AppState {
   switch (action.type) {
     case 'SET_SELECTED_YEAR':
       return { ...state, selectedYear: action.year };
     case 'SELECT_TERRITORY':
-      return {
-        ...state,
-        selectedTerritory: action.territory,
-        isInfoPanelOpen: true,
-        isSummaryPanelOpen: false,
-      };
+      return { ...state, activePanel: { kind: 'territory', selectedTerritory: action.territory } };
     case 'CLEAR_SELECTION':
-      return { ...state, selectedTerritory: null, isInfoPanelOpen: false };
+      return { ...state, activePanel: { kind: 'none' } };
     case 'SET_MAP_VIEW':
       return { ...state, mapView: action.view };
     case 'OPEN_SUMMARY':
-      return {
-        ...state,
-        isSummaryPanelOpen: true,
-        isInfoPanelOpen: false,
-        selectedTerritory: null,
-      };
-    case 'CLOSE_SUMMARY':
-      return { ...state, isSummaryPanelOpen: false };
+      return { ...state, activePanel: { kind: 'summary' } };
+    case 'CLOSE_PANEL':
+      return { ...state, activePanel: { kind: 'none' } };
   }
 }
 
@@ -67,7 +57,7 @@ export function AppStateProvider({
       clearSelection: () => dispatch({ type: 'CLEAR_SELECTION' }),
       setMapView: (view: MapView) => dispatch({ type: 'SET_MAP_VIEW', view }),
       openSummary: () => dispatch({ type: 'OPEN_SUMMARY' }),
-      closeSummary: () => dispatch({ type: 'CLOSE_SUMMARY' }),
+      closePanel: () => dispatch({ type: 'CLOSE_PANEL' }),
     }),
     [],
   );

@@ -133,13 +133,14 @@ function MobileContent({ state, yearLabel, onClose }: ContentProps) {
 
 export function EraSummaryPanel() {
   const { state, actions } = useAppState();
-  const { selectedYear, isSummaryPanelOpen } = state;
+  const { selectedYear, activePanel } = state;
+  const isSummaryPanelOpen = activePanel.kind === 'summary';
   const isMobile = useIsMobile();
 
   const { summary, isLoading, error } = useEraSummary(selectedYear);
 
   const handleClose = useCallback(() => {
-    actions.closeSummary();
+    actions.closePanel();
   }, [actions]);
 
   useEscapeKey(isSummaryPanelOpen && !isMobile, handleClose);

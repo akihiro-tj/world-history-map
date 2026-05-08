@@ -31,9 +31,7 @@ describe('YearSelector', () => {
       <AppStateProvider
         initialState={{
           selectedYear: createHistoricalYear(initialYear),
-          selectedTerritory: null,
-          isInfoPanelOpen: false,
-          isSummaryPanelOpen: false,
+          activePanel: { kind: 'none' },
           mapView: { longitude: 0, latitude: 30, zoom: 2 },
         }}
       >

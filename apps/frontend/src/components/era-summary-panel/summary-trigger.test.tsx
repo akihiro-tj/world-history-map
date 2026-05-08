@@ -15,15 +15,17 @@ beforeAll(() => {
 });
 
 const mockOpenSummary = vi.fn();
-let mockIsSummaryPanelOpen = false;
-let mockIsInfoPanelOpen = false;
+type ActivePanelKind = 'none' | 'summary' | 'territory';
+let mockActivePanelKind: ActivePanelKind = 'none';
 
 vi.mock('@/contexts/app-state-context', () => ({
   useAppState: () => ({
     state: {
       selectedYear: createHistoricalYear(1650),
-      isSummaryPanelOpen: mockIsSummaryPanelOpen,
-      isInfoPanelOpen: mockIsInfoPanelOpen,
+      activePanel:
+        mockActivePanelKind === 'territory'
+          ? { kind: 'territory', selectedTerritory: 'France' }
+          : { kind: mockActivePanelKind },
     },
     actions: {
       openSummary: mockOpenSummary,
@@ -36,8 +38,7 @@ import { SummaryTrigger } from './summary-trigger';
 describe('SummaryTrigger', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockIsSummaryPanelOpen = false;
-    mockIsInfoPanelOpen = false;
+    mockActivePanelKind = 'none';
   });
 
   it('renders with 概要 label', () => {
@@ -47,14 +48,14 @@ describe('SummaryTrigger', () => {
   });
 
   it('returns null when summary panel is open', () => {
-    mockIsSummaryPanelOpen = true;
+    mockActivePanelKind = 'summary';
     const { container } = render(<SummaryTrigger />);
 
     expect(container.firstChild).toBeNull();
   });
 
   it('returns null when territory info panel is open', () => {
-    mockIsInfoPanelOpen = true;
+    mockActivePanelKind = 'territory';
     const { container } = render(<SummaryTrigger />);
 
     expect(container.firstChild).toBeNull();

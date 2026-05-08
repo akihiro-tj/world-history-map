@@ -26,8 +26,7 @@ vi.mock('@/contexts/app-state-context', () => ({
   useAppState: () => ({
     state: {
       selectedYear: mockSelectedYear,
-      selectedTerritory: 'France',
-      isInfoPanelOpen: true,
+      activePanel: { kind: 'territory', selectedTerritory: 'France' },
     },
     actions: {
       clearSelection: mockClearSelection,

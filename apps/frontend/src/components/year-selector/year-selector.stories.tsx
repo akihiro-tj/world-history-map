@@ -32,10 +32,8 @@ const meta = {
       <AppStateProvider
         initialState={{
           selectedYear: createHistoricalYear(1650),
-          selectedTerritory: null,
+          activePanel: { kind: 'none' },
           mapView: { longitude: 0, latitude: 30, zoom: 2 },
-          isInfoPanelOpen: false,
-          isSummaryPanelOpen: false,
         }}
       >
         <div className="bg-gray-700 p-4">
@@ -73,10 +71,8 @@ export const ManyYears: Story = {
       <AppStateProvider
         initialState={{
           selectedYear: createHistoricalYear(-500),
-          selectedTerritory: null,
+          activePanel: { kind: 'none' },
           mapView: { longitude: 0, latitude: 30, zoom: 2 },
-          isInfoPanelOpen: false,
-          isSummaryPanelOpen: false,
         }}
       >
         <div className="bg-gray-700 p-4">

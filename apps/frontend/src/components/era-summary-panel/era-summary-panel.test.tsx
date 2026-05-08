@@ -23,12 +23,10 @@ vi.mock('@/contexts/app-state-context', () => ({
   useAppState: () => ({
     state: {
       selectedYear: mockSelectedYear,
-      isSummaryPanelOpen: mockIsSummaryPanelOpen,
-      isInfoPanelOpen: false,
-      selectedTerritory: null,
+      activePanel: mockIsSummaryPanelOpen ? { kind: 'summary' } : { kind: 'none' },
     },
     actions: {
-      closeSummary: mockCloseSummary,
+      closePanel: mockCloseSummary,
     },
   }),
 }));

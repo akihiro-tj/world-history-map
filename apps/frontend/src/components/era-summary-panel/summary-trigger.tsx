@@ -21,9 +21,8 @@ function ListBulletIcon() {
 
 export function SummaryTrigger() {
   const { state, actions } = useAppState();
-  const { isSummaryPanelOpen, isInfoPanelOpen } = state;
 
-  if (isSummaryPanelOpen || isInfoPanelOpen) {
+  if (state.activePanel.kind !== 'none') {
     return null;
   }
 

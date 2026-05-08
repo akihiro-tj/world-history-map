@@ -6,9 +6,7 @@ import { AppStateProvider, useAppState } from './app-state-context';
 
 const initialState = {
   selectedYear: createHistoricalYear(1700),
-  selectedTerritory: null as string | null,
-  isInfoPanelOpen: false,
-  isSummaryPanelOpen: false,
+  activePanel: { kind: 'none' as const },
   mapView: { longitude: 0, latitude: 30, zoom: 2 },
 };
 
@@ -43,11 +41,10 @@ describe('AppStateProvider + useAppState', () => {
       result.current.actions.setSelectedYear(createHistoricalYear(1800));
     });
 
-    expect(result.current.state.isSummaryPanelOpen).toBe(true);
-    expect(result.current.state.isInfoPanelOpen).toBe(false);
+    expect(result.current.state.activePanel.kind).toBe('summary');
   });
 
-  it('SELECT_TERRITORY updates selectedTerritory, opens info panel, and closes summary panel', () => {
+  it('SELECT_TERRITORY sets activePanel to territory and stores territory name', () => {
     const { result } = renderHook(() => useAppState(), { wrapper });
 
     act(() => {
@@ -57,12 +54,14 @@ describe('AppStateProvider + useAppState', () => {
       result.current.actions.selectTerritory('France');
     });
 
-    expect(result.current.state.selectedTerritory).toBe('France');
-    expect(result.current.state.isInfoPanelOpen).toBe(true);
-    expect(result.current.state.isSummaryPanelOpen).toBe(false);
+    const panel = result.current.state.activePanel;
+    expect(panel.kind).toBe('territory');
+    if (panel.kind === 'territory') {
+      expect(panel.selectedTerritory).toBe('France');
+    }
   });
 
-  it('CLEAR_SELECTION clears territory and closes info panel', () => {
+  it('CLEAR_SELECTION sets activePanel to none', () => {
     const { result } = renderHook(() => useAppState(), { wrapper });
 
     act(() => {
@@ -72,8 +71,7 @@ describe('AppStateProvider + useAppState', () => {
       result.current.actions.clearSelection();
     });
 
-    expect(result.current.state.selectedTerritory).toBeNull();
-    expect(result.current.state.isInfoPanelOpen).toBe(false);
+    expect(result.current.state.activePanel.kind).toBe('none');
   });
 
   it('SET_MAP_VIEW updates mapView', () => {
@@ -93,7 +91,7 @@ describe('AppStateProvider + useAppState', () => {
     }).toThrow('useAppState must be used within an AppStateProvider');
   });
 
-  it('OPEN_SUMMARY sets isSummaryPanelOpen=true, isInfoPanelOpen=false, selectedTerritory=null', () => {
+  it('OPEN_SUMMARY sets activePanel to summary and closes territory panel', () => {
     const { result } = renderHook(() => useAppState(), { wrapper });
 
     act(() => {
@@ -103,23 +101,20 @@ describe('AppStateProvider + useAppState', () => {
       result.current.actions.openSummary();
     });
 
-    expect(result.current.state.isSummaryPanelOpen).toBe(true);
-    expect(result.current.state.isInfoPanelOpen).toBe(false);
-    expect(result.current.state.selectedTerritory).toBeNull();
+    expect(result.current.state.activePanel.kind).toBe('summary');
   });
 
-  it('CLOSE_SUMMARY sets isSummaryPanelOpen=false without affecting territory', () => {
+  it('CLOSE_PANEL sets activePanel to none', () => {
     const { result } = renderHook(() => useAppState(), { wrapper });
 
     act(() => {
       result.current.actions.openSummary();
     });
     act(() => {
-      result.current.actions.closeSummary();
+      result.current.actions.closePanel();
     });
 
-    expect(result.current.state.isSummaryPanelOpen).toBe(false);
-    expect(result.current.state.selectedTerritory).toBeNull();
+    expect(result.current.state.activePanel.kind).toBe('none');
   });
 
   it('OPEN_SUMMARY is idempotent', () => {
@@ -132,8 +127,7 @@ describe('AppStateProvider + useAppState', () => {
       result.current.actions.openSummary();
     });
 
-    expect(result.current.state.isSummaryPanelOpen).toBe(true);
-    expect(result.current.state.isInfoPanelOpen).toBe(false);
+    expect(result.current.state.activePanel.kind).toBe('summary');
   });
 
   it('after-wins exclusion: OPEN_SUMMARY → SELECT_TERRITORY → OPEN_SUMMARY cycle maintains invariant', () => {
@@ -142,19 +136,16 @@ describe('AppStateProvider + useAppState', () => {
     act(() => {
       result.current.actions.openSummary();
     });
-    expect(result.current.state.isSummaryPanelOpen).toBe(true);
-    expect(result.current.state.isInfoPanelOpen).toBe(false);
+    expect(result.current.state.activePanel.kind).toBe('summary');
 
     act(() => {
       result.current.actions.selectTerritory('France');
     });
-    expect(result.current.state.isSummaryPanelOpen).toBe(false);
-    expect(result.current.state.isInfoPanelOpen).toBe(true);
+    expect(result.current.state.activePanel.kind).toBe('territory');
 
     act(() => {
       result.current.actions.openSummary();
     });
-    expect(result.current.state.isSummaryPanelOpen).toBe(true);
-    expect(result.current.state.isInfoPanelOpen).toBe(false);
+    expect(result.current.state.activePanel.kind).toBe('summary');
   });
 });

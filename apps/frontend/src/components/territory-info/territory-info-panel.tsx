@@ -238,7 +238,9 @@ function MobileContent(props: ContentProps) {
 
 export function TerritoryInfoPanel() {
   const { state, actions } = useAppState();
-  const { selectedTerritory, selectedYear, isInfoPanelOpen } = state;
+  const { selectedYear, activePanel } = state;
+  const isInfoPanelOpen = activePanel.kind === 'territory';
+  const selectedTerritory = activePanel.kind === 'territory' ? activePanel.selectedTerritory : null;
   const isMobile = useIsMobile();
 
   const { description, isLoading, error } = useTerritoryDescription(
