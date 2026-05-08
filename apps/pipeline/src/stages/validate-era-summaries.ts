@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { z } from 'zod';
+import { ERA_SUMMARY_CONSTRAINTS } from '@/config.ts';
 
 const regionIdSchema = z.enum([
   'europe',
@@ -20,8 +21,8 @@ const referenceSchema = z.object({
 
 const regionCardSchema = z.object({
   region: regionIdSchema,
-  title: z.string().min(1).max(30),
-  context: z.string().min(1).max(500),
+  title: z.string().min(1).max(ERA_SUMMARY_CONSTRAINTS.TITLE_MAX_LENGTH),
+  context: z.string().min(1).max(ERA_SUMMARY_CONSTRAINTS.CONTEXT_MAX_LENGTH),
   references: z.array(referenceSchema).optional().default([]),
 });
 
@@ -30,7 +31,7 @@ const eraSummaryFileSchema = z.object({
   regions: z
     .array(regionCardSchema)
     .min(1)
-    .max(8)
+    .max(ERA_SUMMARY_CONSTRAINTS.MAX_REGIONS_PER_ERA)
     .refine(
       (regions) => {
         const regionIds = regions.map((r) => r.region);

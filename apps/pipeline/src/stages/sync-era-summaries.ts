@@ -2,6 +2,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { Client } from '@notionhq/client';
 import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
+import { NOTION_ERA_SUMMARY_PROPERTY } from '@/config.ts';
 import type { PipelineLogger } from '@/stages/types.ts';
 import { validateEraSummaryFile } from '@/stages/validate-era-summaries.ts';
 
@@ -97,21 +98,21 @@ function isValidRegionId(value: string): value is RegionId {
 export function transformNotionPage(page: PageObjectResponse): TransformedRegionEntry {
   const props = page.properties;
 
-  const year = extractNumber(props['Year']);
+  const year = extractNumber(props[NOTION_ERA_SUMMARY_PROPERTY.YEAR]);
   if (year === null) throw new Error(`Page ${page.id} has no Year`);
 
-  const regionRaw = extractSelect(props['Region']);
+  const regionRaw = extractSelect(props[NOTION_ERA_SUMMARY_PROPERTY.REGION]);
   if (!regionRaw) throw new Error(`Page ${page.id} has no Region`);
   if (!isValidRegionId(regionRaw))
     throw new Error(`Page ${page.id} has invalid Region: ${regionRaw}`);
 
-  const title = extractPlainText(props['Title']);
+  const title = extractPlainText(props[NOTION_ERA_SUMMARY_PROPERTY.TITLE]);
   if (!title) throw new Error(`Page ${page.id} has no Title`);
 
-  const context = extractPlainText(props['Context']);
+  const context = extractPlainText(props[NOTION_ERA_SUMMARY_PROPERTY.CONTEXT]);
   if (!context) throw new Error(`Page ${page.id} has no Context`);
 
-  const referencesRaw = extractPlainText(props['References']);
+  const referencesRaw = extractPlainText(props[NOTION_ERA_SUMMARY_PROPERTY.REFERENCES]);
   const references = parseReferences(referencesRaw, page.id);
 
   return {

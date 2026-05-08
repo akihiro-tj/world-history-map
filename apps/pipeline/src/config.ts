@@ -26,6 +26,20 @@ export const DESCRIPTION_CONSTRAINTS = {
   CONTEXT_MAX_LENGTH: 200,
 } as const;
 
+export const ERA_SUMMARY_CONSTRAINTS = {
+  TITLE_MAX_LENGTH: 30,
+  CONTEXT_MAX_LENGTH: 500,
+  MAX_REGIONS_PER_ERA: 8,
+} as const;
+
+export const NOTION_ERA_SUMMARY_PROPERTY = {
+  YEAR: 'Year',
+  REGION: 'Region',
+  TITLE: 'Title',
+  CONTEXT: 'Context',
+  REFERENCES: 'References',
+} as const;
+
 export const NOTION = {
   getDataSourceId: (): string => {
     return execFileSync(
