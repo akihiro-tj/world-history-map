@@ -5,6 +5,7 @@ import { useCanScrollDown } from '@/hooks/use-can-scroll-down';
 import { useEscapeKey } from '@/hooks/use-escape-key';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { cn } from '@/lib/utils';
+import { type RemoteData, toRemoteData } from '@/types/remote-data';
 import { useAppState } from '../../contexts/app-state-context';
 import { BottomSheet } from '../bottom-sheet/bottom-sheet';
 import { CloseButton } from '../close-button/close-button';
@@ -14,29 +15,8 @@ import { ScrollFadeOverlay } from '../scroll-fade-overlay/scroll-fade-overlay';
 import { useEraSummary } from './hooks/use-era-summary';
 import { RegionCard } from './region-card';
 
-type PanelState =
-  | { kind: 'loading' }
-  | { kind: 'error'; message: string }
-  | { kind: 'empty' }
-  | { kind: 'loaded'; summary: EraSummary };
-
-function derivePanelState({
-  summary,
-  isLoading,
-  error,
-}: {
-  summary: EraSummary | null;
-  isLoading: boolean;
-  error: string | null;
-}): PanelState {
-  if (isLoading) return { kind: 'loading' };
-  if (error) return { kind: 'error', message: error };
-  if (!summary) return { kind: 'empty' };
-  return { kind: 'loaded', summary };
-}
-
 interface ContentProps {
-  state: PanelState;
+  state: RemoteData<EraSummary>;
   yearLabel: string;
   onClose: () => void;
 }
@@ -54,7 +34,7 @@ function PanelHeader({ yearLabel, onClose }: { yearLabel: string; onClose: () =>
   );
 }
 
-function PanelBody({ state }: { state: PanelState }) {
+function PanelBody({ state }: { state: RemoteData<EraSummary> }) {
   switch (state.kind) {
     case 'loading':
       return <RoleSpinner />;
@@ -69,7 +49,7 @@ function PanelBody({ state }: { state: PanelState }) {
     case 'loaded':
       return (
         <div className="space-y-4">
-          {state.summary.regions.map((regionCard) => (
+          {state.data.regions.map((regionCard) => (
             <RegionCard key={regionCard.region} regionCard={regionCard} />
           ))}
         </div>
@@ -149,7 +129,7 @@ export function EraSummaryPanel() {
     return null;
   }
 
-  const currentState = derivePanelState({ summary, isLoading, error });
+  const currentState = toRemoteData({ data: summary, isLoading, error });
   const yearLabel = formatHistoricalYear(selectedYear);
 
   if (isMobile) {
