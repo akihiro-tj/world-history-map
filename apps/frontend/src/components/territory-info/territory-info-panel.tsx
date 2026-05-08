@@ -5,6 +5,7 @@ import { useCanScrollDown } from '@/hooks/use-can-scroll-down';
 import { useEscapeKey } from '@/hooks/use-escape-key';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { cn } from '@/lib/utils';
+import { type RemoteData, toRemoteData } from '@/types/remote-data';
 import { useAppState } from '../../contexts/app-state-context';
 import { BottomSheet } from '../bottom-sheet/bottom-sheet';
 import { CloseButton } from '../close-button/close-button';
@@ -17,12 +18,6 @@ import { SummaryNavStrip } from './summary-nav-strip';
 import { TerritoryProfile } from './territory-profile';
 import { TerritoryTimeline } from './territory-timeline';
 
-type PanelState =
-  | { kind: 'loading'; name: string }
-  | { kind: 'error'; message: string }
-  | { kind: 'empty'; name: string }
-  | { kind: 'loaded'; description: TerritoryDescription };
-
 interface ContentProps {
   description: TerritoryDescription | null;
   isLoading: boolean;
@@ -34,14 +29,6 @@ interface ContentProps {
 
 const FALLBACK_LOADING_LABEL = '読み込み中…';
 const FALLBACK_PANEL_TITLE = '領土情報';
-
-function derivePanelState(props: ContentProps): PanelState {
-  const { description, isLoading, error, selectedTerritory } = props;
-  if (isLoading) return { kind: 'loading', name: selectedTerritory ?? FALLBACK_LOADING_LABEL };
-  if (error) return { kind: 'error', message: error };
-  if (!description) return { kind: 'empty', name: selectedTerritory ?? FALLBACK_PANEL_TITLE };
-  return { kind: 'loaded', description };
-}
 
 function PanelWrapper({
   children,
@@ -121,8 +108,12 @@ function DescriptionBody({
 }
 
 function DesktopContent(props: ContentProps) {
-  const { onClose, selectedYear } = props;
-  const state = derivePanelState(props);
+  const { onClose, selectedYear, selectedTerritory } = props;
+  const state = toRemoteData({
+    data: props.description,
+    isLoading: props.isLoading,
+    error: props.error,
+  });
   const scrollRef = useRef<HTMLDivElement>(null);
   const isLoaded = state.kind === 'loaded';
   const canScrollDown = useCanScrollDown(scrollRef, isLoaded);
@@ -132,7 +123,7 @@ function DesktopContent(props: ContentProps) {
       return (
         <PanelWrapper busy>
           <div className="shrink-0">
-            <PanelHeader name={state.name} onClose={onClose} />
+            <PanelHeader name={selectedTerritory ?? FALLBACK_LOADING_LABEL} onClose={onClose} />
           </div>
           <RoleSpinner />
         </PanelWrapper>
@@ -150,7 +141,7 @@ function DesktopContent(props: ContentProps) {
       return (
         <PanelWrapper>
           <div className="shrink-0">
-            <PanelHeader name={state.name} onClose={onClose} />
+            <PanelHeader name={selectedTerritory ?? FALLBACK_PANEL_TITLE} onClose={onClose} />
           </div>
           <NoDescriptionBody />
         </PanelWrapper>
@@ -159,14 +150,10 @@ function DesktopContent(props: ContentProps) {
       return (
         <PanelWrapper scrollable>
           <div className="shrink-0">
-            <PanelHeader
-              name={state.description.name}
-              era={state.description.era}
-              onClose={onClose}
-            />
+            <PanelHeader name={state.data.name} era={state.data.era} onClose={onClose} />
           </div>
           <div ref={scrollRef} className="overflow-y-auto">
-            <DescriptionBody description={state.description} selectedYear={selectedYear} />
+            <DescriptionBody description={state.data} selectedYear={selectedYear} />
           </div>
           <ScrollFadeOverlay show={canScrollDown} />
         </PanelWrapper>
@@ -174,14 +161,17 @@ function DesktopContent(props: ContentProps) {
   }
 }
 
-function getHeaderLabel(state: PanelState): { name: string; era: string | undefined } {
+function getHeaderLabel(
+  state: RemoteData<TerritoryDescription>,
+  selectedTerritory: string | null,
+): { name: string; era: string | undefined } {
   switch (state.kind) {
     case 'loaded':
-      return { name: state.description.name, era: state.description.era };
+      return { name: state.data.name, era: state.data.era };
     case 'error':
       return { name: 'エラー', era: undefined };
     default:
-      return { name: state.name, era: undefined };
+      return { name: selectedTerritory ?? FALLBACK_PANEL_TITLE, era: undefined };
   }
 }
 
@@ -189,7 +179,7 @@ function MobilePanelBody({
   state,
   selectedYear,
 }: {
-  state: PanelState;
+  state: RemoteData<TerritoryDescription>;
   selectedYear: HistoricalYear;
 }) {
   switch (state.kind) {
@@ -200,14 +190,18 @@ function MobilePanelBody({
     case 'empty':
       return <NoDescriptionBody />;
     case 'loaded':
-      return <DescriptionBody description={state.description} selectedYear={selectedYear} />;
+      return <DescriptionBody description={state.data} selectedYear={selectedYear} />;
   }
 }
 
 function MobileContent(props: ContentProps) {
-  const { onClose, selectedYear } = props;
-  const state = derivePanelState(props);
-  const { name: headerName, era: headerEra } = getHeaderLabel(state);
+  const { onClose, selectedYear, selectedTerritory } = props;
+  const state = toRemoteData({
+    data: props.description,
+    isLoading: props.isLoading,
+    error: props.error,
+  });
+  const { name: headerName, era: headerEra } = getHeaderLabel(state, selectedTerritory);
 
   return (
     <BottomSheet
