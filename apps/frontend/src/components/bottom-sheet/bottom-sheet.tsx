@@ -59,7 +59,7 @@ export function BottomSheet({ isOpen, onClose, header, children, ...props }: Bot
       {snap === 'expanded' && (
         <button
           type="button"
-          className="fixed inset-0 z-40 cursor-default border-none bg-black/50"
+          className="fixed inset-0 z-30 cursor-default border-none bg-black/50"
           data-testid="bottom-sheet-backdrop"
           onClick={onClose}
           aria-label="Close"
@@ -70,7 +70,7 @@ export function BottomSheet({ isOpen, onClose, header, children, ...props }: Bot
         role="dialog"
         aria-labelledby={props['aria-labelledby']}
         style={sheetStyle}
-        className="fixed inset-x-0 bottom-0 z-50 flex flex-col rounded-t-2xl bg-gray-800 shadow-xl"
+        className="fixed inset-x-0 bottom-0 z-40 flex flex-col rounded-t-2xl bg-gray-800 shadow-xl"
       >
         <div
           ref={headerRef}
