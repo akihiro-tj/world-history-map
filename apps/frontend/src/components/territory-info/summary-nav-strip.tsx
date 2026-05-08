@@ -9,12 +9,12 @@ export function SummaryNavStrip() {
   return (
     <button
       type="button"
-      aria-label={`${yearLabel}年の世界サマリーを開く`}
+      aria-label={`${yearLabel}年の世界の概要を開く`}
       onClick={() => actions.openSummary()}
-      className="flex min-w-0 flex-1 items-center gap-1.5 px-4 py-2.5 truncate text-left text-sm text-gray-300 transition-colors hover:bg-gray-600/50 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gray-400"
+      className="flex w-max items-center gap-1 rounded-sm text-xs text-gray-300 underline hover:no-underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-400"
     >
       <svg
-        className="h-4 w-4 shrink-0"
+        className="h-3 w-3 shrink-0"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -24,10 +24,10 @@ export function SummaryNavStrip() {
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth={2}
-          d="M4 6h16M4 10h16M4 14h16M4 18h16"
+          d="M10 19l-7-7m0 0l7-7m-7 7h18"
         />
       </svg>
-      <span className="truncate">{yearLabel}年の世界を見る</span>
+      <span className="truncate">{yearLabel}年の世界の概要</span>
     </button>
   );
 }

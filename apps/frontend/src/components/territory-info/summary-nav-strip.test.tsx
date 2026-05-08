@@ -23,7 +23,7 @@ describe('SummaryNavStrip', () => {
   it('renders with selected year label', () => {
     render(<SummaryNavStrip />);
 
-    expect(screen.getByText('1650年の世界を見る')).toBeInTheDocument();
+    expect(screen.getByText('1650年の世界の概要')).toBeInTheDocument();
   });
 
   it('dispatches openSummary on click', () => {
@@ -37,17 +37,17 @@ describe('SummaryNavStrip', () => {
   it('has accessible aria-label', () => {
     render(<SummaryNavStrip />);
 
-    expect(screen.getByRole('button')).toHaveAttribute('aria-label', '1650年の世界サマリーを開く');
+    expect(screen.getByRole('button')).toHaveAttribute('aria-label', '1650年の世界の概要を開く');
   });
 
   it('updates label when year changes', () => {
     const { rerender } = render(<SummaryNavStrip />);
 
-    expect(screen.getByText('1650年の世界を見る')).toBeInTheDocument();
+    expect(screen.getByText('1650年の世界の概要')).toBeInTheDocument();
 
     mockSelectedYear = createHistoricalYear(1700);
     rerender(<SummaryNavStrip />);
 
-    expect(screen.getByText('1700年の世界を見る')).toBeInTheDocument();
+    expect(screen.getByText('1700年の世界の概要')).toBeInTheDocument();
   });
 });

@@ -40,10 +40,10 @@ describe('SummaryTrigger', () => {
     mockIsInfoPanelOpen = false;
   });
 
-  it('renders with サマリー label', () => {
+  it('renders with 概要 label', () => {
     render(<SummaryTrigger />);
 
-    expect(screen.getByText('サマリー')).toBeInTheDocument();
+    expect(screen.getByText('概要')).toBeInTheDocument();
   });
 
   it('returns null when summary panel is open', () => {
@@ -71,6 +71,6 @@ describe('SummaryTrigger', () => {
   it('has aria-label for accessibility', () => {
     render(<SummaryTrigger />);
 
-    expect(screen.getByRole('button')).toHaveAttribute('aria-label', 'サマリーを開く');
+    expect(screen.getByRole('button')).toHaveAttribute('aria-label', '概要を開く');
   });
 });

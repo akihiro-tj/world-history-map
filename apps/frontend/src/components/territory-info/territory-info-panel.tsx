@@ -6,6 +6,7 @@ import { useIsMobile } from '@/hooks/use-is-mobile';
 import { cn } from '@/lib/utils';
 import { useAppState } from '../../contexts/app-state-context';
 import { BottomSheet } from '../bottom-sheet/bottom-sheet';
+import { CloseButton } from '../close-button/close-button';
 import { RoleErrorMessage } from '../feedback/role-error-message';
 import { RoleSpinner } from '../feedback/role-spinner';
 import { useTerritoryDescription } from './hooks/use-territory-description';
@@ -63,44 +64,26 @@ function PanelWrapper({
   );
 }
 
-function NavRow({ onClose }: { onClose: () => void }) {
-  return (
-    <div className="flex items-stretch border-b border-gray-600">
-      <SummaryNavStrip />
-      <button
-        type="button"
-        aria-label="閉じる"
-        onClick={onClose}
-        className="flex shrink-0 items-center px-3 text-gray-300 transition-colors hover:bg-gray-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gray-400"
-      >
-        <svg
-          className="h-5 w-5"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          aria-hidden="true"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-        <span className="sr-only">閉じる</span>
-      </button>
-    </div>
-  );
-}
-
-function PanelHeader({ name, era }: { name: string; era?: string | undefined }) {
+function PanelHeader({
+  name,
+  era,
+  onClose,
+}: {
+  name: string;
+  era?: string | undefined;
+  onClose: () => void;
+}) {
   return (
     <div className="border-b border-gray-600">
-      <div className="px-4 pt-3 pb-3">
-        <h2 id="territory-info-title" className="text-lg font-semibold text-white">
-          {name}
-        </h2>
-        {era && <p className="mt-0.5 text-sm text-gray-300">{era}</p>}
+      <div className="flex items-start justify-between px-4 py-3">
+        <div className="min-w-0 flex-1">
+          <SummaryNavStrip />
+          <h2 id="territory-info-title" className="mt-2.5 text-lg font-semibold text-white">
+            {name}
+          </h2>
+          {era && <p className="mt-0.5 text-sm text-gray-300">{era}</p>}
+        </div>
+        <CloseButton aria-label="閉じる" onClick={onClose} />
       </div>
     </div>
   );
@@ -122,7 +105,7 @@ function DescriptionBody({
   selectedYear: HistoricalYear;
 }) {
   return (
-    <div data-testid="territory-description" className="space-y-3 px-4 pt-2 pb-4">
+    <div data-testid="territory-description" className="space-y-3 px-4 py-4">
       <TerritoryProfile profile={description.profile} />
       {description.context && (
         <p className="text-sm leading-relaxed text-gray-300">{description.context}</p>
@@ -163,8 +146,7 @@ function DesktopContent(props: ContentProps) {
       return (
         <PanelWrapper busy>
           <div className="shrink-0">
-            <NavRow onClose={onClose} />
-            <PanelHeader name={state.name} />
+            <PanelHeader name={state.name} onClose={onClose} />
           </div>
           <RoleSpinner />
         </PanelWrapper>
@@ -173,8 +155,7 @@ function DesktopContent(props: ContentProps) {
       return (
         <PanelWrapper>
           <div className="shrink-0">
-            <NavRow onClose={onClose} />
-            <PanelHeader name="エラー" />
+            <PanelHeader name="エラー" onClose={onClose} />
           </div>
           <RoleErrorMessage>{state.message}</RoleErrorMessage>
         </PanelWrapper>
@@ -183,8 +164,7 @@ function DesktopContent(props: ContentProps) {
       return (
         <PanelWrapper>
           <div className="shrink-0">
-            <NavRow onClose={onClose} />
-            <PanelHeader name={state.name} />
+            <PanelHeader name={state.name} onClose={onClose} />
           </div>
           <NoDescriptionBody />
         </PanelWrapper>
@@ -193,8 +173,11 @@ function DesktopContent(props: ContentProps) {
       return (
         <PanelWrapper scrollable>
           <div className="shrink-0">
-            <NavRow onClose={onClose} />
-            <PanelHeader name={state.description.name} era={state.description.era} />
+            <PanelHeader
+              name={state.description.name}
+              era={state.description.era}
+              onClose={onClose}
+            />
           </div>
           <div ref={scrollRef} className="overflow-y-auto">
             <DescriptionBody description={state.description} selectedYear={selectedYear} />
@@ -227,43 +210,23 @@ function MobileContent(props: ContentProps) {
       isOpen
       onClose={onClose}
       header={
-        <>
-          <div className="flex items-stretch border-b border-gray-600">
-            <SummaryNavStrip />
-            <button
-              type="button"
-              aria-label="閉じる"
-              onClick={onClose}
-              className="flex shrink-0 items-center px-3 text-gray-300 transition-colors hover:bg-gray-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-gray-400"
-            >
-              <svg
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-              <span className="sr-only">閉じる</span>
-            </button>
-          </div>
-          <SelectedAccent>
-            <div className="border-b border-gray-600">
-              <div className="pl-3 pr-4 pt-3 pb-3">
-                <h2 id="territory-info-title" className="text-lg font-semibold text-white">
-                  {headerName}
-                </h2>
-                {headerEra && <p className="mt-0.5 text-sm text-gray-300">{headerEra}</p>}
-              </div>
+        <div className="flex items-start border-b border-gray-600 pr-4">
+          <div className="min-w-0 flex-1">
+            <div className="pl-4 pr-2">
+              <SummaryNavStrip />
             </div>
-          </SelectedAccent>
-        </>
+            <SelectedAccent className="mt-2 pl-3 pr-2 pb-1.5">
+              <h2
+                id="territory-info-title"
+                className="leading-tight text-lg font-semibold text-white"
+              >
+                {headerName}
+              </h2>
+              {headerEra && <p className="leading-tight text-sm text-gray-300">{headerEra}</p>}
+            </SelectedAccent>
+          </div>
+          <CloseButton aria-label="閉じる" onClick={onClose} className="shrink-0" />
+        </div>
       }
       aria-labelledby="territory-info-title"
     >

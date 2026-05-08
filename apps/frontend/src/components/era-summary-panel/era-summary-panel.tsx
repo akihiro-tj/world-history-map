@@ -42,7 +42,7 @@ interface ContentProps {
 function PanelHeader({ yearLabel, onClose }: { yearLabel: string; onClose: () => void }) {
   return (
     <div className="border-b border-gray-600">
-      <div className="flex items-start justify-between px-4 pt-4 pb-3">
+      <div className="flex items-center justify-between px-4 py-3">
         <h2 id="era-summary-title" className="text-lg font-semibold text-white">
           {yearLabel}年の世界
         </h2>
@@ -61,7 +61,7 @@ function PanelBody({ state }: { state: PanelState }) {
     case 'empty':
       return (
         <div role="status" className="py-6 text-center text-sm text-gray-300">
-          この年代のサマリーは準備中です。
+          この年代の概要は準備中です。
         </div>
       );
     case 'loaded':
@@ -113,11 +113,11 @@ function DesktopContent({ state, yearLabel, onClose }: ContentProps) {
     >
       <PanelHeader yearLabel={yearLabel} onClose={onClose} />
       {isLoaded ? (
-        <div ref={scrollRef} className="overflow-y-auto px-4 py-3">
+        <div ref={scrollRef} className="overflow-y-auto px-4 py-4">
           <PanelBody state={state} />
         </div>
       ) : (
-        <div className="px-4 py-3">
+        <div className="px-4 py-4">
           <PanelBody state={state} />
         </div>
       )}
@@ -139,10 +139,17 @@ function MobileContent({ state, yearLabel, onClose }: ContentProps) {
     <BottomSheet
       isOpen
       onClose={onClose}
-      header={<PanelHeader yearLabel={yearLabel} onClose={onClose} />}
+      header={
+        <div className="flex items-center justify-between border-b border-gray-600 px-4 pb-2">
+          <h2 id="era-summary-title" className="text-lg font-semibold text-white">
+            {yearLabel}年の世界
+          </h2>
+          <CloseButton aria-label="閉じる" onClick={onClose} />
+        </div>
+      }
       aria-labelledby="era-summary-title"
     >
-      <div className="px-4 pb-4 pt-3">
+      <div className="px-4 py-4">
         <PanelBody state={state} />
       </div>
     </BottomSheet>

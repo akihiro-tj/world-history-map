@@ -76,7 +76,7 @@ export function BottomSheet({ isOpen, onClose, header, children, ...props }: Bot
           ref={headerRef}
           className={cn('shrink-0 touch-none', isDragging ? 'cursor-grabbing' : 'cursor-grab')}
         >
-          <div className="flex justify-center py-2">
+          <div className="flex justify-center pt-2 pb-1">
             <div className="h-1 w-10 rounded-full bg-gray-500" data-testid="bottom-sheet-handle" />
           </div>
           {header}
