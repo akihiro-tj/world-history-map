@@ -14,7 +14,7 @@ import {
 const SAMPLE_CSS = `
 @theme {
   --color-role-selected: oklch(0.65 0.22 15);
-  --color-role-loading: oklch(0.78 0.14 165);
+  --color-role-loading: oklch(0.71 0.16 250);
   --color-role-warn: oklch(0.78 0.16 75);
   --color-role-error: oklch(0.65 0.22 27);
   --color-role-focus: oklch(0.55 0.18 250);
@@ -95,7 +95,7 @@ describe('RoleColorTokenParser', () => {
     const tokens = tokenSet.toArray();
     expect(tokens).toHaveLength(5);
     expect(tokens.find((t) => t.name === 'selected')?.value).toBe('oklch(0.65 0.22 15)');
-    expect(tokens.find((t) => t.name === 'loading')?.value).toBe('oklch(0.78 0.14 165)');
+    expect(tokens.find((t) => t.name === 'loading')?.value).toBe('oklch(0.71 0.16 250)');
   });
 
   it('ignores non-role color variables', () => {
@@ -168,7 +168,7 @@ describe('RoleColorsBuilder', () => {
     const builder = new RoleColorsBuilder({ cssSource: mockCssSource, outputPath });
     const source = await builder.generateSource();
     expect(source).toContain("selected: '#f73d62'");
-    expect(source).toContain("loading: '#49d3a1'");
+    expect(source).toContain("loading: '#46a6ff'");
     expect(source).toContain("warn: '#f2a618'");
     expect(source).toContain("error: '#f9423d'");
     expect(source).toContain("focus: '#0072d5'");
