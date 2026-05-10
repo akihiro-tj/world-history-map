@@ -64,9 +64,14 @@ export async function runIndexGenStage(
   years: number[],
   logger: PipelineLogger,
 ): Promise<YearIndex> {
-  const index = await generateYearIndex(years, PATHS.mergedGeojson, PATHS.publicPmtiles, logger);
+  const index = await generateYearIndex(
+    years,
+    PATHS.mergedGeojson,
+    PATHS.tilesSourcePmtiles,
+    logger,
+  );
 
-  const indexPath = path.join(PATHS.publicPmtiles, 'index.json');
+  const indexPath = path.join(PATHS.tilesSourcePmtiles, 'index.json');
   writeFileSync(indexPath, JSON.stringify(index, null, 2));
   logger.info('index-gen', `Written: ${indexPath}`);
 
