@@ -1,6 +1,6 @@
 # Feature Specification: Camera Fit on Territory Select
 
-**Feature Branch**: `241-camera-fit-on-territory-select`  
+**Feature Branch**: `004-camera-fit-on-territory-select`  
 **Created**: 2026-05-10  
 **Status**: Draft  
 **Input**: GitHub Issue #257 — 領土選択時にパネルで隠れない位置へカメラを移動する

@@ -1,7 +1,7 @@
 # Implementation Plan: Camera Fit on Territory Select
 
-**Branch**: `241-camera-fit-on-territory-select` | **Date**: 2026-05-10 | **Spec**: [spec.md](./spec.md)
-**Input**: Feature specification from `/specs/241-camera-fit-on-territory-select/spec.md`
+**Branch**: `004-camera-fit-on-territory-select` | **Date**: 2026-05-10 | **Spec**: [spec.md](./spec.md)
+**Input**: Feature specification from `/specs/004-camera-fit-on-territory-select/spec.md`
 
 ## Summary
 
@@ -70,7 +70,7 @@ bbox 算出は `apps/pipeline` の既存 `mergeByName()` を拡張し、ラベ�
 ### Documentation (this feature)
 
 ```text
-specs/241-camera-fit-on-territory-select/
+specs/004-camera-fit-on-territory-select/
 ├── plan.md                            # This file
 ├── research.md                        # Phase 0 output
 ├── data-model.md                      # Phase 1 output（in-memory 型 + Feature プロパティ契約）

@@ -1,6 +1,6 @@
 # Quickstart: Camera Fit on Territory Select
 
-**Feature**: 241-camera-fit-on-territory-select  
+**Feature**: 004-camera-fit-on-territory-select  
 **Date**: 2026-05-10  
 **Linked plan**: [plan.md](./plan.md) / [research.md](./research.md) / [data-model.md](./data-model.md) / [contracts/territory-feature-bbox.md](./contracts/territory-feature-bbox.md)
 
@@ -12,7 +12,7 @@
 
 - リポジトリのセットアップが済んでいること（`pnpm install` 実行済み）
 - Tippecanoe が利用可能（pipeline でタイル生成に必要。既存セットアップ通り）
-- 本ブランチ `241-camera-fit-on-territory-select` をチェックアウト済み
+- 本ブランチ `004-camera-fit-on-territory-select` をチェックアウト済み
 
 ---
 

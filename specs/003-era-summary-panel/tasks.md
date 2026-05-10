@@ -5,7 +5,7 @@ description: "Task list for 年代サマリーパネル feature implementation"
 
 # Tasks: 年代サマリーパネル
 
-**Input**: Design documents from `/specs/240-era-summary-panel/`
+**Input**: Design documents from `/specs/003-era-summary-panel/`
 **Prerequisites**: plan.md, spec.md, research.md, data-model.md, contracts/era-summary-data.md, quickstart.md
 
 **Tests**: Behavior-first tests are included per project constitution (Principle III)
@@ -25,7 +25,7 @@ description: "Task list for 年代サマリーパネル feature implementation"
 - Frontend: `apps/frontend/src/`
 - Pipeline: `apps/pipeline/src/`
 - Static data: `apps/frontend/public/data/`
-- Specs/docs: `specs/240-era-summary-panel/`
+- Specs/docs: `specs/003-era-summary-panel/`
 
 ## Phase 1: Setup (Shared Infrastructure)
 
@@ -45,13 +45,13 @@ description: "Task list for 年代サマリーパネル feature implementation"
 
 ### 2-A. Notion 一次ソースの整備（手作業）
 
-- [x] T004 Notion 上に "Era Summary" データベースを作成し、`specs/240-era-summary-panel/contracts/era-summary-data.md` の Notion DB スキーマに従ってプロパティ（`Year` / `Region` / `Title` / `Context` / `References`）を設定する。`Region` の Select オプション 8 値を登録
+- [x] T004 Notion 上に "Era Summary" データベースを作成し、`specs/003-era-summary-panel/contracts/era-summary-data.md` の Notion DB スキーマに従ってプロパティ（`Year` / `Region` / `Title` / `Context` / `References`）を設定する。`Region` の Select オプション 8 値を登録
 - [x] T005 1Password に Notion DB ID を登録する：`op://dev/world-history-map-pipeline/era-summary-database-id`
-- [x] T006 1650 年の代表データを Notion に投入（地域カード 6 件）。`specs/240-era-summary-panel/contracts/era-summary-data.md` の「サンプル：1650 年」を参照して各地域を 1 ページずつ作成
+- [x] T006 1650 年の代表データを Notion に投入（地域カード 6 件）。`specs/003-era-summary-panel/contracts/era-summary-data.md` の「サンプル：1650 年」を参照して各地域を 1 ページずつ作成
 
 ### 2-B. 型定義とデータローダ
 
-- [x] T007 [P] Create `apps/frontend/src/domain/era-summary/types.ts` with `EraSummary`, `RegionCard`, `RegionId`, `EraSummaryReference` types per `specs/240-era-summary-panel/data-model.md`
+- [x] T007 [P] Create `apps/frontend/src/domain/era-summary/types.ts` with `EraSummary`, `RegionCard`, `RegionId`, `EraSummaryReference` types per `specs/003-era-summary-panel/data-model.md`
 - [x] T008 [P] Create `apps/frontend/src/domain/era-summary/load.ts` with `loadEraSummary(year)` returning `Promise<EraSummary | null>`. Returns `null` on 404, throws on parse failure
 - [x] T009 [P] Create `apps/frontend/src/domain/era-summary/load.test.ts` covering: success / 404 → null / malformed JSON → throw
 
@@ -63,7 +63,7 @@ description: "Task list for 年代サマリーパネル feature implementation"
 
 ### 2-D. 初回 sync の実行（動作確認）
 
-- [x] T013 Run `pnpm pipeline era-summary-sync` and verify `apps/frontend/public/data/era-summaries/1650.json` is generated and validates against the schema in `specs/240-era-summary-panel/contracts/era-summary-data.md`
+- [x] T013 Run `pnpm pipeline era-summary-sync` and verify `apps/frontend/public/data/era-summaries/1650.json` is generated and validates against the schema in `specs/003-era-summary-panel/contracts/era-summary-data.md`
 
 ### 2-E. AppState 拡張（後勝ち排他 reducer）
 
@@ -147,7 +147,7 @@ description: "Task list for 年代サマリーパネル feature implementation"
 - [x] T040 [P] Accessibility audit per FR-010: keyboard-only navigation through summary panel, summary trigger, references, summary nav strip, close buttons. Verify `role="dialog"` + `aria-labelledby` for both panels, `aria-label` on icon-only buttons, focus visible on all clickable elements. Document findings; fix issues in respective component files
 - [x] T041 [P] Performance check covering (a) SC-002：`useEraSummary` を計装し、年代切替 → render 完了までの体感待ち時間を typical broadband で測定（< 1s 確認）、(b) パネルの開閉アニメーションが 60 fps を維持することを Chrome DevTools Performance タブで確認、(c) bundle size の増加が plan.md Constraints の +10KB 上限を超えていないことを `pnpm build` 後の dist サイズで比較。結果を `apps/frontend/docs/performance.md` または feature notes に記録
 - [x] T042 Run `pnpm test && pnpm check && pnpm typecheck` from repo root and ensure all gates pass (Constitution Principle II)
-- [x] T043 Walk through `specs/240-era-summary-panel/quickstart.md` end-to-end (steps 1〜6) and update any drift between docs and actual behavior
+- [x] T043 Walk through `specs/003-era-summary-panel/quickstart.md` end-to-end (steps 1〜6) and update any drift between docs and actual behavior
 - [x] T044 Update `docs/frontend.md` per project constitution Principle "Living Documentation": add EraSummaryPanel to the component catalog, document the after-wins-exclusion state machine, reference the new pipeline subcommand `era-summary-sync`. Add link to `era-summaries/` data path
 - [x] T045 [P] Update `apps/frontend/src/components/era-summary-panel/era-summary-panel.stories.tsx` and `apps/frontend/src/components/territory-info/territory-info-panel.stories.tsx` (if exists) with the new mobile/desktop variants
 - [x] T046 [P] Layout verification per SC-004: confirm map center area remains visible at viewport widths 360px (mobile portrait) and 1280px+ (desktop) when summary panel and/or territory-info-panel are open. Use Storybook viewport addon (`mobile1` / `desktop` viewports) or browser DevTools manual check across `apps/frontend/src/components/era-summary-panel/era-summary-panel.stories.tsx`

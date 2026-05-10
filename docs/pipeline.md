@@ -82,7 +82,7 @@ git push
   | `BBOX_N` | number | 主要ポリゴン bbox 北端緯度（-90〜90） |
   | `BBOX_AM` | 0 \| 1 | antimeridian またぎフラグ（1 のとき `BBOX_E > 180`） |
 
-  「主要ポリゴン」はアメリカ / ロシア / イギリスのような飛び地を持つ領土において面積最大の構成部分を指す。これにより frontend が地球規模にズームアウトしない。詳細な契約は `specs/241-camera-fit-on-territory-select/contracts/territory-feature-bbox.md` を参照。
+  「主要ポリゴン」はアメリカ / ロシア / イギリスのような飛び地を持つ領土において面積最大の構成部分を指す。これにより frontend が地球規模にズームアウトしない。詳細な契約は `specs/004-camera-fit-on-territory-select/contracts/territory-feature-bbox.md` を参照。
 - **validate** — turf でジオメトリを検証し、修復可能なものは clean / rewind / buffer_zero / unkink で直す。修復不能は warning、空コレクションや型違反は error で停止。
 - **convert** — tippecanoe で polygons / labels の各レイヤーを別 MVT に焼き、tile-join で 1 つの PMTiles に結合。出力先: `packages/tiles/src/pmtiles/world_{year}.pmtiles`
 - **index-gen** — 全年処理後、各年の領土名リストを `packages/tiles/src/pmtiles/index.json` として書き出す。

@@ -1,7 +1,7 @@
 # Implementation Plan: 年代サマリーパネル
 
-**Branch**: `240-era-summary-panel` | **Date**: 2026-05-07 | **Spec**: [spec.md](./spec.md)
-**Input**: Feature specification from `/specs/240-era-summary-panel/spec.md`
+**Branch**: `003-era-summary-panel` | **Date**: 2026-05-07 | **Spec**: [spec.md](./spec.md)
+**Input**: Feature specification from `/specs/003-era-summary-panel/spec.md`
 
 ## Summary
 
@@ -73,7 +73,7 @@
 ### Documentation (this feature)
 
 ```text
-specs/240-era-summary-panel/
+specs/003-era-summary-panel/
 ├── plan.md              # This file
 ├── research.md          # Phase 0 output
 ├── data-model.md        # Phase 1 output

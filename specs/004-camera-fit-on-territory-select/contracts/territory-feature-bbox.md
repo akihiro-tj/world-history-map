@@ -1,6 +1,6 @@
 # Contract: Territory Feature BBox Properties
 
-**Feature**: 241-camera-fit-on-territory-select  
+**Feature**: 004-camera-fit-on-territory-select  
 **Date**: 2026-05-10  
 **Linked plan**: [../plan.md](../plan.md) / [../research.md](../research.md) / [../data-model.md](../data-model.md)
 

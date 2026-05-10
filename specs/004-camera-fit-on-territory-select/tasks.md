@@ -5,7 +5,7 @@ description: "Task list for camera fit on territory select feature implementatio
 
 # Tasks: Camera Fit on Territory Select
 
-**Input**: Design documents from `/specs/241-camera-fit-on-territory-select/`
+**Input**: Design documents from `/specs/004-camera-fit-on-territory-select/`
 **Prerequisites**: plan.md, spec.md, research.md, data-model.md, contracts/territory-feature-bbox.md, quickstart.md
 
 **Tests**: Behavior-first tests are included per project constitution (Principle III)
@@ -26,7 +26,7 @@ description: "Task list for camera fit on territory select feature implementatio
 - Pipeline: `apps/pipeline/src/`
 - Static tile artifacts: `packages/tiles/src/`
 - Living docs: `docs/`
-- Specs: `specs/241-camera-fit-on-territory-select/`
+- Specs: `specs/004-camera-fit-on-territory-select/`
 
 ---
 
@@ -138,7 +138,7 @@ description: "Task list for camera fit on territory select feature implementatio
 - [X] T022 [P] Desktop と Mobile（Responsive モード）で quickstart §5.1 / §5.2 の代表シナリオをひと通り通し、既存のクリック・パネル開閉・年代切替に regression がないことを目視確認する
 - [X] T023 リポジトリルートで `pnpm test && pnpm check && pnpm typecheck` を実行し、すべての gate が通ることを確認する
 - [X] T024 `docs/frontend.md` に新しいカメラフィット挙動を追記する（map / interaction セクションに短いサブセクションを追加し、それ以外は変更しない）
-- [X] T025 [P] `docs/pipeline.md` に `mergeByName` が出力する `BBOX_W` / `BBOX_S` / `BBOX_E` / `BBOX_N` / `BBOX_AM` Feature プロパティを追記する（`specs/241-camera-fit-on-territory-select/contracts/territory-feature-bbox.md` を参照リンクとして付ける）
+- [X] T025 [P] `docs/pipeline.md` に `mergeByName` が出力する `BBOX_W` / `BBOX_S` / `BBOX_E` / `BBOX_N` / `BBOX_AM` Feature プロパティを追記する（`specs/004-camera-fit-on-territory-select/contracts/territory-feature-bbox.md` を参照リンクとして付ける）
 
 ---
 

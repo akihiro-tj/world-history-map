@@ -1,6 +1,6 @@
 # Data Model: Camera Fit on Territory Select
 
-**Feature**: 241-camera-fit-on-territory-select  
+**Feature**: 004-camera-fit-on-territory-select  
 **Date**: 2026-05-10  
 **Linked plan**: [plan.md](./plan.md) / [contracts/territory-feature-bbox.md](./contracts/territory-feature-bbox.md)
 
