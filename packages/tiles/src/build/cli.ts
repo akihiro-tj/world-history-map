@@ -1,4 +1,5 @@
-import { writeFile } from 'node:fs/promises';
+import { copyFile, writeFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { TilesManifest } from '../manifest/tiles-manifest.ts';
@@ -9,8 +10,15 @@ const DEFAULT_SOURCE_DIR = path.join(PACKAGE_ROOT, 'src/pmtiles');
 const DEFAULT_DIST_DIR = path.join(PACKAGE_ROOT, 'dist');
 const DEFAULT_MANIFEST_PATH = path.join(PACKAGE_ROOT, 'src/manifest.ts');
 
+async function copyIndexJson(sourceDir: string, distDir: string): Promise<void> {
+  const source = path.join(sourceDir, 'index.json');
+  if (!existsSync(source)) return;
+  await copyFile(source, path.join(distDir, 'index.json'));
+}
+
 async function runBuild(): Promise<void> {
   const manifest = await new ManifestBuilder(DEFAULT_SOURCE_DIR).build(DEFAULT_DIST_DIR);
+  await copyIndexJson(DEFAULT_SOURCE_DIR, DEFAULT_DIST_DIR);
   await writeFile(DEFAULT_MANIFEST_PATH, manifest.toTypeScriptSource());
   console.log(`Built ${manifest.availableYears().length} tiles → manifest.ts`);
 }
