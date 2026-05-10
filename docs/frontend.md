@@ -96,6 +96,17 @@ territoryOpen ─── CLEAR_SELECTION ──→ none
 - `actions.selectTerritory(name)` で `selectedTerritory` と `isInfoPanelOpen` が立つ
 - `TerritoryInfoPanel` が開き、中の `useTerritoryDescription(name, year)` が `descriptions/{year}.json` を（キャッシュ経由で）取り、kebab-case 化した名前でバンドルを引く
 - `TerritoryHighlightLayer` が同じ名前を使って強調描画
+- `useCameraFitOnSelection` が `state.activePanel.selectedTerritory` と `state.selectedYear` の変化を検知してカメラを自動フィット（詳細は後述）
+
+領土選択時のカメラ自動フィット:
+- `MapView` 内で `useCameraFitOnSelection(mapRef)` を呼ぶ。選択経路（クリック / SummaryNavStrip などプログラム選択）を問わず `state.activePanel.selectedTerritory` の変化で起動する
+- `mapRef.getMap().querySourceFeatures('territories', filter)` で対象フィーチャの `BBOX_W / BBOX_S / BBOX_E / BBOX_N / BBOX_AM` を取得し、`parseFeatureBounds` で `TerritoryBounds` に変換する
+- `mapRef.getMap().fitBounds([[west, south], [east, north]], { padding, maxZoom: 5, duration })` でアニメーション付き移動。Desktop では左パネル（幅 384px + 余白 32px = 416px）を避けた padding、Mobile では BottomSheet half snap（40vh + 余白 16px）を避けた bottom padding を使う
+- `prefers-reduced-motion: reduce` のとき `duration: 0`（即ジャンプ）
+- タイル未読込時は `sourcedata` イベントで 1 度だけ再試行する
+- 飛び地を持つ領土（アメリカ / ロシア / イギリスなど）は pipeline が最大面積ポリゴンの bbox を `BBOX_*` として格納しているため、フィット結果が地球規模にズームアウトしない
+- パネルを閉じた際（`selectedTerritory → null`）はガード節でフィットを抑止し、カメラ位置は維持される（FR-007）
+- 同一領土で年代が変化した場合は `selectedYear` の変化で再フィットが発火し、変化後の形状に追随する（FR-009）
 
 投影法を切り替えたとき:
 - ProjectionToggle が `setProjection(next)` を叩き、Context が更新
