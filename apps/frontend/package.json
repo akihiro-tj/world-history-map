@@ -6,7 +6,7 @@
   "scripts": {
     "predev": "pnpm --filter @world-history-map/tiles run build && pnpm --filter @world-history-map/design-tokens run build",
     "dev": "vite",
-    "prebuild": "pnpm --filter @world-history-map/design-tokens run build",
+    "prebuild": "pnpm --filter @world-history-map/tiles run build && pnpm --filter @world-history-map/design-tokens run build",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "test": "vitest run",
