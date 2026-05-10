@@ -73,7 +73,7 @@ description: "Task list for camera fit on territory select feature implementatio
 
 - [ ] T009 [P] [US1] `apps/frontend/src/hooks/use-prefers-reduced-motion.test.ts` に `usePrefersReducedMotion` の失敗テストを追加する（初期値 / `change` イベントによる切替）
 - [ ] T010 [P] [US1] `apps/frontend/src/components/map/hooks/use-panel-padding.test.tsx` に `usePanelPadding` の Desktop 分岐の失敗テストを追加する（`useIsMobile()===false` のとき `{top:24, right:24, bottom:24, left:416}` を返す / `window` リサイズに追随する）
-- [ ] T011 [P] [US1] `apps/frontend/src/components/map/hooks/use-camera-fit-on-selection.test.tsx` に `useCameraFitOnSelection` の失敗テストを追加する。観点：(a) 選択発火で `fitBounds` が一度だけ呼ばれ、引数に解析した bounds + Desktop padding + `MAX_FIT_ZOOM` が含まれる、(b) 同一選択のまま `selectedYear` が変化したら再フィット、(c) `selectedTerritory → null` のときは `fitBounds` を呼ばない、(d) `prefers-reduced-motion: reduce` のとき `duration: 0` が渡される、(e) 初回 `querySourceFeatures` が空配列を返した場合 `sourcedata` イベントで一度だけ再試行する、(f) antimeridian 越えの bounds（`east > 180`）がそのまま渡される
+- [ ] T011 [P] [US1] `apps/frontend/src/components/map/hooks/use-camera-fit-on-selection.test.tsx` に `useCameraFitOnSelection` の失敗テストを追加する。観点：(a) 選択発火で `fitBounds` が一度だけ呼ばれ、引数に解析した bounds + Desktop padding + `MAX_FIT_ZOOM` が含まれる、(b) 同一選択のまま `selectedYear` が変化したら再フィット、(c) `selectedTerritory → null` のときは `fitBounds` を呼ばない、(d) `prefers-reduced-motion: reduce` のとき `duration: 0` が渡される、(e) 初回 `querySourceFeatures` が空配列を返した場合 `sourcedata` イベントで一度だけ再試行する、(f) antimeridian 越えの bounds（`east > 180`）がそのまま渡される、(g) 2 連続選択（territory A → 直後に B）で `fitBounds` が 2 度呼ばれ、2 度目の引数が territory B 由来の bounds であること（最後の選択に収束する FR-011 の保証）
 
 ### Implementation for User Story 1
 
