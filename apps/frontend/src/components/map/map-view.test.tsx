@@ -39,6 +39,10 @@ vi.mock('./tiles-config', () => ({
   getTilesUrl: vi.fn(() => 'pmtiles:///pmtiles/world_1650.pmtiles'),
 }));
 
+vi.mock('./hooks/use-camera-fit-on-selection', () => ({
+  useCameraFitOnSelection: vi.fn(),
+}));
+
 global.fetch = vi.fn(() =>
   Promise.resolve({
     ok: true,
