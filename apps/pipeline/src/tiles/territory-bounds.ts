@@ -14,13 +14,25 @@ export interface BboxFeatureProperties {
 }
 
 export class TerritoryBounds {
+  readonly west: number;
+  readonly south: number;
+  readonly east: number;
+  readonly north: number;
+  readonly crossesAntimeridian: boolean;
+
   private constructor(
-    readonly west: number,
-    readonly south: number,
-    readonly east: number,
-    readonly north: number,
-    readonly crossesAntimeridian: boolean,
-  ) {}
+    west: number,
+    south: number,
+    east: number,
+    north: number,
+    crossesAntimeridian: boolean,
+  ) {
+    this.west = west;
+    this.south = south;
+    this.east = east;
+    this.north = north;
+    this.crossesAntimeridian = crossesAntimeridian;
+  }
 
   static fromPolygon(polygon: ReturnType<typeof turf.polygon>): TerritoryBounds {
     const ring = polygon.geometry.coordinates[0] as [number, number][];
