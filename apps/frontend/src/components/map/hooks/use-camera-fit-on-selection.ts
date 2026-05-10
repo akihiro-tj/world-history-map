@@ -2,7 +2,7 @@ import type { RefObject } from 'react';
 import { useEffect, useRef } from 'react';
 import type { MapRef } from 'react-map-gl/maplibre';
 import { useAppState } from '@/contexts/app-state-context';
-import { parseFeatureBounds } from '@/domain/territory/territory-bounds';
+import { TerritoryBounds } from '@/domain/territory/territory-bounds';
 import { usePrefersReducedMotion } from '@/hooks/use-prefers-reduced-motion';
 import { MAP_CONFIG } from '@/styles/map-style';
 import { usePanelPadding } from './use-panel-padding';
@@ -45,16 +45,14 @@ export function useCameraFitOnSelection(mapRef: RefObject<MapRef | null>): void 
       const feature = features[0];
       if (!feature) return false;
 
-      const bounds = parseFeatureBounds(feature.properties ?? {});
+      const bounds = TerritoryBounds.fromFeatureProperties(feature.properties ?? {});
       if (!bounds) return false;
 
-      map.fitBounds(
-        [
-          [bounds.west, bounds.south],
-          [bounds.east, bounds.north],
-        ],
-        { padding: paddingRef.current, maxZoom: MAP_CONFIG.maxFitZoom, duration },
-      );
+      map.fitBounds(bounds.toFitBoundsTuple(), {
+        padding: paddingRef.current,
+        maxZoom: MAP_CONFIG.maxFitZoom,
+        duration,
+      });
       return true;
     }
 
