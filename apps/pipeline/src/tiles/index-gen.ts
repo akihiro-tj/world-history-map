@@ -1,5 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { TILES_INDEX_FILENAME } from '@world-history-map/tiles/build';
 import { PATHS, YearPaths } from '@/config.ts';
 import type { PipelineLogger } from '@/shared/logger.ts';
 import type { YearIndex } from '@/types/year.ts';
@@ -71,7 +72,7 @@ export async function runIndexGenStage(
     logger,
   );
 
-  const indexPath = path.join(PATHS.tilesSourcePmtiles, 'index.json');
+  const indexPath = path.join(PATHS.tilesSourcePmtiles, TILES_INDEX_FILENAME);
   writeFileSync(indexPath, JSON.stringify(index, null, 2));
   logger.info('index-gen', `Written: ${indexPath}`);
 

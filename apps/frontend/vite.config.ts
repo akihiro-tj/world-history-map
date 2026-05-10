@@ -4,6 +4,7 @@ import type { IncomingMessage, ServerResponse } from 'node:http';
 import path from 'node:path';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import { copyIndexJson, TILES_INDEX_FILENAME } from '@world-history-map/tiles/build';
 import type { Plugin } from 'vite';
 import { defineConfig } from 'vite';
 
@@ -42,14 +43,12 @@ function sendFullResponse(res: ServerResponse, filePath: string, fileSize: numbe
 }
 
 function copyTilesIndexBuildPlugin(): Plugin {
+  const targetDir = path.resolve(__dirname, 'dist', 'pmtiles');
   return {
     name: 'copy-tiles-index-build',
     apply: 'build',
     async closeBundle() {
-      const source = path.join(TILES_DIST, 'index.json');
-      const target = path.resolve(__dirname, 'dist', 'pmtiles', 'index.json');
-      await fs.mkdir(path.dirname(target), { recursive: true });
-      await fs.copyFile(source, target);
+      await copyIndexJson(TILES_DIST, targetDir);
     },
   };
 }
@@ -79,9 +78,8 @@ function serveTilesDevPlugin(): Plugin {
         }
 
         res.setHeader('Accept-Ranges', 'bytes');
-        const contentType = (req.url ?? '').endsWith('.json')
-          ? 'application/json'
-          : 'application/octet-stream';
+        const isTilesIndexRequest = (req.url ?? '').endsWith(`/${TILES_INDEX_FILENAME}`);
+        const contentType = isTilesIndexRequest ? 'application/json' : 'application/octet-stream';
         res.setHeader('Content-Type', contentType);
 
         const rangeHeader = req.headers['range'];

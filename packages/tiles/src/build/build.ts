@@ -1,9 +1,11 @@
-import { copyFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
+import { copyFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { TilesManifest } from '../manifest/tiles-manifest.ts';
 import type { Manifest } from '../types.ts';
 import { ManifestBuilder } from './manifest-builder.ts';
+
+export const TILES_INDEX_FILENAME = 'index.json';
 
 export async function computeManifest(sourceDir: string): Promise<Manifest> {
   return (await new ManifestBuilder(sourceDir).compute()).toRecord();
@@ -18,7 +20,8 @@ export async function isManifestFresh(sourceDir: string, existingManifest: Manif
 }
 
 export async function copyIndexJson(sourceDir: string, distDir: string): Promise<void> {
-  const source = path.join(sourceDir, 'index.json');
+  const source = path.join(sourceDir, TILES_INDEX_FILENAME);
   if (!existsSync(source)) return;
-  await copyFile(source, path.join(distDir, 'index.json'));
+  await mkdir(distDir, { recursive: true });
+  await copyFile(source, path.join(distDir, TILES_INDEX_FILENAME));
 }

@@ -44,4 +44,21 @@ describe('copyIndexJson', () => {
     const copied = await fs.readFile(path.join(distDir, 'index.json'), 'utf-8');
     expect(copied).toBe(newContent);
   });
+
+  it('creates distDir when it does not exist', async () => {
+    const isolatedSource = await fs.mkdtemp(path.join(os.tmpdir(), 'tiles-copy-index-src-'));
+    const isolatedDistParent = await fs.mkdtemp(path.join(os.tmpdir(), 'tiles-copy-index-dist-'));
+    const missingDist = path.join(isolatedDistParent, 'nested', 'pmtiles');
+    const content = JSON.stringify({ years: [{ year: 1900 }] });
+    await fs.writeFile(path.join(isolatedSource, 'index.json'), content);
+
+    try {
+      await copyIndexJson(isolatedSource, missingDist);
+      const copied = await fs.readFile(path.join(missingDist, 'index.json'), 'utf-8');
+      expect(copied).toBe(content);
+    } finally {
+      await fs.rm(isolatedSource, { recursive: true, force: true });
+      await fs.rm(isolatedDistParent, { recursive: true, force: true });
+    }
+  });
 });
