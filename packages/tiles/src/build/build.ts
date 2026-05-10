@@ -1,5 +1,5 @@
 import { existsSync } from 'node:fs';
-import { copyFile, mkdir } from 'node:fs/promises';
+import { copyFile, mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { TilesManifest } from '../manifest/tiles-manifest.ts';
 import type { Manifest } from '../types.ts';
@@ -24,4 +24,14 @@ export async function copyIndexJson(sourceDir: string, distDir: string): Promise
   if (!existsSync(source)) return;
   await mkdir(distDir, { recursive: true });
   await copyFile(source, path.join(distDir, TILES_INDEX_FILENAME));
+}
+
+export async function buildTilesPackage(
+  sourceDir: string,
+  distDir: string,
+  manifestPath: string,
+): Promise<void> {
+  const manifest = await new ManifestBuilder(sourceDir).build(distDir);
+  await copyIndexJson(sourceDir, distDir);
+  await writeFile(manifestPath, manifest.toTypeScriptSource());
 }

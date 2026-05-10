@@ -70,6 +70,8 @@ export const PATHS = {
   pipelineState: path.join(ROOT_DIR, '.cache', 'pipeline-state.json'),
   pipelineLock: path.join(ROOT_DIR, '.cache', 'pipeline.lock'),
   tilesSourcePmtiles: path.resolve(ROOT_DIR, '..', '..', 'packages', 'tiles', 'src', 'pmtiles'),
+  tilesDistDir: path.resolve(ROOT_DIR, '..', '..', 'packages', 'tiles', 'dist'),
+  tilesManifestPath: path.resolve(ROOT_DIR, '..', '..', 'packages', 'tiles', 'src', 'manifest.ts'),
   descriptionsDir: path.resolve(ROOT_DIR, '..', 'frontend', 'public', 'data', 'descriptions'),
   eraSummariesDir: path.resolve(ROOT_DIR, '..', 'frontend', 'public', 'data', 'era-summaries'),
 } as const;

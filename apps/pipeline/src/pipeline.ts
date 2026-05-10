@@ -1,3 +1,4 @@
+import { buildTilesPackage } from '@world-history-map/tiles/build';
 import { EXIT_CODES, PATHS, UPSTREAM } from '@/config.ts';
 import type { PipelineLogger } from '@/shared/logger.ts';
 import { PipelineCheckpoint } from '@/state/checkpoint.ts';
@@ -75,7 +76,10 @@ export async function runPipeline(
     }
 
     logger.info('pipeline', '=== Stage: index-gen ===');
-    await runIndexGenStage(yearsToProcess, logger);
+    await runIndexGenStage(allYears, logger);
+
+    logger.info('pipeline', '=== Stage: tiles-build ===');
+    await buildTilesPackage(PATHS.tilesSourcePmtiles, PATHS.tilesDistDir, PATHS.tilesManifestPath);
 
     checkpoint.complete();
 
