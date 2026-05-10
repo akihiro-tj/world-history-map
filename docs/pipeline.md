@@ -70,7 +70,19 @@ git push
 ## `run` が走らせるステージ
 
 - **fetch** — `historical-basemaps` を git clone（初回）または pull。
-- **merge** — 同名領土を turf で統合し、`NAME` と `SUBJECTO` のみ残す。代表点（ラベル用 Point）を別に出す。同年の `descriptions/{year}.json` から日本語名を引いて、ラベル feature の `name_ja` プロパティに焼き込む。
+- **merge** — 同名領土を turf で統合し、`NAME` / `SUBJECTO` および bbox プロパティ（下記）を残す。代表点（ラベル用 Point）を別に出す。同年の `descriptions/{year}.json` から日本語名を引いて、ラベル feature の `name_ja` プロパティに焼き込む。
+
+  **territories レイヤーに格納される bbox プロパティ**（カメラ自動フィット用）:
+
+  | プロパティ | 型 | 意味 |
+  |-----------|-----|------|
+  | `BBOX_W` | number | 主要ポリゴン bbox 西端経度（-180〜180） |
+  | `BBOX_S` | number | 主要ポリゴン bbox 南端緯度（-90〜90） |
+  | `BBOX_E` | number | 主要ポリゴン bbox 東端経度（antimeridian またぎ時は 180 超） |
+  | `BBOX_N` | number | 主要ポリゴン bbox 北端緯度（-90〜90） |
+  | `BBOX_AM` | 0 \| 1 | antimeridian またぎフラグ（1 のとき `BBOX_E > 180`） |
+
+  「主要ポリゴン」はアメリカ / ロシア / イギリスのような飛び地を持つ領土において面積最大の構成部分を指す。これにより frontend が地球規模にズームアウトしない。詳細な契約は `specs/241-camera-fit-on-territory-select/contracts/territory-feature-bbox.md` を参照。
 - **validate** — turf でジオメトリを検証し、修復可能なものは clean / rewind / buffer_zero / unkink で直す。修復不能は warning、空コレクションや型違反は error で停止。
 - **convert** — tippecanoe で polygons / labels の各レイヤーを別 MVT に焼き、tile-join で 1 つの PMTiles に結合。出力先: `packages/tiles/src/pmtiles/world_{year}.pmtiles`
 - **index-gen** — 全年処理後、各年の領土名リストを `packages/tiles/src/pmtiles/index.json` として書き出す。

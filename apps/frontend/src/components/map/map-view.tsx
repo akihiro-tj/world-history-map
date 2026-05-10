@@ -7,6 +7,7 @@ import { resolveTerritoryName } from '@/domain/territory/resolve-territory-name'
 import type { TerritoryProperties } from '@/domain/territory/types';
 import { useAppState } from '../../contexts/app-state-context';
 import { MAP_CONFIG } from '../../styles/map-style';
+import { useCameraFitOnSelection } from './hooks/use-camera-fit-on-selection';
 import { useMapData } from './hooks/use-map-data';
 import { useMapHover } from './hooks/use-map-hover';
 import { useMapKeyboard } from './hooks/use-map-keyboard';
@@ -32,6 +33,7 @@ export function MapView({ onReady }: MapViewProps) {
   const [mapLoaded, setMapLoaded] = useState(false);
   const { isHoveringTerritory, handleMouseMove } = useMapHover();
   useProjection(mapRef, mapLoaded);
+  useCameraFitOnSelection(mapRef);
 
   usePMTilesProtocol();
 
