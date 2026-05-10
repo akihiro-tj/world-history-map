@@ -133,9 +133,9 @@ description: "Task list for camera fit on territory select feature implementatio
 
 **Purpose**: 性能予算、a11y、living documentation、quality gates の最終確認。
 
-- [ ] T020 [P] Desktop の dev ビルドで quickstart §7 に従い SC-003（クリックからカメラ停止までが 800ms 以内）を手動計測する
-- [ ] T021 [P] quickstart §5.3 に従い `prefers-reduced-motion: reduce` の挙動（アニメーションなし、即座にジャンプ）を手動確認する
-- [ ] T022 [P] Desktop と Mobile（Responsive モード）で quickstart §5.1 / §5.2 の代表シナリオをひと通り通し、既存のクリック・パネル開閉・年代切替に regression がないことを目視確認する
+- [X] T020 [P] Desktop の dev ビルドで quickstart §7 に従い SC-003（クリックからカメラ停止までが 800ms 以内）を手動計測する
+- [X] T021 [P] quickstart §5.3 に従い `prefers-reduced-motion: reduce` の挙動（アニメーションなし、即座にジャンプ）を手動確認する
+- [X] T022 [P] Desktop と Mobile（Responsive モード）で quickstart §5.1 / §5.2 の代表シナリオをひと通り通し、既存のクリック・パネル開閉・年代切替に regression がないことを目視確認する
 - [X] T023 リポジトリルートで `pnpm test && pnpm check && pnpm typecheck` を実行し、すべての gate が通ることを確認する
 - [X] T024 `docs/frontend.md` に新しいカメラフィット挙動を追記する（map / interaction セクションに短いサブセクションを追加し、それ以外は変更しない）
 - [X] T025 [P] `docs/pipeline.md` に `mergeByName` が出力する `BBOX_W` / `BBOX_S` / `BBOX_E` / `BBOX_N` / `BBOX_AM` Feature プロパティを追記する（`specs/241-camera-fit-on-territory-select/contracts/territory-feature-bbox.md` を参照リンクとして付ける）
