@@ -41,6 +41,19 @@ function sendFullResponse(res: ServerResponse, filePath: string, fileSize: numbe
   createReadStream(filePath).pipe(res);
 }
 
+function copyTilesIndexBuildPlugin(): Plugin {
+  return {
+    name: 'copy-tiles-index-build',
+    apply: 'build',
+    async closeBundle() {
+      const source = path.join(TILES_DIST, 'index.json');
+      const target = path.resolve(__dirname, 'dist', 'pmtiles', 'index.json');
+      await fs.mkdir(path.dirname(target), { recursive: true });
+      await fs.copyFile(source, target);
+    },
+  };
+}
+
 function serveTilesDevPlugin(): Plugin {
   return {
     name: 'serve-tiles-dev',
@@ -66,7 +79,10 @@ function serveTilesDevPlugin(): Plugin {
         }
 
         res.setHeader('Accept-Ranges', 'bytes');
-        res.setHeader('Content-Type', 'application/octet-stream');
+        const contentType = (req.url ?? '').endsWith('.json')
+          ? 'application/json'
+          : 'application/octet-stream';
+        res.setHeader('Content-Type', contentType);
 
         const rangeHeader = req.headers['range'];
         const range = rangeHeader ? parseRangeHeader(rangeHeader, stat.size) : null;
@@ -81,7 +97,7 @@ function serveTilesDevPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [serveTilesDevPlugin(), react(), tailwindcss()],
+  plugins: [copyTilesIndexBuildPlugin(), serveTilesDevPlugin(), react(), tailwindcss()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
