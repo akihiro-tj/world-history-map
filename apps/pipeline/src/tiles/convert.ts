@@ -47,7 +47,7 @@ export async function runConvertForYear(
   outputPath: string,
   logger: PipelineLogger,
 ): Promise<string> {
-  await mkdir(PATHS.publicPmtiles, { recursive: true });
+  await mkdir(PATHS.tilesSourcePmtiles, { recursive: true });
 
   const tempDir = PATHS.mergedGeojson;
 

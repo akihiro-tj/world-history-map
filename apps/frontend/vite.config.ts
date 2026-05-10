@@ -4,6 +4,7 @@ import type { IncomingMessage, ServerResponse } from 'node:http';
 import path from 'node:path';
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
+import { copyIndexJson, TILES_INDEX_FILENAME } from '@world-history-map/tiles/build';
 import type { Plugin } from 'vite';
 import { defineConfig } from 'vite';
 
@@ -41,6 +42,17 @@ function sendFullResponse(res: ServerResponse, filePath: string, fileSize: numbe
   createReadStream(filePath).pipe(res);
 }
 
+function copyTilesIndexBuildPlugin(): Plugin {
+  const targetDir = path.resolve(__dirname, 'dist', 'pmtiles');
+  return {
+    name: 'copy-tiles-index-build',
+    apply: 'build',
+    async closeBundle() {
+      await copyIndexJson(TILES_DIST, targetDir);
+    },
+  };
+}
+
 function serveTilesDevPlugin(): Plugin {
   return {
     name: 'serve-tiles-dev',
@@ -66,7 +78,9 @@ function serveTilesDevPlugin(): Plugin {
         }
 
         res.setHeader('Accept-Ranges', 'bytes');
-        res.setHeader('Content-Type', 'application/octet-stream');
+        const isTilesIndexRequest = (req.url ?? '').endsWith(`/${TILES_INDEX_FILENAME}`);
+        const contentType = isTilesIndexRequest ? 'application/json' : 'application/octet-stream';
+        res.setHeader('Content-Type', contentType);
 
         const rangeHeader = req.headers['range'];
         const range = rangeHeader ? parseRangeHeader(rangeHeader, stat.size) : null;
@@ -81,7 +95,7 @@ function serveTilesDevPlugin(): Plugin {
 }
 
 export default defineConfig({
-  plugins: [serveTilesDevPlugin(), react(), tailwindcss()],
+  plugins: [copyTilesIndexBuildPlugin(), serveTilesDevPlugin(), react(), tailwindcss()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

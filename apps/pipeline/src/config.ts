@@ -69,8 +69,7 @@ export const PATHS = {
   mergedGeojson: path.join(ROOT_DIR, '.cache', 'geojson'),
   pipelineState: path.join(ROOT_DIR, '.cache', 'pipeline-state.json'),
   pipelineLock: path.join(ROOT_DIR, '.cache', 'pipeline.lock'),
-  publicPmtiles: path.join(ROOT_DIR, '..', 'frontend', 'public', 'pmtiles'),
-  distPmtiles: path.join(ROOT_DIR, 'dist', 'pmtiles'),
+  tilesSourcePmtiles: path.resolve(ROOT_DIR, '..', '..', 'packages', 'tiles', 'src', 'pmtiles'),
   descriptionsDir: path.resolve(ROOT_DIR, '..', 'frontend', 'public', 'data', 'descriptions'),
   eraSummariesDir: path.resolve(ROOT_DIR, '..', 'frontend', 'public', 'data', 'era-summaries'),
 } as const;
@@ -167,7 +166,7 @@ export class YearPaths {
   }
 
   get pmtilesPath(): string {
-    return path.join(PATHS.publicPmtiles, this.pmtiles);
+    return path.join(PATHS.tilesSourcePmtiles, this.pmtiles);
   }
 
   get descriptionsPath(): string {
