@@ -70,6 +70,7 @@ An interactive world history map that makes spatial and temporal understanding o
 - Code (comments, log messages, variable names): English
 - Documentation (`CLAUDE.md`, `README.md`, etc.): English
 - Specification documents under `specs/` (`spec.md`, `plan.md`, `tasks.md`, `clarifications.md`, etc.): body text in Japanese; section headings and technical terms (API names, type names, etc.) stay in English. When filling speckit templates, preserve the English headings and translate only the body
+  - This applies to **task descriptions in `tasks.md`** as well: write each task's description in Japanese, keeping file paths, identifiers (function / type / property / constant names), library names, CLI invocations, and the `[ID] [P?] [Story?]` markers in English. Don't slip into English just because tasks read like commands.
 - Skills (`.claude/skills/`): Japanese
 
 ## Specification Management
