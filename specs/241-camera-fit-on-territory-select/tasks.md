@@ -34,7 +34,7 @@ description: "Task list for camera fit on territory select feature implementatio
 
 **Purpose**: 全ストーリーで参照する小さな定数追加。実装変更を伴わないため独立実行可能。
 
-- [ ] T001 [P] `apps/frontend/src/styles/map-style.ts` の `MAP_CONFIG` に `MAX_FIT_ZOOM = 5` を追加する
+- [X] T001 [P] `apps/frontend/src/styles/map-style.ts` の `MAP_CONFIG` に `MAX_FIT_ZOOM = 5` を追加する
 
 ---
 
@@ -46,16 +46,16 @@ description: "Task list for camera fit on territory select feature implementatio
 
 ### Tests for Foundational (Behavior-First)
 
-- [ ] T002 [P] `apps/pipeline/src/tiles/merge.test.ts` に `computeMainBbox` の失敗テストを追加する（最大ポリゴンの bbox 算出 + antimeridian 越えの正規化。ケース：単一 Polygon / 飛び地を含む MultiPolygon / 主要ポリゴンが antimeridian をまたぐケース）
-- [ ] T003 [P] `apps/pipeline/src/tiles/merge.test.ts` に `mergeByName` の Feature.properties 出力に対する失敗テストを追加する（`BBOX_W` / `BBOX_S` / `BBOX_E` / `BBOX_N` / `BBOX_AM` が常に存在し、`contracts/territory-feature-bbox.md` の不変条件を満たすこと）
-- [ ] T004 [P] `apps/frontend/src/domain/territory/territory-bounds.test.ts` に `parseFeatureBounds` の失敗テストを追加する（正常系 / antimeridian 透過 / プロパティ欠損 / 数値以外 / 値域外）
+- [X] T002 [P] `apps/pipeline/src/tiles/merge.test.ts` に `computeMainBbox` の失敗テストを追加する（最大ポリゴンの bbox 算出 + antimeridian 越えの正規化。ケース：単一 Polygon / 飛び地を含む MultiPolygon / 主要ポリゴンが antimeridian をまたぐケース）
+- [X] T003 [P] `apps/pipeline/src/tiles/merge.test.ts` に `mergeByName` の Feature.properties 出力に対する失敗テストを追加する（`BBOX_W` / `BBOX_S` / `BBOX_E` / `BBOX_N` / `BBOX_AM` が常に存在し、`contracts/territory-feature-bbox.md` の不変条件を満たすこと）
+- [X] T004 [P] `apps/frontend/src/domain/territory/territory-bounds.test.ts` に `parseFeatureBounds` の失敗テストを追加する（正常系 / antimeridian 透過 / プロパティ欠損 / 数値以外 / 値域外）
 
 ### Implementation for Foundational
 
-- [ ] T005 `apps/pipeline/src/tiles/merge.ts` に `computeMainBbox(largestPoly)` ヘルパーを実装する（`turf.bbox` + research R2 のギャップ検出による antimeridian 正規化）
-- [ ] T006 `apps/pipeline/src/tiles/merge.ts` の `mergeByName` を拡張し、`computeMainBbox(largestPoly)` を呼んで `BBOX_W` / `BBOX_S` / `BBOX_E` / `BBOX_N` / `BBOX_AM` を `mergedFeature.properties` に書き込む。同 5 キーを `KEPT_PROPERTIES` セットにも追加する
-- [ ] T007 [P] `apps/frontend/src/domain/territory/territory-bounds.ts` に `TerritoryBounds` 型と `parseFeatureBounds(properties)` を data-model §1 に従って実装する
-- [ ] T008 動作確認用の代表年（1300 / 1500 / 1600 / 1820 / 1900）について `pnpm pipeline run --year 1300`, `--year 1500`, `--year 1600`, `--year 1820`, `--year 1900` を実行して PMTiles を再生成する（再ハッシュと `manifest.ts` 更新は `predev` で自動）
+- [X] T005 `apps/pipeline/src/tiles/merge.ts` に `computeMainBbox(largestPoly)` ヘルパーを実装する（`turf.bbox` + research R2 のギャップ検出による antimeridian 正規化）
+- [X] T006 `apps/pipeline/src/tiles/merge.ts` の `mergeByName` を拡張し、`computeMainBbox(largestPoly)` を呼んで `BBOX_W` / `BBOX_S` / `BBOX_E` / `BBOX_N` / `BBOX_AM` を `mergedFeature.properties` に書き込む。同 5 キーを `KEPT_PROPERTIES` セットにも追加する
+- [X] T007 [P] `apps/frontend/src/domain/territory/territory-bounds.ts` に `TerritoryBounds` 型と `parseFeatureBounds(properties)` を data-model §1 に従って実装する
+- [X] T008 動作確認用の代表年（1300 / 1500 / 1600 / 1820 / 1900）について `pnpm pipeline run --year 1300`, `--year 1500`, `--year 1600`, `--year 1820`, `--year 1900` を実行して PMTiles を再生成する（再ハッシュと `manifest.ts` 更新は `predev` で自動）
 
 **Checkpoint**: Foundation ready — pipeline が bbox 契約を出力し、frontend がそれを解釈できる状態になる。
 
@@ -71,16 +71,16 @@ description: "Task list for camera fit on territory select feature implementatio
 
 > **NOTE**: 実装より先にこれらのテストを書き、failing を確認してから実装に着手すること。
 
-- [ ] T009 [P] [US1] `apps/frontend/src/hooks/use-prefers-reduced-motion.test.ts` に `usePrefersReducedMotion` の失敗テストを追加する（初期値 / `change` イベントによる切替）
-- [ ] T010 [P] [US1] `apps/frontend/src/components/map/hooks/use-panel-padding.test.tsx` に `usePanelPadding` の Desktop 分岐の失敗テストを追加する（`useIsMobile()===false` のとき `{top:24, right:24, bottom:24, left:416}` を返す / `window` リサイズに追随する）
-- [ ] T011 [P] [US1] `apps/frontend/src/components/map/hooks/use-camera-fit-on-selection.test.tsx` に `useCameraFitOnSelection` の失敗テストを追加する。観点：(a) 選択発火で `fitBounds` が一度だけ呼ばれ、引数に解析した bounds + Desktop padding + `MAX_FIT_ZOOM` が含まれる、(b) 同一選択のまま `selectedYear` が変化したら再フィット、(c) `selectedTerritory → null` のときは `fitBounds` を呼ばない、(d) `prefers-reduced-motion: reduce` のとき `duration: 0` が渡される、(e) 初回 `querySourceFeatures` が空配列を返した場合 `sourcedata` イベントで一度だけ再試行する、(f) antimeridian 越えの bounds（`east > 180`）がそのまま渡される、(g) 2 連続選択（territory A → 直後に B）で `fitBounds` が 2 度呼ばれ、2 度目の引数が territory B 由来の bounds であること（最後の選択に収束する FR-011 の保証）
+- [X] T009 [P] [US1] `apps/frontend/src/hooks/use-prefers-reduced-motion.test.ts` に `usePrefersReducedMotion` の失敗テストを追加する（初期値 / `change` イベントによる切替）
+- [X] T010 [P] [US1] `apps/frontend/src/components/map/hooks/use-panel-padding.test.tsx` に `usePanelPadding` の Desktop 分岐の失敗テストを追加する（`useIsMobile()===false` のとき `{top:24, right:24, bottom:24, left:416}` を返す / `window` リサイズに追随する）
+- [X] T011 [P] [US1] `apps/frontend/src/components/map/hooks/use-camera-fit-on-selection.test.tsx` に `useCameraFitOnSelection` の失敗テストを追加する。観点：(a) 選択発火で `fitBounds` が一度だけ呼ばれ、引数に解析した bounds + Desktop padding + `MAX_FIT_ZOOM` が含まれる、(b) 同一選択のまま `selectedYear` が変化したら再フィット、(c) `selectedTerritory → null` のときは `fitBounds` を呼ばない、(d) `prefers-reduced-motion: reduce` のとき `duration: 0` が渡される、(e) 初回 `querySourceFeatures` が空配列を返した場合 `sourcedata` イベントで一度だけ再試行する、(f) antimeridian 越えの bounds（`east > 180`）がそのまま渡される、(g) 2 連続選択（territory A → 直後に B）で `fitBounds` が 2 度呼ばれ、2 度目の引数が territory B 由来の bounds であること（最後の選択に収束する FR-011 の保証）
 
 ### Implementation for User Story 1
 
-- [ ] T012 [P] [US1] `apps/frontend/src/hooks/use-prefers-reduced-motion.ts` に `usePrefersReducedMotion` を実装する（既存 `useIsMobile` の matchMedia パターンを踏襲）
-- [ ] T013 [US1] `apps/frontend/src/components/map/hooks/use-panel-padding.ts` に `usePanelPadding` を実装する（Desktop 分岐 + Mobile 分岐の両方を含む。Mobile 分岐は US2 のテストで検証）
-- [ ] T014 [US1] `apps/frontend/src/components/map/hooks/use-camera-fit-on-selection.ts` に `useCameraFitOnSelection` を実装する。`state.activePanel.selectedTerritory` と `state.selectedYear` を観測し、`null` ガード後に `mapRef.getMap().querySourceFeatures(...)` を呼び、`parseFeatureBounds` で解釈、空のときは `sourcedata` イベントで一度再試行、最後に `usePanelPadding()` と `MAP_CONFIG.MAX_FIT_ZOOM` と `usePrefersReducedMotion` 由来の `duration` を渡して `fitBounds` を呼ぶ
-- [ ] T015 [US1] `apps/frontend/src/components/map/map-view.tsx` に `useCameraFitOnSelection(mapRef)` の呼び出しを追加する（既存 `usePMTilesProtocol` などの並びに配置。`state.mapView` には触れない）
+- [X] T012 [P] [US1] `apps/frontend/src/hooks/use-prefers-reduced-motion.ts` に `usePrefersReducedMotion` を実装する（既存 `useIsMobile` の matchMedia パターンを踏襲）
+- [X] T013 [US1] `apps/frontend/src/components/map/hooks/use-panel-padding.ts` に `usePanelPadding` を実装する（Desktop 分岐 + Mobile 分岐の両方を含む。Mobile 分岐は US2 のテストで検証）
+- [X] T014 [US1] `apps/frontend/src/components/map/hooks/use-camera-fit-on-selection.ts` に `useCameraFitOnSelection` を実装する。`state.activePanel.selectedTerritory` と `state.selectedYear` を観測し、`null` ガード後に `mapRef.getMap().querySourceFeatures(...)` を呼び、`parseFeatureBounds` で解釈、空のときは `sourcedata` イベントで一度再試行、最後に `usePanelPadding()` と `MAP_CONFIG.MAX_FIT_ZOOM` と `usePrefersReducedMotion` 由来の `duration` を渡して `fitBounds` を呼ぶ
+- [X] T015 [US1] `apps/frontend/src/components/map/map-view.tsx` に `useCameraFitOnSelection(mapRef)` の呼び出しを追加する（既存 `usePMTilesProtocol` などの並びに配置。`state.mapView` には触れない）
 
 **Checkpoint**: quickstart §5.1 の Desktop シナリオ（小さな領土 / オフセンター / 大領土 / 飛び地 / antimeridian / 連続選択 / パネル close）がすべて期待通り動作する。
 
@@ -94,8 +94,8 @@ description: "Task list for camera fit on territory select feature implementatio
 
 ### Tests for User Story 2 (Behavior-First) ⚠️
 
-- [ ] T016 [P] [US2] `apps/frontend/src/components/map/hooks/use-panel-padding.test.tsx` に Mobile 分岐の失敗テストを追加する。`useIsMobile()===true` のとき `{top:16, right:16, bottom: window.innerHeight*0.4 + 16, left:16}` を返す / ビューポート高さの変化に追随する / BottomSheet snap の状態変化は無視する（FR-010）
-- [ ] T017 [P] [US2] `apps/frontend/src/components/map/hooks/use-camera-fit-on-selection.test.tsx` に Mobile 経路の失敗テストを追加する。`useIsMobile()===true` のとき `fitBounds` に渡される padding が Mobile 形状であること
+- [X] T016 [P] [US2] `apps/frontend/src/components/map/hooks/use-panel-padding.test.tsx` に Mobile 分岐の失敗テストを追加する。`useIsMobile()===true` のとき `{top:16, right:16, bottom: window.innerHeight*0.4 + 16, left:16}` を返す / ビューポート高さの変化に追随する / BottomSheet snap の状態変化は無視する（FR-010）
+- [X] T017 [P] [US2] `apps/frontend/src/components/map/hooks/use-camera-fit-on-selection.test.tsx` に Mobile 経路の失敗テストを追加する。`useIsMobile()===true` のとき `fitBounds` に渡される padding が Mobile 形状であること
 
 **Checkpoint**: quickstart §5.2 の Mobile シナリオ（南半球選択 / シート拡縮で再フィットしない / 南米南部選択）がすべて期待通り動作する。
 
@@ -109,7 +109,7 @@ description: "Task list for camera fit on territory select feature implementatio
 
 ### Tests for User Story 3 (Behavior-First) ⚠️
 
-- [ ] T018 [P] [US3] `apps/frontend/src/components/map/hooks/use-camera-fit-on-selection.test.tsx` に失敗テストを追加する。クリックイベントを介さずに `selectTerritory` を dispatch して `fitBounds` が解析した bounds を引数に呼ばれること（選択経路で実装が分岐していないことを保証）
+- [X] T018 [P] [US3] `apps/frontend/src/components/map/hooks/use-camera-fit-on-selection.test.tsx` に失敗テストを追加する。クリックイベントを介さずに `selectTerritory` を dispatch して `fitBounds` が解析した bounds を引数に呼ばれること（選択経路で実装が分岐していないことを保証）
 
 **Checkpoint**: US3 受入シナリオがテストで合格する（実装は US1 で完成済みのため新規実装タスクなし）。
 
@@ -123,7 +123,7 @@ description: "Task list for camera fit on territory select feature implementatio
 
 ### Tests for User Story 4 (Behavior-First) ⚠️
 
-- [ ] T019 [P] [US4] `apps/frontend/src/components/map/hooks/use-camera-fit-on-selection.test.tsx` に失敗テストを追加する。選択 → フィット → `clearSelection` の遷移をシミュレートし、`fitBounds` モックが二度目に呼ばれず、`null` 遷移によるカメラ変更も発生しないことを検証する
+- [X] T019 [P] [US4] `apps/frontend/src/components/map/hooks/use-camera-fit-on-selection.test.tsx` に失敗テストを追加する。選択 → フィット → `clearSelection` の遷移をシミュレートし、`fitBounds` モックが二度目に呼ばれず、`null` 遷移によるカメラ変更も発生しないことを検証する
 
 **Checkpoint**: US4 受入シナリオがテストで合格する（実装は US1 のガード節で完成済みのため新規実装タスクなし）。
 
@@ -136,9 +136,9 @@ description: "Task list for camera fit on territory select feature implementatio
 - [ ] T020 [P] Desktop の dev ビルドで quickstart §7 に従い SC-003（クリックからカメラ停止までが 800ms 以内）を手動計測する
 - [ ] T021 [P] quickstart §5.3 に従い `prefers-reduced-motion: reduce` の挙動（アニメーションなし、即座にジャンプ）を手動確認する
 - [ ] T022 [P] Desktop と Mobile（Responsive モード）で quickstart §5.1 / §5.2 の代表シナリオをひと通り通し、既存のクリック・パネル開閉・年代切替に regression がないことを目視確認する
-- [ ] T023 リポジトリルートで `pnpm test && pnpm check && pnpm typecheck` を実行し、すべての gate が通ることを確認する
-- [ ] T024 `docs/frontend.md` に新しいカメラフィット挙動を追記する（map / interaction セクションに短いサブセクションを追加し、それ以外は変更しない）
-- [ ] T025 [P] `docs/pipeline.md` に `mergeByName` が出力する `BBOX_W` / `BBOX_S` / `BBOX_E` / `BBOX_N` / `BBOX_AM` Feature プロパティを追記する（`specs/241-camera-fit-on-territory-select/contracts/territory-feature-bbox.md` を参照リンクとして付ける）
+- [X] T023 リポジトリルートで `pnpm test && pnpm check && pnpm typecheck` を実行し、すべての gate が通ることを確認する
+- [X] T024 `docs/frontend.md` に新しいカメラフィット挙動を追記する（map / interaction セクションに短いサブセクションを追加し、それ以外は変更しない）
+- [X] T025 [P] `docs/pipeline.md` に `mergeByName` が出力する `BBOX_W` / `BBOX_S` / `BBOX_E` / `BBOX_N` / `BBOX_AM` Feature プロパティを追記する（`specs/241-camera-fit-on-territory-select/contracts/territory-feature-bbox.md` を参照リンクとして付ける）
 
 ---
 
