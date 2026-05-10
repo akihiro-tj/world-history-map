@@ -61,7 +61,7 @@ pipeline と frontend で事実上共有される型。共有パッケージは�
 - `index.json` — 収録されている年と各年の領土一覧（`YearIndex`）。YearSelector の表示源
 - `color-scheme.json` — 領土名 → HEX カラーのマッピング。地図の塗り分けに使う
 - `descriptions/{year}.json` — 年単位の領土説明バンドル（`YearDescriptionBundle`）。Notion から同期
-- `pmtiles/index.json` — `YearIndex` 形式の年リスト。`loader.ts` が `/pmtiles/index.json` として fetch する
+- `pmtiles/index.json` — `YearIndex` 形式の年リスト。`loader.ts` が `/pmtiles/index.json` として fetch する。`packages/tiles/src/pmtiles/index.json` が源泉で、tiles build 時に `dist/` へコピーされ、dev では vite middleware、prod では Vite build plugin 経由で配信される
 
 ## タイル配信とロールバック
 

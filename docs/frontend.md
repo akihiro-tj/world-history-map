@@ -71,7 +71,7 @@ territoryOpen ─── CLEAR_SELECTION ──→ none
 
 タイル URL の組み立ては `tiles-config.ts` に集約されている。`VITE_TILES_BASE_URL` 環境変数の有無で挙動が切り替わる:
 
-- 未設定（dev） — `getTilesUrl(year, '')` が `pmtiles:///pmtiles/world_{year}.{hash}.pmtiles` を返す。`vite.config.ts` の dev middleware が `packages/tiles/dist/` を `/pmtiles/` で配信する
+- 未設定（dev） — `getTilesUrl(year, '')` が `pmtiles:///pmtiles/world_{year}.{hash}.pmtiles` を返す。`vite.config.ts` の dev middleware が `packages/tiles/dist/` を `/pmtiles/` で配信する（`*.pmtiles` バイナリと `index.json` の両方を含む）
 - 設定あり（prod / preview） — `pmtiles://{VITE_TILES_BASE_URL}/world_{year}.{hash}.pmtiles` を返す。ハッシュは `@world-history-map/tiles` の `manifest.ts` からビルド時に解決される（runtime fetch なし）
 
 `MapView` は `useMapData` から得た `pmtilesUrl` を `<Source type="vector">` に渡し、PMTiles プロトコルが HTTP Range Request でスパース読み込みする。主要レイヤー:

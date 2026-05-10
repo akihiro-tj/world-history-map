@@ -26,7 +26,7 @@
  R2 bucket (world-history-map-tiles-prod / dev)
 ```
 
-`index-gen` ステージが全年処理後に `apps/frontend/public/pmtiles/index.json`（年と領土名一覧）を書き出す。
+`index-gen` ステージが全年処理後に `packages/tiles/src/pmtiles/index.json`（年と領土名一覧）を書き出す。
 
 ## コマンド早見表
 
@@ -73,7 +73,7 @@ git push
 - **merge** — 同名領土を turf で統合し、`NAME` と `SUBJECTO` のみ残す。代表点（ラベル用 Point）を別に出す。同年の `descriptions/{year}.json` から日本語名を引いて、ラベル feature の `name_ja` プロパティに焼き込む。
 - **validate** — turf でジオメトリを検証し、修復可能なものは clean / rewind / buffer_zero / unkink で直す。修復不能は warning、空コレクションや型違反は error で停止。
 - **convert** — tippecanoe で polygons / labels の各レイヤーを別 MVT に焼き、tile-join で 1 つの PMTiles に結合。出力先: `packages/tiles/src/pmtiles/world_{year}.pmtiles`
-- **index-gen** — 全年処理後、各年の領土名リストを `apps/frontend/public/pmtiles/index.json` として書き出す。
+- **index-gen** — 全年処理後、各年の領土名リストを `packages/tiles/src/pmtiles/index.json` として書き出す。
 
 ## 増分処理
 
@@ -132,6 +132,5 @@ git push
 
 出力先:
 
-- `packages/tiles/src/pmtiles/` — pipeline が生成する raw PMTiles（git 管理）
-- `apps/frontend/public/pmtiles/index.json` — 年と領土名一覧（git 管理）
+- `packages/tiles/src/pmtiles/` — pipeline が生成する raw PMTiles + `index.json`（年と領土名一覧）（git 管理）
 - `apps/frontend/public/data/descriptions/` — 領土説明 JSON（git 管理）
