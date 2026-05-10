@@ -2,12 +2,13 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import * as turf from '@turf/turf';
 import { describe, expect, it } from 'vitest';
-import { computeMainBbox, mergeByName } from '@/tiles/merge.ts';
+import { mergeByName } from '@/tiles/merge.ts';
+import { TerritoryBounds } from '@/tiles/territory-bounds.ts';
 import type { FeatureCollection } from '@/types/geojson.ts';
 
 const FIXTURES = path.join(process.cwd(), 'tests', 'fixtures');
 
-describe('computeMainBbox', () => {
+describe('TerritoryBounds.fromPolygon', () => {
   it('returns correct bbox for a single normal polygon', () => {
     const polygon = turf.polygon([
       [
@@ -18,7 +19,7 @@ describe('computeMainBbox', () => {
         [2, 46],
       ],
     ]);
-    const result = computeMainBbox(polygon);
+    const result = TerritoryBounds.fromPolygon(polygon);
     expect(result.west).toBe(2);
     expect(result.south).toBe(46);
     expect(result.east).toBe(3);
@@ -36,7 +37,7 @@ describe('computeMainBbox', () => {
         [60, 30],
       ],
     ]);
-    const result = computeMainBbox(mainPolygon);
+    const result = TerritoryBounds.fromPolygon(mainPolygon);
     expect(result.west).toBe(60);
     expect(result.south).toBe(30);
     expect(result.east).toBe(120);
@@ -54,7 +55,7 @@ describe('computeMainBbox', () => {
         [178, -10],
       ],
     ]);
-    const result = computeMainBbox(polygon);
+    const result = TerritoryBounds.fromPolygon(polygon);
     expect(result.crossesAntimeridian).toBe(true);
     expect(result.west).toBeCloseTo(178);
     expect(result.east).toBeCloseTo(182);

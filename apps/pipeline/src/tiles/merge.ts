@@ -4,6 +4,7 @@ import * as turf from '@turf/turf';
 import { PATHS, YearPaths } from '@/config.ts';
 import type { PipelineLogger } from '@/shared/logger.ts';
 import type { FeatureCollection, GeoJSONFeature } from '@/types/geojson.ts';
+import { TerritoryBounds } from './territory-bounds.ts';
 
 const KEPT_PROPERTIES = new Set([
   'NAME',
@@ -32,56 +33,6 @@ function toKebabCase(name: string): string {
     .toLowerCase()
     .replace(/\s+/g, '-')
     .replace(/[^a-z0-9-]/g, '');
-}
-
-export function computeMainBbox(polygon: ReturnType<typeof turf.polygon>): {
-  west: number;
-  south: number;
-  east: number;
-  north: number;
-  crossesAntimeridian: boolean;
-} {
-  const ring = polygon.geometry.coordinates[0] as [number, number][];
-  const lngs = ring.map(([lng]) => lng).sort((a, b) => a - b);
-
-  let maxGap = 0;
-  let gapEastIdx = 0;
-  for (let i = 1; i < lngs.length; i++) {
-    const cur = lngs[i] ?? 0;
-    const prev = lngs[i - 1] ?? 0;
-    const gap = cur - prev;
-    if (gap > maxGap) {
-      maxGap = gap;
-      gapEastIdx = i;
-    }
-  }
-
-  if (maxGap > 180) {
-    const west = lngs[gapEastIdx] ?? 0;
-    const east = (lngs[gapEastIdx - 1] ?? 0) + 360;
-    const lats = ring.map(([, lat]) => lat);
-    return {
-      west,
-      south: Math.min(...lats),
-      east,
-      north: Math.max(...lats),
-      crossesAntimeridian: true,
-    };
-  }
-
-  const [bboxWest, bboxSouth, bboxEast, bboxNorth] = turf.bbox(polygon) as [
-    number,
-    number,
-    number,
-    number,
-  ];
-  return {
-    west: bboxWest,
-    south: bboxSouth,
-    east: bboxEast,
-    north: bboxNorth,
-    crossesAntimeridian: false,
-  };
 }
 
 interface MergeResult {
@@ -154,14 +105,10 @@ export function mergeByName(
       }
 
       if (largestPoly) {
-        const bbox = computeMainBbox(largestPoly);
+        const bounds = TerritoryBounds.fromPolygon(largestPoly);
         mergedFeature.properties = {
           ...mergedFeature.properties,
-          BBOX_W: bbox.west,
-          BBOX_S: bbox.south,
-          BBOX_E: bbox.east,
-          BBOX_N: bbox.north,
-          BBOX_AM: bbox.crossesAntimeridian ? 1 : 0,
+          ...bounds.toFeatureProperties(),
         };
 
         const labelPoint = turf.pointOnFeature(largestPoly);
