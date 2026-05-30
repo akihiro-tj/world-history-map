@@ -27,12 +27,17 @@ colors:
   text-secondary: '#d4d4d4'
   text-tertiary: '#a1a1a1'
   text-quiet: '#717171'
+rounded:
+  lg: 0.5rem
+  '2xl': 1rem
+  full: 9999px
 ---
 
-> **The `colors` frontmatter above is generated** from `packages/design-tokens/src/theme.css`
-> by `pnpm --filter @world-history-map/design-tokens run build`. Do not edit it by hand —
-> change the OKLCH tokens in the package and regenerate (`build:check` guards drift in CI).
-> This markdown body is the hand-authored layer: the *why* and the rules that tokens can't hold.
+> **Frontmatter is partly generated.** The `colors` block is generated from
+> `packages/design-tokens/src/theme.css` by `pnpm --filter @world-history-map/design-tokens run build`
+> — do not edit it by hand; change the OKLCH tokens in the package and regenerate (`build:check`
+> guards drift in CI). The `rounded` block and the markdown body are hand-authored: the design
+> primitives and the *why* / rules that the color tokens can't hold.
 
 # Design System: World History Map
 
@@ -137,12 +142,13 @@ fully expanded.
 
 ## Shapes
 
-The shape language is softly rounded — "approachable but precise":
+The shape language is softly rounded — "approachable but precise". Radii are defined as
+`rounded` tokens in the frontmatter and referenced by name:
 
-- **`rounded-lg`** — panels, icon buttons, the year-selector strip. The default container
-  corner.
-- **`rounded-full`** — pills (the summary FAB), timeline dots, the bottom-sheet drag handle.
-- **`rounded-t-2xl`** — the mobile bottom sheet's top edge.
+- **`rounded.lg` (0.5rem)** — the default container corner: panels, icon buttons, the
+  year-selector strip.
+- **`rounded.full`** — pills (the summary FAB), timeline dots, the bottom-sheet drag handle.
+- **`rounded.2xl` (1rem)** — applied to the top edge only of the mobile bottom sheet.
 - A **left accent stripe** is itself a shape signal: it marks a panel as showing the
   *selected* territory, drawn in the rose accent.
 
@@ -183,7 +189,7 @@ The shape language is softly rounded — "approachable but precise":
   shadow. Depth = frosted glass.
 - Keep the map's center clear; anchor controls to the corners with a consistent inset.
 - Render explicit loading / empty / error states for any async panel (`RemoteData`).
-- Use dynamic-viewport height (`h-dvh` / `min-h-[100dvh]`) for full-height surfaces.
+- Size full-height surfaces with dynamic viewport units (`100dvh`), so mobile browser chrome doesn't clip them.
 - Respect `prefers-reduced-motion` — it is honored globally; new transitions must too.
 - On mobile, re-home controls (FAB + bottom sheet) rather than shrinking desktop panels.
 
@@ -197,7 +203,7 @@ The shape language is softly rounded — "approachable but precise":
   raw Tailwind `gray-*` (some components still ship the latter — that's drift, not the target).
 - Don't add web fonts or swap the system stack casually — it breaks native Japanese rendering
   and adds load cost for no visual gain.
-- Don't use `h-screen` (iOS Safari viewport jump) — use the dvh units.
+- Don't size full-height surfaces to the static viewport height (`100vh`) — it causes the iOS Safari viewport jump; use `100dvh`.
 - Don't make panels full-width on desktop or stack them over the map's focal area.
 - Don't introduce heavy drop shadows as the primary elevation cue; depth reads through blur
   and translucency.

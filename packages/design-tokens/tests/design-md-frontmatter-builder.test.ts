@@ -119,6 +119,33 @@ describe('DesignMdFrontmatterBuilder', () => {
     expect(await stableBuilder.generateDocument()).toBe(firstPass);
   });
 
+  it('preserves hand-authored frontmatter sections while regenerating name and colors', async () => {
+    const documentWithRounded = `---
+name: Old Name
+colors:
+  stale: '#000000'
+rounded:
+  lg: 0.5rem
+  full: 9999px
+---
+
+# Design System
+
+Body prose.
+`;
+    const builder = new DesignMdFrontmatterBuilder({
+      cssSource: sourceOf(SAMPLE_THEME_CSS),
+      documentSource: sourceOf(documentWithRounded),
+      projectName: PROJECT_NAME,
+    });
+    const document = await builder.generateDocument();
+    expect(document).toContain('rounded:');
+    expect(document).toContain('  lg: 0.5rem');
+    expect(document).toContain('  full: 9999px');
+    expect(document).toContain("  role-selected: '#f73d62'");
+    expect(document).not.toContain("stale: '#000000'");
+  });
+
   it('isUpToDate is true only when the existing document matches the generated one', async () => {
     const builder = new DesignMdFrontmatterBuilder({
       cssSource: sourceOf(SAMPLE_THEME_CSS),

@@ -3,6 +3,8 @@ import type { TextSource } from './text-source.ts';
 
 const COLOR_VAR_PATTERN = /--color-([a-z0-9]+(?:-[a-z0-9]+)*)\s*:\s*([^;]+?)\s*;/g;
 const FRONTMATTER_DELIMITER = '---';
+const TOP_LEVEL_KEY_PATTERN = /^([A-Za-z0-9_-]+):/;
+const GENERATED_FRONTMATTER_KEYS = new Set(['name', 'colors']);
 
 export interface ColorEntry {
   readonly name: string;
@@ -31,13 +33,14 @@ export class FrontmatterEmitter {
     this.projectName = projectName;
   }
 
-  emit(colors: ColorEntry[]): string {
-    const colorLines = colors.map((color) => `  ${color.name}: '${color.hex}'`).join('\n');
+  emit(colors: ColorEntry[], preservedSections: string[] = []): string {
+    const colorLines = colors.map((color) => `  ${color.name}: '${color.hex}'`);
     return [
       FRONTMATTER_DELIMITER,
       `name: ${this.projectName}`,
       'colors:',
-      colorLines,
+      ...colorLines,
+      ...preservedSections,
       FRONTMATTER_DELIMITER,
     ].join('\n');
   }
@@ -59,6 +62,30 @@ export function extractBody(document: string): string {
   return lines.slice(closingIndex + 1).join('\n');
 }
 
+export function preservedFrontmatterSections(document: string): string[] {
+  const lines = document.split('\n');
+  if (!isFrontmatterDelimiter(lines[0])) {
+    return [];
+  }
+  const closingIndex = lines.findIndex((line, index) => index >= 1 && isFrontmatterDelimiter(line));
+  if (closingIndex === -1) {
+    return [];
+  }
+
+  const preserved: string[] = [];
+  let keepingSection = false;
+  for (const line of lines.slice(1, closingIndex)) {
+    const topLevelKey = line.match(TOP_LEVEL_KEY_PATTERN)?.[1];
+    if (topLevelKey !== undefined) {
+      keepingSection = !GENERATED_FRONTMATTER_KEYS.has(topLevelKey);
+    }
+    if (keepingSection) {
+      preserved.push(line);
+    }
+  }
+  return preserved;
+}
+
 export class DesignMdFrontmatterBuilder {
   private readonly cssSource: TextSource;
   private readonly documentSource: TextSource;
@@ -77,8 +104,11 @@ export class DesignMdFrontmatterBuilder {
   async generateDocument(): Promise<string> {
     const css = await this.cssSource.read();
     const colors = new ColorPaletteParser().parse(css);
-    const frontmatter = new FrontmatterEmitter(this.projectName).emit(colors);
     const existing = await this.documentSource.read();
+    const frontmatter = new FrontmatterEmitter(this.projectName).emit(
+      colors,
+      preservedFrontmatterSections(existing),
+    );
     return [frontmatter, extractBody(existing)].join('\n');
   }
 
