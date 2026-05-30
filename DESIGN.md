@@ -1,17 +1,6 @@
 ---
 name: World History Map
 colors:
-  primary-50: '#f0f6fc'
-  primary-100: '#d9eafc'
-  primary-200: '#b4d5f8'
-  primary-300: '#7fb6ee'
-  primary-400: '#3690e3'
-  primary-500: '#0072d5'
-  primary-600: '#005aba'
-  primary-700: '#004699'
-  primary-800: '#003872'
-  primary-900: '#002953'
-  primary-950: '#001730'
   role-selected: '#f73d62'
   role-loading: '#46a6ff'
   role-warn: '#f2a618'
@@ -27,26 +16,16 @@ colors:
   text-secondary: '#d4d4d4'
   text-tertiary: '#a1a1a1'
   text-quiet: '#717171'
-rounded:
-  lg: 0.5rem
-  '2xl': 1rem
-  full: 9999px
 ---
-
-> **Frontmatter is partly generated.** The `colors` block is generated from
-> `packages/design-tokens/src/theme.css` by `pnpm --filter @world-history-map/design-tokens run build`
-> — do not edit it by hand; change the OKLCH tokens in the package and regenerate (`build:check`
-> guards drift in CI). The `rounded` block and the markdown body are hand-authored: the design
-> primitives and the *why* / rules that the color tokens can't hold.
 
 # Design System: World History Map
 
 This file is the **design counterpart to `CLAUDE.md`** — persistent design context an agent
-reads before generating UI. It deliberately avoids re-stating values the codebase already
-owns precisely: exact colors live in `packages/design-tokens` (authoritative, OKLCH), and
-layout mechanics (z-index order, breakpoints, pixel widths) live in the components. What
-lives *here* is the layer with no other home — the intent, the relationships, and the do's
-and don'ts that keep generated screens on-brand instead of generically "AI-looking".
+reads before generating UI. The `colors` frontmatter holds the design's own semantic color
+tokens; type, spacing, and radii ride the framework defaults and are described in prose.
+Layout mechanics (z-index order, breakpoints, pixel widths) stay in the components, not here.
+The body holds what has no other home — the intent, the relationships, and the do's and don'ts
+that keep generated screens on-brand instead of generically "AI-looking".
 
 ## Overview
 
@@ -59,19 +38,17 @@ always the hero — UI clusters into the corners and never competes with the map
 Two color layers coexist and must stay separate:
 
 - **UI chrome** — slate panels, white text, the rose accent. Token-driven (`surface-*`,
-  `text-*`, `role-*`), defined in `design-tokens`.
+  `text-*`, `role-*`), defined in this file's frontmatter.
 - **Territory fills** — per-territory colors served at runtime from
   `public/data/color-scheme.json` through a MapLibre `match` expression. Data-driven, *not*
   part of this design system. Treat them as content, not chrome.
 
 ## Colors
 
-Colors are authored in **OKLCH** and named by **role, not hue** — both choices are
-deliberate. OKLCH is perceptually uniform, so the `primary-50…950` ramp is built by varying
-lightness alone without hue drift, and a build step converts the tokens to hex for the
-MapLibre layers (which accept only hex). Role naming (`role-selected`, `role-loading`,
-`role-error`, `role-focus`) encodes *intent*: a contributor changes "the selected-state
-color" in one place instead of hunting for a hue.
+Colors are named by **role, not hue** — `role-selected`, `role-loading`, `role-error`,
+`role-focus` encode *intent*, so a contributor changes "the selected-state color" in one place
+instead of hunting for a hue. They are the only tokens this design owns outright; every other
+dimension defers to the framework's defaults.
 
 **The rose accent is a rule, not just a value.** `role-selected` is the only warm color in an
 otherwise cool field, and it is reserved **exclusively** for two meanings: the *selected
@@ -142,13 +119,14 @@ fully expanded.
 
 ## Shapes
 
-The shape language is softly rounded — "approachable but precise". Radii are defined as
-`rounded` tokens in the frontmatter and referenced by name:
+The shape language is softly rounded — "approachable but precise". Radii ride the framework's
+default scale (the design owns no custom radius values):
 
-- **`rounded.lg` (0.5rem)** — the default container corner: panels, icon buttons, the
+- **0.5rem** (`rounded-lg`) — the default container corner: panels, icon buttons, the
   year-selector strip.
-- **`rounded.full`** — pills (the summary FAB), timeline dots, the bottom-sheet drag handle.
-- **`rounded.2xl` (1rem)** — applied to the top edge only of the mobile bottom sheet.
+- **Fully round** (`rounded-full`) — pills (the summary FAB), timeline dots, the bottom-sheet
+  drag handle.
+- **1rem** (`rounded-2xl`), top edge only — the mobile bottom sheet.
 - A **left accent stripe** is itself a shape signal: it marks a panel as showing the
   *selected* territory, drawn in the rose accent.
 
@@ -182,8 +160,8 @@ The shape language is softly rounded — "approachable but precise". Radii are d
 
 **Do**
 
-- Treat `packages/design-tokens` as the source of truth for exact values; reference role
-  tokens (`role-selected`, `surface-*`, `text-*`) rather than raw hex.
+- Reference role tokens (`role-selected`, `surface-*`, `text-*`) rather than raw hex; the
+  palette is defined in the `colors` frontmatter of this file.
 - Reserve the rose accent (`role-selected`) strictly for *selected territory* and *current year*.
 - Give every floating surface the frosted treatment: near-opaque slate + backdrop blur + soft
   shadow. Depth = frosted glass.
@@ -207,4 +185,3 @@ The shape language is softly rounded — "approachable but precise". Radii are d
 - Don't make panels full-width on desktop or stack them over the map's focal area.
 - Don't introduce heavy drop shadows as the primary elevation cue; depth reads through blur
   and translucency.
-- Don't hand-edit the `colors` frontmatter — change `theme.css` and regenerate.

@@ -44,7 +44,7 @@ pnpm --filter @world-history-map/tiles run test           # Run tiles unit tests
 
 - `docs/overview.md`: Living architecture entry point. Start here for overall structure and cross-app data flow
 - `docs/{pipeline,frontend,worker}.md`: Per-app deep dives; each is independently readable for the app it covers
-- `DESIGN.md`: Design application rules (color usage, surface treatment, layout principles, Do/Don't). **Read this before creating or changing any UI** so generated screens stay consistent. The `colors` frontmatter is generated from `theme.css` via `@world-history-map/design-tokens`; the prose body is hand-written
+- `DESIGN.md`: Design application rules (color usage, surface treatment, layout principles, Do/Don't). **Read this before creating or changing any UI** so generated screens stay consistent. The `colors` frontmatter is the source of truth for the design's color tokens; `theme.css` (Tailwind `@theme`) and `role-colors.generated.ts` (MapLibre) are generated from it via `@world-history-map/design-tokens` (`pnpm --filter @world-history-map/design-tokens run build`; CI's `build:check` guards drift). The prose body — including type/spacing/radii, which ride the framework defaults — is hand-written
 - `.specify/memory/constitution.md`: Project constitution (ratified). Five principles govern change — consult before planning features
 
 ## Code Style

@@ -1,74 +1,58 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { DesignMdFrontmatterBuilder } from './design-md-frontmatter-builder.ts';
-import { RoleColorsBuilder } from './role-colors-builder.ts';
-import type { TextSource } from './text-source.ts';
+import { DesignMdColorParser } from './design-md-color-parser.ts';
+import { RoleColorsEmitter } from './role-colors-builder.ts';
+import { ThemeCssEmitter } from './theme-css-builder.ts';
 
 const PACKAGE_ROOT = path.resolve(fileURLToPath(import.meta.url), '../../..');
 const REPO_ROOT = path.resolve(PACKAGE_ROOT, '../..');
-const THEME_CSS_PATH = path.join(PACKAGE_ROOT, 'src/theme.css');
-const ROLE_COLORS_OUTPUT_PATH = path.join(PACKAGE_ROOT, 'src/role-colors.generated.ts');
 const DESIGN_MD_PATH = path.join(REPO_ROOT, 'DESIGN.md');
-const PROJECT_NAME = 'World History Map';
+const THEME_CSS_PATH = path.join(PACKAGE_ROOT, 'src/theme.css');
+const ROLE_COLORS_PATH = path.join(PACKAGE_ROOT, 'src/role-colors.generated.ts');
 
-class FileSource implements TextSource {
-  private readonly filePath: string;
-
-  constructor(filePath: string) {
-    this.filePath = filePath;
-  }
-
-  async read(): Promise<string> {
-    return readFile(this.filePath, 'utf-8');
-  }
+interface GeneratedArtifact {
+  readonly path: string;
+  readonly content: string;
 }
 
 async function readExisting(filePath: string): Promise<string | null> {
   return readFile(filePath, 'utf-8').catch(() => null);
 }
 
-function createRoleColorsBuilder(): RoleColorsBuilder {
-  return new RoleColorsBuilder({
-    cssSource: new FileSource(THEME_CSS_PATH),
-  });
-}
-
-function createDesignMdBuilder(): DesignMdFrontmatterBuilder {
-  return new DesignMdFrontmatterBuilder({
-    cssSource: new FileSource(THEME_CSS_PATH),
-    documentSource: new FileSource(DESIGN_MD_PATH),
-    projectName: PROJECT_NAME,
-  });
+async function generateArtifacts(): Promise<GeneratedArtifact[]> {
+  const designMd = await readFile(DESIGN_MD_PATH, 'utf-8');
+  const colors = new DesignMdColorParser().parse(designMd);
+  return [
+    { path: THEME_CSS_PATH, content: new ThemeCssEmitter().emit(colors) },
+    { path: ROLE_COLORS_PATH, content: new RoleColorsEmitter().emit(colors) },
+  ];
 }
 
 async function runBuild(): Promise<void> {
-  const roleColorsSource = await createRoleColorsBuilder().generateSource();
-  await writeFile(ROLE_COLORS_OUTPUT_PATH, roleColorsSource);
-  console.log('Generated role-colors.generated.ts');
-
-  const designMdDocument = await createDesignMdBuilder().generateDocument();
-  await writeFile(DESIGN_MD_PATH, designMdDocument);
-  console.log('Generated DESIGN.md frontmatter');
+  for (const artifact of await generateArtifacts()) {
+    await writeFile(artifact.path, artifact.content);
+    console.log(`Generated ${path.relative(PACKAGE_ROOT, artifact.path)}`);
+  }
 }
 
 async function runCheck(): Promise<void> {
-  const roleColorsBuilder = createRoleColorsBuilder();
-  const designMdBuilder = createDesignMdBuilder();
+  const artifacts = await generateArtifacts();
+  const staleArtifacts = (
+    await Promise.all(
+      artifacts.map(async (artifact) => ({
+        relativePath: path.relative(PACKAGE_ROOT, artifact.path),
+        isStale: (await readExisting(artifact.path)) !== artifact.content,
+      })),
+    )
+  ).filter((result) => result.isStale);
 
-  const [generatedRoleColors, existingRoleColors] = await Promise.all([
-    roleColorsBuilder.generateSource(),
-    readExisting(ROLE_COLORS_OUTPUT_PATH),
-  ]);
-  const [generatedDesignMd, existingDesignMd] = await Promise.all([
-    designMdBuilder.generateDocument(),
-    readExisting(DESIGN_MD_PATH),
-  ]);
-
-  const allFresh =
-    roleColorsBuilder.isUpToDate(existingRoleColors, generatedRoleColors) &&
-    designMdBuilder.isUpToDate(existingDesignMd, generatedDesignMd);
-  process.exit(allFresh ? 0 : 1);
+  for (const { relativePath } of staleArtifacts) {
+    console.error(
+      `Stale: ${relativePath} (run \`pnpm --filter @world-history-map/design-tokens run build\`)`,
+    );
+  }
+  process.exit(staleArtifacts.length > 0 ? 1 : 0);
 }
 
 const isCheckMode = process.argv.includes('--check');
