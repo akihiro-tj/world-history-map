@@ -1,7 +1,7 @@
 ---
 name: World History Map
 colors:
-  background: '#0a0e11'
+  surface-base: '#0a0e11'
   map-ocean: '#1a2a3a'
   surface-panel: '#364153'
   surface-sheet: '#1e2939'
@@ -12,8 +12,6 @@ colors:
   text-tertiary: '#a1a1a1'
   text-quiet: '#717171'
   primary: '#0072d5'
-  primary-300: '#7fb6ee'
-  primary-700: '#004699'
   selected: '#f73d62'
   loading: '#46a6ff'
   warn: '#f2a618'
@@ -27,43 +25,31 @@ typography:
     fontSize: 30px
     fontWeight: '700'
     lineHeight: 36px
-    letterSpacing: normal
-  year-active:
-    fontFamily: system-ui
-    fontSize: 20px
-    fontWeight: '700'
-    lineHeight: 28px
-    letterSpacing: normal
   panel-title:
     fontFamily: system-ui
     fontSize: 18px
     fontWeight: '600'
     lineHeight: 28px
-    letterSpacing: normal
-  body-base:
+  body:
     fontFamily: system-ui
     fontSize: 16px
     fontWeight: '400'
     lineHeight: 24px
-    letterSpacing: normal
   body-sm:
     fontFamily: system-ui
     fontSize: 14px
     fontWeight: '400'
     lineHeight: 22px
-    letterSpacing: normal
   label-sm-bold:
     fontFamily: system-ui
     fontSize: 14px
     fontWeight: '600'
     lineHeight: 20px
-    letterSpacing: normal
   caption:
     fontFamily: system-ui
     fontSize: 12px
     fontWeight: '400'
     lineHeight: 16px
-    letterSpacing: normal
 rounded:
   DEFAULT: 0.25rem
   lg: 0.5rem
@@ -72,222 +58,190 @@ rounded:
 spacing:
   unit: 4px
   edge-inset: 16px
-  panel-padding-x: 16px
-  panel-padding-y: 12px
-  gap: 8px
   panel-width: 384px
   panel-max-content: 672px
 ---
 
 # Design System: World History Map
 
-An interactive, map-first atlas for world-history learners. The entire screen is
-a live MapLibre globe; everything else is a translucent control surface floating
-above it. The design language is that of a modern **dark data console / HUD** —
-calm cool-slate neutrals, a disciplined white text hierarchy, and a single warm
-spark reserved for "here / now."
+> Canonical token source: **`packages/design-tokens`** (`@world-history-map/design-tokens`).
+> The frontmatter above is a stable, role-level mirror for quick agent lookup — the
+> OKLCH definitions in the package are authoritative. If a value disagrees, the package
+> wins; update the package first, then reflect the *reasoning* here.
 
-## 1. Visual Theme & Atmosphere
+## Overview
 
-The application is built around an edge-to-edge, full-viewport map (`h-dvh
-w-screen`, `overflow-hidden`, `select-none`) rendered over a deep ocean navy
-(`#1a2a3a`). There is no page chrome in the traditional sense — instead, every
-piece of UI is a **frosted-glass panel that hovers over the map** with
-`backdrop-blur-sm`, ~95% opacity slate fills, and soft drop shadows. The effect
-is a heads-up display layered onto an atlas: the geography stays the hero, and
-the controls feel like glass overlaid on glass. The mood is immersive, focused,
-and quietly technical — closer to a navigation cockpit than a content website.
+World History Map is an interactive atlas for history learners. The whole screen is a
+live MapLibre globe; everything else is a translucent control surface floating above it.
+The design language is a **dark data console / HUD**: calm cool-slate neutrals, a
+disciplined white text hierarchy, and a single warm accent reserved for "here / now".
+The geography is always the hero — UI clusters into the corners and never competes with
+the map.
 
-The color temperature is decidedly **cool**: blue-tinted near-blacks, slate
-greys, and a blue brand accent dominate, evoking depth, water, and night. Against
-that restrained field, one color does all the emotional work — a vivid rose-red
-(`#f73d62`, the `selected` role) — used exclusively to mark the *selected
-territory* and the *current year* on a timeline. Density is moderate-to-high
-inside the panels (definition lists, timelines, region cards stack tightly) but
-internal breathing room is generous (`px-4 py-4`, comfortable `space-y` rhythm),
-so information-rich content never feels cramped. The system respects
-`prefers-reduced-motion` and suppresses iOS tap highlights, reinforcing a
-deliberate, app-like polish.
+This file is the **design counterpart to `CLAUDE.md`**: it does not re-document what the
+code already states precisely (exact values live in `packages/design-tokens` and in the
+components). It captures the layer tokens cannot hold — *why* the system looks the way it
+does, the rules that aren't encoded in any single value, and the do's and don'ts that keep
+generated screens on-brand instead of generically "AI-looking".
 
-## 2. Color Palette & Roles
+Two color layers coexist and must stay separate:
 
-Colors are authored in **OKLCH** in a design-token package
-(`@world-history-map/design-tokens`) and named by *role*, not by hue. A build
-step converts them to hex for the MapLibre layers. Note one intent-vs-shipped
-nuance: the tokens define a `surface-*` family, but the shipped components mostly
-use Tailwind's default **slate-grey** scale (`gray-700/600/800`) for their
-panels and borders — both are recorded below.
+- **UI chrome** — slate panels, white text, the rose accent. Token-driven, defined here.
+- **Territory fills** — per-territory colors served at runtime from `public/data/color-scheme.json`
+  and applied through a MapLibre `match` expression. Data-driven, *not* part of this design
+  system. Treat them as content, not chrome.
 
-### Primary Foundation (Canvas & Surfaces)
+## Colors
 
-- **Abyssal Blue-Black** `#0a0e11` (`surface-base`) — the deepest app base, behind everything.
-- **Deep Ocean Navy** `#1a2a3a` (`MAP_CONFIG.backgroundColor`) — the visible map water/void; the dominant field the user sees.
-- **Frosted Slate Panel** `#364153` (Tailwind `gray-700` @ 95%) — the signature floating-panel fill (info panel, era summary, control bar, year selector, FAB).
-- **Sheet Slate** `#1e2939` (Tailwind `gray-800`) — solid fill for the mobile bottom sheet.
-- **Hairline Slate** `#4a5565` (Tailwind `gray-600`) — panel dividers and borders.
-- **Raised Glass** `#525c6b` (token `surface-raised` = white @14% over panel) — the selected segment inside the year selector.
+Colors are authored in **OKLCH** and named by **role, not hue**. Both choices are
+deliberate:
 
-### Accent & Interactive
+- **OKLCH** is perceptually uniform, so the `primary-50…950` ramp is generated by varying
+  lightness alone without hue drift — and a build step converts the role colors to hex for
+  the MapLibre layers, which only accept hex.
+- **Role naming** (`selected`, `loading`, `error`, `focus`) encodes *intent*. A new
+  contributor changes "the selected-state color" in one place instead of hunting for a hue.
 
-- **Signal Blue** `#0072d5` (`primary-500` / `focus`) — brand accent and the keyboard focus ring (`2px` outline, `2px` offset).
-- **Sky Tint** `#7fb6ee` (`primary-300`) and **Deep Sapphire** `#004699` (`primary-700`) — lighter/darker steps of the full 50–950 blue ramp (hue 250).
-- **Vivid Rose** `#f73d62` (`selected`) — the one warm accent. Selection highlight on the map (`HIGHLIGHT_COLOR`), the `border-l-4` accent stripe on the selected-territory panel, and the glowing "current year" dot on timelines.
+**The rose accent is a rule, not just a value.** `selected` (`#f73d62`) is the only warm
+color in an otherwise cool field, and it is reserved **exclusively** for two meanings:
+the *selected territory* (map highlight, the panel's left accent stripe) and the *current
+year* on a timeline (the glowing dot). Its impact depends entirely on scarcity — spend it
+anywhere else and the "you are here / now" signal dissolves.
 
-### Typography & Text Hierarchy
+**Text hierarchy** is communicated by lightness steps, not size: `text-primary` (#ffffff)
+for titles and values → `text-secondary` (#d4d4d4) for body → `text-tertiary` (#a1a1a1)
+for labels and metadata → `text-quiet` (#717171) for disabled and faint elements.
 
-- **Pure White** `#ffffff` (`text-primary`) — titles, values, emphasized text.
-- **Soft White** `#d4d4d4` (`text-secondary`, ≈ `gray-300`) — body copy, era subtitles, secondary nav.
-- **Muted Grey** `#a1a1a1` (`text-tertiary`, ≈ `gray-400`) — profile labels, timeline years.
-- **Quiet Grey** `#717171` (`text-quiet`, ≈ `gray-500`) — disabled states, faint timeline dots, drag handles.
+**Surfaces** read as a stack of slates: the map void (`map-ocean` #1a2a3a) over the deepest
+base (`surface-base` #0a0e11), with frosted panels (`surface-panel`, shipped as Tailwind
+`gray-700` at ~95%) and hairline dividers (`surface-border`). Note the intent-vs-shipped
+gap: tokens define a `surface-*` family, but components mostly use Tailwind's default slate
+greys (`gray-700/600/800`). When adding UI, prefer the role token; reach for a raw grey only
+to match an immediate neighbor.
 
-### Functional States
+## Typography
 
-- **Loading Blue** `#46a6ff` (`loading`) — the spinner ring.
-- **Amber Warn** `#f2a618` (`warn`) — warnings.
-- **Alert Red** `#f9423d` (`error`) — error text on a 10%-tint background (`bg-role-error/10`).
-- **Map Label** `#eeeeee` text with **Halo** `#161616` (`label-text` / `label-halo`) — keeps place names legible over any territory fill.
+The system uses the **native system font stack** (`system-ui, Avenir, Helvetica, Arial,
+sans-serif`) — no web fonts. This is intentional: the document is `lang="ja"`, so the OS's
+Japanese faces render natively and instantly, with zero font-loading cost or layout shift.
 
-## 3. Typography Rules
+Hierarchy comes from **weight and size, never letter-spacing** (there is no custom tracking
+anywhere). Body copy uses relaxed leading for readability; display numerals (the year
+readout) use tight leading for compactness. Numeric sequences — timeline years — use
+`tabular-nums` so digits align in a column.
 
-### Hierarchy & Weights
+| Role | Size / Weight | Usage |
+|:---|:---|:---|
+| Year Hero | 30px / 700 | The large animated year readout |
+| Active Year | 20px / 700 | Selected year in the selector strip |
+| Panel Title | 18px / 600 | Panel `h2` (territory name, "{year}年の世界") |
+| Body | 16px / 400 | Inactive year-selector buttons |
+| Card Title | 14px / 600 | Region-card `h3`, profile values |
+| Body Small | 14px / 400 | Context paragraphs, era subtitle |
+| Caption | 12px / 400 | Timeline years (tabular) |
 
-The system uses the **native system font stack** (`system-ui, Avenir, Helvetica,
-Arial, sans-serif`) — no web fonts are loaded, keeping the UI fast and
-platform-native (the document is `lang="ja"`, so it renders the OS's Japanese
-faces where present). Base line-height is `1.5`, base weight `400`, with
-`optimizeLegibility` and antialiasing enabled.
+## Layout
 
-| Role | Size | Weight | Usage |
-|:---|:---|:---|:---|
-| Year Hero | `text-3xl` (30px) | Bold 700 | The big animated year readout |
-| Active Year | `text-xl` (20px) | Bold 700 | Currently-selected year in the selector strip |
-| Panel Title | `text-lg` (18px) | Semibold 600 | Panel `h2` (territory name, "{year}年の世界") |
-| Body | `text-base` (16px) | Regular 400 | Inactive year-selector buttons |
-| Card Title | `text-sm` (14px) | Semibold 600 | Region-card `h3`, profile values |
-| Body Small | `text-sm` (14px) | Regular 400 | Context paragraphs (`leading-relaxed`), era subtitle |
-| Caption | `text-xs` (12px) | Regular 400 | Timeline years (`tabular-nums`) |
+The layout is not a page grid — it is a **map canvas with corner-anchored overlays**. The
+organizing rules:
 
-### Spacing Principles
+- The map fills the viewport (`h-dvh w-screen`, `overflow-hidden`, `select-none`). Its
+  center is sacred: panels anchor to the corners with a uniform **16px edge inset** and must
+  never cover the focal geography.
+- Content widths are bounded, not fluid: detail panels at **384px** (`w-96`,
+  `max-w-[calc(100vw-2rem)]`), the year-selector strip at **672px** centered. Panels are
+  never full-width on desktop.
+- A clear **z-index stack** keeps overlays predictable: map (base) → year selector & control
+  bar (`z-20`) → info / summary panels & summary trigger (`z-30`) → mobile bottom sheet
+  (`z-40`).
+- Spacing follows the Tailwind **4px baseline**: 16px screen inset, `px-4` panel padding,
+  `py-3` headers / `py-4` bodies, `space-y-3/4` content rhythm. Dense but orderly.
 
-There is no custom letter-spacing — the system relies on weight and size for
-hierarchy, not tracking. Body paragraphs use `leading-relaxed` for readability;
-display numerals use default leading for compactness. Numeric sequences (timeline
-years) use `tabular-nums` so digits align in a column. Headings sit a hair above
-their subtitles (`mt-0.5`–`mt-2.5`) rather than relying on large vertical gaps.
+**Responsive is a re-home, not a reflow.** One breakpoint matters: **md = 768px**
+(`useIsMobile`). Below it the layout reorganizes by *meaning*: the desktop's top-left summary
+trigger becomes a bottom-right FAB, and side panels become a draggable **bottom sheet** with
+snap points. The summary panel opens by default on desktop and starts closed on mobile.
 
-## 4. Component Stylings
+## Elevation & Depth
 
-### Buttons
+Depth is conveyed by **frosted glass, not heavy shadows**. Every floating surface shares one
+treatment: a ~95%-opacity slate fill (`bg-gray-700/95`) + `backdrop-blur-sm` + a soft
+`shadow-lg`/`shadow-xl`. The map stays faintly visible through the blur, reinforcing the
+"HUD over an atlas" feeling. This consistency is the point — a surface that floats but lacks
+the frosted treatment reads as a foreign element.
 
-- **Icon buttons (control bar):** `rounded-lg`, frosted-slate fill `bg-gray-700/95`, `p-3`, `shadow-lg`, `backdrop-blur-sm`. Idle icon at `text-white/60`, brightening to `text-white` on hover via `transition-colors`. Icon-only with an `sr-only` label; SVG `h-6 w-6`, stroke width `1.5`.
-- **Pill / FAB ("概要" summary trigger):** `rounded-full`, `bg-gray-700/95`, `px-4 py-2.5`, icon + `text-sm` label, `shadow-lg backdrop-blur-sm`, hover `bg-gray-600/95`.
-- **Segmented year buttons:** flat, divided by `border-r border-gray-600`. Selected segment lifts to `bg-surface-raised`, `text-xl font-bold text-white`, wider (`min-w-[5rem]`); inactive segments are `text-gray-300` → hover `bg-gray-600 hover:text-white`. Disabled arrows: `text-gray-500 cursor-not-allowed`.
-- **Close button:** ghost style — `rounded-lg text-gray-300`, hover `bg-gray-600 hover:text-white`, `p-1.5` (md) / `p-1` (sm).
-- Global base reset: buttons inherit font, have no border/padding, `cursor-pointer`, and dim to `opacity-50` + `cursor-not-allowed` when disabled.
+Secondary depth cues: a **scroll-fade overlay** at a panel's bottom edge signals more content
+below; the mobile bottom sheet darkens the map behind it with a `bg-black/50` scrim only when
+fully expanded.
 
-### Cards & Floating Panels
+## Shapes
 
-The floating panel is the system's defining container:
+The shape language is softly rounded, communicating "approachable but precise":
 
-- Positioned `absolute left-4 top-4 z-30`, width `w-96` (384px), `max-w-[calc(100vw-2rem)]`, scrollable variant capped at `max-h-[calc(100vh-2rem)]`.
-- `rounded-lg`, `bg-gray-700/95`, `shadow-xl`, `backdrop-blur-sm`, `overflow-hidden`, flex column.
-- Header is divided from the body by `border-b border-gray-600` (`px-4 py-3`); body padding `px-4 py-4` with `space-y-3`/`space-y-4` rhythm.
-- The **selected-territory** panel adds a `border-l-4 border-role-selected` accent stripe.
-- A bottom **scroll-fade overlay** signals more content below.
-- **Region cards** are lightweight `article`s (no border/shadow): `text-sm font-semibold text-white` title over a `text-sm leading-relaxed text-gray-300` paragraph, stacked `space-y-4`.
+- **`rounded-lg` (8px)** — panels, icon buttons, the year-selector strip. The default
+  container corner.
+- **`rounded-full`** — pills (the summary FAB), timeline dots, the bottom-sheet drag handle.
+- **`rounded-t-2xl` (16px)** — the mobile bottom sheet's top edge.
+- A **`border-l-4` accent stripe** is itself a shape signal: it marks a panel as showing the
+  *selected* territory (in the rose accent).
 
-### Navigation (Year Selector)
+## Components
 
-A horizontally-scrolling strip pinned bottom-center: `inset-x-4 bottom-4`,
-`mx-auto max-w-2xl` (672px), `rounded-lg bg-gray-700/95 shadow-lg
-backdrop-blur-sm`. Prev/next chevron buttons flank a scrollable run of
-year segments (`scrollbar-none`). Full keyboard support (Arrow/Home/End/Enter),
-`aria-current` on the active year, and the selected button auto-scrolls into
-center via `scrollIntoView`.
+- **Floating panel (the signature container).** Corner-anchored, frosted, `rounded-lg`,
+  384px wide, flex column with an `overflow-hidden` body. Header is divided from the body by
+  a hairline border (`px-4 py-3`); body padding `px-4 py-4`. Every async panel renders four
+  explicit states — **loading, error, empty, loaded** (the `RemoteData` pattern) — never a
+  bare blank while fetching.
+- **Icon button (control bar).** Frosted `rounded-lg` square, idle icon at 60% white,
+  brightening to full white on hover (`transition-colors`). Icon-only with an `sr-only`
+  label; SVG stroke width 1.5.
+- **Pill / FAB (summary trigger).** `rounded-full` frosted pill, icon + small label, hover
+  lightens the fill.
+- **Close button.** Ghost: grey icon, hover fills `gray-600` and goes white.
+- **Year selector (nav).** A horizontally-scrolling strip of segmented buttons divided by
+  hairlines. The active year lifts to a raised fill, larger and bold; inactive years are grey
+  with hover feedback. Full keyboard support (Arrow/Home/End/Enter), `aria-current` on the
+  active year, auto-scroll-to-center on change.
+- **Bottom sheet (mobile).** Draggable with snap points, `rounded-t-2xl`, drag handle,
+  focus-trapped when expanded.
+- **Timeline (domain-specific).** A vertical rail with faint dots for past/future events
+  (dimmed to 60–70%) and one emphasized *current* node — a rose dot with a soft glow, bold
+  white event text. Temporal styling is centralized in one strategy map, not scattered across
+  the component.
+- **Feedback.** Loading is a `role-loading` blue spinner ring; errors render as
+  `role-error` text on a 10% tint. Empty states say what's missing in plain language.
+- **Focus.** There are no text inputs — this is a select-and-explore product. The equivalent
+  affordance is the focus ring: a 2px `role-focus` outline shown only for keyboard
+  navigation (`:focus-visible`), suppressed for mouse.
 
-### Inputs & Forms
+## Do's and Don'ts
 
-This is a selection-and-explore product — there are no text inputs. The
-equivalent "input" affordance is the **focus ring**: `:focus-visible` draws a
-`2px solid var(--color-role-focus)` outline with `2px` offset, shown only for
-keyboard navigation (mouse focus is suppressed).
+**Do**
 
-### Domain-Specific Components
+- Treat `packages/design-tokens` as the source of truth for exact values; reference role
+  tokens in components (`role-selected`, `surface-*`, `text-*`) rather than raw hex.
+- Reserve the rose accent (`selected`) strictly for *selected territory* and *current year*.
+- Give every floating surface the frosted treatment: ~95% slate fill + `backdrop-blur` + soft
+  shadow. Depth = frosted glass.
+- Keep the map's center clear; anchor controls to corners with the 16px inset.
+- Render explicit loading / empty / error states for any async panel (`RemoteData`).
+- Use `h-dvh` / `min-h-[100dvh]` for full-height; keep `select-none` on the map shell.
+- Respect `prefers-reduced-motion` — it is honored globally; new transitions must too.
+- On mobile, re-home controls (FAB + bottom sheet) rather than shrinking desktop panels.
+- Keep numeric sequences in `tabular-nums`.
 
-- **Territory Timeline:** an `ol` with a vertical rail (`w-px bg-surface-border`). Past/future events sit at `opacity-60/70` with a tiny `3px` quiet-grey dot, `text-xs` tertiary year, and `text-sm` secondary event. The **current** row is emphasized: `font-semibold`, a `9px` rose dot (`bg-role-selected`) ringed by `border-2 border-surface-panel` and wrapped in an `8px` rose glow (`box-shadow`), with a rose year label and white event text. Temporal styling is centralized in a single strategy map (`timelineRowStyleFor`).
-- **Territory Profile:** a two-column definition list `grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm` — `dt` labels in `text-gray-400`, `dd` values in `text-white`.
-- **Mobile Bottom Sheet:** `fixed inset-x-0 bottom-0`, `rounded-t-2xl bg-gray-800 shadow-xl`, a `h-1 w-10 rounded-full bg-gray-500` drag grabber, a `bg-black/50` backdrop when expanded, draggable snap points, and focus-trapping when fully open.
-- **Feedback:** spinner is a `h-8 w-8 border-4` ring in `loading` blue with a transparent top, `animate-spin`; error is a rounded `bg-role-error/10` block of `text-role-error`.
+**Don't**
 
-## 5. Layout Principles
-
-### Grid & Structure
-
-There is no traditional page grid — the layout is a **map canvas plus absolutely
-positioned overlays**, organized by a clear z-index stack: map (base) → year
-selector & control bar (`z-20`) → info/summary panels & summary trigger (`z-30`)
-→ mobile bottom sheet (`z-40`). Panels anchor to screen corners with a uniform
-`4` (16px) edge inset. Content widths are bounded: panels at `24rem` (384px), the
-year-selector strip at `42rem` (672px), each centered or corner-pinned rather
-than filling the viewport.
-
-### Whitespace Strategy
-
-Spacing follows the Tailwind **4px baseline scale**. The recurring rhythm is a
-`16px` screen inset (`left-4`/`top-4`/`bottom-4`), `px-4` panel padding,
-`py-3` headers / `py-4` bodies, and `gap-2`–`gap-2.5` between stacked controls.
-Vertical content rhythm uses `space-y-3`/`space-y-4`. The result is dense but
-orderly — every panel breathes consistently.
-
-### Alignment & Visual Balance
-
-The map is the optical center of gravity; UI clusters into the corners so the
-geography stays unobstructed. Text is left-aligned for scanning, with header
-rows using `flex justify-between` to push close buttons to the trailing edge.
-Empty/loading/error states are center-aligned for calm symmetry. Numeric data
-(years) is treated as tabular for column alignment.
-
-### Responsive Behavior & Touch
-
-A single breakpoint matters: **`md` = 768px** (`useIsMobile`). Below it, the
-layout reorganizes meaningfully rather than just reflowing — the desktop's
-top-left summary trigger moves to a bottom-right FAB, and detail panels become a
-draggable **bottom sheet** with snap points instead of a floating side panel. On
-desktop, the summary panel opens by default; on mobile it starts closed. Touch
-targets are comfortably sized (`p-3` icon buttons, `px-4 py-2.5` pills), tap
-highlights and callouts are suppressed on the map, and `user-select` is disabled
-across the shell to prevent accidental text selection during pan/zoom.
-
-## 6. Design System Notes for Stitch Generation
-
-### Language to Use
-
-Describe screens as a **dark, map-first console**: "full-bleed dark map
-background," "frosted-glass slate panels floating in the corners with backdrop
-blur and soft shadow," "cool blue-slate neutrals with white text," and "a single
-vivid rose accent reserved for the selected item." Lean on words like *immersive,
-HUD, atlas, frosted, slate, restrained, focused*. Avoid bright or playful
-language — this system is calm and technical.
-
-### Color References
-
-- Canvas: **Deep Ocean Navy** `#1a2a3a` over **Abyssal Blue-Black** `#0a0e11`.
-- Panels: **Frosted Slate** `#364153` at ~95% opacity with backdrop blur; dividers in **Hairline Slate** `#4a5565`.
-- Text: **Pure White** `#ffffff` → **Soft White** `#d4d4d4` → **Muted Grey** `#a1a1a1` → **Quiet Grey** `#717171`.
-- Brand accent: **Signal Blue** `#0072d5` (and focus ring). Hero accent: **Vivid Rose** `#f73d62` — selection / current only.
-- States: loading `#46a6ff`, warn `#f2a618`, error `#f9423d` (on a 10% tint).
-
-### Component Prompts
-
-- *"A floating info panel in the top-left over a dark world map: 384px wide, rounded-lg, frosted slate `#364153` at 95% opacity with `backdrop-blur` and an `xl` shadow. Header with an 18px semibold white title and a 14px grey subtitle, divided by a thin `#4a5565` border, with a ghost close button (×) on the right. A `4px` vivid-rose left border indicates the item is selected."*
-- *"A bottom-center year-selector strip, max 672px wide, rounded-lg frosted slate with backdrop blur. Horizontal row of year segments divided by hairline borders; the active year is larger (20px bold white) on a slightly raised fill, neighbors are 16px grey, flanked by chevron prev/next buttons."*
-- *"A vertical event timeline inside a dark panel: a thin grey rail with small faint dots for past/future events (greyed at 60–70% opacity), and one emphasized 'current' node — a 9px vivid-rose dot with a soft rose glow, bold white event label, and a rose year."*
-
-### Incremental Iteration
-
-Keep the map as a fixed dark backdrop and iterate the overlays in isolation.
-Maintain the **frosted-slate + backdrop-blur** treatment on every floating
-surface for consistency, and ration the **rose accent strictly to "selected /
-current"** state — its impact depends on scarcity. When adapting to mobile,
-re-home controls (corner FAB, bottom sheet) rather than merely shrinking the
-desktop panels. Honor `prefers-reduced-motion` for any new transitions.
+- Don't spend the rose accent on hovers, generic emphasis, or any non-selection UI — scarcity
+  is what makes it read as "now / here".
+- Don't mix the two color layers: territory fills (data-driven, from `color-scheme.json`) must
+  never leak into UI chrome, and chrome tokens must never be used to paint territories.
+- Don't hardcode hex in a component when a role token exists.
+- Don't add web fonts or swap the system stack casually — it would break native Japanese
+  rendering and add load cost for no visual gain.
+- Don't use `h-screen` (iOS Safari viewport jump) — use the dvh units.
+- Don't make panels full-width on desktop or stack them over the map's focal area.
+- Don't introduce heavy drop shadows as the primary elevation cue; the system reads depth
+  through blur and translucency.
+- Don't let this file drift from `packages/design-tokens`. Change the token first; keep this
+  document about the *why*.
