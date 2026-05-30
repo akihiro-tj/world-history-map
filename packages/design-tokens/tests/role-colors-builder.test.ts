@@ -1,15 +1,12 @@
-import { promises as fs } from 'node:fs';
-import os from 'node:os';
-import path from 'node:path';
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import {
-  type CssSource,
   RoleColorModuleEmitter,
   RoleColorsBuilder,
   RoleColorToken,
   RoleColorTokenParser,
   RoleColorTokenSet,
 } from '../src/build/role-colors-builder.ts';
+import type { TextSource } from '../src/build/text-source.ts';
 
 const SAMPLE_CSS = `
 @theme {
@@ -23,7 +20,7 @@ const SAMPLE_CSS = `
 
 const SAMPLE_CSS_MODIFIED = SAMPLE_CSS.replace('oklch(0.65 0.22 15)', 'oklch(0.70 0.25 20)');
 
-const mockCssSource: CssSource = { read: async () => SAMPLE_CSS };
+const mockCssSource: TextSource = { read: async () => SAMPLE_CSS };
 
 describe('RoleColorToken', () => {
   it('accepts valid lowercase name and non-empty value', () => {
@@ -152,20 +149,8 @@ describe('RoleColorModuleEmitter', () => {
 });
 
 describe('RoleColorsBuilder', () => {
-  let temporaryDir: string;
-  let outputPath: string;
-
-  beforeAll(async () => {
-    temporaryDir = await fs.mkdtemp(path.join(os.tmpdir(), 'design-tokens-test-'));
-    outputPath = path.join(temporaryDir, 'role-colors.generated.ts');
-  });
-
-  afterAll(async () => {
-    await fs.rm(temporaryDir, { recursive: true, force: true });
-  });
-
   it('generateSource returns TypeScript source containing all 5 role colors as hex', async () => {
-    const builder = new RoleColorsBuilder({ cssSource: mockCssSource, outputPath });
+    const builder = new RoleColorsBuilder({ cssSource: mockCssSource });
     const source = await builder.generateSource();
     expect(source).toContain("selected: '#f73d62'");
     expect(source).toContain("loading: '#46a6ff'");
@@ -174,29 +159,15 @@ describe('RoleColorsBuilder', () => {
     expect(source).toContain("focus: '#0072d5'");
   });
 
-  it('isFresh returns false when output file does not exist', async () => {
-    const builder = new RoleColorsBuilder({ cssSource: mockCssSource, outputPath });
+  it('isUpToDate is true only when the existing output matches the generated source', async () => {
+    const builder = new RoleColorsBuilder({ cssSource: mockCssSource });
     const source = await builder.generateSource();
-    expect(await builder.isFresh(source)).toBe(false);
-  });
-
-  it('isFresh returns true when generated source matches output file', async () => {
-    const builder = new RoleColorsBuilder({ cssSource: mockCssSource, outputPath });
-    const source = await builder.generateSource();
-    await fs.writeFile(outputPath, source);
-    expect(await builder.isFresh(source)).toBe(true);
-  });
-
-  it('isFresh returns false when generated source differs from output file', async () => {
-    const builder = new RoleColorsBuilder({ cssSource: mockCssSource, outputPath });
-    const source = await builder.generateSource();
-    await fs.writeFile(outputPath, source);
-
-    const modifiedBuilder = new RoleColorsBuilder({
+    const modifiedSource = await new RoleColorsBuilder({
       cssSource: { read: async () => SAMPLE_CSS_MODIFIED },
-      outputPath,
-    });
-    const modifiedSource = await modifiedBuilder.generateSource();
-    expect(await builder.isFresh(modifiedSource)).toBe(false);
+    }).generateSource();
+
+    expect(builder.isUpToDate(source, source)).toBe(true);
+    expect(builder.isUpToDate(null, source)).toBe(false);
+    expect(builder.isUpToDate(modifiedSource, source)).toBe(false);
   });
 });

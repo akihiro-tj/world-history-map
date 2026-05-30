@@ -1,5 +1,5 @@
-import { readFile } from 'node:fs/promises';
 import { oklchToHex } from './oklch.ts';
+import type { TextSource } from './text-source.ts';
 
 const ROLE_COLOR_VAR_PREFIX = '--color-role-';
 const TOKEN_NAME_PATTERN = /^[a-z]+(?:-[a-z]+)*$/;
@@ -45,10 +45,6 @@ export class RoleColorTokenSet {
   }
 }
 
-export interface CssSource {
-  read(): Promise<string>;
-}
-
 export class RoleColorTokenParser {
   parse(css: string): RoleColorTokenSet {
     const pattern = new RegExp(
@@ -88,12 +84,10 @@ export class RoleColorModuleEmitter {
 }
 
 export class RoleColorsBuilder {
-  private readonly cssSource: CssSource;
-  private readonly outputPath: string;
+  private readonly cssSource: TextSource;
 
-  constructor(params: { cssSource: CssSource; outputPath: string }) {
+  constructor(params: { cssSource: TextSource }) {
     this.cssSource = params.cssSource;
-    this.outputPath = params.outputPath;
   }
 
   async generateSource(): Promise<string> {
@@ -103,8 +97,7 @@ export class RoleColorsBuilder {
     return emitter.emit(parser.parse(css));
   }
 
-  async isFresh(generatedSource: string): Promise<boolean> {
-    const existingSource = await readFile(this.outputPath, 'utf-8').catch(() => null);
-    return existingSource === generatedSource;
+  isUpToDate(existing: string | null, generated: string): boolean {
+    return existing === generated;
   }
 }

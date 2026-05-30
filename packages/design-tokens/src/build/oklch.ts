@@ -1,5 +1,11 @@
 const OKLCH_PATTERN = /oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*(?:\/\s*([\d.]+)\s*)?\)/;
 
+const SRGB_LINEAR_THRESHOLD = 0.0031308;
+const SRGB_LINEAR_SLOPE = 12.92;
+const SRGB_GAMMA = 2.4;
+const SRGB_GAMMA_SCALE = 1.055;
+const SRGB_GAMMA_OFFSET = 0.055;
+
 function channelToHex(value: number): string {
   return value.toString(16).padStart(2, '0');
 }
@@ -10,9 +16,14 @@ export function oklchToHex(cssValue: string): string {
 
   const lightness = Number(match[1]);
   const chroma = Number(match[2]);
-  const hue = (Number(match[3]) * Math.PI) / 180;
+  const hueDegrees = Number(match[3]);
   const alpha = match[4] === undefined ? 1 : Number(match[4]);
 
+  if (![lightness, chroma, hueDegrees, alpha].every(Number.isFinite)) {
+    throw new Error(`Cannot convert to hex: ${cssValue}`);
+  }
+
+  const hue = (hueDegrees * Math.PI) / 180;
   const a = chroma * Math.cos(hue);
   const b = chroma * Math.sin(hue);
 
@@ -26,7 +37,9 @@ export function oklchToHex(cssValue: string): string {
 
   const toSrgb = (channel: number) => {
     const clamped = Math.max(0, Math.min(1, channel));
-    return clamped <= 0.0031308 ? 12.92 * clamped : 1.055 * clamped ** (1 / 2.4) - 0.055;
+    return clamped <= SRGB_LINEAR_THRESHOLD
+      ? SRGB_LINEAR_SLOPE * clamped
+      : SRGB_GAMMA_SCALE * clamped ** (1 / SRGB_GAMMA) - SRGB_GAMMA_OFFSET;
   };
 
   const red = Math.round(toSrgb(rLin) * 255);

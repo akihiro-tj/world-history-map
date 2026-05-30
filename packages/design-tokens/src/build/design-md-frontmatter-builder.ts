@@ -1,5 +1,5 @@
 import { oklchToHex } from './oklch.ts';
-import type { CssSource } from './role-colors-builder.ts';
+import type { TextSource } from './text-source.ts';
 
 const COLOR_VAR_PATTERN = /--color-([a-z0-9]+(?:-[a-z0-9]+)*)\s*:\s*([^;]+?)\s*;/g;
 const FRONTMATTER_DELIMITER = '---';
@@ -43,30 +43,30 @@ export class FrontmatterEmitter {
   }
 }
 
+function isFrontmatterDelimiter(line: string | undefined): boolean {
+  return line?.replace(/\r$/, '') === FRONTMATTER_DELIMITER;
+}
+
 export function extractBody(document: string): string {
   const lines = document.split('\n');
-  if (lines[0] !== FRONTMATTER_DELIMITER) {
+  if (!isFrontmatterDelimiter(lines[0])) {
     return document;
   }
-  const closingIndex = lines.indexOf(FRONTMATTER_DELIMITER, 1);
+  const closingIndex = lines.findIndex((line, index) => index >= 1 && isFrontmatterDelimiter(line));
   if (closingIndex === -1) {
     return document;
   }
   return lines.slice(closingIndex + 1).join('\n');
 }
 
-export interface DocumentSource {
-  read(): Promise<string>;
-}
-
 export class DesignMdFrontmatterBuilder {
-  private readonly cssSource: CssSource;
-  private readonly documentSource: DocumentSource;
+  private readonly cssSource: TextSource;
+  private readonly documentSource: TextSource;
   private readonly projectName: string;
 
   constructor(params: {
-    cssSource: CssSource;
-    documentSource: DocumentSource;
+    cssSource: TextSource;
+    documentSource: TextSource;
     projectName: string;
   }) {
     this.cssSource = params.cssSource;
@@ -82,8 +82,7 @@ export class DesignMdFrontmatterBuilder {
     return [frontmatter, extractBody(existing)].join('\n');
   }
 
-  async isFresh(generatedDocument: string): Promise<boolean> {
-    const existing = await this.documentSource.read().catch(() => null);
-    return existing === generatedDocument;
+  isUpToDate(existing: string | null, generated: string): boolean {
+    return existing === generated;
   }
 }

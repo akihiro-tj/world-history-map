@@ -5,7 +5,7 @@ import {
   extractBody,
   FrontmatterEmitter,
 } from '../src/build/design-md-frontmatter-builder.ts';
-import type { CssSource } from '../src/build/role-colors-builder.ts';
+import type { TextSource } from '../src/build/text-source.ts';
 
 const SAMPLE_THEME_CSS = `
 @theme {
@@ -29,7 +29,7 @@ Body prose that must survive regeneration.
 
 const PROJECT_NAME = 'World History Map';
 
-function sourceOf(content: string): CssSource {
+function sourceOf(content: string): TextSource {
   return { read: async () => content };
 }
 
@@ -51,7 +51,7 @@ describe('ColorPaletteParser', () => {
   it('converts OKLCH with alpha to 8-digit hex', () => {
     const colors = parser.parse(SAMPLE_THEME_CSS);
     const surfacePanel = colors.find((color) => color.name === 'surface-panel')?.hex;
-    expect(surfacePanel).toMatch(/^#[0-9a-f]{8}$/);
+    expect(surfacePanel).toBe('#2a2e33f2');
   });
 
   it('throws when no --color-* definitions are found', () => {
@@ -80,6 +80,14 @@ describe('extractBody', () => {
 
   it('returns the whole document when there is no frontmatter', () => {
     expect(extractBody('# No frontmatter here')).toBe('# No frontmatter here');
+  });
+
+  it('strips CRLF frontmatter without leaking it into the body', () => {
+    const crlfDocument = SAMPLE_DESIGN_MD.replace(/\n/g, '\r\n');
+    const body = extractBody(crlfDocument);
+    expect(body).not.toContain('---');
+    expect(body).not.toContain("stale: '#000000'");
+    expect(body).toContain('Body prose that must survive regeneration.');
   });
 });
 
@@ -111,7 +119,7 @@ describe('DesignMdFrontmatterBuilder', () => {
     expect(await stableBuilder.generateDocument()).toBe(firstPass);
   });
 
-  it('isFresh is true only when the stored document matches the generated one', async () => {
+  it('isUpToDate is true only when the existing document matches the generated one', async () => {
     const builder = new DesignMdFrontmatterBuilder({
       cssSource: sourceOf(SAMPLE_THEME_CSS),
       documentSource: sourceOf(SAMPLE_DESIGN_MD),
@@ -119,12 +127,8 @@ describe('DesignMdFrontmatterBuilder', () => {
     });
     const generated = await builder.generateDocument();
 
-    const freshBuilder = new DesignMdFrontmatterBuilder({
-      cssSource: sourceOf(SAMPLE_THEME_CSS),
-      documentSource: sourceOf(generated),
-      projectName: PROJECT_NAME,
-    });
-    expect(await freshBuilder.isFresh(await freshBuilder.generateDocument())).toBe(true);
-    expect(await builder.isFresh(generated)).toBe(false);
+    expect(builder.isUpToDate(generated, generated)).toBe(true);
+    expect(builder.isUpToDate(null, generated)).toBe(false);
+    expect(builder.isUpToDate(SAMPLE_DESIGN_MD, generated)).toBe(false);
   });
 });
