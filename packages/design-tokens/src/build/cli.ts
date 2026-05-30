@@ -1,42 +1,58 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { CssSource } from './role-colors-builder.ts';
-import { RoleColorsBuilder } from './role-colors-builder.ts';
+import { DesignMdColorParser } from './design-md-color-parser.ts';
+import { RoleColorsEmitter } from './role-colors-builder.ts';
+import { ThemeCssEmitter } from './theme-css-builder.ts';
 
 const PACKAGE_ROOT = path.resolve(fileURLToPath(import.meta.url), '../../..');
-const DEFAULT_THEME_CSS_PATH = path.join(PACKAGE_ROOT, 'src/theme.css');
-const DEFAULT_OUTPUT_PATH = path.join(PACKAGE_ROOT, 'src/role-colors.generated.ts');
+const REPO_ROOT = path.resolve(PACKAGE_ROOT, '../..');
+const DESIGN_MD_PATH = path.join(REPO_ROOT, 'DESIGN.md');
+const THEME_CSS_PATH = path.join(PACKAGE_ROOT, 'src/theme.css');
+const ROLE_COLORS_PATH = path.join(PACKAGE_ROOT, 'src/role-colors.generated.ts');
 
-class FileCssSource implements CssSource {
-  private readonly filePath: string;
+interface GeneratedArtifact {
+  readonly path: string;
+  readonly content: string;
+}
 
-  constructor(filePath: string) {
-    this.filePath = filePath;
-  }
+async function readExisting(filePath: string): Promise<string | null> {
+  return readFile(filePath, 'utf-8').catch(() => null);
+}
 
-  async read(): Promise<string> {
-    return readFile(this.filePath, 'utf-8');
-  }
+async function generateArtifacts(): Promise<GeneratedArtifact[]> {
+  const designMd = await readFile(DESIGN_MD_PATH, 'utf-8');
+  const colors = new DesignMdColorParser().parse(designMd);
+  return [
+    { path: THEME_CSS_PATH, content: new ThemeCssEmitter().emit(colors) },
+    { path: ROLE_COLORS_PATH, content: new RoleColorsEmitter().emit(colors) },
+  ];
 }
 
 async function runBuild(): Promise<void> {
-  const builder = new RoleColorsBuilder({
-    cssSource: new FileCssSource(DEFAULT_THEME_CSS_PATH),
-    outputPath: DEFAULT_OUTPUT_PATH,
-  });
-  const source = await builder.generateSource();
-  await writeFile(DEFAULT_OUTPUT_PATH, source);
-  console.log('Generated role-colors.generated.ts');
+  for (const artifact of await generateArtifacts()) {
+    await writeFile(artifact.path, artifact.content);
+    console.log(`Generated ${path.relative(PACKAGE_ROOT, artifact.path)}`);
+  }
 }
 
 async function runCheck(): Promise<void> {
-  const builder = new RoleColorsBuilder({
-    cssSource: new FileCssSource(DEFAULT_THEME_CSS_PATH),
-    outputPath: DEFAULT_OUTPUT_PATH,
-  });
-  const source = await builder.generateSource();
-  process.exit((await builder.isFresh(source)) ? 0 : 1);
+  const artifacts = await generateArtifacts();
+  const staleArtifacts = (
+    await Promise.all(
+      artifacts.map(async (artifact) => ({
+        relativePath: path.relative(PACKAGE_ROOT, artifact.path),
+        isStale: (await readExisting(artifact.path)) !== artifact.content,
+      })),
+    )
+  ).filter((result) => result.isStale);
+
+  for (const { relativePath } of staleArtifacts) {
+    console.error(
+      `Stale: ${relativePath} (run \`pnpm --filter @world-history-map/design-tokens run build\`)`,
+    );
+  }
+  process.exit(staleArtifacts.length > 0 ? 1 : 0);
 }
 
 const isCheckMode = process.argv.includes('--check');
