@@ -94,7 +94,7 @@ export function MapView({ onReady }: MapViewProps) {
       >
         <div className="text-center">
           <p className="text-panel-title text-role-error">Failed to load map data</p>
-          <p className="text-sm text-role-error/80">{error}</p>
+          <p className="text-body-sm text-role-error/80">{error}</p>
         </div>
       </div>
     );
