@@ -23,10 +23,6 @@ colors:
   text-quiet: '#717171'
   text-dimmed: '#ffffff99'
 typography:
-  year-hero:
-    fontSize: 30px
-    fontWeight: '700'
-    lineHeight: 36px
   active-year:
     fontSize: 20px
     fontWeight: '700'
@@ -135,12 +131,11 @@ anywhere). Line-height follows the role's default for its size; `leading-relaxed
 explicitly for reading-flow paragraphs and `leading-tight` for compact headings where needed.
 Numeric sequences — timeline years — use tabular figures so digits align in a column.
 
-The nine roles below are defined in the `typography:` frontmatter and generated as Tailwind
-utilities (`text-year-hero`, `text-panel-title`, etc.) by `@world-history-map/design-tokens`.
+The eight roles below are defined in the `typography:` frontmatter and generated as Tailwind
+utilities (`text-active-year`, `text-panel-title`, etc.) by `@world-history-map/design-tokens`.
 
 | Token | Usage |
 |:---|:---|
-| `year-hero` | The large animated year readout |
 | `active-year` | Selected year in the selector strip |
 | `modal-title` | Modal dialog title |
 | `panel-title` | Panel heading (territory name, "{year}年の世界", error headings) |
