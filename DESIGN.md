@@ -66,9 +66,11 @@ spacing:
 This file is the **design counterpart to `CLAUDE.md`** — persistent design context an agent
 reads before generating UI. The frontmatter is the design's source of truth for tokens:
 `colors` holds semantic color tokens; `typography` holds the nine named type roles (fontSize,
-fontWeight, lineHeight per role); `spacing` holds the baseline grid unit. These are machine-
-readable by design — the `@world-history-map/design-tokens` package generates `theme.css` from
-them so Tailwind v4 exposes each as a utility class. Use the role names, not raw Tailwind
+fontWeight, lineHeight per role); `spacing` holds the baseline grid unit. The frontmatter follows
+Google's [`@google/design.md`](https://github.com/google-labs-code/design.md) open format, which
+parses and validates it (structure, broken references, WCAG contrast); the
+`@world-history-map/design-tokens` package then reshapes that tool's token export into `theme.css`
+(and the MapLibre `role-colors`) so Tailwind v4 exposes each as a utility class. Use the role names, not raw Tailwind
 primitives, so agents and humans read intent. Radii and individual padding/gap values ride the
 framework defaults and are described in prose — they don't benefit from centralization. Layout
 mechanics (z-index order, breakpoints, pixel widths) stay in the components, not here. The body
