@@ -22,6 +22,43 @@ colors:
   text-tertiary: '#a1a1a1'
   text-quiet: '#717171'
   text-dimmed: '#ffffff99'
+typography:
+  year-hero:
+    fontSize: 30px
+    fontWeight: '700'
+    lineHeight: 36px
+  active-year:
+    fontSize: 20px
+    fontWeight: '700'
+    lineHeight: 28px
+  modal-title:
+    fontSize: 20px
+    fontWeight: '600'
+    lineHeight: 28px
+  panel-title:
+    fontSize: 18px
+    fontWeight: '600'
+    lineHeight: 28px
+  section-heading:
+    fontSize: 16px
+    fontWeight: '600'
+    lineHeight: 24px
+  body:
+    fontSize: 16px
+    fontWeight: '500'
+    lineHeight: 24px
+  card-title:
+    fontSize: 14px
+    fontWeight: '600'
+    lineHeight: 20px
+  body-sm:
+    fontSize: 14px
+    lineHeight: 20px
+  caption:
+    fontSize: 12px
+    lineHeight: 16px
+spacing:
+  unit: 4px
 ---
 
 # Design System: World History Map
