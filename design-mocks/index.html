@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Design Mocks — World History Map</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --surface-base: #0a0e11;
+        --surface-panel: #364153;
+        --surface-border: #44484d;
+        --text-primary: #ffffff;
+        --text-secondary: #d4d4d4;
+        --text-tertiary: #a1a1a1;
+        --role-link: #51a2ff;
+        --role-link-hover: #8ec5ff;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        padding: 2.5rem 1.5rem 4rem;
+        font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+        background: var(--surface-base);
+        color: var(--text-secondary);
+        line-height: 1.5;
+      }
+      .wrap {
+        max-width: 760px;
+        margin: 0 auto;
+      }
+      h1 {
+        margin: 0 0 0.25rem;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+      .sub {
+        margin: 0 0 2rem;
+        font-size: 0.875rem;
+        color: var(--text-tertiary);
+      }
+      .feature {
+        margin-bottom: 2rem;
+      }
+      .feature h2 {
+        margin: 0 0 0.75rem;
+        font-size: 1.0625rem;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.875rem;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 0.625rem 0.75rem;
+        border-bottom: 1px solid var(--surface-border);
+      }
+      th {
+        font-weight: 600;
+        color: var(--text-tertiary);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      a {
+        color: var(--role-link);
+        text-decoration: none;
+      }
+      a:hover {
+        color: var(--role-link-hover);
+        text-decoration: underline;
+      }
+      .desc {
+        color: var(--text-tertiary);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Design Mocks</h1>
+      <p class="sub">World History Map — 実装前デザイン確認用モック一覧</p>
+
+      <section class="feature">
+        <h2>sheet-year-control</h2>
+        <p class="desc" style="margin: 0 0 0.75rem; font-size: 0.8125rem">
+          モバイルでボトムシート展開中も年代を切り替えられるようにする年代コントロール配置の構造比較 (issue
+          #261)。各モックは collapsed / half / expanded の 3 スナップ状態を横並び表示
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th>Version</th>
+              <th>内容</th>
+              <th>Link</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>v1</td>
+              <td class="desc">シート内スライダー統合（原案）— ヘッダーに年代スライダーを内蔵</td>
+              <td><a href="./sheet-year-control/v1/index.html">開く →</a></td>
+            </tr>
+            <tr>
+              <td>v2</td>
+              <td class="desc">シート上端に浮かせる追従コントロール — 独立 frosted パネルがシートに追従</td>
+              <td><a href="./sheet-year-control/v2/index.html">開く →</a></td>
+            </tr>
+            <tr>
+              <td>v3</td>
+              <td class="desc">ヘッダーにコンパクト年代ステッパー — 前年 / 現在年 / 次年のピル</td>
+              <td><a href="./sheet-year-control/v3/index.html">開く →</a></td>
+            </tr>
+            <tr>
+              <td>v4</td>
+              <td class="desc">年代コントロールを画面上部へ移設 — シートと重ならない位置に再配置</td>
+              <td><a href="./sheet-year-control/v4/index.html">開く →</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="feature">
+        <h2>territory-emphasis</h2>
+        <p class="desc" style="margin: 0 0 0.75rem; font-size: 0.8125rem">
+          詳細説明がない領土を控えめな色で統一し、説明あり領土を際立たせる塗り分け方針の比較
+          (issue #258)
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th>Version</th>
+              <th>内容</th>
+              <th>Link</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>v1</td>
+              <td class="desc">境界表現・グレー色味・強調度の複数方針を横並び比較</td>
+              <td><a href="./territory-emphasis/v1/index.html">開く →</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </body>
+</html>
