@@ -22,16 +22,58 @@ colors:
   text-tertiary: '#a1a1a1'
   text-quiet: '#717171'
   text-dimmed: '#ffffff99'
+typography:
+  year-hero:
+    fontSize: 30px
+    fontWeight: '700'
+    lineHeight: 36px
+  active-year:
+    fontSize: 20px
+    fontWeight: '700'
+    lineHeight: 28px
+  modal-title:
+    fontSize: 20px
+    fontWeight: '600'
+    lineHeight: 28px
+  panel-title:
+    fontSize: 18px
+    fontWeight: '600'
+    lineHeight: 28px
+  section-heading:
+    fontSize: 16px
+    fontWeight: '600'
+    lineHeight: 24px
+  body:
+    fontSize: 16px
+    fontWeight: '500'
+    lineHeight: 24px
+  card-title:
+    fontSize: 14px
+    fontWeight: '600'
+    lineHeight: 20px
+  body-sm:
+    fontSize: 14px
+    lineHeight: 20px
+  caption:
+    fontSize: 12px
+    lineHeight: 16px
+spacing:
+  unit: 4px
 ---
 
 # Design System: World History Map
 
 This file is the **design counterpart to `CLAUDE.md`** — persistent design context an agent
-reads before generating UI. The `colors` frontmatter holds the design's own semantic color
-tokens; type, spacing, and radii ride the framework defaults and are described in prose.
-Layout mechanics (z-index order, breakpoints, pixel widths) stay in the components, not here.
-The body holds what has no other home — the intent, the relationships, and the do's and don'ts
-that keep generated screens on-brand instead of generically "AI-looking".
+reads before generating UI. The frontmatter is the design's source of truth for tokens:
+`colors` holds semantic color tokens; `typography` holds the nine named type roles (fontSize,
+fontWeight, lineHeight per role); `spacing` holds the baseline grid unit. These are machine-
+readable by design — the `@world-history-map/design-tokens` package generates `theme.css` from
+them so Tailwind v4 exposes each as a utility class. Use the role names, not raw Tailwind
+primitives, so agents and humans read intent. Radii and individual padding/gap values ride the
+framework defaults and are described in prose — they don't benefit from centralization. Layout
+mechanics (z-index order, breakpoints, pixel widths) stay in the components, not here. The body
+holds what has no other home — the intent, the relationships, and the do's and don'ts that keep
+generated screens on-brand instead of generically "AI-looking".
 
 ## Overview
 
@@ -86,21 +128,27 @@ separate concern, defined in the map config rather than the token set.
 The system uses the **native system font stack** (`system-ui, Avenir, Helvetica, Arial,
 sans-serif`) — no web fonts. This is intentional: the document is `lang="ja"`, so the OS's
 Japanese faces render natively and instantly, with zero font-loading cost or layout shift.
+`fontFamily` is uniform across all roles and stays in prose rather than the per-role tokens.
 
 Hierarchy comes from **weight and size, never letter-spacing** (there is no custom tracking
-anywhere). Body copy uses relaxed leading for readability; the large year readout uses tight
-leading for compactness. Numeric sequences — timeline years — use tabular figures so digits
-align in a column.
+anywhere). Line-height follows the role's default for its size; `leading-relaxed` is added
+explicitly for reading-flow paragraphs and `leading-tight` for compact headings where needed.
+Numeric sequences — timeline years — use tabular figures so digits align in a column.
 
-| Role | Size / Weight | Usage |
-|:---|:---|:---|
-| Year Hero | 30px / 700 | The large animated year readout |
-| Active Year | 20px / 700 | Selected year in the selector strip |
-| Panel Title | 18px / 600 | Panel heading (territory name, "{year}年の世界") |
-| Body | 16px / 400 | Inactive year-selector buttons |
-| Card Title | 14px / 600 | Region-card heading, profile values |
-| Body Small | 14px / 400 | Context paragraphs, era subtitle |
-| Caption | 12px / 400 | Timeline years (tabular) |
+The nine roles below are defined in the `typography:` frontmatter and generated as Tailwind
+utilities (`text-year-hero`, `text-panel-title`, etc.) by `@world-history-map/design-tokens`.
+
+| Token | Usage |
+|:---|:---|
+| `year-hero` | The large animated year readout |
+| `active-year` | Selected year in the selector strip |
+| `modal-title` | Modal dialog title |
+| `panel-title` | Panel heading (territory name, "{year}年の世界", error headings) |
+| `section-heading` | Section headings within a panel (e.g. license modal sections) |
+| `body` | Inactive year-selector buttons |
+| `card-title` | Region-card heading |
+| `body-sm` | Context paragraphs, era subtitle, profile fields, timeline events |
+| `caption` | Timeline years (tabular), nav strip links |
 
 ## Layout
 
@@ -113,8 +161,10 @@ principles, not the pixel values:
   full-width on desktop); the year strip is centered with a comfortable max width.
 - **A consistent stacking order keeps overlays predictable:** the map at the base, then the
   persistent controls, then detail panels, with the mobile bottom sheet above everything.
-- **Spacing follows a 4px baseline rhythm** — a consistent edge inset and internal padding,
-  dense but orderly.
+- **Spacing follows the baseline rhythm set by `spacing.unit` in the frontmatter** — a
+  consistent edge inset and internal padding, dense but orderly. Individual padding and gap values use
+  Tailwind's default scale directly (`px-4`, `py-3`, `gap-2`, etc.) and are documented here
+  in prose rather than as named tokens, since horizontal and vertical values often differ.
 
 **Responsive is a re-home, not a reflow.** One threshold matters — a single tablet width.
 Below it the layout reorganizes by *meaning*: the desktop's corner summary trigger becomes a
@@ -179,6 +229,9 @@ default scale (the design owns no custom radius values):
 
 - Reference role tokens (`role-selected`, `surface-*`, `text-*`) rather than raw hex; the
   palette is defined in the `colors` frontmatter of this file.
+- Use typography role tokens (`text-panel-title`, `text-body-sm`, etc.) rather than raw
+  Tailwind size + weight pairs (`text-lg font-semibold`); roles are defined in the
+  `typography:` frontmatter and generated into `theme.css`.
 - Reserve the rose accent (`role-selected`) strictly for *selected territory* and *current year*.
 - Give every floating surface the frosted treatment: near-opaque slate + backdrop blur + soft
   shadow. Depth = frosted glass.
@@ -197,6 +250,8 @@ default scale (the design owns no custom radius values):
 - Don't hardcode hex or reach for raw Tailwind primitives (`gray-*`, `white`, `black`,
   `blue-*`) in chrome — every chrome color goes through a token (`surface-*`, `text-*`,
   `role-*`). Territory fills are the only exception, and they're data, not chrome.
+- Don't reach for raw `text-{size}` / `font-{weight}` pairs in chrome when a typography
+  role covers the intent; unblessed combinations silently diverge from the documented scale.
 - Don't add web fonts or swap the system stack casually — it breaks native Japanese rendering
   and adds load cost for no visual gain.
 - Don't size full-height surfaces to the static viewport height (`100vh`) — it causes the iOS Safari viewport jump; use `100dvh`.

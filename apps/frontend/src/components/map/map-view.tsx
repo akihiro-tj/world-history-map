@@ -93,8 +93,8 @@ export function MapView({ onReady }: MapViewProps) {
         data-testid="map-error"
       >
         <div className="text-center">
-          <p className="text-lg text-role-error">Failed to load map data</p>
-          <p className="text-sm text-role-error/80">{error}</p>
+          <p className="text-panel-title text-role-error">Failed to load map data</p>
+          <p className="text-body-sm text-role-error/80">{error}</p>
         </div>
       </div>
     );
@@ -133,7 +133,7 @@ export function MapView({ onReady }: MapViewProps) {
                 <ellipse cx="12" cy="12" rx="10" ry="4" opacity="0.5" />
               </svg>
             </div>
-            <span className="mt-5 text-sm tracking-wider text-text-tertiary">Loading...</span>
+            <span className="mt-5 text-body-sm text-text-tertiary">Loading...</span>
           </div>
         </output>
       )}

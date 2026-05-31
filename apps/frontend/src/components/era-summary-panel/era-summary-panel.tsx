@@ -25,7 +25,7 @@ function PanelHeader({ yearLabel, onClose }: { yearLabel: string; onClose: () =>
   return (
     <div className="border-b border-surface-border">
       <div className="flex items-center justify-between px-4 py-3">
-        <h2 id="era-summary-title" className="text-lg font-semibold text-text-primary">
+        <h2 id="era-summary-title" className="text-panel-title text-text-primary">
           {yearLabel}年の世界
         </h2>
         <CloseButton onClick={onClose} aria-label="閉じる" />
@@ -42,7 +42,7 @@ function PanelBody({ state }: { state: RemoteData<EraSummary> }) {
       return <RoleErrorMessage>{state.message}</RoleErrorMessage>;
     case 'empty':
       return (
-        <div role="status" className="py-6 text-center text-sm text-text-secondary">
+        <div role="status" className="py-6 text-center text-body-sm text-text-secondary">
           この年代の概要は準備中です。
         </div>
       );
@@ -96,7 +96,7 @@ function MobileContent({ state, yearLabel, onClose }: ContentProps) {
       onClose={onClose}
       header={
         <div className="flex items-center justify-between border-b border-surface-border px-4 pb-2">
-          <h2 id="era-summary-title" className="text-lg font-semibold text-text-primary">
+          <h2 id="era-summary-title" className="text-panel-title text-text-primary">
             {yearLabel}年の世界
           </h2>
           <CloseButton aria-label="閉じる" onClick={onClose} />

@@ -2,6 +2,8 @@ import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DesignMdColorParser } from './design-md-color-parser.ts';
+import { DesignMdSpacingParser } from './design-md-spacing-parser.ts';
+import { DesignMdTypographyParser } from './design-md-typography-parser.ts';
 import { RoleColorsEmitter } from './role-colors-builder.ts';
 import { ThemeCssEmitter } from './theme-css-builder.ts';
 
@@ -23,8 +25,10 @@ async function readExisting(filePath: string): Promise<string | null> {
 async function generateArtifacts(): Promise<GeneratedArtifact[]> {
   const designMd = await readFile(DESIGN_MD_PATH, 'utf-8');
   const colors = new DesignMdColorParser().parse(designMd);
+  const typography = new DesignMdTypographyParser().parse(designMd);
+  const spacing = new DesignMdSpacingParser().parse(designMd);
   return [
-    { path: THEME_CSS_PATH, content: new ThemeCssEmitter().emit(colors) },
+    { path: THEME_CSS_PATH, content: new ThemeCssEmitter().emit({ colors, typography, spacing }) },
     { path: ROLE_COLORS_PATH, content: new RoleColorsEmitter().emit(colors) },
   ];
 }

@@ -22,8 +22,8 @@ const PAST_ROW_STYLE: TimelineRowStyle = {
   markerClassName:
     'absolute top-1/2 -translate-y-1/2 shrink-0 rounded-full -left-3 size-[3px] bg-text-quiet',
   markerInlineStyle: undefined,
-  yearClassName: 'shrink-0 text-xs tabular-nums text-text-tertiary',
-  eventClassName: 'text-sm text-text-secondary',
+  yearClassName: 'shrink-0 text-caption tabular-nums text-text-tertiary',
+  eventClassName: 'text-body-sm text-text-secondary',
 };
 
 const CURRENT_ROW_STYLE: TimelineRowStyle = {
@@ -33,8 +33,8 @@ const CURRENT_ROW_STYLE: TimelineRowStyle = {
   markerInlineStyle: {
     boxShadow: `0 0 ${TIMELINE_CURRENT_DOT_GLOW_PX}px var(--color-role-selected)`,
   },
-  yearClassName: 'shrink-0 text-xs tabular-nums text-role-selected',
-  eventClassName: 'text-sm text-text-primary',
+  yearClassName: 'shrink-0 text-caption tabular-nums text-role-selected',
+  eventClassName: 'text-body-sm text-text-primary',
 };
 
 const FUTURE_ROW_STYLE: TimelineRowStyle = {
@@ -42,8 +42,8 @@ const FUTURE_ROW_STYLE: TimelineRowStyle = {
   markerClassName:
     'absolute top-1/2 -translate-y-1/2 shrink-0 rounded-full -left-3 size-[3px] bg-text-quiet',
   markerInlineStyle: undefined,
-  yearClassName: 'shrink-0 text-xs tabular-nums text-text-tertiary',
-  eventClassName: 'text-sm text-text-secondary',
+  yearClassName: 'shrink-0 text-caption tabular-nums text-text-tertiary',
+  eventClassName: 'text-body-sm text-text-secondary',
 };
 
 const ROW_STYLES: Record<KeyEventTemporal, TimelineRowStyle> = {
