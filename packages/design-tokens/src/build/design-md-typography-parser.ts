@@ -50,10 +50,13 @@ export class DesignMdTypographyParser {
 
       const propertyMatch = line.match(PROPERTY_PATTERN);
       if (propertyMatch !== null && currentToken !== null) {
-        const [, key, value] = propertyMatch;
-        if (key === 'fontSize') currentToken.fontSize = value;
-        else if (key === 'fontWeight') currentToken.fontWeight = value;
-        else if (key === 'lineHeight') currentToken.lineHeight = value;
+        const key = propertyMatch[1];
+        const value = propertyMatch[2];
+        if (key !== undefined && value !== undefined) {
+          if (key === 'fontSize') currentToken.fontSize = value;
+          else if (key === 'fontWeight') currentToken.fontWeight = value;
+          else if (key === 'lineHeight') currentToken.lineHeight = value;
+        }
       }
     }
 
