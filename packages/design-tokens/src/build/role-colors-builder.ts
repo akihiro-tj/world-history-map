@@ -1,4 +1,4 @@
-import type { ColorEntry } from './design-md-color-parser.ts';
+import type { ColorEntry } from './dtcg.ts';
 
 const ROLE_PREFIX = 'role-';
 

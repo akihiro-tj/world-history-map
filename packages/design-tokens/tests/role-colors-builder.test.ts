@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { ColorEntry } from '../src/build/design-md-color-parser.ts';
+import type { ColorEntry } from '../src/build/dtcg.ts';
 import { RoleColorsEmitter } from '../src/build/role-colors-builder.ts';
 
 const COLORS: ColorEntry[] = [

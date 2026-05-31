@@ -1,7 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { ColorEntry } from '../src/build/design-md-color-parser.ts';
-import type { SpacingTokens } from '../src/build/design-md-spacing-parser.ts';
-import type { TypographyEntry } from '../src/build/design-md-typography-parser.ts';
+import type { ColorEntry, SpacingTokens, TypographyEntry } from '../src/build/dtcg.ts';
 import { ThemeCssEmitter } from '../src/build/theme-css-builder.ts';
 
 const COLORS: ColorEntry[] = [

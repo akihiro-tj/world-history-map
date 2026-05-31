@@ -1,6 +1,4 @@
-import type { ColorEntry } from './design-md-color-parser.ts';
-import type { SpacingTokens } from './design-md-spacing-parser.ts';
-import type { TypographyEntry } from './design-md-typography-parser.ts';
+import type { ColorEntry, SpacingTokens, TypographyEntry } from './dtcg.ts';
 
 const GENERATED_HEADER = [
   '/* Generated from DESIGN.md frontmatter. Do not edit by hand. */',
