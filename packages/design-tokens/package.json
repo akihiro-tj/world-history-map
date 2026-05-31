@@ -10,6 +10,7 @@
   "scripts": {
     "build": "tsx src/build/cli.ts",
     "build:check": "tsx src/build/cli.ts --check",
+    "lint": "design.md lint ../../DESIGN.md",
     "predev": "pnpm run build",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage"

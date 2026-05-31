@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { loadDesignTokens } from './design-md.ts';
+import { lintDesignMd, loadDesignTokens } from './design-md.ts';
 import { RoleColorsEmitter } from './role-colors-builder.ts';
 import { ThemeCssEmitter } from './theme-css-builder.ts';
 
@@ -21,6 +21,7 @@ async function readExisting(filePath: string): Promise<string | null> {
 }
 
 async function generateArtifacts(): Promise<GeneratedArtifact[]> {
+  lintDesignMd(DESIGN_MD_PATH);
   const { colors, typography, spacing } = loadDesignTokens(DESIGN_MD_PATH);
   return [
     { path: THEME_CSS_PATH, content: new ThemeCssEmitter().emit({ colors, typography, spacing }) },
