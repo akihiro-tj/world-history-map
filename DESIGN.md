@@ -138,17 +138,17 @@ Numeric sequences — timeline years — use tabular figures so digits align in 
 The nine roles below are defined in the `typography:` frontmatter and generated as Tailwind
 utilities (`text-year-hero`, `text-panel-title`, etc.) by `@world-history-map/design-tokens`.
 
-| Token | Size / Weight | Usage |
-|:---|:---|:---|
-| `year-hero` | 30px / 700 | The large animated year readout |
-| `active-year` | 20px / 700 | Selected year in the selector strip |
-| `modal-title` | 20px / 600 | Modal dialog title |
-| `panel-title` | 18px / 600 | Panel heading (territory name, "{year}年の世界", error headings) |
-| `section-heading` | 16px / 600 | Section headings within a panel (e.g. license modal sections) |
-| `body` | 16px / 500 | Inactive year-selector buttons |
-| `card-title` | 14px / 600 | Region-card heading |
-| `body-sm` | 14px / 400 | Context paragraphs, era subtitle, profile fields, timeline events |
-| `caption` | 12px / 400 | Timeline years (tabular), nav strip links |
+| Token | Usage |
+|:---|:---|
+| `year-hero` | The large animated year readout |
+| `active-year` | Selected year in the selector strip |
+| `modal-title` | Modal dialog title |
+| `panel-title` | Panel heading (territory name, "{year}年の世界", error headings) |
+| `section-heading` | Section headings within a panel (e.g. license modal sections) |
+| `body` | Inactive year-selector buttons |
+| `card-title` | Region-card heading |
+| `body-sm` | Context paragraphs, era subtitle, profile fields, timeline events |
+| `caption` | Timeline years (tabular), nav strip links |
 
 ## Layout
 
@@ -161,8 +161,8 @@ principles, not the pixel values:
   full-width on desktop); the year strip is centered with a comfortable max width.
 - **A consistent stacking order keeps overlays predictable:** the map at the base, then the
   persistent controls, then detail panels, with the mobile bottom sheet above everything.
-- **Spacing follows a 4px baseline rhythm** (`spacing.unit` in frontmatter) — a consistent
-  edge inset and internal padding, dense but orderly. Individual padding and gap values use
+- **Spacing follows the baseline rhythm set by `spacing.unit` in the frontmatter** — a
+  consistent edge inset and internal padding, dense but orderly. Individual padding and gap values use
   Tailwind's default scale directly (`px-4`, `py-3`, `gap-2`, etc.) and are documented here
   in prose rather than as named tokens, since horizontal and vertical values often differ.
 
