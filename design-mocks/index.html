@@ -1,154 +1,163 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Design Mocks — World History Map</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style type="text/tailwindcss">
+      @theme {
+        --color-role-selected: #f73d62;
+        --color-role-loading: #46a6ff;
+        --color-role-warn: #f2a618;
+        --color-role-error: #f9423d;
+        --color-role-focus: #0072d5;
+        --color-role-link: #51a2ff;
+        --color-role-link-hover: #8ec5ff;
+        --color-role-label-text: #eeeeee;
+        --color-role-label-halo: #161616;
+        --color-surface-base: #0a0e11;
+        --color-surface-sheet: #1e2939;
+        --color-surface-panel: #364153f2;
+        --color-surface-raised: #ffffff24;
+        --color-surface-handle: #6a7282;
+        --color-surface-border: #44484d;
+        --color-surface-scrim: #00000080;
+        --color-text-primary: #ffffff;
+        --color-text-secondary: #d4d4d4;
+        --color-text-tertiary: #a1a1a1;
+        --color-text-quiet: #717171;
+        --color-text-dimmed: #ffffff99;
+        --text-year-hero: 30px;
+        --text-year-hero--font-weight: 700;
+        --text-year-hero--line-height: 36px;
+        --text-active-year: 20px;
+        --text-active-year--font-weight: 700;
+        --text-active-year--line-height: 28px;
+        --text-modal-title: 20px;
+        --text-modal-title--font-weight: 600;
+        --text-modal-title--line-height: 28px;
+        --text-panel-title: 18px;
+        --text-panel-title--font-weight: 600;
+        --text-panel-title--line-height: 28px;
+        --text-section-heading: 16px;
+        --text-section-heading--font-weight: 600;
+        --text-section-heading--line-height: 24px;
+        --text-body: 16px;
+        --text-body--font-weight: 500;
+        --text-body--line-height: 24px;
+        --text-card-title: 14px;
+        --text-card-title--font-weight: 600;
+        --text-card-title--line-height: 20px;
+        --text-body-sm: 14px;
+        --text-body-sm--line-height: 20px;
+        --text-caption: 12px;
+        --text-caption--line-height: 16px;
+        --spacing: 4px;
+      }
+    </style>
+
     <style>
       :root {
-        color-scheme: dark;
-        --surface-base: #0a0e11;
-        --surface-panel: #364153;
-        --surface-border: #44484d;
-        --text-primary: #ffffff;
-        --text-secondary: #d4d4d4;
-        --text-tertiary: #a1a1a1;
-        --role-link: #51a2ff;
-        --role-link-hover: #8ec5ff;
-      }
-      * {
-        box-sizing: border-box;
-      }
-      body {
-        margin: 0;
-        padding: 2.5rem 1.5rem 4rem;
         font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-        background: var(--surface-base);
-        color: var(--text-secondary);
         line-height: 1.5;
+        font-weight: 400;
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
       }
-      .wrap {
-        max-width: 760px;
-        margin: 0 auto;
+
+      :focus {
+        outline: none;
       }
-      h1 {
-        margin: 0 0 0.25rem;
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: var(--text-primary);
+
+      :focus-visible {
+        outline: 2px solid var(--color-role-focus);
+        outline-offset: 2px;
       }
-      .sub {
-        margin: 0 0 2rem;
-        font-size: 0.875rem;
-        color: var(--text-tertiary);
-      }
-      .feature {
-        margin-bottom: 2rem;
-      }
-      .feature h2 {
-        margin: 0 0 0.75rem;
-        font-size: 1.0625rem;
-        font-weight: 600;
-        color: var(--text-primary);
-      }
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.875rem;
-      }
-      th,
-      td {
-        text-align: left;
-        padding: 0.625rem 0.75rem;
-        border-bottom: 1px solid var(--surface-border);
-      }
-      th {
-        font-weight: 600;
-        color: var(--text-tertiary);
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-      }
-      a {
-        color: var(--role-link);
-        text-decoration: none;
-      }
-      a:hover {
-        color: var(--role-link-hover);
-        text-decoration: underline;
-      }
-      .desc {
-        color: var(--text-tertiary);
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
       }
     </style>
   </head>
-  <body>
-    <div class="wrap">
-      <h1>Design Mocks</h1>
-      <p class="sub">World History Map — 実装前デザイン確認用モック一覧</p>
 
-      <section class="feature">
-        <h2>sheet-year-control</h2>
-        <p class="desc" style="margin: 0 0 0.75rem; font-size: 0.8125rem">
+  <body class="min-h-dvh bg-surface-base text-text-secondary">
+    <header class="border-b border-surface-border px-6 py-4">
+      <p class="text-caption text-text-tertiary">world-history-map · design mock</p>
+      <h1 class="mt-1 text-panel-title text-text-primary">Design Mocks</h1>
+      <p class="mt-1 text-body-sm text-text-tertiary">実装前デザイン確認用モック一覧</p>
+    </header>
+
+    <main class="mx-auto max-w-3xl px-6 py-10">
+      <!-- design-showcase -->
+      <section class="mb-10">
+        <h2 class="text-section-heading text-text-primary">design-showcase</h2>
+        <p class="mt-1 text-body-sm leading-relaxed text-text-tertiary">
+          DESIGN.md のトークンとコンポーネントを 1 枚に可視化したデザインシステム参照ページ
+        </p>
+        <ul class="mt-3 divide-y divide-surface-border overflow-hidden rounded-lg border border-surface-border bg-surface-sheet">
+          <li class="flex items-center justify-between gap-4 px-4 py-3">
+            <div class="min-w-0">
+              <span class="font-mono text-caption text-text-primary">v1</span>
+              <span class="ml-2 text-body-sm text-text-secondary">
+                色 / タイポ / spacing / shape のトークン + frosted panel・FAB・year selector・timeline・bottom sheet のギャラリー
+              </span>
+            </div>
+            <a href="./design-showcase/v1/index.html" class="shrink-0 text-body-sm text-role-link underline hover:text-role-link-hover">
+              開く →
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <!-- sheet-year-control -->
+      <section class="mb-10">
+        <h2 class="text-section-heading text-text-primary">sheet-year-control</h2>
+        <p class="mt-1 text-body-sm leading-relaxed text-text-tertiary">
           モバイルでボトムシート展開中も年代を切り替えられるようにする年代コントロール配置の構造比較 (issue
           #261)。各モックは collapsed / half / expanded の 3 スナップ状態を横並び表示
         </p>
-        <table>
-          <thead>
-            <tr>
-              <th>Version</th>
-              <th>内容</th>
-              <th>Link</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>v1</td>
-              <td class="desc">シート内スライダー統合（原案）— ヘッダーに年代スライダーを内蔵</td>
-              <td><a href="./sheet-year-control/v1/index.html">開く →</a></td>
-            </tr>
-            <tr>
-              <td>v2</td>
-              <td class="desc">シート上端に浮かせる追従コントロール — 独立 frosted パネルがシートに追従</td>
-              <td><a href="./sheet-year-control/v2/index.html">開く →</a></td>
-            </tr>
-            <tr>
-              <td>v3</td>
-              <td class="desc">ヘッダーにコンパクト年代ステッパー — 前年 / 現在年 / 次年のピル</td>
-              <td><a href="./sheet-year-control/v3/index.html">開く →</a></td>
-            </tr>
-            <tr>
-              <td>v4</td>
-              <td class="desc">年代コントロールを画面上部へ移設 — シートと重ならない位置に再配置</td>
-              <td><a href="./sheet-year-control/v4/index.html">開く →</a></td>
-            </tr>
-          </tbody>
-        </table>
+        <ul class="mt-3 divide-y divide-surface-border overflow-hidden rounded-lg border border-surface-border bg-surface-sheet">
+          <li class="flex items-center justify-between gap-4 px-4 py-3">
+            <div class="min-w-0">
+              <span class="font-mono text-caption text-text-primary">v1</span>
+              <span class="ml-2 text-body-sm text-text-secondary">シート内スライダー統合（原案）— ヘッダーに年代スライダーを内蔵</span>
+            </div>
+            <a href="./sheet-year-control/v1/index.html" class="shrink-0 text-body-sm text-role-link underline hover:text-role-link-hover">開く →</a>
+          </li>
+          <li class="flex items-center justify-between gap-4 px-4 py-3">
+            <div class="min-w-0">
+              <span class="font-mono text-caption text-text-primary">v2</span>
+              <span class="ml-2 text-body-sm text-text-secondary">シート上端に浮かせる追従コントロール — 独立 frosted パネルがシートに追従</span>
+            </div>
+            <a href="./sheet-year-control/v2/index.html" class="shrink-0 text-body-sm text-role-link underline hover:text-role-link-hover">開く →</a>
+          </li>
+          <li class="flex items-center justify-between gap-4 px-4 py-3">
+            <div class="min-w-0">
+              <span class="font-mono text-caption text-text-primary">v3</span>
+              <span class="ml-2 text-body-sm text-text-secondary">ヘッダーにコンパクト年代ステッパー — 前年 / 現在年 / 次年のピル</span>
+            </div>
+            <a href="./sheet-year-control/v3/index.html" class="shrink-0 text-body-sm text-role-link underline hover:text-role-link-hover">開く →</a>
+          </li>
+          <li class="flex items-center justify-between gap-4 px-4 py-3">
+            <div class="min-w-0">
+              <span class="font-mono text-caption text-text-primary">v4</span>
+              <span class="ml-2 text-body-sm text-text-secondary">年代コントロールを画面上部へ移設 — シートと重ならない位置に再配置</span>
+            </div>
+            <a href="./sheet-year-control/v4/index.html" class="shrink-0 text-body-sm text-role-link underline hover:text-role-link-hover">開く →</a>
+          </li>
+        </ul>
       </section>
-
-      <section class="feature">
-        <h2>territory-emphasis</h2>
-        <p class="desc" style="margin: 0 0 0.75rem; font-size: 0.8125rem">
-          詳細説明がない領土を控えめな色で統一し、説明あり領土を際立たせる塗り分け方針の比較
-          (issue #258)
-        </p>
-        <table>
-          <thead>
-            <tr>
-              <th>Version</th>
-              <th>内容</th>
-              <th>Link</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>v1</td>
-              <td class="desc">境界表現・グレー色味・強調度の複数方針を横並び比較</td>
-              <td><a href="./territory-emphasis/v1/index.html">開く →</a></td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-    </div>
+    </main>
   </body>
 </html>
