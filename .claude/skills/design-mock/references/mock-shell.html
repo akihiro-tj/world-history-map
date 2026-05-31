@@ -1,0 +1,105 @@
+<!doctype html>
+<!--
+  design-mock のモック雛形。design-mock スキルが複製して使う。
+
+  `INJECT:` マーカーは生成時にライブのソースから埋める:
+
+    1. theme.css 注入  … packages/design-tokens/src/theme.css の @theme{...}
+    2. base CSS 注入   … apps/frontend/src/index.css の base 設定（CDN で動く形に整える）
+
+  chrome（フレーム枠・ラベル・背景）は `bg-surface-base` 等のトークン utility で書く。
+-->
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{TITLE}}</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <style type="text/tailwindcss">
+      /* INJECT: packages/design-tokens/src/theme.css の @theme{...} をそのまま貼る */
+    </style>
+
+    <style>
+      /* INJECT: apps/frontend/src/index.css の base 設定（system font stack /
+         prefers-reduced-motion / :focus-visible 等）を CDN で動く形に整えて貼る。
+         @import 行は除き、@theme で定義された var(--color-*) はそのまま使える。 */
+    </style>
+  </head>
+
+  <body class="min-h-dvh bg-surface-base text-text-secondary">
+    <!-- メタ帯（ハーネス）。feature 名 / version / 関連リンク -->
+    <header class="border-b border-surface-border px-6 py-4">
+      <p class="text-caption text-text-tertiary">world-history-map · design mock</p>
+      <h1 class="mt-1 text-panel-title text-text-primary">{{FEATURE_NAME}} — {{VERSION}}</h1>
+      <!-- {{META_LINKS}} 関連 spec / issue / 前バージョンへのリンク（あれば。無ければ削除） -->
+    </header>
+
+    <!-- 状態スイッチャ（ハーネス）。async パネルのモック時のみ使い、不要なら丸ごと削除する。
+         data-state-tab の値と一致する [data-state] だけを表示する。 -->
+    <nav data-state-switcher class="flex gap-1 border-b border-surface-border px-6 py-2">
+      <button data-state-tab="loaded" class="rounded-lg px-3 py-1 text-body-sm">loaded</button>
+      <button data-state-tab="loading" class="rounded-lg px-3 py-1 text-body-sm">loading</button>
+      <button data-state-tab="empty" class="rounded-lg px-3 py-1 text-body-sm">empty</button>
+      <button data-state-tab="error" class="rounded-lg px-3 py-1 text-body-sm">error</button>
+    </nav>
+
+    <!-- ビューポート 2 枠（ハーネス）。desktop と mobile(375px) を並置 -->
+    <main class="flex flex-wrap items-start gap-8 p-6">
+      <!-- Desktop -->
+      <section>
+        <p class="mb-2 text-caption text-text-tertiary">Desktop</p>
+        <div
+          class="relative h-[760px] w-[1180px] max-w-full overflow-hidden rounded-lg border border-surface-border bg-surface-base"
+        >
+          <!-- マップ背景プレースホルダ（本番は MapLibre グローブ）。frosted glass を正しく見せる土台。
+               必要なら faint な静的ワールドマップ画像をここに敷く。 -->
+          <div class="absolute inset-0 bg-surface-base"></div>
+
+          <!-- {{DESKTOP_MOCK}} 実 UI をここに差し込む。DESIGN.md に則りトークン utility のみで組む。 -->
+        </div>
+      </section>
+
+      <!-- Mobile (375px) -->
+      <section>
+        <p class="mb-2 text-caption text-text-tertiary">Mobile · 375px</p>
+        <div
+          class="relative h-[760px] w-[375px] overflow-hidden rounded-lg border border-surface-border bg-surface-base"
+        >
+          <div class="absolute inset-0 bg-surface-base"></div>
+
+          <!-- {{MOBILE_MOCK}} モバイルは re-home（FAB + bottom sheet）として組む。 -->
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // 状態スイッチャ（ハーネス JS）。data-state-tab を押すと一致する [data-state] のみ表示。
+      (function initStateSwitcher() {
+        const switcher = document.querySelector('[data-state-switcher]');
+        if (!switcher) return;
+
+        const tabs = Array.from(switcher.querySelectorAll('[data-state-tab]'));
+        const activeTabClasses = ['bg-surface-raised', 'text-text-primary'];
+        const idleTabClasses = ['text-text-tertiary'];
+
+        function applyState(state) {
+          for (const tab of tabs) {
+            const isActive = tab.dataset.stateTab === state;
+            tab.classList.toggle(activeTabClasses[0], isActive);
+            tab.classList.toggle(activeTabClasses[1], isActive);
+            tab.classList.toggle(idleTabClasses[0], !isActive);
+          }
+          for (const node of document.querySelectorAll('[data-state]')) {
+            node.hidden = node.dataset.state !== state;
+          }
+        }
+
+        for (const tab of tabs) {
+          tab.addEventListener('click', () => applyState(tab.dataset.stateTab));
+        }
+        applyState(tabs[0]?.dataset.stateTab ?? 'loaded');
+      })();
+    </script>
+  </body>
+</html>
