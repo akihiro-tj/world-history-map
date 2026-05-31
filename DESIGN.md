@@ -6,16 +6,22 @@ colors:
   role-warn: '#f2a618'
   role-error: '#f9423d'
   role-focus: '#0072d5'
+  role-link: '#51a2ff'
+  role-link-hover: '#8ec5ff'
   role-label-text: '#eeeeee'
   role-label-halo: '#161616'
   surface-base: '#0a0e11'
+  surface-sheet: '#1e2939'
   surface-panel: '#2a2e33f2'
   surface-raised: '#ffffff24'
+  surface-handle: '#6a7282'
   surface-border: '#44484d'
+  surface-scrim: '#00000080'
   text-primary: '#ffffff'
   text-secondary: '#d4d4d4'
   text-tertiary: '#a1a1a1'
   text-quiet: '#717171'
+  text-dimmed: '#ffffff99'
 ---
 
 # Design System: World History Map
@@ -56,14 +62,24 @@ territory* (map highlight, the panel's left accent stripe) and the *current year
 timeline (the glowing dot). Its impact depends entirely on scarcity — spend it anywhere else
 and the "you are here / now" signal dissolves.
 
+**Blue is for links only.** `role-link` (and its `role-link-hover` lift) is the lone blue in
+the UI chrome, reserved for hyperlinks — text *and* their underline decoration draw from the
+same token. Don't reuse it for emphasis or borrow `role-focus` for link text; keeping link and
+focus blues distinct preserves "named by role, not hue".
+
 **Text hierarchy is carried by lightness, not size:** `text-primary` for titles and values →
 `text-secondary` for body → `text-tertiary` for labels and metadata → `text-quiet` for
-disabled and faint elements.
+disabled and faint elements. `text-dimmed` is the separate *idle interactive* tone — a dimmed
+white for resting control-bar icons that brighten to `text-primary` on hover.
 
 **Surfaces read as a stack of slates:** the deepest base (`surface-base`) under the map void,
 with frosted panels (`surface-panel`), raised segments (`surface-raised`), and hairline
-dividers (`surface-border`). The map's own water color is a separate concern, defined in the
-map config rather than the token set.
+dividers (`surface-border`). `surface-raised` doubles as the additive white overlay that
+hover lifts a control's fill with. A darker opaque slate, `surface-sheet`, backs the
+larger-than-a-panel surfaces — the mobile bottom sheet and the map's loading/error void —
+while `surface-handle` is the bottom sheet's grab affordance and `surface-scrim` is the
+translucent black backdrop behind a modal or expanded sheet. The map's own water color is a
+separate concern, defined in the map config rather than the token set.
 
 ## Typography
 
@@ -114,8 +130,9 @@ consistency *is* the point — a surface that floats but lacks the frosted treat
 foreign element.
 
 Secondary depth cues: a **scroll-fade overlay** at a panel's bottom edge signals more content
-below; the mobile bottom sheet darkens the map behind it with a translucent scrim only when
-fully expanded.
+below — it fades from the surface it sits on (`from-surface-panel` on desktop panels,
+`from-surface-sheet` in the bottom sheet) so the gradient blends seamlessly. The mobile bottom
+sheet darkens the map behind it with a translucent `surface-scrim` only when fully expanded.
 
 ## Shapes
 
@@ -177,8 +194,9 @@ default scale (the design owns no custom radius values):
   is what makes it read as "now / here".
 - Don't mix the two color layers: territory fills (data-driven) must never leak into UI
   chrome, and chrome tokens must never paint territories.
-- Don't hardcode hex in a component when a role token exists; prefer `surface-*` tokens over
-  raw Tailwind `gray-*` (some components still ship the latter — that's drift, not the target).
+- Don't hardcode hex or reach for raw Tailwind primitives (`gray-*`, `white`, `black`,
+  `blue-*`) in chrome — every chrome color goes through a token (`surface-*`, `text-*`,
+  `role-*`). Territory fills are the only exception, and they're data, not chrome.
 - Don't add web fonts or swap the system stack casually — it breaks native Japanese rendering
   and adds load cost for no visual gain.
 - Don't size full-height surfaces to the static viewport height (`100vh`) — it causes the iOS Safari viewport jump; use `100dvh`.

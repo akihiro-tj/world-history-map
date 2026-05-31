@@ -36,7 +36,7 @@ const meta = {
           mapView: { longitude: 0, latitude: 30, zoom: 2 },
         }}
       >
-        <div className="bg-gray-700 p-4">
+        <div className="bg-surface-panel p-4">
           <Story />
         </div>
       </AppStateProvider>
@@ -75,7 +75,7 @@ export const ManyYears: Story = {
           mapView: { longitude: 0, latitude: 30, zoom: 2 },
         }}
       >
-        <div className="bg-gray-700 p-4">
+        <div className="bg-surface-panel p-4">
           <Story />
         </div>
       </AppStateProvider>

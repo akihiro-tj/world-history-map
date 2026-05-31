@@ -46,7 +46,7 @@ function PanelWrapper({
       aria-labelledby="territory-info-title"
       aria-busy={busy || undefined}
       className={cn(
-        'absolute left-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] flex flex-col overflow-hidden rounded-lg bg-gray-700/95 shadow-xl backdrop-blur-sm',
+        'absolute left-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] flex flex-col overflow-hidden rounded-lg bg-surface-panel shadow-xl backdrop-blur-sm',
         SELECTED_ACCENT_CLASS,
         scrollable && 'max-h-[calc(100vh-2rem)]',
       )}
@@ -66,14 +66,14 @@ function PanelHeader({
   onClose: () => void;
 }) {
   return (
-    <div className="border-b border-gray-600">
+    <div className="border-b border-surface-border">
       <div className="flex items-start justify-between px-4 py-3">
         <div className="min-w-0 flex-1">
           <SummaryNavStrip />
-          <h2 id="territory-info-title" className="mt-2.5 text-lg font-semibold text-white">
+          <h2 id="territory-info-title" className="mt-2.5 text-lg font-semibold text-text-primary">
             {name}
           </h2>
-          {era && <p className="mt-0.5 text-sm text-gray-300">{era}</p>}
+          {era && <p className="mt-0.5 text-sm text-text-secondary">{era}</p>}
         </div>
         <CloseButton aria-label="閉じる" onClick={onClose} />
       </div>
@@ -83,7 +83,7 @@ function PanelHeader({
 
 function NoDescriptionBody() {
   return (
-    <div data-testid="no-description-message" className="p-4 text-center text-gray-300">
+    <div data-testid="no-description-message" className="p-4 text-center text-text-secondary">
       <p>この領土の詳細情報は準備中です。</p>
     </div>
   );
@@ -100,7 +100,7 @@ function DescriptionBody({
     <div data-testid="territory-description" className="space-y-3 px-4 py-4">
       <TerritoryProfile profile={description.profile} />
       {description.context && (
-        <p className="text-sm leading-relaxed text-gray-300">{description.context}</p>
+        <p className="text-sm leading-relaxed text-text-secondary">{description.context}</p>
       )}
       <TerritoryTimeline keyEvents={description.keyEvents} selectedYear={selectedYear} />
     </div>
@@ -208,7 +208,7 @@ function MobileContent(props: ContentProps) {
       isOpen
       onClose={onClose}
       header={
-        <div className="flex items-start border-b border-gray-600 pr-4">
+        <div className="flex items-start border-b border-surface-border pr-4">
           <div className="min-w-0 flex-1">
             <div className="pl-4 pr-2">
               <SummaryNavStrip />
@@ -216,11 +216,13 @@ function MobileContent(props: ContentProps) {
             <SelectedAccent className="mt-2 pl-3 pr-2 pb-1.5">
               <h2
                 id="territory-info-title"
-                className="leading-tight text-lg font-semibold text-white"
+                className="leading-tight text-lg font-semibold text-text-primary"
               >
                 {headerName}
               </h2>
-              {headerEra && <p className="leading-tight text-sm text-gray-300">{headerEra}</p>}
+              {headerEra && (
+                <p className="leading-tight text-sm text-text-secondary">{headerEra}</p>
+              )}
             </SelectedAccent>
           </div>
           <CloseButton aria-label="閉じる" onClick={onClose} className="shrink-0" />

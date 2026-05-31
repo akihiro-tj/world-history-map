@@ -22,7 +22,7 @@ export const ProjectionToggle = forwardRef<HTMLButtonElement, ProjectionTogglePr
         type="button"
         onClick={handleClick}
         className={cn(
-          'rounded-lg bg-gray-700/95 p-3 text-gray-300 shadow-lg backdrop-blur-sm transition-colors hover:bg-gray-600 hover:text-white',
+          'rounded-lg bg-surface-panel p-3 text-text-secondary shadow-lg backdrop-blur-sm transition-colors hover:bg-surface-raised hover:text-text-primary',
           className,
         )}
         aria-label={isGlobe ? '平面地図に切り替え' : '地球儀表示に切り替え'}

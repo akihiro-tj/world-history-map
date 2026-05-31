@@ -12,8 +12,8 @@ export function TerritoryProfile({ profile }: { profile: TerritoryProfileType | 
     <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm">
       {entries.map((field) => (
         <div key={field} className="contents">
-          <dt className="text-gray-400">{PROFILE_FIELD_LABELS[field]}</dt>
-          <dd className="text-white">{profile[field]}</dd>
+          <dt className="text-text-tertiary">{PROFILE_FIELD_LABELS[field]}</dt>
+          <dd className="text-text-primary">{profile[field]}</dd>
         </div>
       ))}
     </dl>

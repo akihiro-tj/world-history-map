@@ -89,7 +89,7 @@ export function MapView({ onReady }: MapViewProps) {
   if (error) {
     return (
       <div
-        className="flex h-screen w-full items-center justify-center bg-gray-900"
+        className="flex h-screen w-full items-center justify-center bg-surface-sheet"
         data-testid="map-error"
       >
         <div className="text-center">
@@ -133,7 +133,7 @@ export function MapView({ onReady }: MapViewProps) {
                 <ellipse cx="12" cy="12" rx="10" ry="4" opacity="0.5" />
               </svg>
             </div>
-            <span className="mt-5 text-sm tracking-wider text-gray-400">Loading...</span>
+            <span className="mt-5 text-sm tracking-wider text-text-tertiary">Loading...</span>
           </div>
         </output>
       )}

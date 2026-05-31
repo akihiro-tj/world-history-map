@@ -14,7 +14,7 @@ export const CloseButton = forwardRef<HTMLButtonElement, CloseButtonProps>(
         ref={ref}
         type="button"
         className={cn(
-          'rounded-lg text-gray-300 transition-colors hover:bg-gray-600 hover:text-white',
+          'rounded-lg text-text-secondary transition-colors hover:bg-surface-raised hover:text-text-primary',
           size === 'sm' ? 'p-1' : 'p-1.5',
           className,
         )}

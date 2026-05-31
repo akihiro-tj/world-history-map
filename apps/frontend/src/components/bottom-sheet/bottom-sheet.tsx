@@ -41,7 +41,7 @@ export function BottomSheet({ isOpen, onClose, header, children, ...props }: Bot
       {snap === 'expanded' && (
         <button
           type="button"
-          className="fixed inset-0 z-30 cursor-default border-none bg-black/50"
+          className="fixed inset-0 z-30 cursor-default border-none bg-surface-scrim"
           data-testid="bottom-sheet-backdrop"
           onClick={onClose}
           aria-label="Close"
@@ -52,14 +52,17 @@ export function BottomSheet({ isOpen, onClose, header, children, ...props }: Bot
         role="dialog"
         aria-labelledby={props['aria-labelledby']}
         style={sheetStyle}
-        className="fixed inset-x-0 bottom-0 z-40 flex flex-col rounded-t-2xl bg-gray-800 shadow-xl"
+        className="fixed inset-x-0 bottom-0 z-40 flex flex-col rounded-t-2xl bg-surface-sheet shadow-xl"
       >
         <div
           ref={headerRef}
           className={cn('shrink-0 touch-none', isDragging ? 'cursor-grabbing' : 'cursor-grab')}
         >
           <div className="flex justify-center pt-2 pb-1">
-            <div className="h-1 w-10 rounded-full bg-gray-500" data-testid="bottom-sheet-handle" />
+            <div
+              className="h-1 w-10 rounded-full bg-surface-handle"
+              data-testid="bottom-sheet-handle"
+            />
           </div>
           {header}
         </div>
@@ -70,7 +73,7 @@ export function BottomSheet({ isOpen, onClose, header, children, ...props }: Bot
           >
             {children}
           </div>
-          <ScrollFadeOverlay show={showFade} fromColor="from-gray-800" />
+          <ScrollFadeOverlay show={showFade} fromColor="from-surface-sheet" />
         </div>
       </div>
     </>,
