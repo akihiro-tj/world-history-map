@@ -17,6 +17,7 @@
       "!apps/frontend/src/index.css",
       "!packages/design-tokens/src/theme.css",
       "!.claude/worktrees",
+      "!.claude/skills/**/*.html",
       "!design-mocks"
     ]
   },
