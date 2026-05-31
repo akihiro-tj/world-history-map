@@ -7,6 +7,8 @@
     1. theme.css 注入  … packages/design-tokens/src/theme.css の @theme{...}
     2. base CSS 注入   … apps/frontend/src/index.css の base 設定（CDN で動く形に整える）
 
+  このファイル = 1 比較ラウンド (v<n>)。比較する各パターンを <section data-pattern> として
+  <main> に並置する（下の 1 つは雛形。比較する案の数だけ複製する）。version で案を分けない。
   chrome（フレーム枠・ラベル・背景）は `bg-surface-base` 等のトークン utility で書く。
 -->
 <html lang="ja">
@@ -28,77 +30,93 @@
   </head>
 
   <body class="min-h-dvh bg-surface-base text-text-secondary">
-    <!-- メタ帯（ハーネス）。feature 名 / version / 関連リンク -->
+    <!-- ラウンドヘッダー（ハーネス）。このページ全体が 1 比較ラウンド (v<n>)。
+         feature 名 / ラウンド / このラウンドで比較する観点・関連 spec / issue リンク。 -->
     <header class="border-b border-surface-border px-6 py-4">
       <p class="text-caption text-text-tertiary">world-history-map · design mock</p>
-      <h1 class="mt-1 text-panel-title text-text-primary">{{FEATURE_NAME}} — {{VERSION}}</h1>
-      <!-- {{META_LINKS}} 関連 spec / issue / 前バージョンへのリンク（あれば。無ければ削除） -->
+      <h1 class="mt-1 text-panel-title text-text-primary">{{FEATURE_NAME}} — {{ROUND}}</h1>
+      <p class="mt-1 max-w-3xl text-body-sm leading-relaxed text-text-secondary">
+        {{ROUND_SUMMARY}}
+      </p>
     </header>
 
-    <!-- 状態スイッチャ（ハーネス）。async パネルのモック時のみ使い、不要なら丸ごと削除する。
-         data-state-tab の値と一致する [data-state] だけを表示する。 -->
-    <nav data-state-switcher class="flex gap-1 border-b border-surface-border px-6 py-2">
-      <button data-state-tab="loaded" class="rounded-lg px-3 py-1 text-body-sm">loaded</button>
-      <button data-state-tab="loading" class="rounded-lg px-3 py-1 text-body-sm">loading</button>
-      <button data-state-tab="empty" class="rounded-lg px-3 py-1 text-body-sm">empty</button>
-      <button data-state-tab="error" class="rounded-lg px-3 py-1 text-body-sm">error</button>
-    </nav>
+    <!-- 比較パターン群（ハーネス）。1 パターン = 1 <section data-pattern>。比較する案の数だけ複製する。
+         比較が単発（反復の確認等）なら section は 1 つでよい。 -->
+    <main class="space-y-12 p-6">
+      <section data-pattern="{{PATTERN_SLUG}}">
+        <div class="mb-4 border-l-4 border-role-selected pl-3">
+          <h2 class="text-section-heading text-text-primary">{{PATTERN_SLUG}} — {{PATTERN_LABEL}}</h2>
+          <p class="mt-1 max-w-3xl text-body-sm leading-relaxed text-text-secondary">{{PATTERN_NOTE}}</p>
+        </div>
 
-    <!-- ビューポート 2 枠（ハーネス）。desktop と mobile(375px) を並置 -->
-    <main class="flex flex-wrap items-start gap-8 p-6">
-      <!-- Desktop -->
-      <section>
-        <p class="mb-2 text-caption text-text-tertiary">Desktop</p>
-        <div
-          class="relative h-[760px] w-[1180px] max-w-full overflow-hidden rounded-lg border border-surface-border bg-surface-base"
-        >
-          <!-- マップ背景プレースホルダ（本番は MapLibre グローブ）。frosted glass を正しく見せる土台。
-               必要なら faint な静的ワールドマップ画像をここに敷く。 -->
-          <div class="absolute inset-0 bg-surface-base"></div>
+        <!-- 状態スイッチャ（ハーネス）。async パネルのモック時のみ使い、不要なら丸ごと削除する。
+             data-state-tab の値と一致する、同じ section 内の [data-state] だけを表示する。 -->
+        <nav data-state-switcher class="mb-3 flex gap-1 border-b border-surface-border pb-2">
+          <button data-state-tab="loaded" class="rounded-lg px-3 py-1 text-body-sm">loaded</button>
+          <button data-state-tab="loading" class="rounded-lg px-3 py-1 text-body-sm">loading</button>
+          <button data-state-tab="empty" class="rounded-lg px-3 py-1 text-body-sm">empty</button>
+          <button data-state-tab="error" class="rounded-lg px-3 py-1 text-body-sm">error</button>
+        </nav>
 
-          <!-- {{DESKTOP_MOCK}} 実 UI をここに差し込む。DESIGN.md に則りトークン utility のみで組む。 -->
+        <!-- ビューポート 2 枠（ハーネス）。desktop と mobile(375px) を並置。
+             id / aria-labelledby 等は {{PATTERN_SLUG}} で名前空間化し、他 section と重複させない。 -->
+        <div class="flex flex-wrap items-start gap-8">
+          <div>
+            <p class="mb-2 text-caption text-text-tertiary">Desktop</p>
+            <div
+              class="relative h-[760px] w-[1180px] max-w-full overflow-hidden rounded-lg border border-surface-border bg-surface-base"
+            >
+              <!-- マップ背景プレースホルダ（本番は MapLibre グローブ）。frosted glass を正しく見せる土台。
+                   必要なら faint な静的ワールドマップ画像をここに敷く。 -->
+              <div class="absolute inset-0 bg-surface-base"></div>
+
+              <!-- {{DESKTOP_MOCK}} 実 UI をここに差し込む。DESIGN.md に則りトークン utility のみで組む。 -->
+            </div>
+          </div>
+
+          <div>
+            <p class="mb-2 text-caption text-text-tertiary">Mobile · 375px</p>
+            <div
+              class="relative h-[760px] w-[375px] overflow-hidden rounded-lg border border-surface-border bg-surface-base"
+            >
+              <div class="absolute inset-0 bg-surface-base"></div>
+
+              <!-- {{MOBILE_MOCK}} モバイルは re-home（FAB + bottom sheet）として組む。 -->
+            </div>
+          </div>
         </div>
       </section>
-
-      <!-- Mobile (375px) -->
-      <section>
-        <p class="mb-2 text-caption text-text-tertiary">Mobile · 375px</p>
-        <div
-          class="relative h-[760px] w-[375px] overflow-hidden rounded-lg border border-surface-border bg-surface-base"
-        >
-          <div class="absolute inset-0 bg-surface-base"></div>
-
-          <!-- {{MOBILE_MOCK}} モバイルは re-home（FAB + bottom sheet）として組む。 -->
-        </div>
-      </section>
+      <!-- ↑ ここまでが 1 パターン。比較する案の数だけ <section data-pattern> を複製する。 -->
     </main>
 
     <script>
-      // 状態スイッチャ（ハーネス JS）。data-state-tab を押すと一致する [data-state] のみ表示。
-      (function initStateSwitcher() {
-        const switcher = document.querySelector('[data-state-switcher]');
-        if (!switcher) return;
-
-        const tabs = Array.from(switcher.querySelectorAll('[data-state-tab]'));
+      // 状態スイッチャ（ハーネス JS）。各 [data-state-switcher] を、それが属する [data-pattern]
+      // section 内にスコープして初期化する。data-state-tab を押すと一致する [data-state] のみ表示。
+      (function initStateSwitchers() {
         const activeTabClasses = ['bg-surface-raised', 'text-text-primary'];
-        const idleTabClasses = ['text-text-tertiary'];
+        const idleTabClass = 'text-text-tertiary';
 
-        function applyState(state) {
+        for (const switcher of document.querySelectorAll('[data-state-switcher]')) {
+          const scope = switcher.closest('[data-pattern]') ?? document;
+          const tabs = Array.from(switcher.querySelectorAll('[data-state-tab]'));
+
+          function applyState(state) {
+            for (const tab of tabs) {
+              const isActive = tab.dataset.stateTab === state;
+              tab.classList.toggle(activeTabClasses[0], isActive);
+              tab.classList.toggle(activeTabClasses[1], isActive);
+              tab.classList.toggle(idleTabClass, !isActive);
+            }
+            for (const node of scope.querySelectorAll('[data-state]')) {
+              node.hidden = node.dataset.state !== state;
+            }
+          }
+
           for (const tab of tabs) {
-            const isActive = tab.dataset.stateTab === state;
-            tab.classList.toggle(activeTabClasses[0], isActive);
-            tab.classList.toggle(activeTabClasses[1], isActive);
-            tab.classList.toggle(idleTabClasses[0], !isActive);
+            tab.addEventListener('click', () => applyState(tab.dataset.stateTab));
           }
-          for (const node of document.querySelectorAll('[data-state]')) {
-            node.hidden = node.dataset.state !== state;
-          }
+          applyState(tabs[0]?.dataset.stateTab ?? 'loaded');
         }
-
-        for (const tab of tabs) {
-          tab.addEventListener('click', () => applyState(tab.dataset.stateTab));
-        }
-        applyState(tabs[0]?.dataset.stateTab ?? 'loaded');
       })();
     </script>
   </body>

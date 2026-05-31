@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>sheet-year-control — v1 シート内スライダー統合</title>
+    <title>sheet-year-control — v1（年代コントロール配置の比較）</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
     <style type="text/tailwindcss">
@@ -87,17 +87,27 @@
   <body class="min-h-dvh bg-surface-base text-text-secondary">
     <header class="border-b border-surface-border px-6 py-4">
       <p class="text-caption text-text-tertiary">world-history-map · design mock · mobile</p>
-      <h1 class="mt-1 text-panel-title text-text-primary">sheet-year-control — v1 シート内スライダー統合（原案）</h1>
+      <h1 class="mt-1 text-panel-title text-text-primary">sheet-year-control — v1</h1>
       <p class="mt-1 max-w-3xl text-body-sm leading-relaxed text-text-secondary">
-        ボトムシートのヘッダーに年代スライダーを内蔵し、collapsed / half / expanded のいずれでも常時操作可能にする。
-        シート展開中は画面下部の既存スライダーをシート内スライダーが置き換える。横スクロール領域だけ
-        <code class="rounded bg-surface-raised px-1">touch-action: pan-x</code> に分離し、ヘッダーのドラッグ操作と競合させない。
+        ボトムシート表示中も年代コントロールを操作できるようにする配置を比較検討する第 1 ラウンド。
+        4 つの配置パターンを 1 ページに並置し、トレードオフを横断比較する。
         <a class="text-role-link underline hover:text-role-link-hover" href="https://github.com/akihiro-tj/world-history-map/issues/261">issue #261</a>
       </p>
     </header>
 
-    <main class="flex flex-wrap items-start gap-8 p-6">
-      <!-- collapsed -->
+    <main class="space-y-12 p-6">
+      <!-- pattern: sheet-integrated-slider -->
+      <section>
+        <div class="mb-4 border-l-4 border-role-selected pl-3">
+          <h2 class="text-section-heading text-text-primary">sheet-integrated-slider — シート内スライダー統合</h2>
+          <p class="mt-1 max-w-3xl text-body-sm leading-relaxed text-text-secondary">
+            ボトムシートのヘッダーに年代スライダーを内蔵し、collapsed / half / expanded のいずれでも常時操作可能にする。
+        シート展開中は画面下部の既存スライダーをシート内スライダーが置き換える。横スクロール領域だけ
+        <code class="rounded bg-surface-raised px-1">touch-action: pan-x</code> に分離し、ヘッダーのドラッグ操作と競合させない。
+          </p>
+        </div>
+        <div class="flex flex-wrap items-start gap-8">
+          <!-- collapsed -->
       <section>
         <p class="mb-2 text-caption text-text-tertiary">collapsed — ヘッダーのみ表示</p>
         <div class="relative h-[760px] w-[375px] overflow-hidden rounded-lg border border-surface-border bg-surface-base">
@@ -117,7 +127,7 @@
           </div>
 
           <!-- bottom sheet (collapsed) -->
-          <div role="dialog" aria-labelledby="t1" class="absolute inset-x-0 bottom-0 z-40 flex flex-col rounded-t-2xl bg-surface-sheet shadow-xl">
+          <div role="dialog" aria-labelledby="sheet-integrated-slider-t1" class="absolute inset-x-0 bottom-0 z-40 flex flex-col rounded-t-2xl bg-surface-sheet shadow-xl">
             <div class="shrink-0 cursor-grab border-b border-surface-border">
               <div class="flex justify-center pt-2 pb-1"><div class="h-1 w-10 rounded-full bg-surface-handle"></div></div>
               <div class="flex items-start pr-4">
@@ -129,7 +139,7 @@
                     </button>
                   </div>
                   <div class="mt-2 border-l-4 border-role-selected pl-3 pr-2 pb-1.5">
-                    <h2 id="t1" class="leading-tight text-panel-title text-text-primary">オスマン帝国</h2>
+                    <h2 id="sheet-integrated-slider-t1" class="leading-tight text-panel-title text-text-primary">オスマン帝国</h2>
                     <p class="leading-tight text-body-sm text-text-secondary">1453–1922 · メフメト3世</p>
                   </div>
                 </div>
@@ -175,7 +185,7 @@
             </button>
           </div>
 
-          <div role="dialog" aria-labelledby="t2" class="absolute inset-x-0 bottom-0 z-40 flex h-[304px] flex-col rounded-t-2xl bg-surface-sheet shadow-xl">
+          <div role="dialog" aria-labelledby="sheet-integrated-slider-t2" class="absolute inset-x-0 bottom-0 z-40 flex h-[304px] flex-col rounded-t-2xl bg-surface-sheet shadow-xl">
             <div class="shrink-0 cursor-grab border-b border-surface-border">
               <div class="flex justify-center pt-2 pb-1"><div class="h-1 w-10 rounded-full bg-surface-handle"></div></div>
               <div class="flex items-start pr-4">
@@ -187,7 +197,7 @@
                     </button>
                   </div>
                   <div class="mt-2 border-l-4 border-role-selected pl-3 pr-2 pb-1.5">
-                    <h2 id="t2" class="leading-tight text-panel-title text-text-primary">オスマン帝国</h2>
+                    <h2 id="sheet-integrated-slider-t2" class="leading-tight text-panel-title text-text-primary">オスマン帝国</h2>
                     <p class="leading-tight text-body-sm text-text-secondary">1453–1922 · メフメト3世</p>
                   </div>
                 </div>
@@ -237,7 +247,7 @@
 
           <div class="absolute inset-0 z-30 bg-surface-scrim"></div>
 
-          <div role="dialog" aria-labelledby="t3" class="absolute inset-x-0 bottom-0 z-40 flex h-[684px] flex-col rounded-t-2xl bg-surface-sheet shadow-xl">
+          <div role="dialog" aria-labelledby="sheet-integrated-slider-t3" class="absolute inset-x-0 bottom-0 z-40 flex h-[684px] flex-col rounded-t-2xl bg-surface-sheet shadow-xl">
             <div class="shrink-0 cursor-grab border-b border-surface-border">
               <div class="flex justify-center pt-2 pb-1"><div class="h-1 w-10 rounded-full bg-surface-handle"></div></div>
               <div class="flex items-start pr-4">
@@ -249,7 +259,7 @@
                     </button>
                   </div>
                   <div class="mt-2 border-l-4 border-role-selected pl-3 pr-2 pb-1.5">
-                    <h2 id="t3" class="leading-tight text-panel-title text-text-primary">オスマン帝国</h2>
+                    <h2 id="sheet-integrated-slider-t3" class="leading-tight text-panel-title text-text-primary">オスマン帝国</h2>
                     <p class="leading-tight text-body-sm text-text-secondary">1453–1922 · メフメト3世</p>
                   </div>
                 </div>
@@ -308,6 +318,696 @@
               <div class="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-surface-sheet to-transparent"></div>
             </div>
           </div>
+        </div>
+      </section>
+        </div>
+      </section>
+
+      <!-- pattern: sheet-top-pinned -->
+      <section>
+        <div class="mb-4 border-l-4 border-role-selected pl-3">
+          <h2 class="text-section-heading text-text-primary">sheet-top-pinned — シート上端に浮かせる追従コントロール</h2>
+          <p class="mt-1 max-w-3xl text-body-sm leading-relaxed text-text-secondary">
+            既存の年代スライダーをシート本体には組み込まず、独立した frosted パネルのままシート上端のすぐ上へ追従させる。
+        シートが上にスナップするほどスライダーも持ち上がり、常に視認できる。スライダーはドラッグ対象のヘッダーとは別要素なので
+        <code class="rounded bg-surface-raised px-1">touch-action</code> の競合が起きない。
+          </p>
+        </div>
+        <div class="flex flex-wrap items-start gap-8">
+          <!-- collapsed -->
+      <section>
+        <p class="mb-2 text-caption text-text-tertiary">collapsed — ヘッダー直上に追従</p>
+        <div class="relative h-[760px] w-[375px] overflow-hidden rounded-lg border border-surface-border bg-surface-base">
+          <div class="absolute inset-0 bg-surface-base"></div>
+          <div class="absolute left-1/2 top-[34%] h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-surface-sheet/60"></div>
+          <div class="absolute inset-0 opacity-10" style="background-image: repeating-linear-gradient(to right, var(--color-surface-border) 0 1px, transparent 1px 44px), repeating-linear-gradient(to bottom, var(--color-surface-border) 0 1px, transparent 1px 44px);"></div>
+
+          <div class="absolute right-4 top-4 z-30 flex flex-col gap-2">
+            <button type="button" aria-label="拡大" class="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-panel text-text-dimmed shadow-lg backdrop-blur-sm">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+            </button>
+            <button type="button" aria-label="縮小" class="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-panel text-text-dimmed shadow-lg backdrop-blur-sm">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 12h16" /></svg>
+            </button>
+          </div>
+
+          <!-- floating year selector, following the sheet's top edge -->
+          <div class="absolute inset-x-4 bottom-[150px] z-50 mx-auto max-w-2xl overflow-hidden rounded-lg bg-surface-panel shadow-lg backdrop-blur-sm">
+            <nav aria-label="年代選択" class="flex items-stretch">
+              <button type="button" aria-label="前の年代を選択" class="flex shrink-0 items-center border-r border-surface-border px-3 py-2 text-text-secondary">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+              </button>
+              <div class="flex flex-1 items-stretch overflow-x-auto no-scrollbar">
+                <button type="button" class="flex shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 min-w-[4rem] text-body text-text-secondary">1453</button>
+                <button type="button" class="flex shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 min-w-[4rem] text-body text-text-secondary">1517</button>
+                <button type="button" aria-current="true" class="flex shrink-0 items-center justify-center border-r border-surface-border bg-surface-raised px-5 py-3 min-w-[5rem] text-active-year text-text-primary">1600</button>
+                <button type="button" class="flex shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 min-w-[4rem] text-body text-text-secondary">1683</button>
+                <button type="button" class="flex shrink-0 items-center justify-center px-3 py-3 min-w-[4rem] text-body text-text-secondary">1700</button>
+              </div>
+              <button type="button" aria-label="次の年代を選択" class="flex shrink-0 items-center border-l border-surface-border px-3 py-2 text-text-secondary">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+              </button>
+            </nav>
+          </div>
+
+          <!-- bottom sheet (collapsed) -->
+          <div role="dialog" aria-labelledby="sheet-top-pinned-t1" class="absolute inset-x-0 bottom-0 z-40 flex flex-col rounded-t-2xl bg-surface-sheet shadow-xl">
+            <div class="shrink-0 cursor-grab border-b border-surface-border">
+              <div class="flex justify-center pt-2 pb-1"><div class="h-1 w-10 rounded-full bg-surface-handle"></div></div>
+              <div class="flex items-start pr-4 pb-2">
+                <div class="min-w-0 flex-1">
+                  <div class="pl-4 pr-2">
+                    <button type="button" class="flex w-max items-center gap-1 rounded-sm text-caption text-text-secondary underline">
+                      <svg class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                      <span class="truncate">1600年の世界の概要</span>
+                    </button>
+                  </div>
+                  <div class="mt-2 border-l-4 border-role-selected pl-3 pr-2 pb-1.5">
+                    <h2 id="sheet-top-pinned-t1" class="leading-tight text-panel-title text-text-primary">オスマン帝国</h2>
+                    <p class="leading-tight text-body-sm text-text-secondary">1453–1922 · メフメト3世</p>
+                  </div>
+                </div>
+                <button type="button" aria-label="閉じる" class="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-text-tertiary">
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- half -->
+      <section>
+        <p class="mb-2 text-caption text-text-tertiary">half — 40dvh · スライダーが持ち上がる</p>
+        <div class="relative h-[760px] w-[375px] overflow-hidden rounded-lg border border-surface-border bg-surface-base">
+          <div class="absolute inset-0 bg-surface-base"></div>
+          <div class="absolute left-1/2 top-[34%] h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-surface-sheet/60"></div>
+          <div class="absolute inset-0 opacity-10" style="background-image: repeating-linear-gradient(to right, var(--color-surface-border) 0 1px, transparent 1px 44px), repeating-linear-gradient(to bottom, var(--color-surface-border) 0 1px, transparent 1px 44px);"></div>
+
+          <div class="absolute right-4 top-4 z-30 flex flex-col gap-2">
+            <button type="button" aria-label="拡大" class="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-panel text-text-dimmed shadow-lg backdrop-blur-sm">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+            </button>
+            <button type="button" aria-label="縮小" class="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-panel text-text-dimmed shadow-lg backdrop-blur-sm">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 12h16" /></svg>
+            </button>
+          </div>
+
+          <div class="absolute inset-x-4 bottom-[316px] z-50 mx-auto max-w-2xl overflow-hidden rounded-lg bg-surface-panel shadow-lg backdrop-blur-sm">
+            <nav aria-label="年代選択" class="flex items-stretch">
+              <button type="button" aria-label="前の年代を選択" class="flex shrink-0 items-center border-r border-surface-border px-3 py-2 text-text-secondary">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+              </button>
+              <div class="flex flex-1 items-stretch overflow-x-auto no-scrollbar">
+                <button type="button" class="flex shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 min-w-[4rem] text-body text-text-secondary">1453</button>
+                <button type="button" class="flex shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 min-w-[4rem] text-body text-text-secondary">1517</button>
+                <button type="button" aria-current="true" class="flex shrink-0 items-center justify-center border-r border-surface-border bg-surface-raised px-5 py-3 min-w-[5rem] text-active-year text-text-primary">1600</button>
+                <button type="button" class="flex shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 min-w-[4rem] text-body text-text-secondary">1683</button>
+                <button type="button" class="flex shrink-0 items-center justify-center px-3 py-3 min-w-[4rem] text-body text-text-secondary">1700</button>
+              </div>
+              <button type="button" aria-label="次の年代を選択" class="flex shrink-0 items-center border-l border-surface-border px-3 py-2 text-text-secondary">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+              </button>
+            </nav>
+          </div>
+
+          <div role="dialog" aria-labelledby="sheet-top-pinned-t2" class="absolute inset-x-0 bottom-0 z-40 flex h-[304px] flex-col rounded-t-2xl bg-surface-sheet shadow-xl">
+            <div class="shrink-0 cursor-grab border-b border-surface-border">
+              <div class="flex justify-center pt-2 pb-1"><div class="h-1 w-10 rounded-full bg-surface-handle"></div></div>
+              <div class="flex items-start pr-4 pb-2">
+                <div class="min-w-0 flex-1">
+                  <div class="pl-4 pr-2">
+                    <button type="button" class="flex w-max items-center gap-1 rounded-sm text-caption text-text-secondary underline">
+                      <svg class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                      <span class="truncate">1600年の世界の概要</span>
+                    </button>
+                  </div>
+                  <div class="mt-2 border-l-4 border-role-selected pl-3 pr-2 pb-1.5">
+                    <h2 id="sheet-top-pinned-t2" class="leading-tight text-panel-title text-text-primary">オスマン帝国</h2>
+                    <p class="leading-tight text-body-sm text-text-secondary">1453–1922 · メフメト3世</p>
+                  </div>
+                </div>
+                <button type="button" aria-label="閉じる" class="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-text-tertiary">
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+            </div>
+            <div class="relative min-h-0 flex-1">
+              <div class="no-scrollbar h-full overflow-y-auto px-4 py-4">
+                <div class="space-y-3">
+                  <dl class="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-body-sm">
+                    <dt class="text-text-tertiary">首都</dt><dd class="text-text-secondary">イスタンブール</dd>
+                    <dt class="text-text-tertiary">君主</dt><dd class="text-text-secondary">メフメト3世</dd>
+                  </dl>
+                  <p class="text-body-sm leading-relaxed text-text-secondary">16世紀末、オスマン帝国はバルカン半島から北アフリカ、アラビア半島に至る三大陸の版図を維持し、地中海東部の覇権を握っていた。</p>
+                </div>
+              </div>
+              <div class="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-surface-sheet to-transparent"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- expanded -->
+      <section>
+        <p class="mb-2 text-caption text-text-tertiary">expanded — 90dvh · scrim 上に最前面で残る</p>
+        <div class="relative h-[760px] w-[375px] overflow-hidden rounded-lg border border-surface-border bg-surface-base">
+          <div class="absolute inset-0 bg-surface-base"></div>
+          <div class="absolute left-1/2 top-[34%] h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-surface-sheet/60"></div>
+          <div class="absolute inset-0 opacity-10" style="background-image: repeating-linear-gradient(to right, var(--color-surface-border) 0 1px, transparent 1px 44px), repeating-linear-gradient(to bottom, var(--color-surface-border) 0 1px, transparent 1px 44px);"></div>
+
+          <div class="absolute inset-0 z-30 bg-surface-scrim"></div>
+
+          <div class="absolute inset-x-4 bottom-[696px] z-50 mx-auto max-w-2xl overflow-hidden rounded-lg bg-surface-panel shadow-lg backdrop-blur-sm">
+            <nav aria-label="年代選択" class="flex items-stretch">
+              <button type="button" aria-label="前の年代を選択" class="flex shrink-0 items-center border-r border-surface-border px-3 py-2 text-text-secondary">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+              </button>
+              <div class="flex flex-1 items-stretch overflow-x-auto no-scrollbar">
+                <button type="button" class="flex shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 min-w-[4rem] text-body text-text-secondary">1453</button>
+                <button type="button" class="flex shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 min-w-[4rem] text-body text-text-secondary">1517</button>
+                <button type="button" aria-current="true" class="flex shrink-0 items-center justify-center border-r border-surface-border bg-surface-raised px-5 py-3 min-w-[5rem] text-active-year text-text-primary">1600</button>
+                <button type="button" class="flex shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 min-w-[4rem] text-body text-text-secondary">1683</button>
+                <button type="button" class="flex shrink-0 items-center justify-center px-3 py-3 min-w-[4rem] text-body text-text-secondary">1700</button>
+              </div>
+              <button type="button" aria-label="次の年代を選択" class="flex shrink-0 items-center border-l border-surface-border px-3 py-2 text-text-secondary">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+              </button>
+            </nav>
+          </div>
+
+          <div role="dialog" aria-labelledby="sheet-top-pinned-t3" class="absolute inset-x-0 bottom-0 z-40 flex h-[684px] flex-col rounded-t-2xl bg-surface-sheet shadow-xl">
+            <div class="shrink-0 cursor-grab border-b border-surface-border">
+              <div class="flex justify-center pt-2 pb-1"><div class="h-1 w-10 rounded-full bg-surface-handle"></div></div>
+              <div class="flex items-start pr-4 pb-2">
+                <div class="min-w-0 flex-1">
+                  <div class="pl-4 pr-2">
+                    <button type="button" class="flex w-max items-center gap-1 rounded-sm text-caption text-text-secondary underline">
+                      <svg class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                      <span class="truncate">1600年の世界の概要</span>
+                    </button>
+                  </div>
+                  <div class="mt-2 border-l-4 border-role-selected pl-3 pr-2 pb-1.5">
+                    <h2 id="sheet-top-pinned-t3" class="leading-tight text-panel-title text-text-primary">オスマン帝国</h2>
+                    <p class="leading-tight text-body-sm text-text-secondary">1453–1922 · メフメト3世</p>
+                  </div>
+                </div>
+                <button type="button" aria-label="閉じる" class="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-text-tertiary">
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+            </div>
+            <div class="relative min-h-0 flex-1">
+              <div class="no-scrollbar h-full overflow-y-auto px-4 py-4">
+                <div class="space-y-4">
+                  <dl class="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-body-sm">
+                    <dt class="text-text-tertiary">首都</dt><dd class="text-text-secondary">イスタンブール</dd>
+                    <dt class="text-text-tertiary">君主</dt><dd class="text-text-secondary">メフメト3世</dd>
+                    <dt class="text-text-tertiary">宗教</dt><dd class="text-text-secondary">スンナ派イスラム</dd>
+                  </dl>
+                  <p class="text-body-sm leading-relaxed text-text-secondary">16世紀末、オスマン帝国はバルカン半島から北アフリカ、アラビア半島に至る三大陸の版図を維持し、地中海東部の覇権を握っていた。スレイマン1世の最盛期を経て、メフメト3世の治世に入る。</p>
+                  <div>
+                    <h3 class="text-section-heading text-text-primary">主な出来事</h3>
+                    <ol class="mt-2 space-y-3">
+                      <li class="flex gap-3">
+                        <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-surface-handle"></span>
+                        <div><p class="text-caption tabular-nums text-text-tertiary">1453</p><p class="text-body-sm text-text-tertiary">コンスタンティノープル陥落</p></div>
+                      </li>
+                      <li class="flex gap-3">
+                        <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-surface-handle"></span>
+                        <div><p class="text-caption tabular-nums text-text-tertiary">1517</p><p class="text-body-sm text-text-tertiary">マムルーク朝を征服しカリフ位を継承</p></div>
+                      </li>
+                      <li class="flex gap-3">
+                        <span class="mt-1 h-2.5 w-2.5 shrink-0 rounded-full border-2 border-surface-panel bg-role-selected" style="box-shadow: 0 0 8px var(--color-role-selected);"></span>
+                        <div><p class="text-caption tabular-nums text-role-selected">1600</p><p class="text-body-sm font-semibold text-text-primary">メフメト3世治世・三大陸にまたがる版図</p></div>
+                      </li>
+                      <li class="flex gap-3">
+                        <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-surface-handle"></span>
+                        <div><p class="text-caption tabular-nums text-text-tertiary">1683</p><p class="text-body-sm text-text-tertiary">第二次ウィーン包囲の失敗</p></div>
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+              <div class="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-surface-sheet to-transparent"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+        </div>
+      </section>
+
+      <!-- pattern: header-stepper -->
+      <section>
+        <div class="mb-4 border-l-4 border-role-selected pl-3">
+          <h2 class="text-section-heading text-text-primary">header-stepper — ヘッダーにコンパクト年代ステッパー</h2>
+          <p class="mt-1 max-w-3xl text-body-sm leading-relaxed text-text-secondary">
+            スライダーではなく「前年 / 現在年 / 次年」のステッパーピルをヘッダーに置く。1 行で省スペース、タップ 2 点だけなので
+        ドラッグとの <code class="rounded bg-surface-raised px-1">touch-action</code> 競合が原理的に起きない。中央の年ラベルをタップすると
+        年代一覧へ展開する想定。一気にレンジをスクラブする操作は失われる代わりに、隣接年の比較動線は最短になる。
+          </p>
+        </div>
+        <div class="flex flex-wrap items-start gap-8">
+          <!-- collapsed -->
+      <section>
+        <p class="mb-2 text-caption text-text-tertiary">collapsed — ステッパーは1行で常駐</p>
+        <div class="relative h-[760px] w-[375px] overflow-hidden rounded-lg border border-surface-border bg-surface-base">
+          <div class="absolute inset-0 bg-surface-base"></div>
+          <div class="absolute left-1/2 top-[34%] h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-surface-sheet/60"></div>
+          <div class="absolute inset-0 opacity-10" style="background-image: repeating-linear-gradient(to right, var(--color-surface-border) 0 1px, transparent 1px 44px), repeating-linear-gradient(to bottom, var(--color-surface-border) 0 1px, transparent 1px 44px);"></div>
+
+          <div class="absolute right-4 top-4 z-30 flex flex-col gap-2">
+            <button type="button" aria-label="拡大" class="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-panel text-text-dimmed shadow-lg backdrop-blur-sm">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+            </button>
+            <button type="button" aria-label="縮小" class="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-panel text-text-dimmed shadow-lg backdrop-blur-sm">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 12h16" /></svg>
+            </button>
+          </div>
+
+          <div role="dialog" aria-labelledby="header-stepper-t1" class="absolute inset-x-0 bottom-0 z-40 flex flex-col rounded-t-2xl bg-surface-sheet shadow-xl">
+            <div class="shrink-0 cursor-grab border-b border-surface-border">
+              <div class="flex justify-center pt-2 pb-1"><div class="h-1 w-10 rounded-full bg-surface-handle"></div></div>
+              <div class="flex items-start pr-4">
+                <div class="min-w-0 flex-1">
+                  <div class="pl-4 pr-2">
+                    <button type="button" class="flex w-max items-center gap-1 rounded-sm text-caption text-text-secondary underline">
+                      <svg class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                      <span class="truncate">1600年の世界の概要</span>
+                    </button>
+                  </div>
+                  <div class="mt-2 border-l-4 border-role-selected pl-3 pr-2 pb-1.5">
+                    <h2 id="header-stepper-t1" class="leading-tight text-panel-title text-text-primary">オスマン帝国</h2>
+                    <p class="leading-tight text-body-sm text-text-secondary">1453–1922 · メフメト3世</p>
+                  </div>
+                </div>
+                <button type="button" aria-label="閉じる" class="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-text-tertiary">
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+              <!-- compact year stepper -->
+              <div class="px-4 pb-3 pt-1" style="touch-action: auto;">
+                <div class="inline-flex items-center gap-1 rounded-lg bg-surface-raised p-1">
+                  <button type="button" aria-label="前の年代を選択" class="flex h-9 w-9 items-center justify-center rounded-md text-text-secondary">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                  </button>
+                  <button type="button" aria-label="年代を一覧から選択" class="flex items-center gap-1 rounded-md px-3 py-1 text-active-year tabular-nums text-text-primary">
+                    1600年
+                    <svg class="h-3.5 w-3.5 text-text-tertiary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                  </button>
+                  <button type="button" aria-label="次の年代を選択" class="flex h-9 w-9 items-center justify-center rounded-md text-text-secondary">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- half -->
+      <section>
+        <p class="mb-2 text-caption text-text-tertiary">half — 40dvh</p>
+        <div class="relative h-[760px] w-[375px] overflow-hidden rounded-lg border border-surface-border bg-surface-base">
+          <div class="absolute inset-0 bg-surface-base"></div>
+          <div class="absolute left-1/2 top-[34%] h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-surface-sheet/60"></div>
+          <div class="absolute inset-0 opacity-10" style="background-image: repeating-linear-gradient(to right, var(--color-surface-border) 0 1px, transparent 1px 44px), repeating-linear-gradient(to bottom, var(--color-surface-border) 0 1px, transparent 1px 44px);"></div>
+
+          <div class="absolute right-4 top-4 z-30 flex flex-col gap-2">
+            <button type="button" aria-label="拡大" class="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-panel text-text-dimmed shadow-lg backdrop-blur-sm">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+            </button>
+            <button type="button" aria-label="縮小" class="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-panel text-text-dimmed shadow-lg backdrop-blur-sm">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 12h16" /></svg>
+            </button>
+          </div>
+
+          <div role="dialog" aria-labelledby="header-stepper-t2" class="absolute inset-x-0 bottom-0 z-40 flex h-[304px] flex-col rounded-t-2xl bg-surface-sheet shadow-xl">
+            <div class="shrink-0 cursor-grab border-b border-surface-border">
+              <div class="flex justify-center pt-2 pb-1"><div class="h-1 w-10 rounded-full bg-surface-handle"></div></div>
+              <div class="flex items-start pr-4">
+                <div class="min-w-0 flex-1">
+                  <div class="pl-4 pr-2">
+                    <button type="button" class="flex w-max items-center gap-1 rounded-sm text-caption text-text-secondary underline">
+                      <svg class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                      <span class="truncate">1600年の世界の概要</span>
+                    </button>
+                  </div>
+                  <div class="mt-2 border-l-4 border-role-selected pl-3 pr-2 pb-1.5">
+                    <h2 id="header-stepper-t2" class="leading-tight text-panel-title text-text-primary">オスマン帝国</h2>
+                    <p class="leading-tight text-body-sm text-text-secondary">1453–1922 · メフメト3世</p>
+                  </div>
+                </div>
+                <button type="button" aria-label="閉じる" class="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-text-tertiary">
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+              <div class="px-4 pb-3 pt-1" style="touch-action: auto;">
+                <div class="inline-flex items-center gap-1 rounded-lg bg-surface-raised p-1">
+                  <button type="button" aria-label="前の年代を選択" class="flex h-9 w-9 items-center justify-center rounded-md text-text-secondary">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                  </button>
+                  <button type="button" aria-label="年代を一覧から選択" class="flex items-center gap-1 rounded-md px-3 py-1 text-active-year tabular-nums text-text-primary">
+                    1600年
+                    <svg class="h-3.5 w-3.5 text-text-tertiary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                  </button>
+                  <button type="button" aria-label="次の年代を選択" class="flex h-9 w-9 items-center justify-center rounded-md text-text-secondary">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="relative min-h-0 flex-1">
+              <div class="no-scrollbar h-full overflow-y-auto px-4 py-4">
+                <div class="space-y-3">
+                  <dl class="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-body-sm">
+                    <dt class="text-text-tertiary">首都</dt><dd class="text-text-secondary">イスタンブール</dd>
+                    <dt class="text-text-tertiary">君主</dt><dd class="text-text-secondary">メフメト3世</dd>
+                  </dl>
+                  <p class="text-body-sm leading-relaxed text-text-secondary">16世紀末、オスマン帝国はバルカン半島から北アフリカ、アラビア半島に至る三大陸の版図を維持し、地中海東部の覇権を握っていた。</p>
+                </div>
+              </div>
+              <div class="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-surface-sheet to-transparent"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- expanded -->
+      <section>
+        <p class="mb-2 text-caption text-text-tertiary">expanded — 90dvh · scrim 背景</p>
+        <div class="relative h-[760px] w-[375px] overflow-hidden rounded-lg border border-surface-border bg-surface-base">
+          <div class="absolute inset-0 bg-surface-base"></div>
+          <div class="absolute left-1/2 top-[34%] h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-surface-sheet/60"></div>
+          <div class="absolute inset-0 opacity-10" style="background-image: repeating-linear-gradient(to right, var(--color-surface-border) 0 1px, transparent 1px 44px), repeating-linear-gradient(to bottom, var(--color-surface-border) 0 1px, transparent 1px 44px);"></div>
+
+          <div class="absolute inset-0 z-30 bg-surface-scrim"></div>
+
+          <div role="dialog" aria-labelledby="header-stepper-t3" class="absolute inset-x-0 bottom-0 z-40 flex h-[684px] flex-col rounded-t-2xl bg-surface-sheet shadow-xl">
+            <div class="shrink-0 cursor-grab border-b border-surface-border">
+              <div class="flex justify-center pt-2 pb-1"><div class="h-1 w-10 rounded-full bg-surface-handle"></div></div>
+              <div class="flex items-start pr-4">
+                <div class="min-w-0 flex-1">
+                  <div class="pl-4 pr-2">
+                    <button type="button" class="flex w-max items-center gap-1 rounded-sm text-caption text-text-secondary underline">
+                      <svg class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                      <span class="truncate">1600年の世界の概要</span>
+                    </button>
+                  </div>
+                  <div class="mt-2 border-l-4 border-role-selected pl-3 pr-2 pb-1.5">
+                    <h2 id="header-stepper-t3" class="leading-tight text-panel-title text-text-primary">オスマン帝国</h2>
+                    <p class="leading-tight text-body-sm text-text-secondary">1453–1922 · メフメト3世</p>
+                  </div>
+                </div>
+                <button type="button" aria-label="閉じる" class="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-text-tertiary">
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+              <div class="px-4 pb-3 pt-1" style="touch-action: auto;">
+                <div class="inline-flex items-center gap-1 rounded-lg bg-surface-raised p-1">
+                  <button type="button" aria-label="前の年代を選択" class="flex h-9 w-9 items-center justify-center rounded-md text-text-secondary">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                  </button>
+                  <button type="button" aria-label="年代を一覧から選択" class="flex items-center gap-1 rounded-md px-3 py-1 text-active-year tabular-nums text-text-primary">
+                    1600年
+                    <svg class="h-3.5 w-3.5 text-text-tertiary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                  </button>
+                  <button type="button" aria-label="次の年代を選択" class="flex h-9 w-9 items-center justify-center rounded-md text-text-secondary">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="relative min-h-0 flex-1">
+              <div class="no-scrollbar h-full overflow-y-auto px-4 py-4">
+                <div class="space-y-4">
+                  <dl class="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-body-sm">
+                    <dt class="text-text-tertiary">首都</dt><dd class="text-text-secondary">イスタンブール</dd>
+                    <dt class="text-text-tertiary">君主</dt><dd class="text-text-secondary">メフメト3世</dd>
+                    <dt class="text-text-tertiary">宗教</dt><dd class="text-text-secondary">スンナ派イスラム</dd>
+                  </dl>
+                  <p class="text-body-sm leading-relaxed text-text-secondary">16世紀末、オスマン帝国はバルカン半島から北アフリカ、アラビア半島に至る三大陸の版図を維持し、地中海東部の覇権を握っていた。スレイマン1世の最盛期を経て、メフメト3世の治世に入る。</p>
+                  <div>
+                    <h3 class="text-section-heading text-text-primary">主な出来事</h3>
+                    <ol class="mt-2 space-y-3">
+                      <li class="flex gap-3">
+                        <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-surface-handle"></span>
+                        <div><p class="text-caption tabular-nums text-text-tertiary">1453</p><p class="text-body-sm text-text-tertiary">コンスタンティノープル陥落</p></div>
+                      </li>
+                      <li class="flex gap-3">
+                        <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-surface-handle"></span>
+                        <div><p class="text-caption tabular-nums text-text-tertiary">1517</p><p class="text-body-sm text-text-tertiary">マムルーク朝を征服しカリフ位を継承</p></div>
+                      </li>
+                      <li class="flex gap-3">
+                        <span class="mt-1 h-2.5 w-2.5 shrink-0 rounded-full border-2 border-surface-panel bg-role-selected" style="box-shadow: 0 0 8px var(--color-role-selected);"></span>
+                        <div><p class="text-caption tabular-nums text-role-selected">1600</p><p class="text-body-sm font-semibold text-text-primary">メフメト3世治世・三大陸にまたがる版図</p></div>
+                      </li>
+                      <li class="flex gap-3">
+                        <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-surface-handle"></span>
+                        <div><p class="text-caption tabular-nums text-text-tertiary">1683</p><p class="text-body-sm text-text-tertiary">第二次ウィーン包囲の失敗</p></div>
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+              <div class="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-surface-sheet to-transparent"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+        </div>
+      </section>
+
+      <!-- pattern: screen-top-bar -->
+      <section>
+        <div class="mb-4 border-l-4 border-role-selected pl-3">
+          <h2 class="text-section-heading text-text-primary">screen-top-bar — 年代コントロールを画面上部へ移設</h2>
+          <p class="mt-1 max-w-3xl text-body-sm leading-relaxed text-text-secondary">
+            年代スライダーをボトムシートと物理的に重ならない画面上部へ移設し、競合を根本から回避する。シートの開閉やスナップ位置に
+        一切影響されず常時操作可能。一方で「年代は画面下部」という既存の操作慣習・デスクトップ下部配置との一貫性からは外れる点が
+        トレードオフ。
+          </p>
+        </div>
+        <div class="flex flex-wrap items-start gap-8">
+          <!-- collapsed -->
+      <section>
+        <p class="mb-2 text-caption text-text-tertiary">collapsed — 上部スライダーは不動</p>
+        <div class="relative h-[760px] w-[375px] overflow-hidden rounded-lg border border-surface-border bg-surface-base">
+          <div class="absolute inset-0 bg-surface-base"></div>
+          <div class="absolute left-1/2 top-[40%] h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-surface-sheet/60"></div>
+          <div class="absolute inset-0 opacity-10" style="background-image: repeating-linear-gradient(to right, var(--color-surface-border) 0 1px, transparent 1px 44px), repeating-linear-gradient(to bottom, var(--color-surface-border) 0 1px, transparent 1px 44px);"></div>
+
+          <!-- year selector relocated to the top -->
+          <div class="absolute inset-x-4 top-4 z-50 mx-auto max-w-2xl overflow-hidden rounded-lg bg-surface-panel shadow-lg backdrop-blur-sm">
+            <nav aria-label="年代選択" class="flex items-stretch">
+              <button type="button" aria-label="前の年代を選択" class="flex shrink-0 items-center border-r border-surface-border px-3 py-2 text-text-secondary">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+              </button>
+              <div class="flex flex-1 items-stretch overflow-x-auto no-scrollbar">
+                <button type="button" class="flex shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 min-w-[4rem] text-body text-text-secondary">1453</button>
+                <button type="button" class="flex shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 min-w-[4rem] text-body text-text-secondary">1517</button>
+                <button type="button" aria-current="true" class="flex shrink-0 items-center justify-center border-r border-surface-border bg-surface-raised px-5 py-3 min-w-[5rem] text-active-year text-text-primary">1600</button>
+                <button type="button" class="flex shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 min-w-[4rem] text-body text-text-secondary">1683</button>
+                <button type="button" class="flex shrink-0 items-center justify-center px-3 py-3 min-w-[4rem] text-body text-text-secondary">1700</button>
+              </div>
+              <button type="button" aria-label="次の年代を選択" class="flex shrink-0 items-center border-l border-surface-border px-3 py-2 text-text-secondary">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+              </button>
+            </nav>
+          </div>
+
+          <div class="absolute right-4 top-20 z-30 flex flex-col gap-2">
+            <button type="button" aria-label="拡大" class="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-panel text-text-dimmed shadow-lg backdrop-blur-sm">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+            </button>
+            <button type="button" aria-label="縮小" class="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-panel text-text-dimmed shadow-lg backdrop-blur-sm">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 12h16" /></svg>
+            </button>
+          </div>
+
+          <div role="dialog" aria-labelledby="screen-top-bar-t1" class="absolute inset-x-0 bottom-0 z-40 flex flex-col rounded-t-2xl bg-surface-sheet shadow-xl">
+            <div class="shrink-0 cursor-grab border-b border-surface-border">
+              <div class="flex justify-center pt-2 pb-1"><div class="h-1 w-10 rounded-full bg-surface-handle"></div></div>
+              <div class="flex items-start pr-4 pb-2">
+                <div class="min-w-0 flex-1">
+                  <div class="pl-4 pr-2">
+                    <button type="button" class="flex w-max items-center gap-1 rounded-sm text-caption text-text-secondary underline">
+                      <svg class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                      <span class="truncate">1600年の世界の概要</span>
+                    </button>
+                  </div>
+                  <div class="mt-2 border-l-4 border-role-selected pl-3 pr-2 pb-1.5">
+                    <h2 id="screen-top-bar-t1" class="leading-tight text-panel-title text-text-primary">オスマン帝国</h2>
+                    <p class="leading-tight text-body-sm text-text-secondary">1453–1922 · メフメト3世</p>
+                  </div>
+                </div>
+                <button type="button" aria-label="閉じる" class="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-text-tertiary">
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- half -->
+      <section>
+        <p class="mb-2 text-caption text-text-tertiary">half — 40dvh · 上部は影響なし</p>
+        <div class="relative h-[760px] w-[375px] overflow-hidden rounded-lg border border-surface-border bg-surface-base">
+          <div class="absolute inset-0 bg-surface-base"></div>
+          <div class="absolute left-1/2 top-[40%] h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-surface-sheet/60"></div>
+          <div class="absolute inset-0 opacity-10" style="background-image: repeating-linear-gradient(to right, var(--color-surface-border) 0 1px, transparent 1px 44px), repeating-linear-gradient(to bottom, var(--color-surface-border) 0 1px, transparent 1px 44px);"></div>
+
+          <div class="absolute inset-x-4 top-4 z-50 mx-auto max-w-2xl overflow-hidden rounded-lg bg-surface-panel shadow-lg backdrop-blur-sm">
+            <nav aria-label="年代選択" class="flex items-stretch">
+              <button type="button" aria-label="前の年代を選択" class="flex shrink-0 items-center border-r border-surface-border px-3 py-2 text-text-secondary">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+              </button>
+              <div class="flex flex-1 items-stretch overflow-x-auto no-scrollbar">
+                <button type="button" class="flex shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 min-w-[4rem] text-body text-text-secondary">1453</button>
+                <button type="button" class="flex shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 min-w-[4rem] text-body text-text-secondary">1517</button>
+                <button type="button" aria-current="true" class="flex shrink-0 items-center justify-center border-r border-surface-border bg-surface-raised px-5 py-3 min-w-[5rem] text-active-year text-text-primary">1600</button>
+                <button type="button" class="flex shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 min-w-[4rem] text-body text-text-secondary">1683</button>
+                <button type="button" class="flex shrink-0 items-center justify-center px-3 py-3 min-w-[4rem] text-body text-text-secondary">1700</button>
+              </div>
+              <button type="button" aria-label="次の年代を選択" class="flex shrink-0 items-center border-l border-surface-border px-3 py-2 text-text-secondary">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+              </button>
+            </nav>
+          </div>
+
+          <div class="absolute right-4 top-20 z-30 flex flex-col gap-2">
+            <button type="button" aria-label="拡大" class="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-panel text-text-dimmed shadow-lg backdrop-blur-sm">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+            </button>
+            <button type="button" aria-label="縮小" class="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-panel text-text-dimmed shadow-lg backdrop-blur-sm">
+              <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 12h16" /></svg>
+            </button>
+          </div>
+
+          <div role="dialog" aria-labelledby="screen-top-bar-t2" class="absolute inset-x-0 bottom-0 z-40 flex h-[304px] flex-col rounded-t-2xl bg-surface-sheet shadow-xl">
+            <div class="shrink-0 cursor-grab border-b border-surface-border">
+              <div class="flex justify-center pt-2 pb-1"><div class="h-1 w-10 rounded-full bg-surface-handle"></div></div>
+              <div class="flex items-start pr-4 pb-2">
+                <div class="min-w-0 flex-1">
+                  <div class="pl-4 pr-2">
+                    <button type="button" class="flex w-max items-center gap-1 rounded-sm text-caption text-text-secondary underline">
+                      <svg class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                      <span class="truncate">1600年の世界の概要</span>
+                    </button>
+                  </div>
+                  <div class="mt-2 border-l-4 border-role-selected pl-3 pr-2 pb-1.5">
+                    <h2 id="screen-top-bar-t2" class="leading-tight text-panel-title text-text-primary">オスマン帝国</h2>
+                    <p class="leading-tight text-body-sm text-text-secondary">1453–1922 · メフメト3世</p>
+                  </div>
+                </div>
+                <button type="button" aria-label="閉じる" class="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-text-tertiary">
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+            </div>
+            <div class="relative min-h-0 flex-1">
+              <div class="no-scrollbar h-full overflow-y-auto px-4 py-4">
+                <div class="space-y-3">
+                  <dl class="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-body-sm">
+                    <dt class="text-text-tertiary">首都</dt><dd class="text-text-secondary">イスタンブール</dd>
+                    <dt class="text-text-tertiary">君主</dt><dd class="text-text-secondary">メフメト3世</dd>
+                  </dl>
+                  <p class="text-body-sm leading-relaxed text-text-secondary">16世紀末、オスマン帝国はバルカン半島から北アフリカ、アラビア半島に至る三大陸の版図を維持し、地中海東部の覇権を握っていた。</p>
+                </div>
+              </div>
+              <div class="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-surface-sheet to-transparent"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- expanded -->
+      <section>
+        <p class="mb-2 text-caption text-text-tertiary">expanded — 90dvh · scrim 上でも上部で操作可</p>
+        <div class="relative h-[760px] w-[375px] overflow-hidden rounded-lg border border-surface-border bg-surface-base">
+          <div class="absolute inset-0 bg-surface-base"></div>
+          <div class="absolute left-1/2 top-[40%] h-[520px] w-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-surface-sheet/60"></div>
+          <div class="absolute inset-0 opacity-10" style="background-image: repeating-linear-gradient(to right, var(--color-surface-border) 0 1px, transparent 1px 44px), repeating-linear-gradient(to bottom, var(--color-surface-border) 0 1px, transparent 1px 44px);"></div>
+
+          <div class="absolute inset-0 z-30 bg-surface-scrim"></div>
+
+          <div class="absolute inset-x-4 top-4 z-50 mx-auto max-w-2xl overflow-hidden rounded-lg bg-surface-panel shadow-lg backdrop-blur-sm">
+            <nav aria-label="年代選択" class="flex items-stretch">
+              <button type="button" aria-label="前の年代を選択" class="flex shrink-0 items-center border-r border-surface-border px-3 py-2 text-text-secondary">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
+              </button>
+              <div class="flex flex-1 items-stretch overflow-x-auto no-scrollbar">
+                <button type="button" class="flex shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 min-w-[4rem] text-body text-text-secondary">1453</button>
+                <button type="button" class="flex shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 min-w-[4rem] text-body text-text-secondary">1517</button>
+                <button type="button" aria-current="true" class="flex shrink-0 items-center justify-center border-r border-surface-border bg-surface-raised px-5 py-3 min-w-[5rem] text-active-year text-text-primary">1600</button>
+                <button type="button" class="flex shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 min-w-[4rem] text-body text-text-secondary">1683</button>
+                <button type="button" class="flex shrink-0 items-center justify-center px-3 py-3 min-w-[4rem] text-body text-text-secondary">1700</button>
+              </div>
+              <button type="button" aria-label="次の年代を選択" class="flex shrink-0 items-center border-l border-surface-border px-3 py-2 text-text-secondary">
+                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
+              </button>
+            </nav>
+          </div>
+
+          <div role="dialog" aria-labelledby="screen-top-bar-t3" class="absolute inset-x-0 bottom-0 z-40 flex h-[684px] flex-col rounded-t-2xl bg-surface-sheet shadow-xl">
+            <div class="shrink-0 cursor-grab border-b border-surface-border">
+              <div class="flex justify-center pt-2 pb-1"><div class="h-1 w-10 rounded-full bg-surface-handle"></div></div>
+              <div class="flex items-start pr-4 pb-2">
+                <div class="min-w-0 flex-1">
+                  <div class="pl-4 pr-2">
+                    <button type="button" class="flex w-max items-center gap-1 rounded-sm text-caption text-text-secondary underline">
+                      <svg class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                      <span class="truncate">1600年の世界の概要</span>
+                    </button>
+                  </div>
+                  <div class="mt-2 border-l-4 border-role-selected pl-3 pr-2 pb-1.5">
+                    <h2 id="screen-top-bar-t3" class="leading-tight text-panel-title text-text-primary">オスマン帝国</h2>
+                    <p class="leading-tight text-body-sm text-text-secondary">1453–1922 · メフメト3世</p>
+                  </div>
+                </div>
+                <button type="button" aria-label="閉じる" class="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-text-tertiary">
+                  <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+            </div>
+            <div class="relative min-h-0 flex-1">
+              <div class="no-scrollbar h-full overflow-y-auto px-4 py-4">
+                <div class="space-y-4">
+                  <dl class="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-body-sm">
+                    <dt class="text-text-tertiary">首都</dt><dd class="text-text-secondary">イスタンブール</dd>
+                    <dt class="text-text-tertiary">君主</dt><dd class="text-text-secondary">メフメト3世</dd>
+                    <dt class="text-text-tertiary">宗教</dt><dd class="text-text-secondary">スンナ派イスラム</dd>
+                  </dl>
+                  <p class="text-body-sm leading-relaxed text-text-secondary">16世紀末、オスマン帝国はバルカン半島から北アフリカ、アラビア半島に至る三大陸の版図を維持し、地中海東部の覇権を握っていた。スレイマン1世の最盛期を経て、メフメト3世の治世に入る。</p>
+                  <div>
+                    <h3 class="text-section-heading text-text-primary">主な出来事</h3>
+                    <ol class="mt-2 space-y-3">
+                      <li class="flex gap-3">
+                        <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-surface-handle"></span>
+                        <div><p class="text-caption tabular-nums text-text-tertiary">1453</p><p class="text-body-sm text-text-tertiary">コンスタンティノープル陥落</p></div>
+                      </li>
+                      <li class="flex gap-3">
+                        <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-surface-handle"></span>
+                        <div><p class="text-caption tabular-nums text-text-tertiary">1517</p><p class="text-body-sm text-text-tertiary">マムルーク朝を征服しカリフ位を継承</p></div>
+                      </li>
+                      <li class="flex gap-3">
+                        <span class="mt-1 h-2.5 w-2.5 shrink-0 rounded-full border-2 border-surface-panel bg-role-selected" style="box-shadow: 0 0 8px var(--color-role-selected);"></span>
+                        <div><p class="text-caption tabular-nums text-role-selected">1600</p><p class="text-body-sm font-semibold text-text-primary">メフメト3世治世・三大陸にまたがる版図</p></div>
+                      </li>
+                      <li class="flex gap-3">
+                        <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-surface-handle"></span>
+                        <div><p class="text-caption tabular-nums text-text-tertiary">1683</p><p class="text-body-sm text-text-tertiary">第二次ウィーン包囲の失敗</p></div>
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+              <div class="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-surface-sheet to-transparent"></div>
+            </div>
+          </div>
+        </div>
+      </section>
         </div>
       </section>
     </main>

@@ -49,3 +49,6 @@ storybook-static
 
 # Cloudflare
 .wrangler
+
+# Playwright CLI
+.playwright-cli/

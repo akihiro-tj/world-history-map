@@ -4,7 +4,8 @@ description: >-
   design-mocks/ 配下に、DESIGN.md と生成済みデザイントークンに則った単一 HTML モックを生成するスキル。
   新機能をいきなり実装に入らず、まずモックで確認・比較検討したいときに使う。
   DESIGN.md（ルール・意図）・theme.css（トークン）・実コンポーネント（具体レシピ）を実行時に参照し、
-  トークン utility でモックを組む。design-mocks/<feature>/v<n>/ にバージョン並列で保存しブラウザで開く。
+  トークン utility でモックを組む。比較する複数パターンは 1 つの design-mocks/<feature>/v<n>/index.html に
+  並置し、比較検討を反復するごとに v1 → v2 とラウンドを重ねてブラウザで開く。
 argument-hint: "<モックしたい画面・機能の説明>"
 disable-model-invocation: true
 allowed-tools: ["Bash", "Glob", "Read", "Write", "Edit", "AskUserQuestion"]
@@ -26,29 +27,41 @@ allowed-tools: ["Bash", "Glob", "Read", "Write", "Edit", "AskUserQuestion"]
   Components / Do's and Don'ts）に従う。
 - **具体レシピ**（frosted panel の class 構成・状態表現・rose ストライプ等）— 該当する実コンポーネントに合わせる。
 
+## 2 つの軸: パターン（横）とラウンド（縦）
+
+モックは 2 つの軸を**明確に区別**する。この混同が最大の事故源。
+
+- **パターン（横の軸・比較）**: 同時に見比べる、構造の異なる案（例: モーダル vs ボトムシート、
+  シート内スライダー vs 画面上部移設）。互いの改良版ではなく**並列の選択肢**。
+  → **1 つの HTML ファイル内に `<section>` として並置**し、1 スクロールで横断比較できるようにする。
+  各案のラベルは内容を表す kebab-case（`header-stepper`・`screen-top-bar` 等）にする。**v1/v2 で分けない。**
+- **ラウンド（縦の軸・反復） = version**: 比較検討そのものを反復する単位。フィードバックを受けて
+  案を絞る・練り直して再び比較すると v2, v3… になる。→ `v<n>/index.html` というファイルで表す。
+
+> 典型的な誤用: 「4 つの案を比較したい」を v1〜v4 に分けてはいけない。それは 1 ラウンド (v1) の
+> 中の 4 パターンであり、**1 ファイル `v1/index.html` に並置**する。比較を反復して初めて v2 になる。
+
 ## 出力構造
 
 ```text
 <リポジトリルート>/design-mocks/
 ├── index.html                  # 全モックのナビゲーション（毎回再生成）
 └── <feature-name>/             # kebab-case
-    ├── v1/index.html
-    ├── v2/index.html
-    └── ...
+    └── v<n>/index.html         # 1 ラウンド = 1 ファイル。比較パターンは中に <section> で並置
 ```
 
-- `feature-name` は kebab-case。同一 feature への新規モックは v2, v3… と並列保持し既存版は上書きしない。
-- 比較検討は構造の差（例: モーダル vs ボトムシート、表 vs カード）で行い、どの案も DESIGN.md に準拠させる。
+- `feature-name` は kebab-case。比較検討の反復ごとに v1 → v2 → … と新ファイルを足し、既存ラウンドは上書きしない。
+- 比較は「構造の差」（例: モーダル vs ボトムシート、表 vs カード）で行い、どのパターンも DESIGN.md に準拠させる。
 
 ## ワークフロー
 
 ### Step 1: 要件確認
 
 1. `$ARGUMENTS` からモック対象を抽出する。
-2. `Glob design-mocks/*/` で既存 feature / version を把握する。
+2. `Glob design-mocks/*/` で既存 feature / ラウンドを把握する。
 3. 次を「確定済み / 不足」に分類する: feature 名（kebab-case） / 対象 UI の種別（floating panel・FAB・
    bottom sheet・year selector 等） / async か（→ 表示する状態） / desktop と mobile の両方を出すか /
-   今回複数の構造案を並べて比較するか（する場合はどの軸で） / 新規 feature か既存 version の反復か。
+   今回並置して比較するパターンとその比較軸 / 新規 feature の初回ラウンド (v1) か既存ラウンドの反復 (v(n+1)) か。
 4. **不足が 1 つでもあれば** `AskUserQuestion` で確認する。判定経緯は最終報告に残す。
 
 ### Step 2: デザイン源を読む
@@ -63,9 +76,10 @@ allowed-tools: ["Bash", "Glob", "Read", "Write", "Edit", "AskUserQuestion"]
    `apps/frontend/src/components/territory-info/territory-info-panel.tsx`（frosted panel・RemoteData の状態）、
    `year-display/`、`year-selector/`、`era-summary-panel/`、`bottom-sheet/`、`feedback/`。
 
-### Step 3: ディレクトリ / バージョン決定
+### Step 3: ラウンド (version) 決定
 
-1. `Glob design-mocks/<feature-name>/v*/` で既存 version を取得し、次番号を決める（最大値 +1、なければ v1）。
+1. `Glob design-mocks/<feature-name>/v*/` で既存ラウンドを取得し、次番号を決める（初回は v1、
+   既存ラウンドの反復なら最大値 +1）。比較したい複数パターンは version を増やすのではなく、同一ラウンドに並置する。
 2. `mkdir -p design-mocks/<feature-name>/v<n>/`。
 
 ### Step 4: モック生成
@@ -77,20 +91,23 @@ allowed-tools: ["Bash", "Glob", "Read", "Write", "Edit", "AskUserQuestion"]
 2. **base CSS 注入**: 2 つ目の `<style>` 内の `INJECT:` マーカーを、`index.css` の base 設定で置換する。
    `@import` 行は除き、`:root` のフォント設定・`@media (prefers-reduced-motion)`・`:focus-visible`・`.sr-only`
    など CDN で動く CSS だけを残す。`var(--color-*)` は `@theme` 由来でそのまま使える。
-3. **メタ帯 / コンテンツスロット**: feature 名・version・関連リンクを埋め、`{{DESKTOP_MOCK}}` /
-   `{{MOBILE_MOCK}}` に実 UI を組む。
-   - chrome は全てトークン utility で書く。
-   - 具体構成は Step 2 で読んだ実コンポーネントに合わせる（frosted treatment・header の hairline・状態表現など）。
-   - DESIGN.md の Layout / Elevation / Shapes / Components の原則に従う。
+3. **ラウンドヘッダー / パターンセクション**: ヘッダーに feature 名・ラウンド (`{{ROUND}}`)・
+   このラウンドの比較観点と関連リンク (`{{ROUND_SUMMARY}}`) を埋める。比較する各パターンは、雛形の
+   `<section data-pattern>` を**案の数だけ複製**し、`{{PATTERN_SLUG}}`（内容を表す kebab-case）/
+   `{{PATTERN_LABEL}}` / `{{PATTERN_NOTE}}` と `{{DESKTOP_MOCK}}` / `{{MOBILE_MOCK}}` を埋める。
+   - 比較が単発（反復の確認等）なら section は 1 つでよい。複数案なら section を縦に積んで並置する。
+   - chrome は全てトークン utility で書く。具体構成は Step 2 で読んだ実コンポーネントに合わせる
+     （frosted treatment・header の hairline・状態表現など）。DESIGN.md の Layout / Elevation / Shapes / Components に従う。
    - async なら各状態を `[data-state="..."]` で用意する。async でなければ状態スイッチャ（`[data-state-switcher]`）を削除する。
    - mobile は re-home（FAB + bottom sheet）として組む。
-   - 複数構造案の比較時は version を分ける（v1, v2…）か、同一 desktop 枠内に並置する。いずれも DESIGN.md 準拠。
+   - パターンをまたいで `id` が重複しないよう、各 section 内の `id` / `aria-labelledby` 等は `{{PATTERN_SLUG}}` で名前空間化する。
 
 ### Step 5: ルート index.html を再生成
 
 1. `Glob design-mocks/*/v*/index.html` を全列挙する。
 2. `design-mocks/index.html` を再生成する。`mock-shell.html` と同じ要領で theme.css / base CSS を注入し、
-   トークン utility で組んだ feature × version の一覧（各モックへの相対リンク）にする。ナビ目的なので簡素でよい。
+   トークン utility で feature ごとにラウンド (v<n>) を列挙し、各ラウンドが比較するパターンを一行で添えた
+   一覧（各ページへの相対リンク）にする。ナビ目的なので簡素でよい。
 
 ### Step 6: セルフレビュー
 
@@ -104,15 +121,17 @@ open design-mocks/<feature-name>/v<n>/index.html
 ```
 
 ユーザーに報告する:
-- 生成パス / 表示した状態 / 構造案 / 前 version からの差分（あれば）
+- 生成パス / 表示した状態 / 比較したパターン / 前ラウンドからの差分（あれば）
 - Step 6 のセルフレビュー結果（DESIGN.md の Do/Don't と照合した結果、修正の有無）
 - ルート index.html のパス（`open design-mocks/index.html`）
 
 ### Step 8: 反復（必要時）
 
 修正指示があれば `AskUserQuestion` で扱いを確認する:
-- **大幅変更** → v(n+1) として新規作成（Step 2 から再実行）
-- **軽微な調整** → 現 version を直接編集（編集後も Step 6 を再実行）
+- **比較パターンの追加** → 現ラウンドの `v<n>/index.html` に `<section data-pattern>` を 1 つ足す。
+  同一ラウンド内の比較なので version は増やさない。
+- **案を絞った / 練り直して再比較** → 次ラウンド v(n+1) として新規作成（Step 2 から再実行）。既存ラウンドは残す。
+- **既存パターンの軽微な調整** → 現ラウンドの該当 section を直接編集（編集後も Step 6 を再実行）。
 
 ## 注意事項
 
