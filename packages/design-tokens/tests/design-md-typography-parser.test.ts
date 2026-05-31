@@ -63,4 +63,9 @@ describe('DesignMdTypographyParser', () => {
     const malformed = `---\ncolors:\n  role-x: '#fff'\ntypography:\n  bad-token:\n    lineHeight: 20px\n---\n`;
     expect(() => parser.parse(malformed)).toThrow('missing fontSize');
   });
+
+  it('throws on an unrecognized token-name line instead of misattributing its properties', () => {
+    const malformed = `---\ntypography:\n  panel-title:\n    fontSize: 18px\n    lineHeight: 28px\n  Modal-Title:\n    fontSize: 20px\n    lineHeight: 28px\n---\n`;
+    expect(() => parser.parse(malformed)).toThrow('Malformed typography entry');
+  });
 });

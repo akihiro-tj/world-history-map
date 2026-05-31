@@ -1,8 +1,8 @@
-import { extractFrontmatterLines } from './frontmatter.ts';
+import { extractFrontmatterLines, matchTopLevelKey } from './frontmatter.ts';
 
-const TOP_LEVEL_KEY_PATTERN = /^([A-Za-z0-9_-]+):/;
 const TOKEN_NAME_PATTERN = /^ {2}([a-z][a-z0-9-]*):\s*$/;
 const PROPERTY_PATTERN = /^ {4}(fontSize|fontWeight|lineHeight):\s*'?(.+?)'?\s*$/;
+const INDENTED_ENTRY_PATTERN = /^\s+[A-Za-z0-9_-]+:/;
 const TYPOGRAPHY_KEY = 'typography';
 
 export interface TypographyEntry {
@@ -28,7 +28,7 @@ export class DesignMdTypographyParser {
     let currentToken: MutableToken | null = null;
 
     for (const line of lines) {
-      const topLevelKey = line.match(TOP_LEVEL_KEY_PATTERN)?.[1];
+      const topLevelKey = matchTopLevelKey(line);
       if (topLevelKey !== undefined) {
         if (insideTypography && currentToken !== null) {
           entries.push(buildEntry(currentToken));
@@ -57,6 +57,11 @@ export class DesignMdTypographyParser {
           else if (key === 'fontWeight') currentToken.fontWeight = value;
           else if (key === 'lineHeight') currentToken.lineHeight = value;
         }
+        continue;
+      }
+
+      if (INDENTED_ENTRY_PATTERN.test(line)) {
+        throw new Error(`Malformed typography entry in the DESIGN.md frontmatter: "${line.trim()}"`);
       }
     }
 
@@ -73,13 +78,16 @@ export class DesignMdTypographyParser {
 }
 
 function buildEntry(token: MutableToken): TypographyEntry {
-  if (!token.fontSize) {
+  if (token.fontSize === undefined) {
     throw new Error(`Typography token "${token.name}" is missing fontSize`);
   }
-  if (!token.lineHeight) {
+  if (token.lineHeight === undefined) {
     throw new Error(`Typography token "${token.name}" is missing lineHeight`);
   }
-  return token.fontWeight !== undefined
-    ? { name: token.name, fontSize: token.fontSize, fontWeight: token.fontWeight, lineHeight: token.lineHeight }
-    : { name: token.name, fontSize: token.fontSize, lineHeight: token.lineHeight };
+  return {
+    name: token.name,
+    fontSize: token.fontSize,
+    lineHeight: token.lineHeight,
+    ...(token.fontWeight !== undefined ? { fontWeight: token.fontWeight } : {}),
+  };
 }
