@@ -9,7 +9,7 @@ description: >-
 argument-hint: "[<issue-number> | <task-details>] [--base <branch>]"
 user-invocable: true
 disable-model-invocation: false
-allowed-tools: ["Bash", "Read", "Grep", "Glob", "Edit", "Write", "AskUserQuestion", "ExitPlanMode"]
+allowed-tools: ["Bash", "Read", "Grep", "Glob", "Edit", "Write", "AskUserQuestion", "EnterPlanMode", "ExitPlanMode"]
 ---
 
 # 小規模タスク実装ワークフロー
@@ -44,7 +44,9 @@ gh issue view <issue-number> --json title,body,labels,comments
 
 ## Step 2: 計画を立てて承認を得る（承認 ①）
 
-計画を提示してユーザーの承認を得る（plan モードが使える環境では ExitPlanMode を使う）。ここで実装方針と PR の素材を**一度に**固めるのが、以降 PR 作成まで止まらずに進められる理由。手戻りコストが最小の今のうちに合意しておく。
+**このステップの最初のアクションは `EnterPlanMode` ツールを呼ぶことだけ。** 他のツールを先に呼ばない。プランモードに入ってから、Step 1 で把握しきれていない部分があればコードベースの探索を続ける。プランモード中はファイル編集・コミット・その他の変更を一切行わない（プランファイルへの書き込みのみ許可）。計画がまとまったら `ExitPlanMode` でプランを提示してユーザーの承認を得る。
+
+ここで実装方針と PR の素材を**一度に**固めるのが、以降 PR 作成まで止まらずに進められる理由。手戻りコストが最小の今のうちに合意しておく。
 
 計画には次を含める。Step 1 で分かったことはデフォルトとして埋めて提示し、確認の手間を減らす。
 
@@ -91,7 +93,12 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 
 ## Step 5: PR を作成する（承認 ②）
 
-PR の説明文・タイトル・ラベルを生成し、ユーザーの承認を得てから作成する。書き方とテンプレートは [references/pr-description.md](references/pr-description.md) に従う。説明文の素材は Step 2 で固めた PR メタ情報・コミット履歴・Step 4 の動作確認結果から組み立てる。
+PR の説明文・タイトル・ラベルを生成し、ユーザーの承認を得てから作成する。**本文を書き始める前に `Read` ツールで次の 2 ファイルを必ず読む**:
+
+- `.claude/skills/implement/references/pr-description.md`（書き方ルール）
+- `.github/PULL_REQUEST_TEMPLATE.md`（本文の骨格テンプレート）
+
+説明文の素材は Step 2 で固めた PR メタ情報・コミット履歴・Step 4 の動作確認結果から組み立てる。
 
 base branch は `--base` 引数があればそれを、なければ `main` を使う。変更内容に合うラベルを `gh label list --limit 100 --json name,description` の一覧から提案する。
 
