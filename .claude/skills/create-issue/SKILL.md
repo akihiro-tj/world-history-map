@@ -8,7 +8,7 @@ description: >-
 argument-hint: "[<用途や課題の説明>]"
 user-invocable: true
 disable-model-invocation: false
-allowed-tools: ["Bash", "Read", "Grep", "Glob", "AskUserQuestion"]
+allowed-tools: ["Bash", "Read", "Grep", "Glob", "Write", "AskUserQuestion"]
 ---
 
 # GitHub Issue 起票
@@ -21,14 +21,14 @@ allowed-tools: ["Bash", "Read", "Grep", "Glob", "AskUserQuestion"]
 
 ## Step 1: 用途を判定して初期情報を集める
 
-発言から用途を推定する。曖昧なら確認に含める。該当するリファレンスを読み、その「収集する情報」のうち発言から埋まらない項目だけを、用途確認とあわせて 1 回の AskUserQuestion で聞く。
+発言から用途を推定する。曖昧なら確認に含める。用途が確定したら **`Read` ツールで対応するリファレンスファイルを読む**。その「収集する情報」のうち発言から埋まらない項目だけを、用途確認とあわせて 1 回の AskUserQuestion で聞く。
 
-| 用途 | リファレンス | ラベル |
+| 用途 | リファレンス（Read で読む） | ラベル |
 |------|-------------|--------|
-| 機能提案 | [references/proposal.md](references/proposal.md) | `proposal` |
-| バグ報告 | [references/bug.md](references/bug.md) | `bug` |
-| リファクタリング | [references/refactor.md](references/refactor.md) | `refactor` |
-| 調査・検討 | [references/investigation.md](references/investigation.md) | `investigation` |
+| 機能提案 | `.claude/skills/create-issue/references/proposal.md` | `proposal` |
+| バグ報告 | `.claude/skills/create-issue/references/bug.md` | `bug` |
+| リファクタリング | `.claude/skills/create-issue/references/refactor.md` | `refactor` |
+| 調査・検討 | `.claude/skills/create-issue/references/investigation.md` | `investigation` |
 
 ## Step 2: コードベースを調べて深掘りする
 
@@ -37,6 +37,8 @@ allowed-tools: ["Bash", "Read", "Grep", "Glob", "AskUserQuestion"]
 ここで壁打ちの価値が出る。要件理解に必要な範囲で調べ、起票の根拠にならない深読みはしない。
 
 ## Step 3: タイトルと本文を組み立てて確認する
+
+**`Read` ツールで `.github/ISSUE_TEMPLATE/<用途>.md` を読んでから**本文を組み立てる（ファイル名は用途に対応: `proposal.md` / `bug.md` / `refactor.md` / `investigation.md`）。
 
 タイトルはリファレンスの「タイトル」ガイドに従う。共通ルール:
 
@@ -56,8 +58,10 @@ allowed-tools: ["Bash", "Read", "Grep", "Glob", "AskUserQuestion"]
 
 ## Step 4: 起票する
 
+本文を `/tmp/issue-body.md` に `Write` ツールで書き出してから起票する。
+
 ```bash
-gh issue create --title "<title>" --body-file <path> --label "<label>" --assignee @me
+gh issue create --title "<title>" --body-file /tmp/issue-body.md --label "<label>" --assignee @me
 ```
 
 ラベルはリポジトリに整備済みなので新規作成しない。作成された issue の URL を表示する。
