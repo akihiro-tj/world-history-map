@@ -9,11 +9,11 @@ interface RegionCardProps {
 export function RegionCard({ regionCard, className }: RegionCardProps) {
   return (
     <article className={className}>
-      <h3 className="text-sm font-semibold text-white">{regionCard.title}</h3>
+      <h3 className="text-sm font-semibold text-text-primary">{regionCard.title}</h3>
       {regionCard.references.length > 0 ? (
         <SummaryReferences context={regionCard.context} references={regionCard.references} />
       ) : (
-        <p className="mt-1 text-sm leading-relaxed text-gray-300">{regionCard.context}</p>
+        <p className="mt-1 text-sm leading-relaxed text-text-secondary">{regionCard.context}</p>
       )}
     </article>
   );

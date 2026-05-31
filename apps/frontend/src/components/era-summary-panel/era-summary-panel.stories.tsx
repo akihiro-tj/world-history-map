@@ -67,7 +67,7 @@ const meta = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className="relative h-dvh w-screen overflow-hidden bg-gray-900">
+      <div className="relative h-dvh w-screen overflow-hidden bg-surface-sheet">
         <AppStateProvider initialState={openSummaryState}>
           <Story />
         </AppStateProvider>

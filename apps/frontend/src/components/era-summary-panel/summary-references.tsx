@@ -51,7 +51,7 @@ export function SummaryReferences({ context, references }: SummaryReferencesProp
   const segments = annotated.segments(availableYears);
 
   return (
-    <p className="mt-1 text-sm leading-relaxed text-gray-300">
+    <p className="mt-1 text-sm leading-relaxed text-text-secondary">
       {segments.map((segment, index) =>
         renderSegment(segment, `${segment.kind}-${index}`, actions),
       )}

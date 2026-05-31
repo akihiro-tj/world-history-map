@@ -11,7 +11,7 @@ export function SummaryNavStrip() {
       type="button"
       aria-label={`${yearLabel}年の世界の概要を開く`}
       onClick={() => actions.openSummary()}
-      className="flex w-max items-center gap-1 rounded-sm text-xs text-gray-300 underline hover:no-underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gray-400"
+      className="flex w-max items-center gap-1 rounded-sm text-xs text-text-secondary underline hover:no-underline focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-role-focus"
     >
       <svg
         className="h-3 w-3 shrink-0"

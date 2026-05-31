@@ -34,7 +34,7 @@ const CURRENT_ROW_STYLE: TimelineRowStyle = {
     boxShadow: `0 0 ${TIMELINE_CURRENT_DOT_GLOW_PX}px var(--color-role-selected)`,
   },
   yearClassName: 'shrink-0 text-xs tabular-nums text-role-selected',
-  eventClassName: 'text-sm text-white',
+  eventClassName: 'text-sm text-text-primary',
 };
 
 const FUTURE_ROW_STYLE: TimelineRowStyle = {

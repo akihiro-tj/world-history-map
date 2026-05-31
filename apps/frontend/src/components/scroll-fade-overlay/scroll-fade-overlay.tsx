@@ -5,7 +5,10 @@ interface ScrollFadeOverlayProps {
   fromColor?: string;
 }
 
-export function ScrollFadeOverlay({ show, fromColor = 'from-gray-700' }: ScrollFadeOverlayProps) {
+export function ScrollFadeOverlay({
+  show,
+  fromColor = 'from-surface-panel',
+}: ScrollFadeOverlayProps) {
   return (
     <div
       aria-hidden="true"

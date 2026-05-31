@@ -23,9 +23,9 @@ interface ContentProps {
 
 function PanelHeader({ yearLabel, onClose }: { yearLabel: string; onClose: () => void }) {
   return (
-    <div className="border-b border-gray-600">
+    <div className="border-b border-surface-border">
       <div className="flex items-center justify-between px-4 py-3">
-        <h2 id="era-summary-title" className="text-lg font-semibold text-white">
+        <h2 id="era-summary-title" className="text-lg font-semibold text-text-primary">
           {yearLabel}年の世界
         </h2>
         <CloseButton onClick={onClose} aria-label="閉じる" />
@@ -42,7 +42,7 @@ function PanelBody({ state }: { state: RemoteData<EraSummary> }) {
       return <RoleErrorMessage>{state.message}</RoleErrorMessage>;
     case 'empty':
       return (
-        <div role="status" className="py-6 text-center text-sm text-gray-300">
+        <div role="status" className="py-6 text-center text-sm text-text-secondary">
           この年代の概要は準備中です。
         </div>
       );
@@ -70,7 +70,7 @@ function DesktopContent({ state, yearLabel, onClose }: ContentProps) {
       aria-labelledby="era-summary-title"
       aria-busy={isLoading || undefined}
       className={cn(
-        'absolute left-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] flex flex-col overflow-hidden rounded-lg bg-gray-700/95 shadow-xl backdrop-blur-sm',
+        'absolute left-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] flex flex-col overflow-hidden rounded-lg bg-surface-panel shadow-xl backdrop-blur-sm',
         isLoaded && 'max-h-[calc(100vh-2rem)]',
       )}
     >
@@ -95,8 +95,8 @@ function MobileContent({ state, yearLabel, onClose }: ContentProps) {
       isOpen
       onClose={onClose}
       header={
-        <div className="flex items-center justify-between border-b border-gray-600 px-4 pb-2">
-          <h2 id="era-summary-title" className="text-lg font-semibold text-white">
+        <div className="flex items-center justify-between border-b border-surface-border px-4 pb-2">
+          <h2 id="era-summary-title" className="text-lg font-semibold text-text-primary">
             {yearLabel}年の世界
           </h2>
           <CloseButton aria-label="閉じる" onClick={onClose} />

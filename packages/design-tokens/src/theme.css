@@ -6,14 +6,20 @@
   --color-role-warn: #f2a618;
   --color-role-error: #f9423d;
   --color-role-focus: #0072d5;
+  --color-role-link: #51a2ff;
+  --color-role-link-hover: #8ec5ff;
   --color-role-label-text: #eeeeee;
   --color-role-label-halo: #161616;
   --color-surface-base: #0a0e11;
-  --color-surface-panel: #2a2e33f2;
+  --color-surface-sheet: #1e2939;
+  --color-surface-panel: #364153f2;
   --color-surface-raised: #ffffff24;
+  --color-surface-handle: #6a7282;
   --color-surface-border: #44484d;
+  --color-surface-scrim: #00000080;
   --color-text-primary: #ffffff;
   --color-text-secondary: #d4d4d4;
   --color-text-tertiary: #a1a1a1;
   --color-text-quiet: #717171;
+  --color-text-dimmed: #ffffff99;
 }

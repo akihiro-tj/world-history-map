@@ -13,14 +13,14 @@ export function ControlBar({ onOpenLicense }: ControlBarProps) {
       <ProjectionToggle
         projection={projection}
         onToggle={setProjection}
-        className="bg-gray-700/95 p-3 text-white/60 shadow-lg backdrop-blur-sm transition-colors hover:text-white"
+        className="bg-surface-panel p-3 text-text-dimmed shadow-lg backdrop-blur-sm transition-colors hover:text-text-primary"
         data-testid="projection-toggle"
       />
       <button
         type="button"
         data-testid="license-link"
         onClick={onOpenLicense}
-        className="rounded-lg bg-gray-700/95 p-3 text-white/60 shadow-lg backdrop-blur-sm transition-colors hover:text-white"
+        className="rounded-lg bg-surface-panel p-3 text-text-dimmed shadow-lg backdrop-blur-sm transition-colors hover:text-text-primary"
       >
         <svg
           className="h-6 w-6"

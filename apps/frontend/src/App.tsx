@@ -60,7 +60,7 @@ function AppContent() {
         </>
       )}
       {isMapReady && years.length > 0 && (
-        <div className="absolute inset-x-4 bottom-4 z-20 mx-auto max-w-2xl overflow-hidden rounded-lg bg-gray-700/95 shadow-lg backdrop-blur-sm">
+        <div className="absolute inset-x-4 bottom-4 z-20 mx-auto max-w-2xl overflow-hidden rounded-lg bg-surface-panel shadow-lg backdrop-blur-sm">
           <YearSelector years={years} />
         </div>
       )}

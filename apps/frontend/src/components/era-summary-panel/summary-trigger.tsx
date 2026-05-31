@@ -31,7 +31,7 @@ export function SummaryTrigger() {
       type="button"
       aria-label="概要を開く"
       onClick={() => actions.openSummary()}
-      className="flex items-center gap-1.5 rounded-full bg-gray-700/95 px-4 py-2.5 text-sm text-white shadow-lg backdrop-blur-sm transition-colors hover:bg-gray-600/95"
+      className="flex items-center gap-1.5 rounded-full bg-surface-panel px-4 py-2.5 text-sm text-text-primary shadow-lg backdrop-blur-sm transition-colors hover:bg-surface-raised"
     >
       <ListBulletIcon />
       <span>概要</span>

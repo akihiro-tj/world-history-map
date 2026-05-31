@@ -6,6 +6,8 @@ export const roleColors = {
   warn: '#f2a618',
   error: '#f9423d',
   focus: '#0072d5',
+  link: '#51a2ff',
+  linkHover: '#8ec5ff',
   labelText: '#eeeeee',
   labelHalo: '#161616',
 } as const;

@@ -9,7 +9,7 @@ export interface LicenseDisclaimerProps {
 }
 
 const linkClass =
-  'text-blue-400 hover:text-blue-300 underline decoration-blue-400/40 hover:decoration-blue-300 underline-offset-2 transition-colors';
+  'text-role-link hover:text-role-link-hover underline decoration-role-link/40 hover:decoration-role-link-hover underline-offset-2 transition-colors';
 
 export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
   const modalRef = useRef<HTMLDivElement>(null);
@@ -51,17 +51,17 @@ export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
     >
       <div
         data-testid="license-modal-backdrop"
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-surface-scrim backdrop-blur-sm"
         onClick={onClose}
         aria-hidden="true"
       />
 
       <div
         data-testid="license-modal-content"
-        className="relative z-10 mx-4 max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-gray-700 p-6 shadow-2xl sm:p-8"
+        className="relative z-10 mx-4 max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-surface-panel p-6 shadow-2xl sm:p-8"
       >
-        <div className="mb-7 flex items-start justify-between border-b border-gray-600 pb-4">
-          <h2 id="license-disclaimer-title" className="text-xl font-semibold text-white">
+        <div className="mb-7 flex items-start justify-between border-b border-surface-border pb-4">
+          <h2 id="license-disclaimer-title" className="text-xl font-semibold text-text-primary">
             このサイトについて
           </h2>
           <CloseButton ref={closeButtonRef} onClick={onClose} aria-label="閉じる" />
@@ -69,8 +69,8 @@ export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
 
         <div className="space-y-8">
           <section>
-            <h3 className="mb-3 text-base font-semibold text-white">注意事項</h3>
-            <p className="text-sm leading-relaxed text-gray-300">
+            <h3 className="mb-3 text-base font-semibold text-text-primary">注意事項</h3>
+            <p className="text-sm leading-relaxed text-text-secondary">
               本サイトの境界線・領土区分は、
               <a
                 href="https://github.com/aourednik/historical-basemaps"
@@ -85,8 +85,8 @@ export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
           </section>
 
           <section>
-            <h3 className="mb-3 text-base font-semibold text-white">ライセンス</h3>
-            <p className="text-sm leading-relaxed text-gray-300">
+            <h3 className="mb-3 text-base font-semibold text-text-primary">ライセンス</h3>
+            <p className="text-sm leading-relaxed text-text-secondary">
               本サイトで使用している地図データは André Ourednik 氏による{' '}
               <a
                 href="https://github.com/aourednik/historical-basemaps"
@@ -97,7 +97,7 @@ export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
                 historical-basemaps
               </a>{' '}
               プロジェクトに基づき、
-              <strong className="font-medium text-white">
+              <strong className="font-medium text-text-primary">
                 GNU General Public License v3.0 (GPL-3.0)
               </strong>
               のもとで提供されています。詳細は{' '}
@@ -114,8 +114,8 @@ export function LicenseDisclaimer({ isOpen, onClose }: LicenseDisclaimerProps) {
           </section>
 
           <section>
-            <h3 className="mb-3 text-base font-semibold text-white">ソースコード</h3>
-            <p className="text-sm leading-relaxed text-gray-300">
+            <h3 className="mb-3 text-base font-semibold text-text-primary">ソースコード</h3>
+            <p className="text-sm leading-relaxed text-text-secondary">
               本サイトのソースコードは{' '}
               <a
                 href="https://github.com/akihiro-tj/world-history-map"
