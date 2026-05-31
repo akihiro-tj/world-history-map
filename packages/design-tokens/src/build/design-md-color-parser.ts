@@ -1,6 +1,5 @@
-import { extractFrontmatterLines } from './frontmatter.ts';
+import { extractFrontmatterLines, matchTopLevelKey } from './frontmatter.ts';
 
-const TOP_LEVEL_KEY_PATTERN = /^([A-Za-z0-9_-]+):/;
 const COLOR_ENTRY_PATTERN =
   /^\s+([a-z0-9]+(?:-[a-z0-9]+)*):\s*'?(#(?:[0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8}))'?\s*$/;
 const INDENTED_ENTRY_PATTERN = /^\s+[A-Za-z0-9_-]+:\s*\S/;
@@ -18,7 +17,7 @@ export class DesignMdColorParser {
     const entries: ColorEntry[] = [];
     let insideColors = false;
     for (const line of lines) {
-      const topLevelKey = line.match(TOP_LEVEL_KEY_PATTERN)?.[1];
+      const topLevelKey = matchTopLevelKey(line);
       if (topLevelKey !== undefined) {
         insideColors = topLevelKey === COLORS_KEY;
         continue;

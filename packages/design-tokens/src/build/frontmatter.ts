@@ -1,7 +1,12 @@
 const FRONTMATTER_DELIMITER = '---';
+const TOP_LEVEL_KEY_PATTERN = /^([A-Za-z0-9_-]+):/;
 
 function isFrontmatterDelimiter(line: string | undefined): boolean {
   return line?.replace(/\r$/, '') === FRONTMATTER_DELIMITER;
+}
+
+export function matchTopLevelKey(line: string): string | undefined {
+  return line.match(TOP_LEVEL_KEY_PATTERN)?.[1];
 }
 
 export function extractFrontmatterLines(markdown: string): string[] {

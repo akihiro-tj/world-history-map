@@ -1,6 +1,5 @@
-import { extractFrontmatterLines } from './frontmatter.ts';
+import { extractFrontmatterLines, matchTopLevelKey } from './frontmatter.ts';
 
-const TOP_LEVEL_KEY_PATTERN = /^([A-Za-z0-9_-]+):/;
 const UNIT_PATTERN = /^ {2}unit:\s*(.+?)\s*$/;
 const SPACING_KEY = 'spacing';
 
@@ -16,7 +15,7 @@ export class DesignMdSpacingParser {
     let unit: string | null = null;
 
     for (const line of lines) {
-      const topLevelKey = line.match(TOP_LEVEL_KEY_PATTERN)?.[1];
+      const topLevelKey = matchTopLevelKey(line);
       if (topLevelKey !== undefined) {
         insideSpacing = topLevelKey === SPACING_KEY;
         continue;

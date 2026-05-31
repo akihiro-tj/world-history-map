@@ -17,14 +17,13 @@ export class ThemeCssEmitter {
   emit({ colors, typography, spacing }: ThemeCssInput): string {
     const colorDeclarations = colors.map((color) => `  --color-${color.name}: ${color.hex};`);
 
-    const typographyDeclarations: string[] = [];
-    for (const token of typography) {
-      typographyDeclarations.push(`  --text-${token.name}: ${token.fontSize};`);
-      if (token.fontWeight !== undefined) {
-        typographyDeclarations.push(`  --text-${token.name}--font-weight: ${token.fontWeight};`);
-      }
-      typographyDeclarations.push(`  --text-${token.name}--line-height: ${token.lineHeight};`);
-    }
+    const typographyDeclarations = typography.flatMap((token) => [
+      `  --text-${token.name}: ${token.fontSize};`,
+      ...(token.fontWeight !== undefined
+        ? [`  --text-${token.name}--font-weight: ${token.fontWeight};`]
+        : []),
+      `  --text-${token.name}--line-height: ${token.lineHeight};`,
+    ]);
 
     const spacingDeclaration = `  --spacing: ${spacing.unit};`;
 
