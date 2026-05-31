@@ -152,10 +152,10 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
               onClick={() => handleYearClick(yearEntry.year)}
               onKeyDown={(e) => handleKeyDown(e, index)}
               className={cn(
-                'flex shrink-0 items-center justify-center border-r border-surface-border py-3 font-medium transition-colors last:border-r-0',
+                'flex shrink-0 items-center justify-center border-r border-surface-border py-3 transition-colors last:border-r-0',
                 isSelected
-                  ? 'min-w-[5rem] bg-surface-raised px-5 text-xl font-bold text-text-primary'
-                  : 'min-w-[4rem] px-3 text-base text-text-secondary hover:bg-surface-raised hover:text-text-primary',
+                  ? 'min-w-[5rem] bg-surface-raised px-5 text-active-year text-text-primary'
+                  : 'min-w-[4rem] px-3 text-body text-text-secondary hover:bg-surface-raised hover:text-text-primary',
               )}
             >
               {formatHistoricalYear(yearEntry.year)}

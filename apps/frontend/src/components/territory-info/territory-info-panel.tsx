@@ -70,10 +70,10 @@ function PanelHeader({
       <div className="flex items-start justify-between px-4 py-3">
         <div className="min-w-0 flex-1">
           <SummaryNavStrip />
-          <h2 id="territory-info-title" className="mt-2.5 text-lg font-semibold text-text-primary">
+          <h2 id="territory-info-title" className="mt-2.5 text-panel-title text-text-primary">
             {name}
           </h2>
-          {era && <p className="mt-0.5 text-sm text-text-secondary">{era}</p>}
+          {era && <p className="mt-0.5 text-body-sm text-text-secondary">{era}</p>}
         </div>
         <CloseButton aria-label="閉じる" onClick={onClose} />
       </div>
@@ -100,7 +100,7 @@ function DescriptionBody({
     <div data-testid="territory-description" className="space-y-3 px-4 py-4">
       <TerritoryProfile profile={description.profile} />
       {description.context && (
-        <p className="text-sm leading-relaxed text-text-secondary">{description.context}</p>
+        <p className="text-body-sm leading-relaxed text-text-secondary">{description.context}</p>
       )}
       <TerritoryTimeline keyEvents={description.keyEvents} selectedYear={selectedYear} />
     </div>
@@ -216,12 +216,12 @@ function MobileContent(props: ContentProps) {
             <SelectedAccent className="mt-2 pl-3 pr-2 pb-1.5">
               <h2
                 id="territory-info-title"
-                className="leading-tight text-lg font-semibold text-text-primary"
+                className="leading-tight text-panel-title text-text-primary"
               >
                 {headerName}
               </h2>
               {headerEra && (
-                <p className="leading-tight text-sm text-text-secondary">{headerEra}</p>
+                <p className="leading-tight text-body-sm text-text-secondary">{headerEra}</p>
               )}
             </SelectedAccent>
           </div>
