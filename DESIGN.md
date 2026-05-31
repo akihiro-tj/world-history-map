@@ -12,7 +12,7 @@ colors:
   role-label-halo: '#161616'
   surface-base: '#0a0e11'
   surface-sheet: '#1e2939'
-  surface-panel: '#2a2e33f2'
+  surface-panel: '#364153f2'
   surface-raised: '#ffffff24'
   surface-handle: '#6a7282'
   surface-border: '#44484d'
