@@ -1,11 +1,11 @@
-import type { ReactNode } from 'react';
+import { type ReactNode, useMemo } from 'react';
 import {
   AnnotatedContext,
   type ContextSegment,
   splitIntoParagraphs,
 } from '@/domain/era-summary/annotated-context';
 import type { EraSummaryReference } from '@/domain/era-summary/types';
-import { createHistoricalYear } from '@/domain/year/historical-year';
+import { createHistoricalYear, type HistoricalYear } from '@/domain/year/historical-year';
 import { useAppState } from '../../contexts/app-state-context';
 import { useAvailableYears } from './hooks/use-available-years';
 
@@ -54,14 +54,41 @@ function renderSegment(segment: ContextSegment, key: string, actions: AppActions
   }
 }
 
+interface AnnotatedParagraph {
+  key: string;
+  segments: readonly ContextSegment[];
+}
+
+/**
+ * Splits the context into paragraphs and annotates each, linking every reference
+ * at most once across the whole card: once a reference's text is matched in one
+ * paragraph it is not re-linked in later paragraphs where it recurs as prose.
+ */
+function annotateParagraphs(
+  context: string,
+  references: readonly EraSummaryReference[],
+  availableYears: ReadonlySet<HistoricalYear>,
+): AnnotatedParagraph[] {
+  const unlinked = new Set(references);
+
+  return splitIntoParagraphs(context).map((text, index) => {
+    const applicable = references.filter((reference) => unlinked.has(reference));
+    const segments = new AnnotatedContext(text, applicable).segments(availableYears);
+    for (const reference of applicable) {
+      if (text.includes(reference.text)) unlinked.delete(reference);
+    }
+    return { key: `${index}:${text}`, segments };
+  });
+}
+
 export function SummaryReferences({ context, references }: SummaryReferencesProps) {
   const { actions } = useAppState();
   const availableYears = useAvailableYears();
 
-  const paragraphs = splitIntoParagraphs(context).map((text, index) => ({
-    key: `${index}:${text}`,
-    segments: new AnnotatedContext(text, references).segments(availableYears),
-  }));
+  const paragraphs = useMemo(
+    () => annotateParagraphs(context, references, availableYears),
+    [context, references, availableYears],
+  );
 
   return (
     <div className="mt-1 space-y-2 text-body-sm leading-relaxed text-text-secondary">

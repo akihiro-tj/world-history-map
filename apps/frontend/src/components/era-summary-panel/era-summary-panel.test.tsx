@@ -61,6 +61,13 @@ vi.mock('./hooks/use-era-summary', () => ({
   }),
 }));
 
+vi.mock('@/hooks/use-year-index', () => ({
+  useYearIndex: () => ({
+    years: [{ year: createHistoricalYear(1650), filename: 'world_1650.pmtiles', countries: [] }],
+    isLoading: false,
+  }),
+}));
+
 import { EraSummaryPanel } from './era-summary-panel';
 
 describe('EraSummaryPanel', () => {

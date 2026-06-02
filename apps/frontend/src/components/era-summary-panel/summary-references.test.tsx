@@ -132,4 +132,18 @@ describe('SummaryReferences', () => {
     expect(screen.getByText('最初の段落。')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'フランス' })).toBeInTheDocument();
   });
+
+  it('links a repeated reference only at its first occurrence across paragraphs', () => {
+    const refs: EraSummaryReference[] = [{ kind: 'territory', target: 'France', text: 'フランス' }];
+    render(
+      <SummaryReferences
+        context={'フランスが台頭した。\n\nフランスは衰退した。'}
+        references={refs}
+      />,
+    );
+
+    const buttons = screen.getAllByRole('button');
+    expect(buttons).toHaveLength(1);
+    expect(screen.getByText('フランスは衰退した。')).toBeInTheDocument();
+  });
 });
