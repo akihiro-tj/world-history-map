@@ -1,60 +1,56 @@
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { Client } from '@notionhq/client';
 import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
-import { NOTION_ERA_SUMMARY_PROPERTY } from '@/config.ts';
-import { REGION_IDS, type RegionId } from '@/domain/era-summary/region-id.ts';
-import { validateEraSummaryFile } from '@/era-summary/validate.ts';
+import { NOTION_ERA_SUMMARY_PROPERTY, YearPaths } from '@/config.ts';
+import type {
+  EraSummary,
+  EraSummaryReference,
+  RegionCard,
+} from '@/domain/era-summary/era-summary.ts';
+import { isRegionId, REGION_IDS } from '@/domain/era-summary/region-id.ts';
+import {
+  validateEraSummaryFile,
+  type YearTerritories,
+  type YearTerritoriesResolver,
+} from '@/era-summary/validate.ts';
 import type { PipelineLogger } from '@/shared/logger.ts';
-
-interface EraSummaryReference {
-  kind: 'territory' | 'year';
-  target: string;
-  text: string;
-}
-
-interface RegionCard {
-  region: RegionId;
-  title: string;
-  context: string;
-  references: EraSummaryReference[];
-}
-
-interface EraSummary {
-  year: number;
-  regions: RegionCard[];
-}
 
 export interface RegionEntry {
   year: number;
   regionCard: RegionCard;
+  order: number | null;
 }
 
 function extractPlainText(
-  prop: PageObjectResponse['properties'][string] | undefined,
+  notionProperty: PageObjectResponse['properties'][string] | undefined,
 ): string | undefined {
-  if (!prop) return undefined;
-  if (prop.type === 'title') {
-    const text = prop.title.map((richTextItem) => richTextItem.plain_text).join('');
+  if (!notionProperty) return undefined;
+  if (notionProperty.type === 'title') {
+    const text = notionProperty.title.map((richTextItem) => richTextItem.plain_text).join('');
     return text || undefined;
   }
-  if (prop.type === 'rich_text') {
-    const text = prop.rich_text.map((richTextItem) => richTextItem.plain_text).join('');
+  if (notionProperty.type === 'rich_text') {
+    const text = notionProperty.rich_text.map((richTextItem) => richTextItem.plain_text).join('');
     return text || undefined;
   }
   return undefined;
 }
 
-function extractNumber(prop: PageObjectResponse['properties'][string] | undefined): number | null {
-  if (prop?.type === 'number') {
-    return prop.number;
+function extractNumber(
+  notionProperty: PageObjectResponse['properties'][string] | undefined,
+): number | null {
+  if (notionProperty?.type === 'number') {
+    return notionProperty.number;
   }
   return null;
 }
 
-function extractSelect(prop: PageObjectResponse['properties'][string] | undefined): string | null {
-  if (prop?.type === 'select') {
-    return prop.select?.name ?? null;
+function extractSelect(
+  notionProperty: PageObjectResponse['properties'][string] | undefined,
+): string | null {
+  if (notionProperty?.type === 'select') {
+    return notionProperty.select?.name ?? null;
   }
   return null;
 }
@@ -75,10 +71,6 @@ function parseReferences(
   }
 }
 
-function isValidRegionId(value: string): value is RegionId {
-  return (REGION_IDS as readonly string[]).includes(value);
-}
-
 export function transformNotionPage(
   page: PageObjectResponse,
   logger: Pick<PipelineLogger, 'warn'> = {
@@ -92,8 +84,7 @@ export function transformNotionPage(
 
   const regionRaw = extractSelect(notionProperties[NOTION_ERA_SUMMARY_PROPERTY.REGION]);
   if (!regionRaw) throw new Error(`Page ${page.id} has no Region`);
-  if (!isValidRegionId(regionRaw))
-    throw new Error(`Page ${page.id} has invalid Region: ${regionRaw}`);
+  if (!isRegionId(regionRaw)) throw new Error(`Page ${page.id} has invalid Region: ${regionRaw}`);
 
   const title = extractPlainText(notionProperties[NOTION_ERA_SUMMARY_PROPERTY.TITLE]);
   if (!title) throw new Error(`Page ${page.id} has no Title`);
@@ -104,33 +95,62 @@ export function transformNotionPage(
   const referencesRaw = extractPlainText(notionProperties[NOTION_ERA_SUMMARY_PROPERTY.REFERENCES]);
   const references = parseReferences(referencesRaw, page.id, logger);
 
+  const order = extractNumber(notionProperties[NOTION_ERA_SUMMARY_PROPERTY.ORDER]);
+
   return {
     year,
     regionCard: { region: regionRaw, title, context, references },
+    order,
   };
 }
 
 export class EraSummaryRegions {
-  readonly #cardsByYear = new Map<number, RegionCard[]>();
+  readonly #entriesByYear = new Map<number, RegionEntry[]>();
 
   add(entry: RegionEntry): void {
     const { year, regionCard } = entry;
-    if (!this.#cardsByYear.has(year)) {
-      this.#cardsByYear.set(year, []);
-    }
-    const cards = this.#cardsByYear.get(year);
-    if (!cards) return;
+    const existingEntries = this.#entriesByYear.get(year);
+    const entries = existingEntries ?? [];
 
-    const isDuplicate = cards.some((card) => card.region === regionCard.region);
+    const isDuplicate = entries.some(
+      (existing) => existing.regionCard.region === regionCard.region,
+    );
     if (isDuplicate) {
       throw new Error(`Duplicate Year×Region: year=${year}, region=${regionCard.region}`);
     }
 
-    cards.push(regionCard);
+    entries.push(entry);
+    if (existingEntries === undefined) {
+      this.#entriesByYear.set(year, entries);
+    }
   }
 
   build(): EraSummary[] {
-    return Array.from(this.#cardsByYear.entries()).map(([year, regions]) => ({ year, regions }));
+    return Array.from(this.#entriesByYear.entries()).map(([year, entries]) => ({
+      year,
+      regions: [...entries]
+        .sort((a, b) => this.#compareEntries(a, b))
+        .map((entry) => entry.regionCard),
+    }));
+  }
+
+  /**
+   * Cards with an explicit Order sort first (ascending), then cards without one
+   * in canonical REGION_IDS order. Explicit cards always precede fallback cards
+   * regardless of the Order value, and ties on equal Order break by canonical
+   * order, so the result never depends on the nondeterministic Notion fetch order.
+   */
+  #compareEntries(a: RegionEntry, b: RegionEntry): number {
+    if (a.order !== null && b.order !== null) {
+      return a.order - b.order || this.#canonicalIndex(a) - this.#canonicalIndex(b);
+    }
+    if (a.order !== null) return -1;
+    if (b.order !== null) return 1;
+    return this.#canonicalIndex(a) - this.#canonicalIndex(b);
+  }
+
+  #canonicalIndex(entry: RegionEntry): number {
+    return REGION_IDS.indexOf(entry.regionCard.region);
   }
 }
 
@@ -147,7 +167,7 @@ async function fetchAllPages(
       data_source_id: dataSourceId,
       ...(cursor !== undefined && { start_cursor: cursor }),
       ...(yearFilter !== undefined && {
-        filter: { property: 'Year', number: { equals: yearFilter } },
+        filter: { property: NOTION_ERA_SUMMARY_PROPERTY.YEAR, number: { equals: yearFilter } },
       }),
     });
 
@@ -183,7 +203,54 @@ function transformPages(
   return { entries, errorCount };
 }
 
-function writeSummaries(summaries: EraSummary[], outputDir: string, logger: PipelineLogger): void {
+function readDescriptionIds(filePath: string): ReadonlySet<string> | null {
+  if (!existsSync(filePath)) return null;
+
+  const parsed = JSON.parse(readFileSync(filePath, 'utf-8'));
+  if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+    throw new Error(`Malformed descriptions file (expected a JSON object): ${filePath}`);
+  }
+  return new Set(Object.keys(parsed));
+}
+
+function readGeojsonNames(filePath: string): ReadonlySet<string> | null {
+  if (!existsSync(filePath)) return null;
+
+  const geojson = JSON.parse(readFileSync(filePath, 'utf-8')) as {
+    features?: { properties?: Record<string, unknown> }[];
+  };
+  const names = new Set<string>();
+  for (const feature of geojson.features ?? []) {
+    const name = feature.properties?.['NAME'];
+    if (typeof name === 'string') names.add(name);
+  }
+  return names;
+}
+
+function createYearTerritoriesResolver(): YearTerritoriesResolver {
+  const cache = new Map<number, YearTerritories>();
+
+  return (year) => {
+    const cached = cache.get(year);
+    if (cached !== undefined) return cached;
+
+    const yearPaths = new YearPaths(year);
+    const territories: YearTerritories = {
+      descriptionIds: readDescriptionIds(yearPaths.descriptionsPath),
+      geojsonNames: readGeojsonNames(yearPaths.mergedGeojsonPath),
+    };
+
+    cache.set(year, territories);
+    return territories;
+  };
+}
+
+function writeSummaries(
+  summaries: EraSummary[],
+  outputDir: string,
+  resolveYearTerritories: YearTerritoriesResolver,
+  logger: PipelineLogger,
+): void {
   mkdirSync(outputDir, { recursive: true });
 
   let validationErrors = 0;
@@ -192,7 +259,7 @@ function writeSummaries(summaries: EraSummary[], outputDir: string, logger: Pipe
     const filePath = path.join(outputDir, `${summary.year}.json`);
     writeFileSync(filePath, `${JSON.stringify(summary, null, 2)}\n`);
 
-    const validation = validateEraSummaryFile(filePath);
+    const validation = validateEraSummaryFile(filePath, resolveYearTerritories);
     if (!validation.valid) {
       validationErrors++;
       for (const validationError of validation.errors) {
@@ -231,5 +298,5 @@ export async function syncEraSummaries(
     regions.add(entry);
   }
 
-  writeSummaries(regions.build(), outputDir, logger);
+  writeSummaries(regions.build(), outputDir, createYearTerritoriesResolver(), logger);
 }

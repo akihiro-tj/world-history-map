@@ -110,7 +110,21 @@ describe('sync-era-summaries', () => {
           context: '三十年戦争が終結し、主権国家体制が成立。',
           references: [{ kind: 'territory', target: 'france', text: 'フランス' }],
         },
+        order: null,
       });
+    });
+
+    it('extracts the Order property when present', () => {
+      const page = createNotionPage({
+        Year: numberProp(1650),
+        Region: selectProp('europe'),
+        Title: titleProp('ヨーロッパ'),
+        Context: richText('三十年戦争が終結し、主権国家体制が成立。'),
+        References: richText('[]'),
+        Order: numberProp(2),
+      });
+
+      expect(transformNotionPage(page).order).toBe(2);
     });
 
     it('throws when Title is empty', () => {
@@ -177,14 +191,17 @@ describe('sync-era-summaries', () => {
       regions.add({
         year: 1650,
         regionCard: { region: 'europe', title: 'ヨーロッパ', context: 'ctx', references: [] },
+        order: 0,
       });
       regions.add({
         year: 1650,
         regionCard: { region: 'east-asia', title: '東アジア', context: 'ctx', references: [] },
+        order: 1,
       });
       regions.add({
         year: 1700,
         regionCard: { region: 'europe', title: 'ヨーロッパ', context: 'ctx', references: [] },
+        order: 0,
       });
 
       const summaries = regions.build();
@@ -194,17 +211,91 @@ describe('sync-era-summaries', () => {
       expect(s1650?.regions).toHaveLength(2);
     });
 
+    it('sorts regions within a year by Order ascending', () => {
+      const regions = new EraSummaryRegions();
+      regions.add({
+        year: 1650,
+        regionCard: { region: 'east-asia', title: '東アジア', context: 'ctx', references: [] },
+        order: 1,
+      });
+      regions.add({
+        year: 1650,
+        regionCard: { region: 'europe', title: 'ヨーロッパ', context: 'ctx', references: [] },
+        order: 0,
+      });
+
+      const s1650 = regions.build().find((s) => s.year === 1650);
+
+      expect(s1650?.regions.map((region) => region.region)).toEqual(['europe', 'east-asia']);
+    });
+
+    it('places explicitly-ordered cards before fallback cards regardless of Order magnitude', () => {
+      const regions = new EraSummaryRegions();
+      regions.add({
+        year: 1650,
+        regionCard: { region: 'europe', title: 'ヨーロッパ', context: 'ctx', references: [] },
+        order: null,
+      });
+      regions.add({
+        year: 1650,
+        regionCard: { region: 'south-asia', title: '南アジア', context: 'ctx', references: [] },
+        order: 100,
+      });
+
+      const s1650 = regions.build().find((s) => s.year === 1650);
+
+      expect(s1650?.regions.map((region) => region.region)).toEqual(['south-asia', 'europe']);
+    });
+
+    it('breaks ties on equal Order by canonical order, independent of insertion order', () => {
+      const regions = new EraSummaryRegions();
+      regions.add({
+        year: 1650,
+        regionCard: { region: 'east-asia', title: '東アジア', context: 'ctx', references: [] },
+        order: 0,
+      });
+      regions.add({
+        year: 1650,
+        regionCard: { region: 'europe', title: 'ヨーロッパ', context: 'ctx', references: [] },
+        order: 0,
+      });
+
+      const s1650 = regions.build().find((s) => s.year === 1650);
+
+      expect(s1650?.regions.map((region) => region.region)).toEqual(['europe', 'east-asia']);
+    });
+
+    it('falls back to canonical region order when Order is absent', () => {
+      const regions = new EraSummaryRegions();
+      regions.add({
+        year: 1650,
+        regionCard: { region: 'east-asia', title: '東アジア', context: 'ctx', references: [] },
+        order: null,
+      });
+      regions.add({
+        year: 1650,
+        regionCard: { region: 'europe', title: 'ヨーロッパ', context: 'ctx', references: [] },
+        order: null,
+      });
+
+      const s1650 = regions.build().find((s) => s.year === 1650);
+
+      expect(s1650?.regions.map((region) => region.region)).toEqual(['europe', 'east-asia']);
+    });
+
     it('throws when the same Year × Region combination appears more than once', () => {
       const regions = new EraSummaryRegions();
       regions.add({
         year: 1650,
         regionCard: { region: 'europe', title: 'ヨーロッパ A', context: 'ctx', references: [] },
+        order: 0,
       });
 
       expect(() =>
         regions.add({
           year: 1650,
           regionCard: { region: 'europe', title: 'ヨーロッパ B', context: 'ctx', references: [] },
+          order: 1,
         }),
       ).toThrow(/duplicate/i);
     });

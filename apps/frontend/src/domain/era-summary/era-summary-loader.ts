@@ -1,5 +1,6 @@
 import type { HistoricalYear } from '../year/historical-year';
 import { type EraSummarySource, HttpEraSummaryRepository } from './http-era-summary-repository';
+import { parseEraSummary } from './parse-era-summary';
 import type { EraSummary } from './types';
 
 class HttpEraSummarySource implements EraSummarySource {
@@ -14,7 +15,11 @@ class HttpEraSummarySource implements EraSummarySource {
     const contentType = response.headers.get('content-type');
     if (!contentType?.includes('application/json')) return null;
 
-    return response.json() as Promise<EraSummary>;
+    const summary = parseEraSummary(await response.json());
+    if (summary === null) {
+      console.warn(`Malformed era summary for year ${year}, ignoring`);
+    }
+    return summary;
   }
 }
 

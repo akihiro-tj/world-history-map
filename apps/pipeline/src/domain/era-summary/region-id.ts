@@ -14,3 +14,7 @@ export const REGION_IDS = [
 export type RegionId = (typeof REGION_IDS)[number];
 
 export const regionIdSchema = z.enum(REGION_IDS);
+
+export function isRegionId(value: string): value is RegionId {
+  return (REGION_IDS as readonly string[]).includes(value);
+}

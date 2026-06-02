@@ -3,7 +3,11 @@
     {
       "year": -123000,
       "filename": "world_-123000.pmtiles",
-      "countries": ["Homo erectus", "Homo heidelbergensis", "Neanderthal"]
+      "countries": [
+        "Homo erectus",
+        "Homo heidelbergensis",
+        "Neanderthal"
+      ]
     },
     {
       "year": -10000,

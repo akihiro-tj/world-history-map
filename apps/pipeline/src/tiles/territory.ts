@@ -1,4 +1,5 @@
 import * as turf from '@turf/turf';
+import { toTerritoryId } from '@/domain/territory/territory-id.ts';
 import type { GeoJSONFeature } from '@/types/geojson.ts';
 import type { DescriptionLookup } from './merge.ts';
 import { TerritoryBounds } from './territory-bounds.ts';
@@ -35,13 +36,6 @@ function extractPolygons(features: GeoJSONFeature[]): number[][][][] {
     }
   }
   return polygonCoordinates;
-}
-
-function toKebabCase(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/\s+/g, '-')
-    .replace(/[^a-z0-9-]/g, '');
 }
 
 export class Territory {
@@ -103,7 +97,7 @@ export class Territory {
   ): ReturnType<typeof turf.point> {
     const labelPoint = turf.pointOnFeature(mainPoly);
     const labelProperties: Record<string, unknown> = { ...mergedProperties };
-    const nameJa = translations[toKebabCase(this.name)]?.name;
+    const nameJa = translations[toTerritoryId(this.name)]?.name;
     if (nameJa) {
       labelProperties['name_ja'] = nameJa;
     }

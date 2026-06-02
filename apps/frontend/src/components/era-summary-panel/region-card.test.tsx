@@ -1,5 +1,24 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import { createHistoricalYear } from '@/domain/year/historical-year';
+
+vi.mock('@/contexts/app-state-context', () => ({
+  useAppState: () => ({
+    state: { selectedYear: createHistoricalYear(1650) },
+    actions: {
+      selectTerritory: vi.fn(),
+      setSelectedYear: vi.fn(),
+    },
+  }),
+}));
+
+vi.mock('@/hooks/use-year-index', () => ({
+  useYearIndex: () => ({
+    years: [{ year: createHistoricalYear(1650), filename: 'world_1650.pmtiles', countries: [] }],
+    isLoading: false,
+  }),
+}));
+
 import { RegionCard } from './region-card';
 
 const sampleCard = {

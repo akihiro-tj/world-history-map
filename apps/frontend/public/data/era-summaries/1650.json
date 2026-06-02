@@ -4,34 +4,102 @@
     {
       "region": "europe",
       "title": "ヨーロッパ",
-      "context": "三十年戦争が終結（1648年ウェストファリア条約）し、主権国家体制が成立。フランスでは絶対王政が確立しつつあり、イングランドは内戦からピューリタン革命の只中。",
+      "context": "1618年、ベーメン（ボヘミア）の新教徒反乱を発端に三十年戦争が始まった。宗教対立はやがて、デンマークやスウェーデンなど北欧諸国、さらにフランスが勢力拡大を狙って介入する国際戦争へと拡大した。\n\n1648年のウェストファリア条約で戦争は終結し、スイスとオランダの独立が承認された。神聖ローマ帝国は有名無実化してドイツの分裂が決定的となり、各国の主権を対等に認める主権国家体制が成立した。\n\n同じ頃、イギリスではピューリタン革命が起こって1649年に国王チャールズ1世が処刑された。ロシアでは1613年にロマノフ朝が成立し、長く続いた動乱の時代を収めていた。",
       "references": [
         {
-          "kind": "year",
-          "target": "1648",
-          "text": "1648年"
+          "kind": "territory",
+          "target": "Denmark-Norway",
+          "text": "デンマーク"
         },
         {
           "kind": "territory",
-          "target": "france",
+          "target": "Sweden",
+          "text": "スウェーデン"
+        },
+        {
+          "kind": "territory",
+          "target": "France",
           "text": "フランス"
+        },
+        {
+          "kind": "territory",
+          "target": "Swiss Confederation",
+          "text": "スイス"
+        },
+        {
+          "kind": "territory",
+          "target": "Dutch Republic",
+          "text": "オランダ"
+        },
+        {
+          "kind": "territory",
+          "target": "Holy Roman Empire",
+          "text": "神聖ローマ帝国"
+        },
+        {
+          "kind": "territory",
+          "target": "England and Ireland",
+          "text": "イギリス"
+        },
+        {
+          "kind": "territory",
+          "target": "Tsardom of Muscovy",
+          "text": "ロシア"
         }
       ]
     },
     {
-      "region": "americas",
-      "title": "南北アメリカ",
-      "context": "スペイン領植民地（ヌエバ・エスパーニャ／ペルー副王領）が銀の採掘で世界経済を支える。北米東岸ではイギリス植民地（バージニア・ニューイングランド）が拡大。",
-      "references": []
+      "region": "east-asia",
+      "title": "東アジア",
+      "context": "中国では、ヌルハチが建てた後金が1636年に国号を清と改め、1644年に李自成の反乱で明が滅ぶと、山海関を越えて中国本土の支配を固めていった。江南では南明が抵抗を続けた。日本では江戸幕府が3代将軍徳川家光のもとで鎖国を完成させ、貿易を長崎などに限り、朱印船貿易は途絶えた。朝鮮は2度の侵攻を受けて清に服属し、その朝貢国となった。",
+      "references": [
+        {
+          "kind": "territory",
+          "target": "Manchu Empire",
+          "text": "清"
+        },
+        {
+          "kind": "territory",
+          "target": "Tokugawa Shogunate",
+          "text": "江戸幕府"
+        },
+        {
+          "kind": "territory",
+          "target": "Korea",
+          "text": "朝鮮"
+        }
+      ]
+    },
+    {
+      "region": "southeast-asia",
+      "title": "東南アジア",
+      "context": "オランダはジャワ島のバタヴィアを拠点に東インド会社（VOC）の交易網を広げ、1623年のアンボイナ事件でイギリスを香辛料の産地モルッカ諸島から締め出した。敗れたイギリスは経営の軸足をインドへ移し、オランダは1641年にポルトガルからマラッカを奪って香辛料貿易の支配を固めた。",
+      "references": [
+        {
+          "kind": "territory",
+          "target": "Dutch East Indies",
+          "text": "オランダ"
+        },
+        {
+          "kind": "territory",
+          "target": "England and Ireland",
+          "text": "イギリス"
+        },
+        {
+          "kind": "territory",
+          "target": "Portugal",
+          "text": "ポルトガル"
+        }
+      ]
     },
     {
       "region": "south-asia",
       "title": "南アジア",
-      "context": "ムガル帝国がシャー・ジャハーンの治世下で最盛期を迎える。タージマハル建造の時代。",
+      "context": "ムガル帝国は第5代皇帝シャー・ジャハーンの治世下で最盛期にあり、亡き妃のための廟タージ・マハルの造営が進められていた。",
       "references": [
         {
           "kind": "territory",
-          "target": "mughal-empire",
+          "target": "Mughal Empire",
           "text": "ムガル帝国"
         }
       ]
@@ -39,35 +107,49 @@
     {
       "region": "middle-east-north-africa",
       "title": "中東・北アフリカ",
-      "context": "オスマン帝国は最盛期を過ぎ停滞期に入る。サファヴィー朝はアッバース 2 世の治世で文化的繁栄を維持。",
+      "context": "オスマン帝国は最盛期を過ぎて停滞期に入り、宮廷の混乱が続いていた。イランのサファヴィー朝はアッバース2世のもとで文化的な繁栄を保っていた。",
       "references": [
         {
           "kind": "territory",
-          "target": "ottoman-empire",
+          "target": "Ottoman Empire",
           "text": "オスマン帝国"
+        },
+        {
+          "kind": "territory",
+          "target": "Safavid Empire",
+          "text": "サファヴィー朝"
         }
       ]
     },
     {
-      "region": "sub-saharan-africa",
-      "title": "サブサハラ・アフリカ",
-      "context": "大西洋奴隷貿易が本格化。コンゴ王国・ベニン王国などがヨーロッパ諸国との交易・抗争に関わる。",
-      "references": []
-    },
-    {
-      "region": "east-asia",
-      "title": "東アジア",
-      "context": "明朝が李自成の乱と清軍の南下により滅亡（1644 年）、清が中国本土を支配。日本では江戸幕府が鎖国体制を確立。",
+      "region": "americas",
+      "title": "南北アメリカ",
+      "context": "スペインは南北アメリカの植民地で銀の採掘を続け、その富がヨーロッパや世界の経済を支えていた。北米の東岸では、イギリスがジェームズタウンやピルグリム・ファーザーズの上陸したプリマス、フランスがケベック、オランダがニューアムステルダムを築き、植民地を広げつつあった。",
       "references": [
         {
           "kind": "territory",
-          "target": "qing",
-          "text": "清"
+          "target": "Spain",
+          "text": "スペイン"
         },
         {
           "kind": "territory",
-          "target": "japan",
-          "text": "日本"
+          "target": "Virginia",
+          "text": "ジェームズタウン"
+        },
+        {
+          "kind": "territory",
+          "target": "Massachusetts Bay",
+          "text": "プリマス"
+        },
+        {
+          "kind": "territory",
+          "target": "New France",
+          "text": "ケベック"
+        },
+        {
+          "kind": "territory",
+          "target": "New Amsterdam",
+          "text": "ニューアムステルダム"
         }
       ]
     }

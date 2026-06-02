@@ -73,7 +73,7 @@ export async function runIndexGenStage(
   );
 
   const indexPath = path.join(PATHS.tilesSourcePmtiles, TILES_INDEX_FILENAME);
-  writeFileSync(indexPath, JSON.stringify(index, null, 2));
+  writeFileSync(indexPath, `${JSON.stringify(index, null, 2)}\n`);
   logger.info('index-gen', `Written: ${indexPath}`);
 
   return index;

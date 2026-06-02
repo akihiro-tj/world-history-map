@@ -14,6 +14,7 @@
       "!**/build",
       "!**/coverage",
       "!apps/frontend/public",
+      "!packages/tiles/src/pmtiles",
       "!apps/frontend/src/index.css",
       "!packages/design-tokens/src/theme.css",
       "!.claude/worktrees",

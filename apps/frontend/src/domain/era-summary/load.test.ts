@@ -19,7 +19,7 @@ const mockEraSummary1650 = {
       region: 'europe',
       title: 'ヨーロッパ',
       context: 'ウェストファリア条約後の主権国家体制。',
-      references: [{ kind: 'territory', target: 'france', text: 'フランス' }],
+      references: [{ kind: 'territory', target: 'France', text: 'フランス' }],
     },
   ],
 };
