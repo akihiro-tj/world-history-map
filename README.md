@@ -39,7 +39,7 @@ Without direnv:
 nix develop
 ```
 
-The shell provides `tippecanoe`, `tile-join`, and Node.js 24. Inside it, `pnpm` resolves to the version declared in `package.json` (`packageManager`) via corepack.
+Inside the shell, `pnpm` resolves to the version declared in `package.json` (`packageManager`) via corepack.
 
 > `op` (1Password CLI) is used by `pnpm territory-sync` to read Notion credentials and is intentionally **not** bundled in the flake — it relies on the 1Password desktop app integration. Install it on your system if you sync territory descriptions.
 
