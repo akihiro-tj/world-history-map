@@ -2,7 +2,7 @@ import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { type TerritoryIdResolver, validateEraSummaryFile } from '@/era-summary/validate.ts';
+import { validateEraSummaryFile, type YearTerritoriesResolver } from '@/era-summary/validate.ts';
 
 let workDir: string;
 
@@ -20,8 +20,10 @@ function writeSummary(summary: unknown): string {
   return filePath;
 }
 
-const resolveFranceOnly: TerritoryIdResolver = (year) =>
-  year === 1650 ? new Set(['france']) : null;
+const resolveFranceOnly: YearTerritoriesResolver = (year) => ({
+  descriptionIds: year === 1650 ? new Set(['france']) : null,
+  geojsonNames: null,
+});
 
 describe('validateEraSummaryFile', () => {
   it('accepts a well-formed summary whose references resolve', () => {
@@ -82,8 +84,10 @@ describe('validateEraSummaryFile', () => {
   });
 
   it('resolves a NAME target with spaces and lowercase words by kebab-casing', () => {
-    const resolveMuscovy: TerritoryIdResolver = (year) =>
-      year === 1650 ? new Set(['tsardom-of-muscovy']) : null;
+    const resolveMuscovy: YearTerritoriesResolver = (year) => ({
+      descriptionIds: year === 1650 ? new Set(['tsardom-of-muscovy']) : null,
+      geojsonNames: null,
+    });
     const filePath = writeSummary({
       year: 1650,
       regions: [
@@ -100,6 +104,74 @@ describe('validateEraSummaryFile', () => {
 
     expect(result.valid).toBe(true);
     expect(result.errors).toEqual([]);
+  });
+
+  it('rejects a target that resolves by id but is not an exact GeoJSON NAME', () => {
+    const resolveCaseSensitive: YearTerritoriesResolver = () => ({
+      descriptionIds: new Set(['france']),
+      geojsonNames: new Set(['France']),
+    });
+    const filePath = writeSummary({
+      year: 1650,
+      regions: [
+        {
+          region: 'europe',
+          title: 'ヨーロッパ',
+          context: 'フランスで絶対王政が確立しつつあった。',
+          references: [{ kind: 'territory', target: 'france', text: 'フランス' }],
+        },
+      ],
+    });
+
+    const result = validateEraSummaryFile(filePath, resolveCaseSensitive);
+
+    expect(result.valid).toBe(false);
+    expect(result.errors[0]).toMatch(/is not an exact GeoJSON NAME/);
+  });
+
+  it('accepts a target that matches an exact GeoJSON NAME', () => {
+    const resolveCaseSensitive: YearTerritoriesResolver = () => ({
+      descriptionIds: new Set(['france']),
+      geojsonNames: new Set(['France']),
+    });
+    const filePath = writeSummary({
+      year: 1650,
+      regions: [
+        {
+          region: 'europe',
+          title: 'ヨーロッパ',
+          context: 'フランスで絶対王政が確立しつつあった。',
+          references: [{ kind: 'territory', target: 'France', text: 'フランス' }],
+        },
+      ],
+    });
+
+    const result = validateEraSummaryFile(filePath, resolveCaseSensitive);
+
+    expect(result.valid).toBe(true);
+    expect(result.errors).toEqual([]);
+  });
+
+  it('skips the NAME check when the GeoJSON is unavailable', () => {
+    const resolveWithoutNames: YearTerritoriesResolver = () => ({
+      descriptionIds: new Set(['france']),
+      geojsonNames: null,
+    });
+    const filePath = writeSummary({
+      year: 1650,
+      regions: [
+        {
+          region: 'europe',
+          title: 'ヨーロッパ',
+          context: 'フランスで絶対王政が確立しつつあった。',
+          references: [{ kind: 'territory', target: 'france', text: 'フランス' }],
+        },
+      ],
+    });
+
+    const result = validateEraSummaryFile(filePath, resolveWithoutNames);
+
+    expect(result.valid).toBe(true);
   });
 
   it('skips territory resolution when no resolver is provided', () => {

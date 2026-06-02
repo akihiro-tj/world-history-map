@@ -2,14 +2,18 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { Client } from '@notionhq/client';
 import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
-import { NOTION_ERA_SUMMARY_PROPERTY, PATHS } from '@/config.ts';
+import { NOTION_ERA_SUMMARY_PROPERTY, YearPaths } from '@/config.ts';
 import type {
   EraSummary,
   EraSummaryReference,
   RegionCard,
 } from '@/domain/era-summary/era-summary.ts';
 import { isRegionId, REGION_IDS } from '@/domain/era-summary/region-id.ts';
-import { type TerritoryIdResolver, validateEraSummaryFile } from '@/era-summary/validate.ts';
+import {
+  validateEraSummaryFile,
+  type YearTerritories,
+  type YearTerritoriesResolver,
+} from '@/era-summary/validate.ts';
 import type { PipelineLogger } from '@/shared/logger.ts';
 
 export interface RegionEntry {
@@ -100,8 +104,6 @@ export function transformNotionPage(
   };
 }
 
-const FALLBACK_ORDER_BASE = REGION_IDS.length;
-
 export class EraSummaryRegions {
   readonly #entriesByYear = new Map<number, RegionEntry[]>();
 
@@ -127,19 +129,28 @@ export class EraSummaryRegions {
     return Array.from(this.#entriesByYear.entries()).map(([year, entries]) => ({
       year,
       regions: [...entries]
-        .sort((a, b) => this.#sortValue(a) - this.#sortValue(b))
+        .sort((a, b) => this.#compareEntries(a, b))
         .map((entry) => entry.regionCard),
     }));
   }
 
   /**
-   * Smaller value sorts earlier. Cards with an explicit Order keep that rank;
-   * cards without one fall back to the canonical REGION_IDS order, placed after
-   * any explicitly-ordered cards so a partially-migrated year stays deterministic.
+   * Cards with an explicit Order sort first (ascending), then cards without one
+   * in canonical REGION_IDS order. Explicit cards always precede fallback cards
+   * regardless of the Order value, and ties on equal Order break by canonical
+   * order, so the result never depends on the nondeterministic Notion fetch order.
    */
-  #sortValue(entry: RegionEntry): number {
-    if (entry.order !== null) return entry.order;
-    return FALLBACK_ORDER_BASE + REGION_IDS.indexOf(entry.regionCard.region);
+  #compareEntries(a: RegionEntry, b: RegionEntry): number {
+    if (a.order !== null && b.order !== null) {
+      return a.order - b.order || this.#canonicalIndex(a) - this.#canonicalIndex(b);
+    }
+    if (a.order !== null) return -1;
+    if (b.order !== null) return 1;
+    return this.#canonicalIndex(a) - this.#canonicalIndex(b);
+  }
+
+  #canonicalIndex(entry: RegionEntry): number {
+    return REGION_IDS.indexOf(entry.regionCard.region);
   }
 }
 
@@ -192,27 +203,49 @@ function transformPages(
   return { entries, errorCount };
 }
 
-function createDescriptionTerritoryResolver(descriptionsDir: string): TerritoryIdResolver {
-  const cache = new Map<number, ReadonlySet<string> | null>();
+function readDescriptionIds(filePath: string): ReadonlySet<string> | null {
+  if (!existsSync(filePath)) return null;
+  return new Set(
+    Object.keys(JSON.parse(readFileSync(filePath, 'utf-8')) as Record<string, unknown>),
+  );
+}
+
+function readGeojsonNames(filePath: string): ReadonlySet<string> | null {
+  if (!existsSync(filePath)) return null;
+
+  const geojson = JSON.parse(readFileSync(filePath, 'utf-8')) as {
+    features?: { properties?: Record<string, unknown> }[];
+  };
+  const names = new Set<string>();
+  for (const feature of geojson.features ?? []) {
+    const name = feature.properties?.['NAME'];
+    if (typeof name === 'string') names.add(name);
+  }
+  return names;
+}
+
+function createYearTerritoriesResolver(): YearTerritoriesResolver {
+  const cache = new Map<number, YearTerritories>();
 
   return (year) => {
     const cached = cache.get(year);
     if (cached !== undefined) return cached;
 
-    const filePath = path.join(descriptionsDir, `${year}.json`);
-    const territoryIds = existsSync(filePath)
-      ? new Set(Object.keys(JSON.parse(readFileSync(filePath, 'utf-8')) as Record<string, unknown>))
-      : null;
+    const yearPaths = new YearPaths(year);
+    const territories: YearTerritories = {
+      descriptionIds: readDescriptionIds(yearPaths.descriptionsPath),
+      geojsonNames: readGeojsonNames(yearPaths.mergedGeojsonPath),
+    };
 
-    cache.set(year, territoryIds);
-    return territoryIds;
+    cache.set(year, territories);
+    return territories;
   };
 }
 
 function writeSummaries(
   summaries: EraSummary[],
   outputDir: string,
-  resolveTerritoryIds: TerritoryIdResolver,
+  resolveYearTerritories: YearTerritoriesResolver,
   logger: PipelineLogger,
 ): void {
   mkdirSync(outputDir, { recursive: true });
@@ -223,7 +256,7 @@ function writeSummaries(
     const filePath = path.join(outputDir, `${summary.year}.json`);
     writeFileSync(filePath, `${JSON.stringify(summary, null, 2)}\n`);
 
-    const validation = validateEraSummaryFile(filePath, resolveTerritoryIds);
+    const validation = validateEraSummaryFile(filePath, resolveYearTerritories);
     if (!validation.valid) {
       validationErrors++;
       for (const validationError of validation.errors) {
@@ -262,10 +295,5 @@ export async function syncEraSummaries(
     regions.add(entry);
   }
 
-  writeSummaries(
-    regions.build(),
-    outputDir,
-    createDescriptionTerritoryResolver(PATHS.descriptionsDir),
-    logger,
-  );
+  writeSummaries(regions.build(), outputDir, createYearTerritoriesResolver(), logger);
 }

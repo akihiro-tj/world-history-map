@@ -229,6 +229,42 @@ describe('sync-era-summaries', () => {
       expect(s1650?.regions.map((region) => region.region)).toEqual(['europe', 'east-asia']);
     });
 
+    it('places explicitly-ordered cards before fallback cards regardless of Order magnitude', () => {
+      const regions = new EraSummaryRegions();
+      regions.add({
+        year: 1650,
+        regionCard: { region: 'europe', title: 'ヨーロッパ', context: 'ctx', references: [] },
+        order: null,
+      });
+      regions.add({
+        year: 1650,
+        regionCard: { region: 'south-asia', title: '南アジア', context: 'ctx', references: [] },
+        order: 100,
+      });
+
+      const s1650 = regions.build().find((s) => s.year === 1650);
+
+      expect(s1650?.regions.map((region) => region.region)).toEqual(['south-asia', 'europe']);
+    });
+
+    it('breaks ties on equal Order by canonical order, independent of insertion order', () => {
+      const regions = new EraSummaryRegions();
+      regions.add({
+        year: 1650,
+        regionCard: { region: 'east-asia', title: '東アジア', context: 'ctx', references: [] },
+        order: 0,
+      });
+      regions.add({
+        year: 1650,
+        regionCard: { region: 'europe', title: 'ヨーロッパ', context: 'ctx', references: [] },
+        order: 0,
+      });
+
+      const s1650 = regions.build().find((s) => s.year === 1650);
+
+      expect(s1650?.regions.map((region) => region.region)).toEqual(['europe', 'east-asia']);
+    });
+
     it('falls back to canonical region order when Order is absent', () => {
       const regions = new EraSummaryRegions();
       regions.add({

@@ -35,26 +35,58 @@ const eraSummaryFileSchema = z.object({
 type EraSummaryFile = z.infer<typeof eraSummaryFileSchema>;
 
 /**
- * Resolves the set of territory ids that exist at a given year. Returns null
- * when no descriptions exist for the year. Injected so the validator stays
- * decoupled from how descriptions are stored.
+ * The territories at a year from the two views a reference depends on:
+ * `descriptionIds` are the kebab ids the description panel looks up (null when no
+ * descriptions exist for the year); `geojsonNames` are the exact GeoJSON NAMEs the
+ * map highlight matches on (null when the source geojson is unavailable, in which
+ * case the NAME check is skipped). Injected so the validator stays decoupled from
+ * how each source is stored.
  */
-export type TerritoryIdResolver = (year: number) => ReadonlySet<string> | null;
+export interface YearTerritories {
+  descriptionIds: ReadonlySet<string> | null;
+  geojsonNames: ReadonlySet<string> | null;
+}
+
+export type YearTerritoriesResolver = (year: number) => YearTerritories;
 
 const TERRITORY_REFERENCE_KIND = 'territory';
 
+function territoryReferenceErrors(
+  reference: { target: string },
+  year: number,
+  territories: YearTerritories,
+  location: string,
+): string[] {
+  const errors: string[] = [];
+
+  if (territories.descriptionIds === null) {
+    errors.push(
+      `${location}.target: no descriptions exist for year ${year}, so territory "${reference.target}" cannot be resolved`,
+    );
+  } else if (!territories.descriptionIds.has(toTerritoryId(reference.target))) {
+    errors.push(`${location}.target: "${reference.target}" is not a territory at year ${year}`);
+  }
+
+  if (territories.geojsonNames !== null && !territories.geojsonNames.has(reference.target)) {
+    errors.push(
+      `${location}.target: "${reference.target}" is not an exact GeoJSON NAME at year ${year}, so the map highlight will not match`,
+    );
+  }
+
+  return errors;
+}
+
 /**
  * Checks the cross-referential invariants the frontend silently depends on:
- * a reference whose `text` is absent from `context` is dropped at render time,
- * and a territory reference whose `target` (a GeoJSON NAME) has no description at
- * this year selects nothing when clicked. The description id is derived from the
- * NAME the same way the frontend does, so the two stay aligned.
+ * a reference whose `text` is absent from `context` is dropped at render time;
+ * a territory `target` whose derived id has no description selects nothing; and a
+ * `target` that is not an exact GeoJSON NAME never highlights on the map.
  */
 function collectReferenceErrors(
   eraSummary: EraSummaryFile,
-  resolveTerritoryIds: TerritoryIdResolver | undefined,
+  resolveYearTerritories: YearTerritoriesResolver | undefined,
 ): string[] {
-  const territoryIds = resolveTerritoryIds ? resolveTerritoryIds(eraSummary.year) : undefined;
+  const territories = resolveYearTerritories ? resolveYearTerritories(eraSummary.year) : undefined;
   const errors: string[] = [];
 
   eraSummary.regions.forEach((region, regionIndex) => {
@@ -67,17 +99,9 @@ function collectReferenceErrors(
         );
       }
 
-      if (reference.kind !== TERRITORY_REFERENCE_KIND || territoryIds === undefined) return;
+      if (reference.kind !== TERRITORY_REFERENCE_KIND || territories === undefined) return;
 
-      if (territoryIds === null) {
-        errors.push(
-          `${location}.target: no descriptions exist for year ${eraSummary.year}, so territory "${reference.target}" cannot be resolved`,
-        );
-      } else if (!territoryIds.has(toTerritoryId(reference.target))) {
-        errors.push(
-          `${location}.target: "${reference.target}" is not a territory at year ${eraSummary.year}`,
-        );
-      }
+      errors.push(...territoryReferenceErrors(reference, eraSummary.year, territories, location));
     });
   });
 
@@ -92,7 +116,7 @@ export interface EraSummaryValidationResult {
 
 export function validateEraSummaryFile(
   filePath: string,
-  resolveTerritoryIds?: TerritoryIdResolver,
+  resolveYearTerritories?: YearTerritoriesResolver,
 ): EraSummaryValidationResult {
   const content = readFileSync(filePath, 'utf-8');
   const rawEraSummary = JSON.parse(content);
@@ -103,6 +127,6 @@ export function validateEraSummaryFile(
     return { filePath, valid: false, errors };
   }
 
-  const referenceErrors = collectReferenceErrors(parsed.data, resolveTerritoryIds);
+  const referenceErrors = collectReferenceErrors(parsed.data, resolveYearTerritories);
   return { filePath, valid: referenceErrors.length === 0, errors: referenceErrors };
 }
