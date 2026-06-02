@@ -19,7 +19,8 @@
       "!packages/design-tokens/src/theme.css",
       "!.claude/worktrees",
       "!.claude/skills/**/*.html",
-      "!design-mocks"
+      "!design-mocks",
+      "!flake.lock"
     ]
   },
   "formatter": {

@@ -21,6 +21,7 @@ build
 *.local
 .env*
 !.env.example
+!.envrc
 
 # Editor directories and files
 .vscode/*
@@ -49,6 +50,10 @@ storybook-static
 
 # Cloudflare
 .wrangler
+
+# Nix / direnv
+.direnv/
+/result
 
 # Playwright CLI
 .playwright-cli/
