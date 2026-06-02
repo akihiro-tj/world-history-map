@@ -3,15 +3,17 @@ import type { EraSummaryReference } from './types';
 
 export type ContextSegment =
   | { kind: 'plain'; text: string }
-  | { kind: 'territory'; text: string; displayName: string }
+  | { kind: 'territory'; text: string; territoryName: string }
   | { kind: 'year-link'; text: string; year: HistoricalYear }
   | { kind: 'year-plain'; text: string };
 
-function toTerritoryDisplayName(kebabSlug: string): string {
-  return kebabSlug
-    .split('-')
-    .map((word) => (word.length > 0 ? (word[0]?.toUpperCase() ?? '') + word.slice(1) : word))
-    .join(' ');
+const PARAGRAPH_BREAK = /\n\s*\n/;
+
+export function splitIntoParagraphs(context: string): readonly string[] {
+  return context
+    .split(PARAGRAPH_BREAK)
+    .map((paragraph) => paragraph.trim())
+    .filter((paragraph) => paragraph.length > 0);
 }
 
 function resolveYearSegment(
@@ -59,7 +61,7 @@ export class AnnotatedContext {
         result.push({
           kind: 'territory',
           text: ref.text,
-          displayName: toTerritoryDisplayName(ref.target),
+          territoryName: ref.target,
         });
       } else {
         result.push(resolveYearSegment(ref, availableYears));

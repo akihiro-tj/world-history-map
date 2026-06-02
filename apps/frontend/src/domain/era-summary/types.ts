@@ -12,6 +12,9 @@ export type RegionId =
 
 export interface EraSummaryReference {
   readonly kind: 'territory' | 'year';
+  // For 'territory', target is the exact GeoJSON NAME so the map highlight can match on
+  // it directly; the territory description id is derived from it by kebab-casing.
+  // For 'year', target is the year as a string.
   readonly target: string;
   readonly text: string;
 }

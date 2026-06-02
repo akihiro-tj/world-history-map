@@ -1,5 +1,9 @@
 import type { ReactNode } from 'react';
-import { AnnotatedContext, type ContextSegment } from '@/domain/era-summary/annotated-context';
+import {
+  AnnotatedContext,
+  type ContextSegment,
+  splitIntoParagraphs,
+} from '@/domain/era-summary/annotated-context';
 import type { EraSummaryReference } from '@/domain/era-summary/types';
 import { createHistoricalYear } from '@/domain/year/historical-year';
 import { useAppState } from '../../contexts/app-state-context';
@@ -24,7 +28,7 @@ function renderSegment(
         <button
           key={key}
           type="button"
-          onClick={() => actions.selectTerritory(segment.displayName)}
+          onClick={() => actions.selectTerritory(segment.territoryName)}
           className="underline hover:no-underline"
         >
           {segment.text}
@@ -47,14 +51,20 @@ function renderSegment(
 export function SummaryReferences({ context, references }: SummaryReferencesProps) {
   const { actions } = useAppState();
   const availableYears = useAvailableYears();
-  const annotated = new AnnotatedContext(context, references);
-  const segments = annotated.segments(availableYears);
+  const paragraphs = splitIntoParagraphs(context);
 
   return (
-    <p className="mt-1 text-body-sm leading-relaxed text-text-secondary">
-      {segments.map((segment, index) =>
-        renderSegment(segment, `${segment.kind}-${index}`, actions),
-      )}
-    </p>
+    <div className="mt-1 space-y-2 text-body-sm leading-relaxed text-text-secondary">
+      {paragraphs.map((paragraph) => {
+        const segments = new AnnotatedContext(paragraph, references).segments(availableYears);
+        return (
+          <p key={paragraph}>
+            {segments.map((segment, index) =>
+              renderSegment(segment, `${segment.kind}-${index}`, actions),
+            )}
+          </p>
+        );
+      })}
+    </div>
   );
 }

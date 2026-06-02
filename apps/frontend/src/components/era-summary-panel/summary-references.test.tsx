@@ -58,8 +58,8 @@ describe('SummaryReferences', () => {
     expect(screen.getByText('では絶対王政が確立。')).toBeInTheDocument();
   });
 
-  it('dispatches selectTerritory with title-cased name when territory reference is clicked', () => {
-    const refs: EraSummaryReference[] = [{ kind: 'territory', target: 'france', text: 'フランス' }];
+  it('passes the territory NAME to selectTerritory when a territory reference is clicked', () => {
+    const refs: EraSummaryReference[] = [{ kind: 'territory', target: 'France', text: 'フランス' }];
     render(<SummaryReferences context="フランスの歴史。" references={refs} />);
 
     fireEvent.click(screen.getByRole('button', { name: 'フランス' }));
@@ -67,15 +67,15 @@ describe('SummaryReferences', () => {
     expect(mockSelectTerritory).toHaveBeenCalledWith('France');
   });
 
-  it('converts multi-word kebab-case territory to title case', () => {
+  it('passes a NAME with spaces and lowercase words through unchanged', () => {
     const refs: EraSummaryReference[] = [
-      { kind: 'territory', target: 'ottoman-empire', text: 'オスマン帝国' },
+      { kind: 'territory', target: 'Tsardom of Muscovy', text: 'ロシア' },
     ];
-    render(<SummaryReferences context="オスマン帝国の歴史。" references={refs} />);
+    render(<SummaryReferences context="ロシアの歴史。" references={refs} />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'オスマン帝国' }));
+    fireEvent.click(screen.getByRole('button', { name: 'ロシア' }));
 
-    expect(mockSelectTerritory).toHaveBeenCalledWith('Ottoman Empire');
+    expect(mockSelectTerritory).toHaveBeenCalledWith('Tsardom of Muscovy');
   });
 
   it('dispatches setSelectedYear when year reference is clicked and year is available', () => {
@@ -104,8 +104,8 @@ describe('SummaryReferences', () => {
 
   it('processes multiple references in order of first occurrence', () => {
     const refs: EraSummaryReference[] = [
-      { kind: 'territory', target: 'qing', text: '清' },
-      { kind: 'territory', target: 'japan', text: '日本' },
+      { kind: 'territory', target: 'Manchu Empire', text: '清' },
+      { kind: 'territory', target: 'Japan', text: '日本' },
     ];
     render(<SummaryReferences context="清と日本が存在する。" references={refs} />);
 
@@ -113,5 +113,23 @@ describe('SummaryReferences', () => {
     expect(buttons).toHaveLength(2);
     expect(buttons[0]).toHaveTextContent('清');
     expect(buttons[1]).toHaveTextContent('日本');
+  });
+
+  it('renders blank-line separated context as separate paragraphs', () => {
+    render(<SummaryReferences context={'第一段落の文。\n\n第二段落の文。'} references={noRefs} />);
+
+    const first = screen.getByText('第一段落の文。');
+    const second = screen.getByText('第二段落の文。');
+    expect(first.tagName).toBe('P');
+    expect(second.tagName).toBe('P');
+    expect(first).not.toBe(second);
+  });
+
+  it('annotates a reference inside the paragraph it appears in', () => {
+    const refs: EraSummaryReference[] = [{ kind: 'territory', target: 'france', text: 'フランス' }];
+    render(<SummaryReferences context={'最初の段落。\n\nフランスの段落。'} references={refs} />);
+
+    expect(screen.getByText('最初の段落。')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'フランス' })).toBeInTheDocument();
   });
 });
