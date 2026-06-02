@@ -3,27 +3,14 @@ import path from 'node:path';
 import { Client } from '@notionhq/client';
 import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
 import { NOTION_ERA_SUMMARY_PROPERTY, PATHS } from '@/config.ts';
-import { REGION_IDS, type RegionId } from '@/domain/era-summary/region-id.ts';
+import type {
+  EraSummary,
+  EraSummaryReference,
+  RegionCard,
+} from '@/domain/era-summary/era-summary.ts';
+import { isRegionId, REGION_IDS } from '@/domain/era-summary/region-id.ts';
 import { type TerritoryIdResolver, validateEraSummaryFile } from '@/era-summary/validate.ts';
 import type { PipelineLogger } from '@/shared/logger.ts';
-
-interface EraSummaryReference {
-  kind: 'territory' | 'year';
-  target: string;
-  text: string;
-}
-
-interface RegionCard {
-  region: RegionId;
-  title: string;
-  context: string;
-  references: EraSummaryReference[];
-}
-
-interface EraSummary {
-  year: number;
-  regions: RegionCard[];
-}
 
 export interface RegionEntry {
   year: number;
@@ -32,30 +19,34 @@ export interface RegionEntry {
 }
 
 function extractPlainText(
-  prop: PageObjectResponse['properties'][string] | undefined,
+  notionProperty: PageObjectResponse['properties'][string] | undefined,
 ): string | undefined {
-  if (!prop) return undefined;
-  if (prop.type === 'title') {
-    const text = prop.title.map((richTextItem) => richTextItem.plain_text).join('');
+  if (!notionProperty) return undefined;
+  if (notionProperty.type === 'title') {
+    const text = notionProperty.title.map((richTextItem) => richTextItem.plain_text).join('');
     return text || undefined;
   }
-  if (prop.type === 'rich_text') {
-    const text = prop.rich_text.map((richTextItem) => richTextItem.plain_text).join('');
+  if (notionProperty.type === 'rich_text') {
+    const text = notionProperty.rich_text.map((richTextItem) => richTextItem.plain_text).join('');
     return text || undefined;
   }
   return undefined;
 }
 
-function extractNumber(prop: PageObjectResponse['properties'][string] | undefined): number | null {
-  if (prop?.type === 'number') {
-    return prop.number;
+function extractNumber(
+  notionProperty: PageObjectResponse['properties'][string] | undefined,
+): number | null {
+  if (notionProperty?.type === 'number') {
+    return notionProperty.number;
   }
   return null;
 }
 
-function extractSelect(prop: PageObjectResponse['properties'][string] | undefined): string | null {
-  if (prop?.type === 'select') {
-    return prop.select?.name ?? null;
+function extractSelect(
+  notionProperty: PageObjectResponse['properties'][string] | undefined,
+): string | null {
+  if (notionProperty?.type === 'select') {
+    return notionProperty.select?.name ?? null;
   }
   return null;
 }
@@ -76,10 +67,6 @@ function parseReferences(
   }
 }
 
-function isValidRegionId(value: string): value is RegionId {
-  return (REGION_IDS as readonly string[]).includes(value);
-}
-
 export function transformNotionPage(
   page: PageObjectResponse,
   logger: Pick<PipelineLogger, 'warn'> = {
@@ -93,8 +80,7 @@ export function transformNotionPage(
 
   const regionRaw = extractSelect(notionProperties[NOTION_ERA_SUMMARY_PROPERTY.REGION]);
   if (!regionRaw) throw new Error(`Page ${page.id} has no Region`);
-  if (!isValidRegionId(regionRaw))
-    throw new Error(`Page ${page.id} has invalid Region: ${regionRaw}`);
+  if (!isRegionId(regionRaw)) throw new Error(`Page ${page.id} has invalid Region: ${regionRaw}`);
 
   const title = extractPlainText(notionProperties[NOTION_ERA_SUMMARY_PROPERTY.TITLE]);
   if (!title) throw new Error(`Page ${page.id} has no Title`);
@@ -116,22 +102,13 @@ export function transformNotionPage(
 
 const FALLBACK_ORDER_BASE = REGION_IDS.length;
 
-/**
- * Smaller value sorts earlier. Cards with an explicit Order keep that rank;
- * cards without one fall back to the canonical REGION_IDS order, placed after
- * any explicitly-ordered cards so a partially-migrated year stays deterministic.
- */
-function regionSortValue(entry: RegionEntry): number {
-  if (entry.order !== null) return entry.order;
-  return FALLBACK_ORDER_BASE + REGION_IDS.indexOf(entry.regionCard.region);
-}
-
 export class EraSummaryRegions {
   readonly #entriesByYear = new Map<number, RegionEntry[]>();
 
   add(entry: RegionEntry): void {
     const { year, regionCard } = entry;
-    const entries = this.#entriesByYear.get(year) ?? [];
+    const existingEntries = this.#entriesByYear.get(year);
+    const entries = existingEntries ?? [];
 
     const isDuplicate = entries.some(
       (existing) => existing.regionCard.region === regionCard.region,
@@ -141,16 +118,28 @@ export class EraSummaryRegions {
     }
 
     entries.push(entry);
-    this.#entriesByYear.set(year, entries);
+    if (existingEntries === undefined) {
+      this.#entriesByYear.set(year, entries);
+    }
   }
 
   build(): EraSummary[] {
     return Array.from(this.#entriesByYear.entries()).map(([year, entries]) => ({
       year,
       regions: [...entries]
-        .sort((a, b) => regionSortValue(a) - regionSortValue(b))
+        .sort((a, b) => this.#sortValue(a) - this.#sortValue(b))
         .map((entry) => entry.regionCard),
     }));
+  }
+
+  /**
+   * Smaller value sorts earlier. Cards with an explicit Order keep that rank;
+   * cards without one fall back to the canonical REGION_IDS order, placed after
+   * any explicitly-ordered cards so a partially-migrated year stays deterministic.
+   */
+  #sortValue(entry: RegionEntry): number {
+    if (entry.order !== null) return entry.order;
+    return FALLBACK_ORDER_BASE + REGION_IDS.indexOf(entry.regionCard.region);
   }
 }
 
@@ -167,7 +156,7 @@ async function fetchAllPages(
       data_source_id: dataSourceId,
       ...(cursor !== undefined && { start_cursor: cursor }),
       ...(yearFilter !== undefined && {
-        filter: { property: 'Year', number: { equals: yearFilter } },
+        filter: { property: NOTION_ERA_SUMMARY_PROPERTY.YEAR, number: { equals: yearFilter } },
       }),
     });
 

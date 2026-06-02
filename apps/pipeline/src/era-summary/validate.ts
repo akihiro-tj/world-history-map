@@ -51,13 +51,13 @@ const TERRITORY_REFERENCE_KIND = 'territory';
  * NAME the same way the frontend does, so the two stay aligned.
  */
 function collectReferenceErrors(
-  data: EraSummaryFile,
+  eraSummary: EraSummaryFile,
   resolveTerritoryIds: TerritoryIdResolver | undefined,
 ): string[] {
-  const territoryIds = resolveTerritoryIds ? resolveTerritoryIds(data.year) : undefined;
+  const territoryIds = resolveTerritoryIds ? resolveTerritoryIds(eraSummary.year) : undefined;
   const errors: string[] = [];
 
-  data.regions.forEach((region, regionIndex) => {
+  eraSummary.regions.forEach((region, regionIndex) => {
     region.references.forEach((reference, referenceIndex) => {
       const location = `regions.${regionIndex}.references.${referenceIndex}`;
 
@@ -71,11 +71,11 @@ function collectReferenceErrors(
 
       if (territoryIds === null) {
         errors.push(
-          `${location}.target: no descriptions exist for year ${data.year}, so territory "${reference.target}" cannot be resolved`,
+          `${location}.target: no descriptions exist for year ${eraSummary.year}, so territory "${reference.target}" cannot be resolved`,
         );
       } else if (!territoryIds.has(toTerritoryId(reference.target))) {
         errors.push(
-          `${location}.target: "${reference.target}" is not a territory at year ${data.year}`,
+          `${location}.target: "${reference.target}" is not a territory at year ${eraSummary.year}`,
         );
       }
     });
@@ -95,8 +95,8 @@ export function validateEraSummaryFile(
   resolveTerritoryIds?: TerritoryIdResolver,
 ): EraSummaryValidationResult {
   const content = readFileSync(filePath, 'utf-8');
-  const data = JSON.parse(content);
-  const parsed = eraSummaryFileSchema.safeParse(data);
+  const rawEraSummary = JSON.parse(content);
+  const parsed = eraSummaryFileSchema.safeParse(rawEraSummary);
 
   if (!parsed.success) {
     const errors = parsed.error.issues.map((issue) => `${issue.path.join('.')}: ${issue.message}`);
