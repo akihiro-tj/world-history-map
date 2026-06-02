@@ -38,6 +38,7 @@ export const NOTION_ERA_SUMMARY_PROPERTY = {
   TITLE: 'Title',
   CONTEXT: 'Context',
   REFERENCES: 'References',
+  ORDER: 'Order',
 } as const;
 
 export const NOTION = {

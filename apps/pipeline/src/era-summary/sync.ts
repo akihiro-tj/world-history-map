@@ -1,10 +1,10 @@
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { Client } from '@notionhq/client';
 import type { PageObjectResponse } from '@notionhq/client/build/src/api-endpoints';
-import { NOTION_ERA_SUMMARY_PROPERTY } from '@/config.ts';
+import { NOTION_ERA_SUMMARY_PROPERTY, PATHS } from '@/config.ts';
 import { REGION_IDS, type RegionId } from '@/domain/era-summary/region-id.ts';
-import { validateEraSummaryFile } from '@/era-summary/validate.ts';
+import { type TerritoryIdResolver, validateEraSummaryFile } from '@/era-summary/validate.ts';
 import type { PipelineLogger } from '@/shared/logger.ts';
 
 interface EraSummaryReference {
@@ -28,6 +28,7 @@ interface EraSummary {
 export interface RegionEntry {
   year: number;
   regionCard: RegionCard;
+  order: number | null;
 }
 
 function extractPlainText(
@@ -104,33 +105,52 @@ export function transformNotionPage(
   const referencesRaw = extractPlainText(notionProperties[NOTION_ERA_SUMMARY_PROPERTY.REFERENCES]);
   const references = parseReferences(referencesRaw, page.id, logger);
 
+  const order = extractNumber(notionProperties[NOTION_ERA_SUMMARY_PROPERTY.ORDER]);
+
   return {
     year,
     regionCard: { region: regionRaw, title, context, references },
+    order,
   };
 }
 
+const FALLBACK_ORDER_BASE = REGION_IDS.length;
+
+/**
+ * Smaller value sorts earlier. Cards with an explicit Order keep that rank;
+ * cards without one fall back to the canonical REGION_IDS order, placed after
+ * any explicitly-ordered cards so a partially-migrated year stays deterministic.
+ */
+function regionSortValue(entry: RegionEntry): number {
+  if (entry.order !== null) return entry.order;
+  return FALLBACK_ORDER_BASE + REGION_IDS.indexOf(entry.regionCard.region);
+}
+
 export class EraSummaryRegions {
-  readonly #cardsByYear = new Map<number, RegionCard[]>();
+  readonly #entriesByYear = new Map<number, RegionEntry[]>();
 
   add(entry: RegionEntry): void {
     const { year, regionCard } = entry;
-    if (!this.#cardsByYear.has(year)) {
-      this.#cardsByYear.set(year, []);
-    }
-    const cards = this.#cardsByYear.get(year);
-    if (!cards) return;
+    const entries = this.#entriesByYear.get(year) ?? [];
 
-    const isDuplicate = cards.some((card) => card.region === regionCard.region);
+    const isDuplicate = entries.some(
+      (existing) => existing.regionCard.region === regionCard.region,
+    );
     if (isDuplicate) {
       throw new Error(`Duplicate Year×Region: year=${year}, region=${regionCard.region}`);
     }
 
-    cards.push(regionCard);
+    entries.push(entry);
+    this.#entriesByYear.set(year, entries);
   }
 
   build(): EraSummary[] {
-    return Array.from(this.#cardsByYear.entries()).map(([year, regions]) => ({ year, regions }));
+    return Array.from(this.#entriesByYear.entries()).map(([year, entries]) => ({
+      year,
+      regions: [...entries]
+        .sort((a, b) => regionSortValue(a) - regionSortValue(b))
+        .map((entry) => entry.regionCard),
+    }));
   }
 }
 
@@ -183,7 +203,29 @@ function transformPages(
   return { entries, errorCount };
 }
 
-function writeSummaries(summaries: EraSummary[], outputDir: string, logger: PipelineLogger): void {
+function createDescriptionTerritoryResolver(descriptionsDir: string): TerritoryIdResolver {
+  const cache = new Map<number, ReadonlySet<string> | null>();
+
+  return (year) => {
+    const cached = cache.get(year);
+    if (cached !== undefined) return cached;
+
+    const filePath = path.join(descriptionsDir, `${year}.json`);
+    const territoryIds = existsSync(filePath)
+      ? new Set(Object.keys(JSON.parse(readFileSync(filePath, 'utf-8')) as Record<string, unknown>))
+      : null;
+
+    cache.set(year, territoryIds);
+    return territoryIds;
+  };
+}
+
+function writeSummaries(
+  summaries: EraSummary[],
+  outputDir: string,
+  resolveTerritoryIds: TerritoryIdResolver,
+  logger: PipelineLogger,
+): void {
   mkdirSync(outputDir, { recursive: true });
 
   let validationErrors = 0;
@@ -192,7 +234,7 @@ function writeSummaries(summaries: EraSummary[], outputDir: string, logger: Pipe
     const filePath = path.join(outputDir, `${summary.year}.json`);
     writeFileSync(filePath, `${JSON.stringify(summary, null, 2)}\n`);
 
-    const validation = validateEraSummaryFile(filePath);
+    const validation = validateEraSummaryFile(filePath, resolveTerritoryIds);
     if (!validation.valid) {
       validationErrors++;
       for (const validationError of validation.errors) {
@@ -231,5 +273,10 @@ export async function syncEraSummaries(
     regions.add(entry);
   }
 
-  writeSummaries(regions.build(), outputDir, logger);
+  writeSummaries(
+    regions.build(),
+    outputDir,
+    createDescriptionTerritoryResolver(PATHS.descriptionsDir),
+    logger,
+  );
 }
