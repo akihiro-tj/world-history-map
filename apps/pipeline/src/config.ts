@@ -41,26 +41,23 @@ export const NOTION_ERA_SUMMARY_PROPERTY = {
   ORDER: 'Order',
 } as const;
 
+const OP_SECRET_REFERENCES = {
+  territoryDescriptionsDataSourceId:
+    'op://dev/world-history-map-pipeline/territory-descriptions-datasource-id',
+  eraSummaryDataSourceId: 'op://dev/world-history-map-pipeline/era-summary-datasource-id',
+  credential: 'op://dev/world-history-map-pipeline/credential',
+} as const;
+
+function readOpSecret(secretReference: string): string {
+  return execFileSync('op', ['read', secretReference], { encoding: 'utf-8' }).trim();
+}
+
 export const NOTION = {
-  getDataSourceId: (): string => {
-    return execFileSync(
-      'op',
-      ['read', 'op://dev/world-history-map-pipeline/territory-descriptions-datasource-id'],
-      { encoding: 'utf-8' },
-    ).trim();
-  },
-  getEraSummaryDataSourceId: (): string => {
-    return execFileSync(
-      'op',
-      ['read', 'op://dev/world-history-map-pipeline/era-summary-datasource-id'],
-      { encoding: 'utf-8' },
-    ).trim();
-  },
-  getToken: (): string => {
-    return execFileSync('op', ['read', 'op://dev/world-history-map-pipeline/credential'], {
-      encoding: 'utf-8',
-    }).trim();
-  },
+  getDataSourceId: (): string =>
+    readOpSecret(OP_SECRET_REFERENCES.territoryDescriptionsDataSourceId),
+  getEraSummaryDataSourceId: (): string =>
+    readOpSecret(OP_SECRET_REFERENCES.eraSummaryDataSourceId),
+  getToken: (): string => readOpSecret(OP_SECRET_REFERENCES.credential),
 } as const;
 
 export const PATHS = {
