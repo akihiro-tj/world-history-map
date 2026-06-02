@@ -138,9 +138,9 @@ git push
 
 外部ツール（PATH 上に必要）:
 
+- `tippecanoe` / `tile-join` — GeoJSON → MVT → PMTiles 変換とレイヤ結合。リポジトリ直下の Nix devShell (`flake.nix`) が提供する。`direnv allow` で自動有効化、または `nix develop` で入る
 - `git` — `historical-basemaps` の clone/pull
-- `tippecanoe` — GeoJSON → MVT → PMTiles
-- `op` — Notion 認証情報を 1Password から取り出す
+- `op` — Notion 認証情報を 1Password から取り出す（territory-sync 用）。Nix devShell には含めないためシステムに別途インストールする
 
 出力先:
 
