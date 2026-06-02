@@ -13,7 +13,11 @@ const referenceSchema = z.object({
 const regionCardSchema = z.object({
   region: regionIdSchema,
   title: z.string().min(1).max(ERA_SUMMARY_CONSTRAINTS.TITLE_MAX_LENGTH),
-  context: z.string().min(1).max(ERA_SUMMARY_CONSTRAINTS.CONTEXT_MAX_LENGTH),
+  context: z
+    .string()
+    .min(1)
+    .max(ERA_SUMMARY_CONSTRAINTS.CONTEXT_MAX_LENGTH)
+    .refine((value) => value.trim().length > 0, { message: 'context must not be blank' }),
   references: z.array(referenceSchema).optional().default([]),
 });
 
@@ -31,8 +35,6 @@ const eraSummaryFileSchema = z.object({
       { message: 'regions must not contain duplicate region identifiers' },
     ),
 });
-
-type EraSummaryFile = z.infer<typeof eraSummaryFileSchema>;
 
 /**
  * The territories at a year from the two views a reference depends on:
@@ -76,32 +78,57 @@ function territoryReferenceErrors(
   return errors;
 }
 
+function asString(value: unknown): string | null {
+  return typeof value === 'string' ? value : null;
+}
+
 /**
  * Checks the cross-referential invariants the frontend silently depends on:
  * a reference whose `text` is absent from `context` is dropped at render time;
  * a territory `target` whose derived id has no description selects nothing; and a
  * `target` that is not an exact GeoJSON NAME never highlights on the map.
+ *
+ * Reads the raw parsed JSON defensively rather than the schema's typed output so
+ * these errors surface in the same pass as schema errors instead of only after the
+ * structure is fixed; anything too malformed to read is left to the schema.
  */
 function collectReferenceErrors(
-  eraSummary: EraSummaryFile,
+  raw: unknown,
   resolveYearTerritories: YearTerritoriesResolver | undefined,
 ): string[] {
-  const territories = resolveYearTerritories ? resolveYearTerritories(eraSummary.year) : undefined;
+  if (typeof raw !== 'object' || raw === null) return [];
+  const { year, regions } = raw as { year?: unknown; regions?: unknown };
+  if (!Array.isArray(regions)) return [];
+
+  const numericYear = typeof year === 'number' ? year : null;
+  const territories =
+    resolveYearTerritories && numericYear !== null
+      ? resolveYearTerritories(numericYear)
+      : undefined;
   const errors: string[] = [];
 
-  eraSummary.regions.forEach((region, regionIndex) => {
-    region.references.forEach((reference, referenceIndex) => {
-      const location = `regions.${regionIndex}.references.${referenceIndex}`;
+  regions.forEach((region, regionIndex) => {
+    if (typeof region !== 'object' || region === null) return;
+    const context = asString((region as { context?: unknown }).context);
+    const references = (region as { references?: unknown }).references;
+    if (context === null || !Array.isArray(references)) return;
 
-      if (!region.context.includes(reference.text)) {
-        errors.push(
-          `${location}.text: "${reference.text}" does not appear in context and will be dropped`,
-        );
+    references.forEach((reference, referenceIndex) => {
+      if (typeof reference !== 'object' || reference === null) return;
+      const text = asString((reference as { text?: unknown }).text);
+      const target = asString((reference as { target?: unknown }).target);
+      if (text === null || target === null) return;
+
+      const location = `regions.${regionIndex}.references.${referenceIndex}`;
+      if (!context.includes(text)) {
+        errors.push(`${location}.text: "${text}" does not appear in context and will be dropped`);
       }
 
-      if (reference.kind !== TERRITORY_REFERENCE_KIND || territories === undefined) return;
-
-      errors.push(...territoryReferenceErrors(reference, eraSummary.year, territories, location));
+      const kind = (reference as { kind?: unknown }).kind;
+      if (kind !== TERRITORY_REFERENCE_KIND || territories === undefined || numericYear === null) {
+        return;
+      }
+      errors.push(...territoryReferenceErrors({ target }, numericYear, territories, location));
     });
   });
 
@@ -122,11 +149,11 @@ export function validateEraSummaryFile(
   const rawEraSummary = JSON.parse(content);
   const parsed = eraSummaryFileSchema.safeParse(rawEraSummary);
 
-  if (!parsed.success) {
-    const errors = parsed.error.issues.map((issue) => `${issue.path.join('.')}: ${issue.message}`);
-    return { filePath, valid: false, errors };
-  }
+  const schemaErrors = parsed.success
+    ? []
+    : parsed.error.issues.map((issue) => `${issue.path.join('.')}: ${issue.message}`);
+  const referenceErrors = collectReferenceErrors(rawEraSummary, resolveYearTerritories);
+  const errors = [...schemaErrors, ...referenceErrors];
 
-  const referenceErrors = collectReferenceErrors(parsed.data, resolveYearTerritories);
-  return { filePath, valid: referenceErrors.length === 0, errors: referenceErrors };
+  return { filePath, valid: errors.length === 0, errors };
 }

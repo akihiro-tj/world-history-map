@@ -205,9 +205,12 @@ function transformPages(
 
 function readDescriptionIds(filePath: string): ReadonlySet<string> | null {
   if (!existsSync(filePath)) return null;
-  return new Set(
-    Object.keys(JSON.parse(readFileSync(filePath, 'utf-8')) as Record<string, unknown>),
-  );
+
+  const parsed = JSON.parse(readFileSync(filePath, 'utf-8'));
+  if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
+    throw new Error(`Malformed descriptions file (expected a JSON object): ${filePath}`);
+  }
+  return new Set(Object.keys(parsed));
 }
 
 function readGeojsonNames(filePath: string): ReadonlySet<string> | null {

@@ -206,4 +206,37 @@ describe('validateEraSummaryFile', () => {
     expect(result.valid).toBe(false);
     expect(result.errors.join(' ')).toMatch(/duplicate region/);
   });
+
+  it('rejects a blank context', () => {
+    const filePath = writeSummary({
+      year: 1650,
+      regions: [{ region: 'europe', title: 'ヨーロッパ', context: '   ', references: [] }],
+    });
+
+    const result = validateEraSummaryFile(filePath, resolveFranceOnly);
+
+    expect(result.valid).toBe(false);
+    expect(result.errors.join(' ')).toMatch(/must not be blank/);
+  });
+
+  it('reports schema errors and reference errors in a single pass', () => {
+    const filePath = writeSummary({
+      year: 1650,
+      regions: [
+        {
+          region: 'europe',
+          title: 'A',
+          context: 'ctx',
+          references: [{ kind: 'territory', target: 'France', text: 'フランス' }],
+        },
+        { region: 'europe', title: 'B', context: 'ctx', references: [] },
+      ],
+    });
+
+    const result = validateEraSummaryFile(filePath, resolveFranceOnly);
+
+    expect(result.valid).toBe(false);
+    expect(result.errors.join(' ')).toMatch(/duplicate region/);
+    expect(result.errors.join(' ')).toMatch(/does not appear in context/);
+  });
 });
