@@ -41,10 +41,10 @@ describe('SummaryTrigger', () => {
     mockActivePanelKind = 'none';
   });
 
-  it('renders with 概要 label', () => {
+  it('renders with 時代の概観 label', () => {
     render(<SummaryTrigger />);
 
-    expect(screen.getByText('概要')).toBeInTheDocument();
+    expect(screen.getByText('時代の概観')).toBeInTheDocument();
   });
 
   it('returns null when summary panel is open', () => {
@@ -72,6 +72,6 @@ describe('SummaryTrigger', () => {
   it('has aria-label for accessibility', () => {
     render(<SummaryTrigger />);
 
-    expect(screen.getByRole('button')).toHaveAttribute('aria-label', '概要を開く');
+    expect(screen.getByRole('button')).toHaveAttribute('aria-label', '時代の概観を開く');
   });
 });

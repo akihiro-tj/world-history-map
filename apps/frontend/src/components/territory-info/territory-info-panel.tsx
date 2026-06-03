@@ -48,7 +48,7 @@ function PanelWrapper({
       className={cn(
         'absolute left-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] flex flex-col overflow-hidden rounded-lg bg-surface-panel shadow-xl backdrop-blur-sm',
         SELECTED_ACCENT_CLASS,
-        scrollable && 'max-h-[calc(100vh-2rem)]',
+        scrollable && 'max-h-[calc(100dvh-100px)]',
       )}
     >
       {children}
@@ -73,7 +73,7 @@ function PanelHeader({
           <h2 id="territory-info-title" className="mt-2.5 text-panel-title text-text-primary">
             {name}
           </h2>
-          {era && <p className="mt-0.5 text-body-sm text-text-secondary">{era}</p>}
+          {era && <p className="mt-0.5 text-body text-text-secondary">{era}</p>}
         </div>
         <CloseButton aria-label="閉じる" onClick={onClose} />
       </div>
@@ -100,7 +100,7 @@ function DescriptionBody({
     <div data-testid="territory-description" className="space-y-3 px-4 py-4">
       <TerritoryProfile profile={description.profile} />
       {description.context && (
-        <p className="text-body-sm leading-relaxed text-text-secondary">{description.context}</p>
+        <p className="text-body leading-relaxed text-text-secondary">{description.context}</p>
       )}
       <TerritoryTimeline keyEvents={description.keyEvents} selectedYear={selectedYear} />
     </div>
@@ -221,7 +221,7 @@ function MobileContent(props: ContentProps) {
                 {headerName}
               </h2>
               {headerEra && (
-                <p className="leading-tight text-body-sm text-text-secondary">{headerEra}</p>
+                <p className="leading-tight text-body text-text-secondary">{headerEra}</p>
               )}
             </SelectedAccent>
           </div>

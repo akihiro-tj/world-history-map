@@ -241,14 +241,14 @@ describe('TerritoryInfoPanel - US-3: SummaryNavStrip integration', () => {
   it('renders summary nav strip', () => {
     render(<TerritoryInfoPanel />);
 
-    expect(screen.getByText('1700年の世界の概要')).toBeInTheDocument();
+    expect(screen.getByText('1700年の概観')).toBeInTheDocument();
   });
 
   it('close button and breadcrumb are both rendered', () => {
     render(<TerritoryInfoPanel />);
 
     expect(screen.getByRole('button', { name: /閉じる/i })).toBeInTheDocument();
-    expect(screen.getByText('1700年の世界の概要')).toBeInTheDocument();
+    expect(screen.getByText('1700年の概観')).toBeInTheDocument();
   });
 
   it('close button is outside the header content block', () => {
@@ -263,13 +263,13 @@ describe('TerritoryInfoPanel - US-3: SummaryNavStrip integration', () => {
   it('breadcrumb label and description both follow year change', () => {
     const { rerender } = render(<TerritoryInfoPanel />);
 
-    expect(screen.getByText('1700年の世界の概要')).toBeInTheDocument();
+    expect(screen.getByText('1700年の概観')).toBeInTheDocument();
 
     mockSelectedYear = createHistoricalYear(1800);
     mockDescriptionValue = { ...richDescription, name: '1800 年のフランス' };
     rerender(<TerritoryInfoPanel />);
 
-    expect(screen.getByText('1800年の世界の概要')).toBeInTheDocument();
+    expect(screen.getByText('1800年の概観')).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('1800 年のフランス');
   });
 });

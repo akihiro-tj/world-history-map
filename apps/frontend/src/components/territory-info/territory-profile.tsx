@@ -9,7 +9,7 @@ export function TerritoryProfile({ profile }: { profile: TerritoryProfileType | 
   if (entries.length === 0) return null;
 
   return (
-    <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-body-sm">
+    <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-body">
       {entries.map((field) => (
         <div key={field} className="contents">
           <dt className="text-text-tertiary">{PROFILE_FIELD_LABELS[field]}</dt>
