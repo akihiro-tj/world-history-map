@@ -1,0 +1,12 @@
+lockfile_version: '1'
+generated_at: '2026-06-03T23:55:06.806242+00:00'
+apm_version: 0.16.1
+dependencies:
+- repo_url: nextlevelbuilder/ui-ux-pro-max-skill
+  host: github.com
+  resolved_commit: 07f4ef3ac2568c25a3b0c8ef5165a86abc3e56e4
+  resolved_ref: v2.5.0
+  package_type: marketplace_plugin
+  deployed_files:
+  - .claude/skills/ui-ux-pro-max
+  content_hash: sha256:7841d183a3a1a142c36e83a5ed22348e0e1361db7fe854b587a8513edde61b53

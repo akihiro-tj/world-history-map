@@ -57,3 +57,7 @@ storybook-static
 
 # Playwright CLI
 .playwright-cli/
+
+
+# APM dependencies
+apm_modules/
