@@ -8,47 +8,40 @@
 
     <style type="text/tailwindcss">
       @theme {
-        --color-role-selected: #f73d62;
-        --color-role-loading: #46a6ff;
-        --color-role-warn: #f2a618;
+        --color-role-selected: #f5b13d;
+        --color-role-loading: #38bdf8;
         --color-role-error: #f9423d;
-        --color-role-focus: #0072d5;
-        --color-role-link: #51a2ff;
+        --color-role-focus: #38bdf8;
+        --color-role-link: #5aa2ff;
         --color-role-link-hover: #8ec5ff;
         --color-role-label-text: #eeeeee;
         --color-role-label-halo: #161616;
-        --color-surface-base: #0a0e11;
-        --color-surface-sheet: #1e2939;
-        --color-surface-panel: #364153f2;
+        --color-surface-base: #0a0e14;
+        --color-surface-sheet: #1b2533;
+        --color-surface-panel: #2d3a4cf2;
         --color-surface-raised: #ffffff24;
-        --color-surface-handle: #6a7282;
-        --color-surface-border: #44484d;
+        --color-surface-handle: #687587;
+        --color-surface-border: #3c4654;
         --color-surface-scrim: #00000080;
         --color-text-primary: #ffffff;
         --color-text-secondary: #d4d4d4;
-        --color-text-tertiary: #a1a1a1;
+        --color-text-tertiary: #adadad;
         --color-text-quiet: #717171;
         --color-text-dimmed: #ffffff99;
-        --text-active-year: 20px;
-        --text-active-year--font-weight: 700;
-        --text-active-year--line-height: 28px;
-        --text-modal-title: 20px;
-        --text-modal-title--font-weight: 600;
-        --text-modal-title--line-height: 28px;
-        --text-panel-title: 18px;
+        --text-title: 20px;
+        --text-title--font-weight: 700;
+        --text-title--line-height: 28px;
+        --text-panel-title: 20px;
         --text-panel-title--font-weight: 600;
         --text-panel-title--line-height: 28px;
         --text-section-heading: 16px;
         --text-section-heading--font-weight: 600;
         --text-section-heading--line-height: 24px;
+        --text-label: 16px;
+        --text-label--font-weight: 500;
+        --text-label--line-height: 24px;
         --text-body: 16px;
-        --text-body--font-weight: 500;
         --text-body--line-height: 24px;
-        --text-card-title: 14px;
-        --text-card-title--font-weight: 600;
-        --text-card-title--line-height: 20px;
-        --text-body-sm: 14px;
-        --text-body-sm--line-height: 20px;
         --text-caption: 12px;
         --text-caption--line-height: 16px;
         --spacing: 4px;
@@ -84,6 +77,10 @@
           transition-duration: 0.01ms !important;
           scroll-behavior: auto !important;
         }
+      }
+
+      section[id] {
+        scroll-margin-top: 3.5rem;
       }
 
       .sr-only {
@@ -124,7 +121,7 @@
     <header class="border-b border-surface-border px-6 py-4">
       <p class="text-caption text-text-tertiary">world-history-map · design mock</p>
       <h1 class="mt-1 text-panel-title text-text-primary">design-showcase — v1</h1>
-      <p class="mt-1 text-body-sm text-text-tertiary">
+      <p class="mt-1 text-body text-text-tertiary">
         DESIGN.md のトークンとコンポーネントを 1 枚に可視化したデザインシステム参照ページ
       </p>
       <nav class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-caption">
@@ -132,10 +129,10 @@
           DESIGN.md
         </a>
         <a
-          href="https://github.com/kzhrknt/awesome-design-md-jp"
+          href="https://github.com/google-labs-code/design.md"
           class="text-role-link underline hover:text-role-link-hover"
         >
-          参照: awesome-design-md-jp
+          参照: design.md
         </a>
         <a href="../../index.html" class="text-role-link underline hover:text-role-link-hover">
           ← モック一覧
@@ -143,110 +140,129 @@
       </nav>
     </header>
 
+    <nav aria-label="セクション" class="sticky top-0 z-40 border-b border-surface-border bg-surface-base/90 backdrop-blur">
+      <ul class="mx-auto flex max-w-5xl flex-wrap gap-x-4 gap-y-1 px-6 py-2 text-caption">
+        <li><a href="#overview" class="text-text-tertiary underline-offset-2 hover:text-text-primary hover:underline">Overview</a></li>
+        <li><a href="#colors" class="text-text-tertiary underline-offset-2 hover:text-text-primary hover:underline">Colors</a></li>
+        <li><a href="#typography" class="text-text-tertiary underline-offset-2 hover:text-text-primary hover:underline">Typography</a></li>
+        <li><a href="#spacing" class="text-text-tertiary underline-offset-2 hover:text-text-primary hover:underline">Spacing</a></li>
+        <li><a href="#shapes" class="text-text-tertiary underline-offset-2 hover:text-text-primary hover:underline">Shapes</a></li>
+        <li><a href="#elevation" class="text-text-tertiary underline-offset-2 hover:text-text-primary hover:underline">Elevation</a></li>
+        <li><a href="#components" class="text-text-tertiary underline-offset-2 hover:text-text-primary hover:underline">Components</a></li>
+        <li><a href="#dos" class="text-text-tertiary underline-offset-2 hover:text-text-primary hover:underline">Do/Don't</a></li>
+      </ul>
+    </nav>
+
     <main class="mx-auto max-w-5xl px-6 py-10">
       <!-- ===== Overview ===== -->
-      <section class="mb-14">
+      <section id="overview" class="mb-14">
         <h2 class="text-panel-title text-text-primary">Overview</h2>
-        <p class="mt-3 max-w-2xl text-body-sm leading-relaxed text-text-secondary">
+        <p class="mt-3 max-w-2xl text-body leading-relaxed text-text-secondary">
           画面全体が生きた MapLibre のグローブで、それ以外はすべてその上に浮かぶ半透明のコントロール面。
-          デザイン言語は <span class="text-text-primary">dark data console / HUD</span> — 落ち着いた
-          クールスレートの中立色、規律ある白のテキスト階層、そして「ここ / いま」だけに使う単一の暖色アクセント。
-          地理が常に主役で、UI は隅にまとまり地図と競合しない。
+          デザイン言語は <span class="text-text-primary">dark immersive atlas — 夜の天文台</span> — 落ち着いた
+          クールスレートの地、規律ある白のテキスト階層、そして「ここ / いま」だけに灯す単一の暖色（ゴールド）。
+          地理が常に主役で、UI はレンズを囲む静かな観測機器のように隅へ退き、地図と競合しない。
         </p>
-        <div class="mt-4 flex flex-wrap gap-2">
-          <span
-            class="rounded-full bg-surface-panel px-3 py-1 text-caption text-text-secondary backdrop-blur-sm"
-          >
-            cool-slate neutrals
-          </span>
-          <span
-            class="rounded-full bg-surface-panel px-3 py-1 text-caption text-text-secondary backdrop-blur-sm"
-          >
-            system font / lang=ja
-          </span>
-          <span
-            class="rounded-full bg-surface-panel px-3 py-1 text-caption text-text-secondary backdrop-blur-sm"
-          >
-            rose accent = here / now
-          </span>
-          <span
-            class="rounded-full bg-surface-panel px-3 py-1 text-caption text-text-secondary backdrop-blur-sm"
-          >
-            depth = frosted glass
-          </span>
+        <div class="map-void mt-4 rounded-lg border border-surface-border p-3">
+          <div class="flex flex-wrap gap-2">
+            <span class="rounded-full bg-surface-panel px-3 py-1 text-caption text-text-secondary backdrop-blur-sm">
+              cool-slate neutrals
+            </span>
+            <span class="rounded-full bg-surface-panel px-3 py-1 text-caption text-text-secondary backdrop-blur-sm">
+              system font / lang=ja
+            </span>
+            <span class="rounded-full bg-surface-panel px-3 py-1 text-caption text-text-secondary backdrop-blur-sm">
+              gold accent = here / now
+            </span>
+            <span class="rounded-full bg-surface-panel px-3 py-1 text-caption text-text-secondary backdrop-blur-sm">
+              depth = frosted glass
+            </span>
+          </div>
         </div>
+
+        <h3 class="mt-7 text-section-heading text-text-primary">原則 — この6つが全決定を生む</h3>
+        <ol class="mt-3 grid gap-2 text-body leading-relaxed text-text-secondary sm:grid-cols-2">
+          <li><span class="text-text-primary">1. 地図が主役、UI は観測機器</span> — 暗い地・frosted・退く chrome はここから導かれる</li>
+          <li><span class="text-text-primary">2. 暖色の一点 =「ここ / いま」</span> — ゴールドは選択領土と現在年だけ。意味は希少さ</li>
+          <li><span class="text-text-primary">3. 読むための道具</span> — 本文は読みやすさ優先。サイズは“種類”を、色は“同じ種類内の主従”を表す（副次は縮めず暗くする）</li>
+          <li><span class="text-text-primary">4. 選んで探る、入力しない</span> — map と年代ストリップが主たる入力面。フォームは持たず、操作の大半が select なので focus ring が主役の手がかり</li>
+          <li><span class="text-text-primary">5. 非同期は常に明示</span> — loading / empty / error / loaded を必ず描く</li>
+          <li><span class="text-text-primary">6. モバイルは reflow せず re-home</span> — FAB + bottom sheet に再配置</li>
+        </ol>
       </section>
 
       <!-- ===== Colors ===== -->
-      <section class="mb-14">
+      <section id="colors" class="mb-14">
         <h2 class="text-panel-title text-text-primary">Colors</h2>
-        <p class="mt-2 max-w-2xl text-body-sm leading-relaxed text-text-secondary">
-          色は hue ではなく <span class="text-text-primary">role（役割）</span> で命名される。chrome
-          の色はすべてトークン経由（領土の塗りはデータ駆動で、ここには含めない）。
+        <p class="mt-2 max-w-2xl text-body leading-relaxed text-text-secondary">
+          色は hue ではなく <span class="text-text-primary">role（役割）</span> で命名し、値は「役割が違えば
+          見た目も違う」を満たすよう選ぶ。chrome の色はすべてトークン経由（領土の塗りはデータ駆動で、ここには含めない）。
         </p>
 
-        <!-- Accent & State -->
-        <h3 class="mt-7 text-section-heading text-text-primary">Accent &amp; State</h3>
+        <!-- Accent -->
+        <h3 class="mt-7 text-section-heading text-text-primary">Accent — 唯一の持続する暖色</h3>
         <div
-          class="mt-3 rounded-lg border border-role-selected/40 bg-role-selected/10 px-4 py-3 text-body-sm text-text-secondary"
+          class="mt-3 rounded-lg border border-role-selected/40 bg-role-selected/10 px-4 py-3 text-body text-text-secondary"
         >
           <span class="font-mono text-role-selected">role-selected</span>
-          は唯一の暖色。<span class="text-text-primary">選択中の領土</span> と
+          は安静時に唯一光る暖色（ゴールド）。<span class="text-text-primary">選択中の領土</span> と
           <span class="text-text-primary">現在の年</span>
-          にだけ使う。hover や一般的な強調に使うと「いま / ここ」のシグナルが消える。
+          にだけ使う。天文台の一点の光であり、hover や一般的な強調に浪費すると「いま / ここ」のシグナルが消える。
         </div>
         <div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-          <!-- swatch: role-selected -->
           <div class="overflow-hidden rounded-lg border border-surface-border">
             <div class="h-16 bg-role-selected"></div>
             <div class="px-3 py-2">
               <p class="font-mono text-caption text-text-primary">role-selected</p>
-              <p class="font-mono text-caption text-text-quiet">#f73d62</p>
+              <p class="font-mono text-caption text-text-tertiary">#f5b13d</p>
               <p class="mt-1 text-caption text-text-tertiary">選択領土 / 現在の年</p>
             </div>
           </div>
+        </div>
+
+        <!-- Status -->
+        <h3 class="mt-7 text-section-heading text-text-primary">Status — フィードバック時だけ現れる過渡色</h3>
+        <p class="mt-1 text-caption text-text-tertiary">
+          ローディング/フォーカスのシステム青とエラーの赤。いずれも表示中だけ現れて消える過渡色で、安静時の UI に居座らずゴールドのアクセントと競合しない。role-loading と role-focus は同値（#38bdf8）の同じシステム青で、用途だけが異なる（識別の必要がない過渡シグナル）。warning 状態はこのプロダクトに存在しないため warn 色は持たない。
+        </p>
+        <div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
           <div class="overflow-hidden rounded-lg border border-surface-border">
             <div class="h-16 bg-role-loading"></div>
             <div class="px-3 py-2">
               <p class="font-mono text-caption text-text-primary">role-loading</p>
-              <p class="font-mono text-caption text-text-quiet">#46a6ff</p>
-              <p class="mt-1 text-caption text-text-tertiary">ローディング</p>
-            </div>
-          </div>
-          <div class="overflow-hidden rounded-lg border border-surface-border">
-            <div class="h-16 bg-role-warn"></div>
-            <div class="px-3 py-2">
-              <p class="font-mono text-caption text-text-primary">role-warn</p>
-              <p class="font-mono text-caption text-text-quiet">#f2a618</p>
-              <p class="mt-1 text-caption text-text-tertiary">警告</p>
-            </div>
-          </div>
-          <div class="overflow-hidden rounded-lg border border-surface-border">
-            <div class="h-16 bg-role-error"></div>
-            <div class="px-3 py-2">
-              <p class="font-mono text-caption text-text-primary">role-error</p>
-              <p class="font-mono text-caption text-text-quiet">#f9423d</p>
-              <p class="mt-1 text-caption text-text-tertiary">エラー</p>
+              <p class="font-mono text-caption text-text-tertiary">#38bdf8</p>
+              <p class="mt-1 text-caption text-text-tertiary">ローディング（システム青）</p>
             </div>
           </div>
           <div class="overflow-hidden rounded-lg border border-surface-border">
             <div class="h-16 bg-role-focus"></div>
             <div class="px-3 py-2">
               <p class="font-mono text-caption text-text-primary">role-focus</p>
-              <p class="font-mono text-caption text-text-quiet">#0072d5</p>
-              <p class="mt-1 text-caption text-text-tertiary">フォーカスリング</p>
+              <p class="font-mono text-caption text-text-tertiary">#38bdf8</p>
+              <p class="mt-1 text-caption text-text-tertiary">フォーカスリング（同・システム青）</p>
+            </div>
+          </div>
+          <div class="overflow-hidden rounded-lg border border-surface-border">
+            <div class="h-16 bg-role-error"></div>
+            <div class="px-3 py-2">
+              <p class="font-mono text-caption text-text-primary">role-error</p>
+              <p class="font-mono text-caption text-text-tertiary">#f9423d</p>
+              <p class="mt-1 text-caption text-text-tertiary">エラー（赤）</p>
             </div>
           </div>
         </div>
 
         <!-- Links -->
-        <h3 class="mt-7 text-section-heading text-text-primary">Links</h3>
+        <h3 class="mt-7 text-section-heading text-text-primary">Links — 唯一の持続する青</h3>
+        <p class="mt-1 text-caption text-text-tertiary">
+          リンクは藍寄りの青。過渡的なシステム青（loading / focus）とは色域を分け、役割の差を目で識別できるようにする。
+        </p>
         <div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
           <div class="overflow-hidden rounded-lg border border-surface-border">
             <div class="h-16 bg-role-link"></div>
             <div class="px-3 py-2">
               <p class="font-mono text-caption text-text-primary">role-link</p>
-              <p class="font-mono text-caption text-text-quiet">#51a2ff</p>
+              <p class="font-mono text-caption text-text-tertiary">#5aa2ff</p>
               <p class="mt-1 text-caption text-text-tertiary">ハイパーリンク</p>
             </div>
           </div>
@@ -254,7 +270,7 @@
             <div class="h-16 bg-role-link-hover"></div>
             <div class="px-3 py-2">
               <p class="font-mono text-caption text-text-primary">role-link-hover</p>
-              <p class="font-mono text-caption text-text-quiet">#8ec5ff</p>
+              <p class="font-mono text-caption text-text-tertiary">#8ec5ff</p>
               <p class="mt-1 text-caption text-text-tertiary">リンク hover</p>
             </div>
           </div>
@@ -270,7 +286,7 @@
             <div class="h-16 bg-role-label-text"></div>
             <div class="px-3 py-2">
               <p class="font-mono text-caption text-text-primary">role-label-text</p>
-              <p class="font-mono text-caption text-text-quiet">#eeeeee</p>
+              <p class="font-mono text-caption text-text-tertiary">#eeeeee</p>
               <p class="mt-1 text-caption text-text-tertiary">ラベル文字</p>
             </div>
           </div>
@@ -278,21 +294,23 @@
             <div class="h-16 bg-role-label-halo"></div>
             <div class="px-3 py-2">
               <p class="font-mono text-caption text-text-primary">role-label-halo</p>
-              <p class="font-mono text-caption text-text-quiet">#161616</p>
+              <p class="font-mono text-caption text-text-tertiary">#161616</p>
               <p class="mt-1 text-caption text-text-tertiary">ラベルの縁取り</p>
             </div>
           </div>
         </div>
 
         <!-- Surfaces -->
-        <h3 class="mt-7 text-section-heading text-text-primary">Surfaces</h3>
-        <p class="mt-1 text-caption text-text-tertiary">スレートの積層。深い base から frosted panel へ。</p>
+        <h3 class="mt-7 text-section-heading text-text-primary">Surfaces — 1 本のスレートのランプ</h3>
+        <p class="mt-1 text-caption text-text-tertiary">
+          base → sheet → panel → raised → border → handle は別系統ではなく、明度と不透明度で刻んだ同一色相の段。
+        </p>
         <div class="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
           <div class="overflow-hidden rounded-lg border border-surface-border">
             <div class="h-16 bg-surface-base"></div>
             <div class="px-3 py-2">
               <p class="font-mono text-caption text-text-primary">surface-base</p>
-              <p class="font-mono text-caption text-text-quiet">#0a0e11</p>
+              <p class="font-mono text-caption text-text-tertiary">#0a0e14</p>
               <p class="mt-1 text-caption text-text-tertiary">地図の下地（最深部）</p>
             </div>
           </div>
@@ -300,8 +318,8 @@
             <div class="h-16 bg-surface-sheet"></div>
             <div class="px-3 py-2">
               <p class="font-mono text-caption text-text-primary">surface-sheet</p>
-              <p class="font-mono text-caption text-text-quiet">#1e2939</p>
-              <p class="mt-1 text-caption text-text-tertiary">ボトムシート / void</p>
+              <p class="font-mono text-caption text-text-tertiary">#1b2533</p>
+              <p class="mt-1 text-caption text-text-tertiary">ボトムシート / void（不透明）</p>
             </div>
           </div>
           <!-- surface-panel over the map-void so the alpha (f2) reads as frosted -->
@@ -309,15 +327,15 @@
             <div class="h-16 bg-surface-panel backdrop-blur-sm"></div>
             <div class="bg-surface-base px-3 py-2">
               <p class="font-mono text-caption text-text-primary">surface-panel</p>
-              <p class="font-mono text-caption text-text-quiet">#364153f2</p>
-              <p class="mt-1 text-caption text-text-tertiary">frosted パネル（95%）</p>
+              <p class="font-mono text-caption text-text-tertiary">#2d3a4cf2</p>
+              <p class="mt-1 text-caption text-text-tertiary">frosted 浮遊パネル（95%）</p>
             </div>
           </div>
           <div class="overflow-hidden rounded-lg border border-surface-border bg-surface-sheet">
             <div class="m-2 h-12 rounded bg-surface-raised"></div>
             <div class="px-3 pb-2">
               <p class="font-mono text-caption text-text-primary">surface-raised</p>
-              <p class="font-mono text-caption text-text-quiet">#ffffff24</p>
+              <p class="font-mono text-caption text-text-tertiary">#ffffff24</p>
               <p class="mt-1 text-caption text-text-tertiary">持ち上げ / hover 加算白</p>
             </div>
           </div>
@@ -327,7 +345,7 @@
             </div>
             <div class="px-3 py-2">
               <p class="font-mono text-caption text-text-primary">surface-handle</p>
-              <p class="font-mono text-caption text-text-quiet">#6a7282</p>
+              <p class="font-mono text-caption text-text-tertiary">#687587</p>
               <p class="mt-1 text-caption text-text-tertiary">ドラッグつまみ</p>
             </div>
           </div>
@@ -337,7 +355,7 @@
             </div>
             <div class="px-3 py-2">
               <p class="font-mono text-caption text-text-primary">surface-border</p>
-              <p class="font-mono text-caption text-text-quiet">#44484d</p>
+              <p class="font-mono text-caption text-text-tertiary">#3c4654</p>
               <p class="mt-1 text-caption text-text-tertiary">ヘアライン区切り</p>
             </div>
           </div>
@@ -346,125 +364,119 @@
             <div class="h-16 bg-surface-scrim"></div>
             <div class="bg-surface-base px-3 py-2">
               <p class="font-mono text-caption text-text-primary">surface-scrim</p>
-              <p class="font-mono text-caption text-text-quiet">#00000080</p>
+              <p class="font-mono text-caption text-text-tertiary">#00000080</p>
               <p class="mt-1 text-caption text-text-tertiary">モーダル背後の暗幕</p>
             </div>
           </div>
         </div>
 
         <!-- Text -->
-        <h3 class="mt-7 text-section-heading text-text-primary">Text</h3>
-        <p class="mt-1 text-caption text-text-tertiary">階層は size ではなく lightness（明度）で表す。</p>
+        <h3 class="mt-7 text-section-heading text-text-primary">Text — 同じ種類内の主従は明度で</h3>
+        <p class="mt-1 text-caption text-text-tertiary">サイズは文章の“種類”を分け、同じ種類内の主従は明度で表す（副次は縮めず暗くする。ただし読める下限を守る）。</p>
         <div class="mt-3 overflow-hidden rounded-lg border border-surface-border bg-surface-sheet">
           <div class="flex items-baseline justify-between gap-4 border-b border-surface-border px-4 py-3">
             <span class="text-body text-text-primary">本文 Aa 世界史 1600</span>
-            <span class="font-mono text-caption text-text-quiet">text-primary · #ffffff · タイトル・数値</span>
+            <span class="font-mono text-caption text-text-tertiary">text-primary · #ffffff · タイトル・数値</span>
           </div>
           <div class="flex items-baseline justify-between gap-4 border-b border-surface-border px-4 py-3">
             <span class="text-body text-text-secondary">本文 Aa 世界史 1600</span>
-            <span class="font-mono text-caption text-text-quiet">text-secondary · #d4d4d4 · 本文</span>
+            <span class="font-mono text-caption text-text-tertiary">text-secondary · #d4d4d4 · 本文</span>
           </div>
           <div class="flex items-baseline justify-between gap-4 border-b border-surface-border px-4 py-3">
             <span class="text-body text-text-tertiary">本文 Aa 世界史 1600</span>
-            <span class="font-mono text-caption text-text-quiet">text-tertiary · #a1a1a1 · ラベル・メタ</span>
+            <span class="font-mono text-caption text-text-tertiary">text-tertiary · #a1a1a1 · ラベル・メタ</span>
           </div>
           <div class="flex items-baseline justify-between gap-4 border-b border-surface-border px-4 py-3">
             <span class="text-body text-text-quiet">本文 Aa 世界史 1600</span>
-            <span class="font-mono text-caption text-text-quiet">text-quiet · #717171 · 無効・薄い要素</span>
+            <span class="font-mono text-caption text-text-tertiary">text-quiet · #717171 · 無効・薄い要素</span>
           </div>
           <div class="flex items-baseline justify-between gap-4 px-4 py-3">
             <span class="text-body text-text-dimmed">本文 Aa 世界史 1600</span>
-            <span class="font-mono text-caption text-text-quiet">text-dimmed · #ffffff99 · アイドルの操作アイコン</span>
+            <span class="font-mono text-caption text-text-tertiary">text-dimmed · #ffffff99 · アイドルの操作アイコン</span>
           </div>
         </div>
       </section>
 
       <!-- ===== Typography ===== -->
-      <section class="mb-14">
+      <section id="typography" class="mb-14">
         <h2 class="text-panel-title text-text-primary">Typography</h2>
-        <p class="mt-2 max-w-2xl text-body-sm leading-relaxed text-text-secondary">
-          system font stack のみ（web フォントなし）。階層は weight と size で作り、letter-spacing
-          は使わない。8 つの role がトークン utility として生成される。
+        <p class="mt-2 max-w-2xl text-body leading-relaxed text-text-secondary">
+          system font stack のみ（web フォントなし）。階層は weight と size で作り、letter-spacing は使わない。
+          スケールは意図的に疎で <span class="text-text-primary">6 role・本文 1 サイズ</span>。同じ role
+          の中での主従は font を縮めず <span class="text-text-primary">色</span>（明度ランプ）で表す —
+          ラベルと値はどちらも 16px で、text-tertiary と text-primary で差をつける。
         </p>
         <div class="mt-4 divide-y divide-surface-border overflow-hidden rounded-lg border border-surface-border bg-surface-sheet">
           <div class="flex flex-wrap items-baseline justify-between gap-3 px-4 py-4">
-            <span class="text-active-year text-text-primary">1600</span>
-            <span class="font-mono text-caption text-text-tertiary">active-year · 20 / 700 / 28</span>
-          </div>
-          <div class="flex flex-wrap items-baseline justify-between gap-3 px-4 py-4">
-            <span class="text-modal-title text-text-primary">ライセンスについて</span>
-            <span class="font-mono text-caption text-text-tertiary">modal-title · 20 / 600 / 28</span>
+            <span class="text-title tabular-nums text-text-primary">1600</span>
+            <span class="font-mono text-caption text-text-tertiary">title · 20 / 700 / 28 · モーダル題 + 現在年(tabular)</span>
           </div>
           <div class="flex flex-wrap items-baseline justify-between gap-3 px-4 py-4">
             <span class="text-panel-title text-text-primary">オスマン帝国</span>
-            <span class="font-mono text-caption text-text-tertiary">panel-title · 18 / 600 / 28</span>
+            <span class="font-mono text-caption text-text-tertiary">panel-title · 20 / 600 / 28</span>
           </div>
           <div class="flex flex-wrap items-baseline justify-between gap-3 px-4 py-4">
             <span class="text-section-heading text-text-primary">主な出来事</span>
             <span class="font-mono text-caption text-text-tertiary">section-heading · 16 / 600 / 24</span>
           </div>
           <div class="flex flex-wrap items-baseline justify-between gap-3 px-4 py-4">
-            <span class="text-body text-text-secondary">1700</span>
-            <span class="font-mono text-caption text-text-tertiary">body · 16 / 500 / 24</span>
+            <span class="text-label text-text-secondary">1700</span>
+            <span class="font-mono text-caption text-text-tertiary">label · 16 / 500 / 24 · 非アクティブな年ボタン</span>
           </div>
           <div class="flex flex-wrap items-baseline justify-between gap-3 px-4 py-4">
-            <span class="text-card-title text-text-primary">東アジア</span>
-            <span class="font-mono text-caption text-text-tertiary">card-title · 14 / 600 / 20</span>
-          </div>
-          <div class="flex flex-wrap items-baseline justify-between gap-3 px-4 py-4">
-            <span class="text-body-sm text-text-secondary">文脈の段落テキスト</span>
-            <span class="font-mono text-caption text-text-tertiary">body-sm · 14 / — / 20</span>
+            <span class="text-body text-text-secondary">文脈の段落テキスト・プロフィール・年表</span>
+            <span class="font-mono text-caption text-text-tertiary">body · 16 / 400 / 24</span>
           </div>
           <div class="flex flex-wrap items-baseline justify-between gap-3 px-4 py-4">
             <span class="text-caption tabular-nums text-text-tertiary">1453</span>
-            <span class="font-mono text-caption text-text-tertiary">caption · 12 / — / 16</span>
+            <span class="font-mono text-caption text-text-tertiary">caption · 12 / 400 / 16 · メタ・年表の年(tabular)</span>
           </div>
         </div>
       </section>
 
       <!-- ===== Spacing ===== -->
-      <section class="mb-14">
+      <section id="spacing" class="mb-14">
         <h2 class="text-panel-title text-text-primary">Spacing</h2>
-        <p class="mt-2 max-w-2xl text-body-sm leading-relaxed text-text-secondary">
+        <p class="mt-2 max-w-2xl text-body leading-relaxed text-text-secondary">
           ベースラインの単位は <span class="text-text-primary">4px</span>。padding / gap は
           Tailwind 既定スケールをそのまま使う（密だが整然と）。
         </p>
         <div class="mt-4 space-y-2 rounded-lg border border-surface-border bg-surface-sheet px-4 py-4">
           <div class="flex items-center gap-3">
-            <span class="h-4 w-1 rounded-sm bg-role-loading"></span>
+            <span class="h-4 w-1 rounded-sm bg-surface-handle"></span>
             <span class="font-mono text-caption text-text-tertiary">1u · 4px</span>
           </div>
           <div class="flex items-center gap-3">
-            <span class="h-4 w-2 rounded-sm bg-role-loading"></span>
+            <span class="h-4 w-2 rounded-sm bg-surface-handle"></span>
             <span class="font-mono text-caption text-text-tertiary">2u · 8px</span>
           </div>
           <div class="flex items-center gap-3">
-            <span class="h-4 w-3 rounded-sm bg-role-loading"></span>
+            <span class="h-4 w-3 rounded-sm bg-surface-handle"></span>
             <span class="font-mono text-caption text-text-tertiary">3u · 12px</span>
           </div>
           <div class="flex items-center gap-3">
-            <span class="h-4 w-4 rounded-sm bg-role-loading"></span>
+            <span class="h-4 w-4 rounded-sm bg-surface-handle"></span>
             <span class="font-mono text-caption text-text-tertiary">4u · 16px</span>
           </div>
           <div class="flex items-center gap-3">
-            <span class="h-4 w-6 rounded-sm bg-role-loading"></span>
+            <span class="h-4 w-6 rounded-sm bg-surface-handle"></span>
             <span class="font-mono text-caption text-text-tertiary">6u · 24px</span>
           </div>
           <div class="flex items-center gap-3">
-            <span class="h-4 w-8 rounded-sm bg-role-loading"></span>
+            <span class="h-4 w-8 rounded-sm bg-surface-handle"></span>
             <span class="font-mono text-caption text-text-tertiary">8u · 32px</span>
           </div>
           <div class="flex items-center gap-3">
-            <span class="h-4 w-12 rounded-sm bg-role-loading"></span>
+            <span class="h-4 w-12 rounded-sm bg-surface-handle"></span>
             <span class="font-mono text-caption text-text-tertiary">12u · 48px</span>
           </div>
         </div>
       </section>
 
       <!-- ===== Shapes ===== -->
-      <section class="mb-14">
+      <section id="shapes" class="mb-14">
         <h2 class="text-panel-title text-text-primary">Shapes &amp; Radii</h2>
-        <p class="mt-2 max-w-2xl text-body-sm leading-relaxed text-text-secondary">
+        <p class="mt-2 max-w-2xl text-body leading-relaxed text-text-secondary">
           柔らかく丸い「approachable but precise」。半径はフレームワーク既定スケールに乗る。
         </p>
         <div class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -490,22 +502,22 @@
               <div class="h-full border-l-4 border-role-selected"></div>
             </div>
             <p class="mt-2 font-mono text-caption text-text-primary">left accent stripe</p>
-            <p class="text-caption text-text-tertiary">border-l-4 · 選択領土の印</p>
+            <p class="text-caption text-text-tertiary">border-l-4 · 選択領土の印（ゴールド）</p>
           </div>
         </div>
       </section>
 
       <!-- ===== Elevation ===== -->
-      <section class="mb-14">
+      <section id="elevation" class="mb-14">
         <h2 class="text-panel-title text-text-primary">Elevation &amp; Depth</h2>
-        <p class="mt-2 max-w-2xl text-body-sm leading-relaxed text-text-secondary">
+        <p class="mt-2 max-w-2xl text-body leading-relaxed text-text-secondary">
           深さは <span class="text-text-primary">frosted glass</span> で表す（重い影ではない）。すべての
           浮遊面が「near-opaque slate + backdrop blur + soft shadow」を共有する。地図が blur 越しに
-          薄く透けることで「HUD over an atlas」が成立する。
+          薄く透けることで、不透明なアプリではなく「生きたアトラスの上に置かれた観測機器」に見える。
         </p>
         <div class="map-void mt-4 flex flex-wrap items-center gap-5 overflow-hidden rounded-lg border border-surface-border p-8">
           <div class="rounded-lg bg-surface-panel px-5 py-4 shadow-xl backdrop-blur-sm">
-            <p class="text-card-title text-text-primary">frosted panel</p>
+            <p class="text-section-heading text-text-primary">frosted panel</p>
             <p class="mt-1 text-caption text-text-tertiary">bg-surface-panel + backdrop-blur-sm + shadow-xl</p>
           </div>
           <div class="rounded-lg bg-surface-panel p-3 text-text-dimmed shadow-lg backdrop-blur-sm">
@@ -517,14 +529,14 @@
       </section>
 
       <!-- ===== Components in context ===== -->
-      <section class="mb-14">
+      <section id="components" class="mb-14">
         <h2 class="text-panel-title text-text-primary">Components in context</h2>
-        <p class="mt-2 max-w-2xl text-body-sm leading-relaxed text-text-secondary">
+        <p class="mt-2 max-w-2xl text-body leading-relaxed text-text-secondary">
           実コンポーネントを地図文脈の上に配置。隅にアンカーされ、地図の中央は常に空けられる。
         </p>
 
-        <!-- Desktop HUD stage -->
-        <p class="mt-5 mb-2 text-caption text-text-tertiary">デスクトップ HUD レイアウト</p>
+        <!-- Desktop observatory layout -->
+        <p class="mt-5 mb-2 text-caption text-text-tertiary">デスクトップ 観測機器レイアウト</p>
         <div class="overflow-x-auto rounded-lg border border-surface-border">
           <div class="map-void relative h-[560px] min-w-[920px]">
             <!-- Control bar (top right) -->
@@ -544,7 +556,7 @@
             </div>
 
             <!-- Territory info panel (top left) — loaded state -->
-            <aside class="absolute left-4 top-4 z-30 flex max-h-[calc(100%-2rem)] w-96 flex-col overflow-hidden rounded-lg border-l-4 border-role-selected bg-surface-panel shadow-xl backdrop-blur-sm">
+            <aside class="absolute left-4 top-4 z-30 flex max-h-[calc(100%-100px)] w-96 flex-col overflow-hidden rounded-lg border-l-4 border-role-selected bg-surface-panel shadow-xl backdrop-blur-sm">
               <div class="shrink-0 border-b border-surface-border">
                 <div class="flex items-start justify-between px-4 py-3">
                   <div class="min-w-0 flex-1">
@@ -552,12 +564,12 @@
                       <svg class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                       </svg>
-                      <span class="truncate">1600年の世界の概要</span>
+                      <span class="truncate">1600年の概観</span>
                     </button>
                     <h2 class="mt-2.5 text-panel-title text-text-primary">オスマン帝国</h2>
-                    <p class="mt-0.5 text-body-sm text-text-secondary">近世</p>
+                    <p class="mt-0.5 text-body text-text-secondary">近世</p>
                   </div>
-                  <button type="button" class="rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-surface-raised hover:text-text-primary">
+                  <button type="button" class="flex h-11 w-11 items-center justify-center rounded-lg text-text-secondary transition-colors hover:bg-surface-raised hover:text-text-primary">
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -567,7 +579,7 @@
               </div>
               <div class="overflow-y-auto">
                 <div class="space-y-3 px-4 py-4">
-                  <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-body-sm">
+                  <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-body">
                     <dt class="text-text-tertiary">首都</dt>
                     <dd class="text-text-primary">コンスタンティノープル</dd>
                     <dt class="text-text-tertiary">政体</dt>
@@ -579,7 +591,7 @@
                     <dt class="text-text-tertiary">宗教</dt>
                     <dd class="text-text-primary">スンナ派イスラム教</dd>
                   </dl>
-                  <p class="text-body-sm leading-relaxed text-text-secondary">
+                  <p class="text-body leading-relaxed text-text-secondary">
                     3 大陸にまたがる広大な版図を擁し、地中海東部の交易を支配した。スレイマン1世の最盛期を経て、この頃も
                     なお欧州・西アジアの強国であり続けた。
                   </p>
@@ -588,46 +600,47 @@
                     <li class="relative flex items-center gap-2.5 py-1.5 opacity-70">
                       <span aria-hidden="true" class="absolute top-1/2 -left-3 size-[3px] -translate-y-1/2 shrink-0 rounded-full bg-text-quiet"></span>
                       <span class="shrink-0 text-caption tabular-nums text-text-tertiary">1453</span>
-                      <span class="text-body-sm text-text-secondary">コンスタンティノープル陥落</span>
+                      <span class="text-body text-text-secondary">コンスタンティノープル陥落</span>
                     </li>
                     <li class="relative flex items-center gap-2.5 py-1.5 opacity-70">
                       <span aria-hidden="true" class="absolute top-1/2 -left-3 size-[3px] -translate-y-1/2 shrink-0 rounded-full bg-text-quiet"></span>
                       <span class="shrink-0 text-caption tabular-nums text-text-tertiary">1571</span>
-                      <span class="text-body-sm text-text-secondary">レパントの海戦</span>
+                      <span class="text-body text-text-secondary">レパントの海戦</span>
                     </li>
                     <li aria-current="true" class="relative flex items-center gap-2.5 py-2 font-semibold">
                       <span aria-hidden="true" class="absolute top-1/2 -left-[15px] size-[9px] -translate-y-1/2 shrink-0 rounded-full border-2 border-surface-panel bg-role-selected" style="box-shadow: 0 0 8px var(--color-role-selected)"></span>
                       <span class="shrink-0 text-caption tabular-nums text-role-selected">1600</span>
-                      <span class="text-body-sm text-text-primary">現在</span>
+                      <span class="text-body text-text-primary">現在</span>
                     </li>
                     <li class="relative flex items-center gap-2.5 py-1.5 opacity-60">
                       <span aria-hidden="true" class="absolute top-1/2 -left-3 size-[3px] -translate-y-1/2 shrink-0 rounded-full bg-text-quiet"></span>
                       <span class="shrink-0 text-caption tabular-nums text-text-tertiary">1683</span>
-                      <span class="text-body-sm text-text-secondary">第二次ウィーン包囲</span>
+                      <span class="text-body text-text-secondary">第二次ウィーン包囲</span>
                     </li>
                   </ol>
                 </div>
               </div>
+              <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-surface-panel to-transparent"></div>
             </aside>
 
             <!-- Year selector (bottom center) -->
             <div class="absolute bottom-4 left-1/2 z-20 -translate-x-1/2">
               <div class="overflow-hidden rounded-lg bg-surface-panel shadow-lg backdrop-blur-sm">
                 <nav aria-label="年代選択" class="flex items-stretch">
-                  <button type="button" class="flex shrink-0 items-center border-r border-surface-border px-3 py-2 text-text-secondary transition-colors hover:bg-surface-raised hover:text-text-primary">
+                  <button type="button" class="flex shrink-0 items-center border-r border-surface-border px-4 py-2 text-text-secondary transition-colors hover:bg-surface-raised hover:text-text-primary">
                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
                     </svg>
                     <span class="sr-only">前の年代</span>
                   </button>
                   <div class="flex items-stretch">
-                    <button type="button" class="flex min-w-[4rem] shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 text-body text-text-secondary transition-colors hover:bg-surface-raised hover:text-text-primary">1300</button>
-                    <button type="button" class="flex min-w-[4rem] shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 text-body text-text-secondary transition-colors hover:bg-surface-raised hover:text-text-primary">1453</button>
-                    <button type="button" aria-current="true" class="flex min-w-[5rem] shrink-0 items-center justify-center border-r border-surface-border bg-surface-raised px-5 py-3 text-active-year text-text-primary">1600</button>
-                    <button type="button" class="flex min-w-[4rem] shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 text-body text-text-secondary transition-colors hover:bg-surface-raised hover:text-text-primary">1700</button>
-                    <button type="button" class="flex min-w-[4rem] shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 text-body text-text-secondary transition-colors last:border-r-0 hover:bg-surface-raised hover:text-text-primary">1815</button>
+                    <button type="button" class="flex min-w-[4rem] shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 text-label tabular-nums text-text-secondary transition-colors hover:bg-surface-raised hover:text-text-primary">1300</button>
+                    <button type="button" class="flex min-w-[4rem] shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 text-label tabular-nums text-text-secondary transition-colors hover:bg-surface-raised hover:text-text-primary">1453</button>
+                    <button type="button" aria-current="true" class="flex min-w-[5rem] shrink-0 items-center justify-center border-r border-surface-border bg-surface-raised px-5 py-3 text-title tabular-nums text-text-primary">1600</button>
+                    <button type="button" class="flex min-w-[4rem] shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 text-label tabular-nums text-text-secondary transition-colors hover:bg-surface-raised hover:text-text-primary">1700</button>
+                    <button type="button" class="flex min-w-[4rem] shrink-0 items-center justify-center border-r border-surface-border px-3 py-3 text-label tabular-nums text-text-secondary transition-colors last:border-r-0 hover:bg-surface-raised hover:text-text-primary">1815</button>
                   </div>
-                  <button type="button" class="flex shrink-0 items-center border-l border-surface-border px-3 py-2 text-text-secondary transition-colors hover:bg-surface-raised hover:text-text-primary">
+                  <button type="button" class="flex shrink-0 items-center border-l border-surface-border px-4 py-2 text-text-secondary transition-colors hover:bg-surface-raised hover:text-text-primary">
                     <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
                     </svg>
@@ -641,25 +654,25 @@
 
         <!-- Summary trigger (FAB): desktop top-left, mobile bottom-right; shown only when no panel is open -->
         <p class="mt-6 mb-2 text-caption text-text-tertiary">
-          概要トリガー FAB（パネル非表示時のみ表示 — デスクトップ: 左上 / モバイル: 右下）
+          時代の概観トリガー FAB（パネル非表示時のみ表示 — デスクトップ: 左上 / モバイル: 右下）
         </p>
         <div class="map-void relative h-44 overflow-hidden rounded-lg border border-surface-border">
           <div class="absolute left-4 top-4 flex flex-col items-start gap-1">
-            <button type="button" class="flex items-center gap-1.5 rounded-full bg-surface-panel px-4 py-2.5 text-body-sm text-text-primary shadow-lg backdrop-blur-sm transition-colors hover:bg-surface-raised">
+            <button type="button" class="flex items-center gap-1.5 rounded-full bg-surface-panel px-4 py-2.5 text-body text-text-primary shadow-lg backdrop-blur-sm transition-colors hover:bg-surface-raised">
               <svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
               </svg>
-              <span>概要</span>
+              <span>時代の概観</span>
             </button>
             <span class="font-mono text-caption text-text-tertiary">desktop · left-4 top-4</span>
           </div>
           <div class="absolute right-4 bottom-4 flex flex-col items-end gap-1">
             <span class="font-mono text-caption text-text-tertiary">mobile · bottom-right</span>
-            <button type="button" class="flex items-center gap-1.5 rounded-full bg-surface-panel px-4 py-2.5 text-body-sm text-text-primary shadow-lg backdrop-blur-sm transition-colors hover:bg-surface-raised">
+            <button type="button" class="flex items-center gap-1.5 rounded-full bg-surface-panel px-4 py-2.5 text-body text-text-primary shadow-lg backdrop-blur-sm transition-colors hover:bg-surface-raised">
               <svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
               </svg>
-              <span>概要</span>
+              <span>時代の概観</span>
             </button>
           </div>
         </div>
@@ -687,11 +700,14 @@
               <div class="border-b border-surface-border px-4 py-3">
                 <h3 class="text-panel-title text-text-primary">エラー</h3>
               </div>
-              <p class="m-3 rounded bg-role-error/10 p-3 text-body-sm text-role-error">
-                データの取得に失敗しました。
-              </p>
+              <div class="m-3 flex items-start gap-2 rounded border border-role-error/40 bg-role-error/10 p-3">
+                <svg class="mt-0.5 h-5 w-5 shrink-0 text-role-error" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+                <p class="text-body text-text-secondary">データの取得に失敗しました。</p>
+              </div>
             </div>
-            <p class="mt-2 font-mono text-caption text-text-tertiary">error · role-error on tint</p>
+            <p class="mt-2 font-mono text-caption text-text-tertiary">error · 明色本文 + role-error アクセント</p>
           </div>
           <!-- empty -->
           <div class="map-void overflow-hidden rounded-lg border border-surface-border p-4">
@@ -699,7 +715,7 @@
               <div class="border-b border-surface-border px-4 py-3">
                 <h3 class="text-panel-title text-text-primary">サファヴィー朝</h3>
               </div>
-              <div class="p-4 text-center text-body-sm text-text-secondary">
+              <div class="p-4 text-center text-body text-text-secondary">
                 <p>この領土の詳細情報は準備中です。</p>
               </div>
             </div>
@@ -710,10 +726,10 @@
             <div class="flex flex-col overflow-hidden rounded-lg border-l-4 border-role-selected bg-surface-panel shadow-xl backdrop-blur-sm">
               <div class="border-b border-surface-border px-4 py-3">
                 <h3 class="text-panel-title text-text-primary">オスマン帝国</h3>
-                <p class="mt-0.5 text-body-sm text-text-secondary">近世</p>
+                <p class="mt-0.5 text-body text-text-secondary">近世</p>
               </div>
               <div class="px-4 py-4">
-                <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-body-sm">
+                <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-body">
                   <dt class="text-text-tertiary">首都</dt>
                   <dd class="text-text-primary">コンスタンティノープル</dd>
                   <dt class="text-text-tertiary">王朝</dt>
@@ -726,12 +742,12 @@
         </div>
 
         <!-- Era summary panel -->
-        <p class="mt-6 mb-2 text-caption text-text-tertiary">概要パネル（「{year}年の世界」— region card）</p>
+        <p class="mt-6 mb-2 text-caption text-text-tertiary">時代の概観パネル（「{year}年の概観」— region card）</p>
         <div class="map-void overflow-hidden rounded-lg border border-surface-border p-6">
           <aside class="flex max-w-sm flex-col overflow-hidden rounded-lg bg-surface-panel shadow-xl backdrop-blur-sm">
-            <div class="flex items-start justify-between border-b border-surface-border px-4 py-3">
-              <h2 class="text-panel-title text-text-primary">1600年の世界</h2>
-              <button type="button" class="rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-surface-raised hover:text-text-primary">
+            <div class="flex items-center justify-between border-b border-surface-border px-4 py-3">
+              <h2 class="text-panel-title text-text-primary">1600年の概観</h2>
+              <button type="button" class="flex h-11 w-11 items-center justify-center rounded-lg text-text-secondary transition-colors hover:bg-surface-raised hover:text-text-primary">
                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -740,19 +756,51 @@
             </div>
             <div class="space-y-4 px-4 py-4">
               <article>
-                <h3 class="text-card-title text-text-primary">東アジア</h3>
-                <p class="mt-1 text-body-sm leading-relaxed text-text-secondary">
+                <h3 class="text-section-heading text-text-primary">東アジア</h3>
+                <p class="mt-1 text-body leading-relaxed text-text-secondary">
                   明朝が後期に入り、北方では女真が台頭。豊臣秀吉の朝鮮出兵が終結した直後の動乱期。
                 </p>
               </article>
               <article>
-                <h3 class="text-card-title text-text-primary">西アジア</h3>
-                <p class="mt-1 text-body-sm leading-relaxed text-text-secondary">
+                <h3 class="text-section-heading text-text-primary">西アジア</h3>
+                <p class="mt-1 text-body leading-relaxed text-text-secondary">
                   オスマン帝国とサファヴィー朝が覇権を争い、シーア派とスンナ派の対立が地政学を形づくった。
                 </p>
               </article>
             </div>
           </aside>
+        </div>
+        <p class="mt-2 text-caption text-text-tertiary">
+          時代の概観パネルも async surface — loading / empty / error は上の RemoteData と同じ扱い（ここでは loaded のみ図示）。
+        </p>
+
+        <!-- Modal dialog (about) — surface-scrim + title role -->
+        <p class="mt-6 mb-2 text-caption text-text-tertiary">
+          モーダルダイアログ（surface-scrim + title 見出し）
+        </p>
+        <div class="map-void relative grid h-72 place-items-center overflow-hidden rounded-lg border border-surface-border">
+          <div aria-hidden="true" class="absolute inset-0 bg-surface-scrim"></div>
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="about-modal-title"
+            class="relative z-10 mx-4 w-full max-w-sm overflow-hidden rounded-lg bg-surface-panel shadow-xl backdrop-blur-sm"
+          >
+            <div class="flex items-center justify-between border-b border-surface-border px-4 py-3">
+              <h2 id="about-modal-title" class="text-title text-text-primary">このサイトについて</h2>
+              <button type="button" class="flex h-11 w-11 items-center justify-center rounded-lg text-text-secondary transition-colors hover:bg-surface-raised hover:text-text-primary">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                <span class="sr-only">閉じる</span>
+              </button>
+            </div>
+            <div class="px-4 py-4">
+              <p class="text-body leading-relaxed text-text-secondary">
+                World History Map は歴史学習者のためのインタラクティブな世界地図。地図を選んで年代をたどり、特定の領土の歴史を連続した物語として読む。
+              </p>
+            </div>
+          </div>
         </div>
 
         <!-- Mobile re-home: bottom sheet -->
@@ -776,15 +824,15 @@
                         <svg class="h-3 w-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
                           <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                         </svg>
-                        <span class="truncate">1600年の世界の概要</span>
+                        <span class="truncate">1600年の概観</span>
                       </button>
                     </div>
                     <div class="mt-2 border-l-4 border-role-selected pl-3 pr-2 pb-1.5">
                       <h2 class="leading-tight text-panel-title text-text-primary">オスマン帝国</h2>
-                      <p class="leading-tight text-body-sm text-text-secondary">近世</p>
+                      <p class="leading-tight text-body text-text-secondary">近世</p>
                     </div>
                   </div>
-                  <button type="button" class="shrink-0 rounded-lg p-1.5 text-text-secondary transition-colors hover:bg-surface-raised hover:text-text-primary">
+                  <button type="button" class="shrink-0 flex h-11 w-11 items-center justify-center rounded-lg text-text-secondary transition-colors hover:bg-surface-raised hover:text-text-primary">
                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -794,7 +842,7 @@
               </div>
               <div class="relative min-h-0 flex-1 overflow-y-auto">
                 <div class="space-y-3 px-4 py-4">
-                  <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-body-sm">
+                  <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-body">
                     <dt class="text-text-tertiary">首都</dt>
                     <dd class="text-text-primary">コンスタンティノープル</dd>
                     <dt class="text-text-tertiary">政体</dt>
@@ -802,7 +850,7 @@
                     <dt class="text-text-tertiary">王朝</dt>
                     <dd class="text-text-primary">オスマン朝</dd>
                   </dl>
-                  <p class="text-body-sm leading-relaxed text-text-secondary">
+                  <p class="text-body leading-relaxed text-text-secondary">
                     3 大陸にまたがる広大な版図を擁し、地中海東部の交易を支配した。
                   </p>
                 </div>
@@ -815,15 +863,18 @@
       </section>
 
       <!-- ===== Do / Don't ===== -->
-      <section class="mb-6">
+      <section id="dos" class="mb-6">
         <h2 class="text-panel-title text-text-primary">Do's &amp; Don'ts</h2>
+        <p class="mt-2 max-w-2xl text-body leading-relaxed text-text-secondary">
+          上の原則をスキャン可能にしたチェックリスト。ドリフトした画面を捕まえるために使う。
+        </p>
         <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
           <div class="rounded-lg border border-surface-border bg-surface-sheet px-4 py-4">
             <p class="text-section-heading text-text-primary">Do</p>
-            <ul class="mt-2 space-y-1.5 text-body-sm leading-relaxed text-text-secondary">
+            <ul class="mt-2 space-y-1.5 text-body leading-relaxed text-text-secondary">
               <li>role トークン（role-selected / surface-* / text-*）で書く</li>
-              <li>typography role（text-panel-title 等）を使う</li>
-              <li>rose アクセントは選択領土・現在の年だけに使う</li>
+              <li>typography role（text-panel-title / text-body 等）を使う</li>
+              <li>ゴールドのアクセントは選択領土・現在の年だけに使う</li>
               <li>浮遊面は必ず frosted（slate + blur + soft shadow）</li>
               <li>async パネルは loading / empty / error / loaded を明示</li>
               <li>全高サーフェスは 100dvh で測る</li>
@@ -831,13 +882,13 @@
           </div>
           <div class="rounded-lg border border-surface-border bg-surface-sheet px-4 py-4">
             <p class="text-section-heading text-text-primary">Don't</p>
-            <ul class="mt-2 space-y-1.5 text-body-sm leading-relaxed text-text-secondary">
-              <li>rose を hover や一般的な強調に浪費しない</li>
+            <ul class="mt-2 space-y-1.5 text-body leading-relaxed text-text-secondary">
+              <li>ゴールドを hover や一般的な強調に浪費しない</li>
+              <li>赤(error)を安静時の UI に居座らせない（過渡的なフィードバック。warning 色は持たない）</li>
               <li>領土の塗り（データ）と chrome の色を混ぜない</li>
               <li>hex や raw Tailwind 原色（gray-* 等）を chrome に書かない</li>
-              <li>role がある意図に raw な text-{size}/font-{weight} を使わない</li>
-              <li>web フォントを足さない（native 日本語描画が壊れる）</li>
-              <li>重いドロップシャドウを主たる深さの手段にしない</li>
+              <li>6 role の中間に type role を足さない / 本文を縮めて副次を表さない（色で表す）</li>
+              <li>web フォントを足さない / 重いドロップシャドウを主たる深さにしない</li>
             </ul>
           </div>
         </div>

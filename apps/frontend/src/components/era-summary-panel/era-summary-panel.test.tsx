@@ -90,7 +90,7 @@ describe('EraSummaryPanel', () => {
   it('renders year heading and region cards when summary is loaded', () => {
     render(<EraSummaryPanel />);
 
-    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('1650年の世界');
+    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('1650年の概観');
     expect(screen.getByRole('heading', { name: 'ヨーロッパ' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: '東アジア' })).toBeInTheDocument();
   });
@@ -138,13 +138,13 @@ describe('EraSummaryPanel', () => {
   it('updates content when year changes', () => {
     const { rerender } = render(<EraSummaryPanel />);
 
-    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('1650年の世界');
+    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('1650年の概観');
 
     mockSelectedYear = createHistoricalYear(1700);
     mockSummaryValue = null;
     rerender(<EraSummaryPanel />);
 
-    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('1700年の世界');
+    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('1700年の概観');
     expect(screen.getByRole('status')).toBeInTheDocument();
   });
 });

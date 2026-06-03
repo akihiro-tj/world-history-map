@@ -154,8 +154,8 @@ export function YearSelector({ years, onYearSelect }: YearSelectorProps) {
               className={cn(
                 'flex shrink-0 items-center justify-center border-r border-surface-border py-3 transition-colors last:border-r-0',
                 isSelected
-                  ? 'min-w-[5rem] bg-surface-raised px-5 text-active-year text-text-primary'
-                  : 'min-w-[4rem] px-3 text-body text-text-secondary hover:bg-surface-raised hover:text-text-primary',
+                  ? 'min-w-[5rem] bg-surface-raised px-5 text-title text-text-primary'
+                  : 'min-w-[4rem] px-3 text-label text-text-secondary hover:bg-surface-raised hover:text-text-primary',
               )}
             >
               {formatHistoricalYear(yearEntry.year)}

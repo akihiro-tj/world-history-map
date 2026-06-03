@@ -1,55 +1,46 @@
 ---
 name: World History Map
 colors:
-  role-selected: '#f73d62'
-  role-loading: '#46a6ff'
-  role-warn: '#f2a618'
+  role-selected: '#f5b13d'
+  role-loading: '#38bdf8'
   role-error: '#f9423d'
-  role-focus: '#0072d5'
-  role-link: '#51a2ff'
+  role-focus: '#38bdf8'
+  role-link: '#5aa2ff'
   role-link-hover: '#8ec5ff'
   role-label-text: '#eeeeee'
   role-label-halo: '#161616'
-  surface-base: '#0a0e11'
-  surface-sheet: '#1e2939'
-  surface-panel: '#364153f2'
+  surface-base: '#0a0e14'
+  surface-sheet: '#1b2533'
+  surface-panel: '#2d3a4cf2'
   surface-raised: '#ffffff24'
-  surface-handle: '#6a7282'
-  surface-border: '#44484d'
+  surface-handle: '#687587'
+  surface-border: '#3c4654'
   surface-scrim: '#00000080'
   text-primary: '#ffffff'
   text-secondary: '#d4d4d4'
-  text-tertiary: '#a1a1a1'
+  text-tertiary: '#adadad'
   text-quiet: '#717171'
   text-dimmed: '#ffffff99'
 typography:
-  active-year:
+  title:
     fontSize: 20px
     fontWeight: '700'
     lineHeight: 28px
-  modal-title:
-    fontSize: 20px
-    fontWeight: '600'
-    lineHeight: 28px
   panel-title:
-    fontSize: 18px
+    fontSize: 20px
     fontWeight: '600'
     lineHeight: 28px
   section-heading:
     fontSize: 16px
     fontWeight: '600'
     lineHeight: 24px
-  body:
+  label:
     fontSize: 16px
     fontWeight: '500'
     lineHeight: 24px
-  card-title:
-    fontSize: 14px
-    fontWeight: '600'
-    lineHeight: 20px
-  body-sm:
-    fontSize: 14px
-    lineHeight: 20px
+  body:
+    fontSize: 16px
+    lineHeight: 24px
   caption:
     fontSize: 12px
     lineHeight: 16px
@@ -59,197 +50,246 @@ spacing:
 
 # Design System: World History Map
 
-This file is the **design counterpart to `CLAUDE.md`** — persistent design context an agent
-reads before generating UI. The frontmatter is the design's source of truth for tokens:
-`colors` holds semantic color tokens; `typography` holds the nine named type roles (fontSize,
-fontWeight, lineHeight per role); `spacing` holds the baseline grid unit. These are machine-
-readable by design — the `@world-history-map/design-tokens` package generates `theme.css` from
-them so Tailwind v4 exposes each as a utility class. Use the role names, not raw Tailwind
-primitives, so agents and humans read intent. Radii and individual padding/gap values ride the
-framework defaults and are described in prose — they don't benefit from centralization. Layout
-mechanics (z-index order, breakpoints, pixel widths) stay in the components, not here. The body
-holds what has no other home — the intent, the relationships, and the do's and don'ts that keep
-generated screens on-brand instead of generically "AI-looking".
+This file is the **design counterpart to `CLAUDE.md`**: the context an agent reads before
+generating UI, so a new screen looks like *this product* rather than a generic dark dashboard. It
+is a **brief, not a catalogue** — it exists to explain the *intent* behind the design so an agent
+can make sound choices the tokens alone don't dictate. If a section ever reads like an inventory of
+what already exists, it has drifted from its job.
+
+Source of truth splits in two: the **frontmatter holds token values** (colors, the six type roles,
+the spacing unit); the **body holds intent** — why those values exist and how to apply them.
+**Never restate a token's value in prose** (no hex, no px, no weight); name the token and explain
+the reasoning. The exception is values that are *not* tokens — radii, padding, and gaps that ride
+the framework defaults — for which this prose is their only home. `@world-history-map/design-tokens`
+generates `theme.css` (Tailwind `@theme`) and `role-colors.generated.ts` (MapLibre) from the
+frontmatter, so every token is a utility class; reference role names (`role-selected`,
+`text-tertiary`, `text-panel-title`), never raw Tailwind primitives. Layout mechanics (z-index,
+breakpoints, pixel widths) live in the components, not here.
 
 ## Overview
 
-World History Map is an interactive atlas for history learners. The whole screen is a live
-MapLibre globe; everything else is a translucent control surface floating above it. The
-design language is a **dark data console / HUD**: calm cool-slate neutrals, a disciplined
-white text hierarchy, and a single warm accent reserved for "here / now". The geography is
-always the hero — UI clusters into the corners and never competes with the map.
+World History Map is an interactive atlas for history learners. The whole screen is a live MapLibre
+globe; everything else is a translucent control surface floating above it. The language is a **dark,
+immersive atlas — an observatory at night**: a calm field of cool slate, a disciplined white text
+hierarchy, and a single warm point of light for "here / now".
 
-Two color layers coexist and must stay separate:
+Six principles generate every rule that follows. When a specific case isn't covered below, decide
+by these:
 
-- **UI chrome** — slate panels, white text, the rose accent. Token-driven (`surface-*`,
-  `text-*`, `role-*`), defined in this file's frontmatter.
-- **Territory fills** — per-territory colors served at runtime from
-  `public/data/color-scheme.json` through a MapLibre `match` expression. Data-driven, *not*
-  part of this design system. Treat them as content, not chrome.
+1. **The map is the hero; chrome is instrumentation.** Controls recede to the corners and let the
+   geography show through. This is *why* the field is dark (map colors pop against it), *why*
+   surfaces are frosted (the map stays visible through them), and *why* the chrome is muted slate. A
+   surface that hides or competes with the map is wrong, however handsome on its own.
+2. **One warm light means "here / now".** In an all-cool field, the lone gold accent
+   (`role-selected`) marks the selected territory and the current year — nothing else. Its meaning
+   *is* its scarcity.
+3. **This is a reading instrument.** Learners read real historical prose here, so body text is sized
+   for sustained reading and never shrunk to signal "secondary". Size separates the *kinds* of text
+   (heading / body / meta); within a kind, prominence is shown by color — dimmer, not smaller.
+4. **Select-and-explore, never fill-in.** The map and the year strip are the input surface — the
+   user taps a territory or a year and reads, rather than filling in forms. Style controls as
+   buttons, pills, and segments, and because interaction is overwhelmingly select-not-type, treat
+   the keyboard focus ring as a first-class affordance.
+5. **Async is always explicit.** Territory and year data load over the network; every async surface
+   shows **loading / empty / error / loaded** (the `RemoteData` pattern), never a bare blank.
+6. **Mobile re-homes, it doesn't reflow.** Below the single tablet threshold the layout reorganizes
+   by *meaning* (corner panels → bottom sheet, summary trigger → FAB) rather than shrinking the
+   desktop layout.
+
+**Two color layers must stay separate.** *UI chrome* — slate surfaces, white text, the gold accent,
+status and link colors — is token-driven and owned by this file. *Map content* — per-territory
+fills from `public/data/color-scheme.json`, plus the map's label colors (`role-label-text` /
+`role-label-halo`) and water — is painted by MapLibre, not the chrome. The label colors sit in the
+frontmatter only because they ride the same generation pipeline; treat them as content. Never paint
+a territory with a chrome token, and never let a map-content color into the UI.
 
 ## Colors
 
-Colors are named by **role, not hue** — `role-selected`, `role-loading`, `role-error`,
-`role-focus` encode *intent*, so a contributor changes "the selected-state color" in one place
-instead of hunting for a hue. They are the only tokens this design owns outright; every other
-dimension defers to the framework's defaults.
+Colors are named by **role, not hue**, and tuned so that roles which mean different things also
+*look* different — a role name is a promise the eye must be able to keep. The rules a hex code can't
+tell you:
 
-**The rose accent is a rule, not just a value.** `role-selected` is the only warm color in an
-otherwise cool field, and it is reserved **exclusively** for two meanings: the *selected
-territory* (map highlight, the panel's left accent stripe) and the *current year* on a
-timeline (the glowing dot). Its impact depends entirely on scarcity — spend it anywhere else
-and the "you are here / now" signal dissolves.
-
-**Blue is for links only.** `role-link` (and its `role-link-hover` lift) is the lone blue in
-the UI chrome, reserved for hyperlinks — text *and* their underline decoration draw from the
-same token. Don't reuse it for emphasis or borrow `role-focus` for link text; keeping link and
-focus blues distinct preserves "named by role, not hue".
-
-**Text hierarchy is carried by lightness, not size:** `text-primary` for titles and values →
-`text-secondary` for body → `text-tertiary` for labels and metadata → `text-quiet` for
-disabled and faint elements. `text-dimmed` is the separate *idle interactive* tone — a dimmed
-white for resting control-bar icons that brighten to `text-primary` on hover.
-
-**Surfaces read as a stack of slates:** the deepest base (`surface-base`) under the map void,
-with frosted panels (`surface-panel`), raised segments (`surface-raised`), and hairline
-dividers (`surface-border`). `surface-raised` doubles as the additive white overlay that
-hover lifts a control's fill with. A darker opaque slate, `surface-sheet`, backs the
-larger-than-a-panel surfaces — the mobile bottom sheet and the map's loading/error void —
-while `surface-handle` is the bottom sheet's grab affordance and `surface-scrim` is the
-translucent black backdrop behind a modal or expanded sheet. The map's own water color is a
-separate concern, defined in the map config rather than the token set.
+- **Gold is the only persistent warm color** (Principle 2). `role-selected` marks the *selected
+  territory* (map highlight, a panel's left accent stripe) and the *current year* (the timeline's
+  glowing dot) — and nothing else. Hovers, headings, and emphasis stay neutral; spend gold elsewhere
+  and "here / now" dissolves.
+- **Red is transient, and an accent — not a body fill.** `role-error` is the lone alarm color: it
+  appears during feedback and then leaves the screen. It rides the *frame* of an error — an icon, a
+  hairline, a faint tint — while the message itself stays in the legible light-text ramp, so error
+  prose never falls below contrast on the dark field. There is deliberately **no warning color** — a
+  select-and-explore map has loading and error states but nothing to caution about, so a warn token
+  would have no job to do.
+- **Two blues, kept visibly apart.** `role-link` (with its `role-link-hover` lift) is the only
+  *persistent* blue — links, text and underline from one token, leaning indigo. `role-loading` and
+  `role-focus` share one brighter, sky-leaning *system blue*: transient cool signals (a spinner, a
+  focus ring) that never need telling apart from each other but must read as clearly *not* a link.
+  The focus blue is bright on purpose so the ring survives the dark field.
+- **Within one kind of text, prominence rides lightness** (Principle 3). Size and weight separate the
+  *kinds* (heading / control / body / meta); the lightness ramp then ranks importance *inside* a
+  kind: `text-primary` (titles, values) → `text-secondary` (body) → `text-tertiary` (labels,
+  metadata) → `text-quiet` (disabled, faint). Dimming lets secondary text recede instead of enlarging
+  primary text to compete with the map — but the dim tones have a floor: keep them legible, never dim
+  into unreadability. `text-dimmed` is the one tone outside that ramp — a *resting interactive* white
+  for idle control-bar icons, translucent so they recede into the frosted chrome until they brighten
+  to `text-primary` on hover.
+- **Surfaces are one slate ramp, not separate families.** `surface-base` (the void under the map) →
+  `surface-sheet` (opaque slate for surfaces *larger than a panel* — the bottom sheet, the
+  loading/error void) → `surface-panel` (the frosted fill of a *floating* panel; its alpha is
+  precisely what lets the map blur through) → `surface-raised` (additive white for a hover or raised
+  lift) → `surface-border` (the hairline, kept in the slate hue so it never reads as a grey seam) →
+  `surface-handle` (the bottom sheet's grab affordance). `surface-scrim` is the translucent black
+  behind a modal or an expanded sheet.
 
 ## Typography
 
 The system uses the **native system font stack** (`system-ui, Avenir, Helvetica, Arial,
-sans-serif`) — no web fonts. This is intentional: the document is `lang="ja"`, so the OS's
-Japanese faces render natively and instantly, with zero font-loading cost or layout shift.
-`fontFamily` is uniform across all roles and stays in prose rather than the per-role tokens.
+sans-serif`) — no web fonts. This is intentional: the document is `lang="ja"`, so the OS's Japanese
+faces render natively and instantly, with zero font-loading cost or layout shift. `fontFamily` is
+uniform across all roles and stays in prose rather than the per-role tokens.
 
-Hierarchy comes from **weight and size, never letter-spacing** (there is no custom tracking
-anywhere). Line-height follows the role's default for its size; `leading-relaxed` is added
-explicitly for reading-flow paragraphs and `leading-tight` for compact headings where needed.
-Numeric sequences — timeline years — use tabular figures so digits align in a column.
+Hierarchy comes from **weight and size, never letter-spacing** (there is no custom tracking).
+`leading-relaxed` is added for reading-flow paragraphs and `leading-tight` for compact headings
+where needed. Numeric sequences — timeline years, the active year — use **tabular figures** so digits
+align in a column.
 
-The eight roles below are defined in the `typography:` frontmatter and generated as Tailwind
-utilities (`text-active-year`, `text-panel-title`, etc.) by `@world-history-map/design-tokens`.
+The scale is deliberately small — six roles and a single body size — and the numbers live **only**
+in the frontmatter. Within a role, prominence comes from **text color** (the lightness ramp), not a
+smaller font: a field label and its value share one role and are told apart only by `text-tertiary`
+vs `text-primary`. Size says *what kind of text* this is — heading, control, reading body, or meta;
+color says *how prominent* it is within that kind. Because this is a reading instrument (Principle
+3), body text stays comfortable for sustained reading and never shrinks to signal "secondary".
+Hierarchy reads from the gaps *between* roles, so resist adding intermediate steps.
 
 | Token | Usage |
 |:---|:---|
-| `active-year` | Selected year in the selector strip |
-| `modal-title` | Modal dialog title |
-| `panel-title` | Panel heading (territory name, "{year}年の世界", error headings) |
-| `section-heading` | Section headings within a panel (e.g. license modal sections) |
-| `body` | Inactive year-selector buttons |
-| `card-title` | Region-card heading |
-| `body-sm` | Context paragraphs, era subtitle, profile fields, timeline events |
-| `caption` | Timeline years (tabular), nav strip links |
+| `title` | The loudest text — modal dialog titles **and** the active year (tabular figures). The headline of a surface. |
+| `panel-title` | Panel heading — territory name, "{year}年の概観", error headings. |
+| `section-heading` | Section headings within a panel **and** region-card headings. |
+| `label` | Prominent control label — inactive year-selector buttons. |
+| `body` | All reading text — context paragraphs, era subtitle, profile fields, timeline events, region-card body. Secondary reading text keeps this role and recedes via `text-secondary` / `text-tertiary`. |
+| `caption` | The quietest text — metadata, nav-strip links, timeline years (tabular figures). |
 
 ## Layout
 
-The layout is not a page grid — it is a **map canvas with corner-anchored overlays**. The
-principles, not the pixel values:
+The layout is not a page grid — it is a **map canvas with corner-anchored overlays** (Principle 1):
 
 - **The map's center is sacred.** Controls anchor to the corners with a consistent edge inset;
   nothing covers the focal geography.
-- **Panels are bounded, never full-bleed.** Detail panels are a single readable column (never
+- **Panels are bounded, never full-bleed.** A detail panel is a single readable column (never
   full-width on desktop); the year strip is centered with a comfortable max width.
-- **A consistent stacking order keeps overlays predictable:** the map at the base, then the
-  persistent controls, then detail panels, with the mobile bottom sheet above everything.
-- **Spacing follows the baseline rhythm set by `spacing.unit` in the frontmatter** — a
-  consistent edge inset and internal padding, dense but orderly. Individual padding and gap values use
-  Tailwind's default scale directly (`px-4`, `py-3`, `gap-2`, etc.) and are documented here
-  in prose rather than as named tokens, since horizontal and vertical values often differ.
+- **Stacking order is fixed so overlays stay predictable:** map at the base, then persistent
+  controls, then detail panels, with the mobile bottom sheet above everything.
+- **Spacing follows the baseline rhythm of `spacing.unit`** — a consistent inset and internal
+  padding, dense but orderly. Individual padding/gap values use Tailwind's default scale directly
+  (`px-4`, `py-3`, `gap-2`); they live in prose because horizontal and vertical values often differ.
 
-**Responsive is a re-home, not a reflow.** One threshold matters — a single tablet width.
-Below it the layout reorganizes by *meaning*: the desktop's corner summary trigger becomes a
-bottom-right FAB, and side panels become a draggable **bottom sheet** with snap points. The
-summary panel opens by default on desktop and starts closed on mobile.
+**Responsive is a re-home, not a reflow** (Principle 6). One threshold matters — a single tablet
+width. Below it the corner summary trigger becomes a bottom-right FAB and side panels become a
+draggable **bottom sheet** with snap points. The summary panel opens by default on desktop and
+starts closed on mobile.
 
 ## Elevation & Depth
 
-Depth is conveyed by **frosted glass, not heavy shadows**. Every floating surface shares one
-treatment: a near-opaque slate fill + a small backdrop blur + a soft shadow. The map stays
-faintly visible through the blur, reinforcing the "HUD over an atlas" feeling. This
-consistency *is* the point — a surface that floats but lacks the frosted treatment reads as a
-foreign element.
+Depth is conveyed by **frosted glass, not heavy shadows** — and that is a direct consequence of
+Principle 1, not a stylistic flourish. Every floating surface shares one treatment: a near-opaque
+slate fill + a small backdrop blur + a soft shadow. The fill is near-opaque (not clear glass) so
+text stays legible; the blur is small so the map reads as a soft presence beneath, not a
+distraction. That faint, living map under the chrome is what makes the UI feel like instruments
+laid over an atlas rather than an opaque app drawn on top. The consistency *is* the signal: a
+surface that floats but skips the frosted treatment reads as a foreign element.
 
-Secondary depth cues: a **scroll-fade overlay** at a panel's bottom edge signals more content
-below — it fades from the surface it sits on (`from-surface-panel` on desktop panels,
-`from-surface-sheet` in the bottom sheet) so the gradient blends seamlessly. The mobile bottom
-sheet darkens the map behind it with a translucent `surface-scrim` only when fully expanded.
+Two secondary cues: a **scroll-fade overlay** at a panel's bottom edge hints at more content below,
+fading from whatever surface it sits on (`from-surface-panel` on desktop panels, `from-surface-sheet`
+in the bottom sheet) so the gradient is seamless; and the bottom sheet darkens the map behind it with
+`surface-scrim` only when fully expanded.
 
 ## Shapes
 
-The shape language is softly rounded — "approachable but precise". Radii ride the framework's
-default scale (the design owns no custom radius values):
+Shape is softly rounded — "approachable but precise" — and it also carries one piece of *meaning*.
+Radii ride the framework defaults (the design owns no custom radius tokens), so they are named here
+with their values:
 
-- **0.5rem** (`rounded-lg`) — the default container corner: panels, icon buttons, the
-  year-selector strip.
-- **Fully round** (`rounded-full`) — pills (the summary FAB), timeline dots, the bottom-sheet
-  drag handle.
-- **1rem** (`rounded-2xl`), top edge only — the mobile bottom sheet.
-- A **left accent stripe** is itself a shape signal: it marks a panel as showing the
-  *selected* territory, drawn in the rose accent.
+- **`rounded-lg`** (0.5rem) — the default container corner: panels, icon buttons, the year-selector
+  strip.
+- **`rounded-full`** — pills (the summary FAB), timeline dots, the bottom-sheet drag handle.
+- **`rounded-t-2xl`** (1rem, top edge only) — the mobile bottom sheet.
+- A **left accent stripe** (`border-l-4` in `role-selected`) is the meaningful shape: it is the
+  single signal that a panel is showing the *selected* territory.
 
 ## Components
 
-- **Floating panel (the signature container).** Corner-anchored, frosted, rounded, a single
-  readable column, flex layout with an overflow-hidden body and a header divided from the body
-  by a hairline border. Every async panel renders four explicit states — **loading, error,
-  empty, loaded** (the `RemoteData` pattern) — never a bare blank while fetching.
-- **Icon button (control bar).** Frosted rounded square; idle icon dimmed, brightening to full
-  white on hover. Icon-only with a screen-reader label.
-- **Pill / FAB (summary trigger).** Frosted rounded-full pill, icon + short label, hover
-  lightens the fill.
-- **Close button.** Ghost: grey icon, hover fills and goes white.
-- **Year selector (nav).** A horizontally-scrolling strip of segmented buttons divided by
-  hairlines. The active year lifts to a raised fill, larger and bold; inactive years are grey
-  with hover feedback. Full keyboard support, `aria-current` on the active year, auto-scroll
-  to center on change.
-- **Bottom sheet (mobile).** Draggable with snap points, a rounded top edge and drag handle,
-  focus-trapped when expanded.
-- **Timeline (domain-specific).** A vertical rail with faint dots for past/future events and
-  one emphasized *current* node — a rose dot with a soft glow and bold white event text.
-  Temporal styling is centralized in one strategy map, not scattered across the component.
-- **Feedback.** Loading is a `role-loading` spinner ring; errors render as `role-error` text
-  on a faint tint. Empty states say what's missing in plain language.
-- **Focus.** There are no text inputs — this is a select-and-explore product. The equivalent
-  affordance is the focus ring: a `role-focus` outline shown only for keyboard navigation,
-  suppressed for mouse.
+The product is assembled from a small set of recurring pieces. Each note below captures a piece's
+*intent* — when a detail here conflicts with a principle, the principle wins; the exact composition
+is demonstrated in the design showcase rather than re-specified here.
+
+- **Floating panel — the signature container.** A corner-anchored frosted surface (Principle 1):
+  `surface-panel` fill, backdrop blur, soft shadow, `rounded-lg`, one readable column. Its header is
+  fixed over a scrollable body — fixed *so the panel never jumps* as data loads — with a scroll-fade
+  hinting at more below. When it shows the **selected territory** it gains a left accent stripe in
+  `role-selected`, the only place a panel turns warm. It always renders one of the four `RemoteData`
+  states.
+- **`RemoteData` states (Principle 5).** *Loading* — a centered `role-loading` spinner ring in the
+  body. *Error* — a plain-language message in the legible light-text ramp on a faint `role-error`
+  tint, with `role-error` carrying only the accent (icon, hairline), never the body copy. *Empty* —
+  a short plain-language line saying what's missing (e.g. "詳細情報は準備中です"), never a blank.
+  *Loaded* — the real content. The header stays put across all four so the panel never jumps.
+- **Year selector — the temporal control.** A horizontally-scrolling strip of segmented buttons
+  divided by hairlines, with prev/next steppers at the ends. History is taught in discrete
+  year-snapshots, so this is *segmented buttons, not a continuous slider*. The active year lifts to a
+  `surface-raised` fill and the `title` role (bold, tabular); inactive years use the `label` role in
+  `text-secondary` with hover feedback. `aria-current` marks the active year, the strip auto-scrolls
+  it to center on change, and it is fully keyboard-navigable.
+- **Icon button (control bar).** A frosted `rounded-lg` square; the icon rests at `text-dimmed` and
+  brightens to `text-primary` on hover. Icon-only, always with an `sr-only` label, and sized to a
+  comfortable touch target (≥44px) even when the glyph itself is small.
+- **Summary trigger (pill / FAB).** A frosted `rounded-full` pill, icon + short label; hover lightens
+  the fill with `surface-raised`. It sits in a corner on desktop and re-homes to a bottom-right FAB on
+  mobile (Principle 6), shown only when no panel is open.
+- **Close button.** Ghost: a grey icon that fills with `surface-raised` and goes `text-primary` on
+  hover.
+- **Bottom sheet (mobile).** The mobile re-home of side panels (Principle 6): an opaque
+  `surface-sheet` surface with a `rounded-t-2xl` top edge and a `surface-handle` drag affordance,
+  draggable between snap points, focus-trapped when expanded, and backed by `surface-scrim` only at
+  full expansion. Size it with dynamic viewport units, never the static height.
+- **Timeline (domain-specific).** A vertical rail of events: faint dots for past and future, and one
+  emphasized *current* node — a `role-selected` dot with a soft glow and bold white text (Principle
+  2). Past / current / future styling is centralized in one strategy map, not branched across the
+  component.
+- **Focus ring (Principle 4).** Because interaction is overwhelmingly select-not-type, the keyboard
+  focus ring is the primary input affordance: a `role-focus` outline shown only for keyboard
+  navigation (`:focus-visible`) and suppressed for the mouse.
 
 ## Do's and Don'ts
 
+A scannable checklist of the principles above — use it to catch a screen that has drifted.
+
 **Do**
 
-- Reference role tokens (`role-selected`, `surface-*`, `text-*`) rather than raw hex; the
-  palette is defined in the `colors` frontmatter of this file.
-- Use typography role tokens (`text-panel-title`, `text-body-sm`, etc.) rather than raw
-  Tailwind size + weight pairs (`text-lg font-semibold`); roles are defined in the
-  `typography:` frontmatter and generated into `theme.css`.
-- Reserve the rose accent (`role-selected`) strictly for *selected territory* and *current year*.
-- Give every floating surface the frosted treatment: near-opaque slate + backdrop blur + soft
-  shadow. Depth = frosted glass.
-- Keep the map's center clear; anchor controls to the corners with a consistent inset.
-- Render explicit loading / empty / error states for any async panel (`RemoteData`).
-- Size full-height surfaces with dynamic viewport units (`100dvh`), so mobile browser chrome doesn't clip them.
-- Respect `prefers-reduced-motion` — it is honored globally; new transitions must too.
-- On mobile, re-home controls (FAB + bottom sheet) rather than shrinking desktop panels.
+- Reserve the gold accent (`role-selected`) strictly for the selected territory and the current year.
+- Give every floating surface the frosted treatment (near-opaque slate + backdrop blur + soft shadow);
+  depth comes from blur and translucency, not drop shadows.
+- Keep the map's center clear and anchor controls to the corners.
+- Render explicit loading / empty / error / loaded states for any async surface (`RemoteData`).
+- Give every interactive control a comfortable touch target (≥44px), padding icon-only buttons out
+  even when the glyph is small.
+- Carry hierarchy with text color, and reach for a typography role token (`text-panel-title`,
+  `text-body`) rather than a raw size + weight pair.
+- On mobile, re-home controls (FAB + bottom sheet) instead of shrinking the desktop layout.
+- Size full-height surfaces with dynamic viewport units (`100dvh`) so mobile browser chrome doesn't
+  clip them, and honor `prefers-reduced-motion` (it is enforced globally).
 
 **Don't**
 
-- Don't spend the rose accent on hovers, generic emphasis, or any non-selection UI — scarcity
-  is what makes it read as "now / here".
-- Don't mix the two color layers: territory fills (data-driven) must never leak into UI
-  chrome, and chrome tokens must never paint territories.
-- Don't hardcode hex or reach for raw Tailwind primitives (`gray-*`, `white`, `black`,
-  `blue-*`) in chrome — every chrome color goes through a token (`surface-*`, `text-*`,
-  `role-*`). Territory fills are the only exception, and they're data, not chrome.
-- Don't reach for raw `text-{size}` / `font-{weight}` pairs in chrome when a typography
-  role covers the intent; unblessed combinations silently diverge from the documented scale.
-- Don't add web fonts or swap the system stack casually — it breaks native Japanese rendering
-  and adds load cost for no visual gain.
-- Don't size full-height surfaces to the static viewport height (`100vh`) — it causes the iOS Safari viewport jump; use `100dvh`.
-- Don't make panels full-width on desktop or stack them over the map's focal area.
-- Don't introduce heavy drop shadows as the primary elevation cue; depth reads through blur
-  and translucency.
+- Don't spend the gold accent on hovers, emphasis, or any non-selection UI — scarcity is what makes
+  it read as "now / here".
+- Don't let `role-error` settle into the resting UI; it is transient feedback, not a second accent.
+  (There is no standing warning color by design.)
+- Don't mix the two color layers: territory fills and map-label colors never enter the chrome, and
+  chrome tokens never paint the map.
+- Don't hardcode hex or reach for raw Tailwind primitives (`gray-*`, `white`, `blue-*`) in chrome;
+  every chrome color goes through a token.
+- Don't add intermediate type roles or shrink body text to signal "secondary" — the scale is
+  intentionally sparse and prominence comes from color.
+- Don't add web fonts or swap the system stack — it breaks native Japanese rendering for no gain.
+- Don't make a panel full-width on desktop or stack it over the map's focal area, and don't size a
+  full-height surface to the static viewport (`100vh`) — it causes the iOS Safari jump.

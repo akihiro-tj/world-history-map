@@ -1,12 +1,11 @@
 // Generated from DESIGN.md frontmatter. Do not edit by hand.
 // Run `pnpm --filter @world-history-map/design-tokens run build` to regenerate.
 export const roleColors = {
-  selected: '#f73d62',
-  loading: '#46a6ff',
-  warn: '#f2a618',
+  selected: '#f5b13d',
+  loading: '#38bdf8',
   error: '#f9423d',
-  focus: '#0072d5',
-  link: '#51a2ff',
+  focus: '#38bdf8',
+  link: '#5aa2ff',
   linkHover: '#8ec5ff',
   labelText: '#eeeeee',
   labelHalo: '#161616',

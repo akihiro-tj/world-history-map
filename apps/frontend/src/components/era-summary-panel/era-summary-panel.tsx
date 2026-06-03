@@ -26,7 +26,7 @@ function PanelHeader({ yearLabel, onClose }: { yearLabel: string; onClose: () =>
     <div className="border-b border-surface-border">
       <div className="flex items-center justify-between px-4 py-3">
         <h2 id="era-summary-title" className="text-panel-title text-text-primary">
-          {yearLabel}年の世界
+          {yearLabel}年の概観
         </h2>
         <CloseButton onClick={onClose} aria-label="閉じる" />
       </div>
@@ -42,8 +42,8 @@ function PanelBody({ state }: { state: RemoteData<EraSummary> }) {
       return <RoleErrorMessage>{state.message}</RoleErrorMessage>;
     case 'empty':
       return (
-        <div role="status" className="py-6 text-center text-body-sm text-text-secondary">
-          この年代の概要は準備中です。
+        <div role="status" className="py-6 text-center text-body text-text-secondary">
+          この年代の概観は準備中です。
         </div>
       );
     case 'loaded':
@@ -71,7 +71,7 @@ function DesktopContent({ state, yearLabel, onClose }: ContentProps) {
       aria-busy={isLoading || undefined}
       className={cn(
         'absolute left-4 top-4 z-30 w-96 max-w-[calc(100vw-2rem)] flex flex-col overflow-hidden rounded-lg bg-surface-panel shadow-xl backdrop-blur-sm',
-        isLoaded && 'max-h-[calc(100vh-2rem)]',
+        isLoaded && 'max-h-[calc(100dvh-100px)]',
       )}
     >
       <PanelHeader yearLabel={yearLabel} onClose={onClose} />
@@ -97,7 +97,7 @@ function MobileContent({ state, yearLabel, onClose }: ContentProps) {
       header={
         <div className="flex items-center justify-between border-b border-surface-border px-4 pb-2">
           <h2 id="era-summary-title" className="text-panel-title text-text-primary">
-            {yearLabel}年の世界
+            {yearLabel}年の概観
           </h2>
           <CloseButton aria-label="閉じる" onClick={onClose} />
         </div>

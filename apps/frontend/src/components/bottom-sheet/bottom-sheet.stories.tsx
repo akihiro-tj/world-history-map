@@ -18,11 +18,11 @@ const meta = {
         <h2 id="sheet-title" className="text-panel-title text-text-primary">
           フランス王国
         </h2>
-        <p className="text-body-sm text-text-secondary">絶対王政期</p>
+        <p className="text-body text-text-secondary">絶対王政期</p>
       </div>
     ),
     children: (
-      <div className="space-y-3 px-4 pb-4 text-body-sm text-text-secondary">
+      <div className="space-y-3 px-4 pb-4 text-body text-text-secondary">
         <p>
           1700年のフランスはルイ14世の親政期にあり、ヨーロッパ最大の人口約2000万人を擁した。翌1701年にはスペイン継承戦争が勃発する。
         </p>

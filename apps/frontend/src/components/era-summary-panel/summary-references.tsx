@@ -91,7 +91,7 @@ export function SummaryReferences({ context, references }: SummaryReferencesProp
   );
 
   return (
-    <div className="mt-1 space-y-2 text-body-sm leading-relaxed text-text-secondary">
+    <div className="mt-1 space-y-2 text-body leading-relaxed text-text-secondary">
       {paragraphs.map((paragraph) => (
         <p key={paragraph.key}>
           {paragraph.segments.map((segment, index) =>

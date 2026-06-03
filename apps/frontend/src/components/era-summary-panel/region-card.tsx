@@ -9,7 +9,7 @@ interface RegionCardProps {
 export function RegionCard({ regionCard, className }: RegionCardProps) {
   return (
     <article className={className}>
-      <h3 className="text-card-title text-text-primary">{regionCard.title}</h3>
+      <h3 className="text-section-heading text-text-primary">{regionCard.title}</h3>
       <SummaryReferences context={regionCard.context} references={regionCard.references} />
     </article>
   );
