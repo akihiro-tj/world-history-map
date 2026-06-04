@@ -3,7 +3,8 @@ name: design-mock
 description: >-
   design-mocks/ 配下に、DESIGN.md と生成済みデザイントークンに則った単一 HTML モックを生成するスキル。
   新機能をいきなり実装に入らず、まずモックで確認・比較検討したいときに使う。
-  DESIGN.md（ルール・意図）・theme.css（トークン）・実コンポーネント（具体レシピ）を実行時に参照し、
+  DESIGN.md（ルール・意図）・theme.css（トークン）・実コンポーネント（具体レシピ）に加え、
+  ui-ux-pro-max の `--domain ux`（インタラクション/アクセシビリティ）を実行時に参照し、
   トークン utility でモックを組む。比較する複数パターンは 1 つの design-mocks/<feature>/v<n>/index.html に
   並置し、比較検討を反復するごとに v1 → v2 とラウンドを重ねてブラウザで開く。
 argument-hint: "<モックしたい画面・機能の説明>"
@@ -26,6 +27,11 @@ allowed-tools: ["Bash", "Glob", "Read", "Write", "Edit", "AskUserQuestion"]
 - **ルール・意図** — `DESIGN.md`（Overview / Colors / Typography / Layout / Elevation / Shapes /
   Components / Do's and Don'ts）に従う。
 - **具体レシピ**（frosted panel の class 構成・状態表現・rose ストライプ等）— 該当する実コンポーネントに合わせる。
+- **インタラクション / アクセシビリティ品質** — `ui-ux-pro-max` スキルの `--domain ux` を引いて、
+  touch target・focus・loading/skeleton・reduced-motion・dark/light contrast・フォーム等の観点を補強する。
+  これは**視覚言語（色 / タイポ / サーフェス）を上書きしない**。視覚の源は DESIGN.md / theme.css / 実コンポーネントのままで、
+  ui-ux-pro-max は DESIGN.md がカバーしない振る舞い面を補完する位置づけ。`--design-system`・`style`・`color`・
+  `typography`・`--stack` は使わない（確立済みトークンと矛盾しうる / React Native 前提で Web モックに不適）。
 
 ## 2 つの軸: パターン（横）とラウンド（縦）
 
@@ -75,6 +81,17 @@ allowed-tools: ["Bash", "Glob", "Read", "Write", "Edit", "AskUserQuestion"]
 4. 対象に近い**実コンポーネント** 1〜2 個を `Glob`/`Read` で特定して読む。例:
    `apps/frontend/src/components/territory-info/territory-info-panel.tsx`（frosted panel・RemoteData の状態）、
    `year-display/`、`year-selector/`、`era-summary-panel/`、`bottom-sheet/`、`feedback/`。
+5. **UX 知見の補完（対象 UI に応じて条件付き）** — 対象がインタラクション・状態遷移・タッチを伴う場合
+   （bottom sheet・FAB・form・slider・async 状態・chart・ナビゲーション等）、`ui-ux-pro-max` の `--domain ux` を
+   対象 UI のキーワードで引き、適用すべき観点と Tailwind ユーティリティの当て方を Step 4 / Step 6 で使う:
+
+   ```bash
+   python3 .claude/skills/ui-ux-pro-max/scripts/search.py "<対象UIのキーワード>" --domain ux -n 6
+   ```
+
+   キーワード例: bottom sheet → `"bottom sheet modal touch dismiss"`、async 状態 → `"loading skeleton async feedback"`、
+   form → `"form label validation error"`、操作系 → `"touch target spacing focus"`、chart → `"chart legend tooltip accessible"`。
+   floating panel の薄い静的表示などインタラクションを伴わない場合は省略してよい。
 
 ### Step 3: ラウンド (version) 決定
 
@@ -111,8 +128,12 @@ allowed-tools: ["Bash", "Glob", "Read", "Write", "Edit", "AskUserQuestion"]
 
 ### Step 6: セルフレビュー
 
-`DESIGN.md` の `## Do's and Don'ts` を読み直し、生成した HTML を各項目に照合する。違反があれば修正する。
-**再生成は最大 1 回**まで。
+2 つの観点で照合し、違反があれば修正する。**再生成は最大 1 回**まで。
+
+1. **視覚言語** — `DESIGN.md` の `## Do's and Don'ts` を読み直し、生成した HTML を各項目に照合する。
+2. **インタラクション / アクセシビリティ** — Step 2 で `--domain ux` を引いた場合、取得した各ガイドラインの
+   Do / Don't に照合する（touch target ≥44px・focus 可視・loading フィードバック・reduced-motion 尊重・
+   dark/light の contrast・フォームのラベルとエラー位置 等）。mobile re-home（FAB + bottom sheet）と async 状態を重点的に見る。
 
 ### Step 7: open + 報告
 
@@ -122,7 +143,7 @@ open design-mocks/<feature-name>/v<n>/index.html
 
 ユーザーに報告する:
 - 生成パス / 表示した状態 / 比較したパターン / 前ラウンドからの差分（あれば）
-- Step 6 のセルフレビュー結果（DESIGN.md の Do/Don't と照合した結果、修正の有無）
+- Step 6 のセルフレビュー結果（DESIGN.md の Do/Don't と、引いた場合は `--domain ux` ガイドラインへの照合結果、修正の有無）
 - ルート index.html のパス（`open design-mocks/index.html`）
 
 ### Step 8: 反復（必要時）
@@ -136,4 +157,5 @@ open design-mocks/<feature-name>/v<n>/index.html
 ## 注意事項
 
 - 触ってよいのは `design-mocks/` 配下のみ。プロダクションコードや DESIGN.md / theme.css は変更しない。
+- `ui-ux-pro-max` は `--domain ux` の参照（読み取り）だけに使う。`--persist`（`design-system/` 配下を生成）は使わない。
 - `.gitignore` への追加可否はユーザー判断に委ねる（自動追加しない）。
