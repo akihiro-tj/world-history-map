@@ -1,7 +1,7 @@
 version: 2
 cooldown:
   default:
-    days: 3
+    days: 7
 updates:
   # npm dependencies
   - package-ecosystem: npm
