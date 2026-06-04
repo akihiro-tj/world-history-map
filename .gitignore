@@ -62,3 +62,7 @@ storybook-static
 # APM dependencies
 apm_modules/
 .agents/
+
+# Python (skill scripts)
+__pycache__/
+*.pyc
