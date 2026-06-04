@@ -2,7 +2,7 @@
   description = "Development environment for world-history-map";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
   };
 
   outputs = { nixpkgs, ... }:
@@ -26,8 +26,8 @@
           default = pkgs.mkShell {
             packages = (with pkgs; [
               git
-              nodejs_24
-              pnpm_10
+              nodejs_26
+              pnpm_11
               tippecanoe
               uv
             ]) ++ [ specify ];
