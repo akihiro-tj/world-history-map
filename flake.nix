@@ -11,6 +11,8 @@
       forAllSystems = nixpkgs.lib.genAttrs systems;
       # Lag spec-kit one week behind upstream as a cooldown; bump only to tags released >= 7 days ago.
       speckitVersion = "v0.8.17";
+      # Lag apm one week behind upstream as a cooldown; bump only to tags released >= 7 days ago.
+      apmVersion = "v0.16.0";
     in
     {
       devShells = forAllSystems (system:
@@ -21,6 +23,11 @@
               --from "git+https://github.com/github/spec-kit.git@${speckitVersion}" \
               specify "$@"
           '';
+          apm = pkgs.writeShellScriptBin "apm" ''
+            exec ${pkgs.uv}/bin/uv tool run \
+              --from "git+https://github.com/microsoft/apm.git@${apmVersion}" \
+              apm "$@"
+          '';
         in
         {
           default = pkgs.mkShell {
@@ -30,7 +37,7 @@
               pnpm_11
               tippecanoe
               uv
-            ]) ++ [ specify ];
+            ]) ++ [ specify apm ];
           };
         });
     };
