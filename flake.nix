@@ -27,6 +27,7 @@
             packages = (with pkgs; [
               git
               nodejs_24
+              pnpm_10
               tippecanoe
               uv
             ]) ++ [ specify ];
