@@ -1,12 +1,14 @@
 ---
+version: alpha
 name: World History Map
+description: The design counterpart to CLAUDE.md — the brief an agent reads before generating UI for World History Map.
 colors:
   role-selected: '#f5b13d'
   role-loading: '#38bdf8'
-  role-error: '#f9423d'
+  role-error: '#fa5450'
   role-focus: '#38bdf8'
-  role-link: '#5aa2ff'
-  role-link-hover: '#8ec5ff'
+  role-link: '#76b2ff'
+  role-link-hover: '#9bccff'
   role-label-text: '#eeeeee'
   role-label-halo: '#161616'
   surface-base: '#0a0e14'

@@ -3,10 +3,10 @@
 export const roleColors = {
   selected: '#f5b13d',
   loading: '#38bdf8',
-  error: '#f9423d',
+  error: '#fa5450',
   focus: '#38bdf8',
-  link: '#5aa2ff',
-  linkHover: '#8ec5ff',
+  link: '#76b2ff',
+  linkHover: '#9bccff',
   labelText: '#eeeeee',
   labelHalo: '#161616',
 } as const;
