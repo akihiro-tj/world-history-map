@@ -1,12 +1,14 @@
 ---
+version: alpha
 name: World History Map
+description: The design counterpart to CLAUDE.md — the brief an agent reads before generating UI for World History Map.
 colors:
   role-selected: '#f5b13d'
   role-loading: '#38bdf8'
-  role-error: '#f9423d'
+  role-error: '#fa5450'
   role-focus: '#38bdf8'
-  role-link: '#5aa2ff'
-  role-link-hover: '#8ec5ff'
+  role-link: '#76b2ff'
+  role-link-hover: '#9bccff'
   role-label-text: '#eeeeee'
   role-label-halo: '#161616'
   surface-base: '#0a0e14'
@@ -84,8 +86,8 @@ by these:
    (`role-selected`) marks the selected territory and the current year — nothing else. Its meaning
    *is* its scarcity.
 3. **This is a reading instrument.** Learners read real historical prose here, so body text is sized
-   for sustained reading and never shrunk to signal "secondary". Size separates the *kinds* of text
-   (heading / body / meta); within a kind, prominence is shown by color — dimmer, not smaller.
+   for sustained reading and never shrunk to signal "secondary". Size and weight separate the *kinds*
+   of text (heading / body / meta); within a kind, prominence is shown by color — dimmer, not smaller.
 4. **Select-and-explore, never fill-in.** The map and the year strip are the input surface — the
    user taps a territory or a year and reads, rather than filling in forms. Style controls as
    buttons, pills, and segments, and because interaction is overwhelmingly select-not-type, treat
@@ -106,8 +108,9 @@ a territory with a chrome token, and never let a map-content color into the UI.
 ## Colors
 
 Colors are named by **role, not hue**, and tuned so that roles which mean different things also
-*look* different — a role name is a promise the eye must be able to keep. The rules a hex code can't
-tell you:
+*look* different — a role name is a promise the eye must be able to keep. There is deliberately no
+`primary` hue palette (the format's usual baseline): in a role-named system the nearest thing to a
+primary is `role-selected`, the lone accent for "here / now". The rules a hex code can't tell you:
 
 - **Gold is the only persistent warm color** (Principle 2). `role-selected` marks the *selected
   territory* (map highlight, a panel's left accent stripe) and the *current year* (the timeline's
@@ -127,11 +130,15 @@ tell you:
 - **Within one kind of text, prominence rides lightness** (Principle 3). Size and weight separate the
   *kinds* (heading / control / body / meta); the lightness ramp then ranks importance *inside* a
   kind: `text-primary` (titles, values) → `text-secondary` (body) → `text-tertiary` (labels,
-  metadata) → `text-quiet` (disabled, faint). Dimming lets secondary text recede instead of enlarging
+  metadata) → `text-quiet` (disabled only). Dimming lets secondary text recede instead of enlarging
   primary text to compete with the map — but the dim tones have a floor: keep them legible, never dim
-  into unreadability. `text-dimmed` is the one tone outside that ramp — a *resting interactive* white
-  for idle control-bar icons, translucent so they recede into the frosted chrome until they brighten
-  to `text-primary` on hover.
+  into unreadability. That floor is measured against the *worst* background a token can land on — the
+  brightest map content bleeding through a frosted panel, not just the dark base, since the panel fill
+  is only near-opaque — and `role-link` and `role-error` are tuned to clear it there too. `text-quiet`
+  is the deliberate exception: reserved for genuinely disabled text, it may sit below the floor and so
+  must never carry information a reader needs. `text-dimmed` is the one tone outside that ramp — a
+  *resting interactive* white for idle control-bar icons, translucent so they recede into the frosted
+  chrome until they brighten to `text-primary` on hover.
 - **Surfaces are one slate ramp, not separate families.** `surface-base` (the void under the map) →
   `surface-sheet` (opaque slate for surfaces *larger than a panel* — the bottom sheet, the
   loading/error void) → `surface-panel` (the frosted fill of a *floating* panel; its alpha is
@@ -145,7 +152,8 @@ tell you:
 The system uses the **native system font stack** (`system-ui, Avenir, Helvetica, Arial,
 sans-serif`) — no web fonts. This is intentional: the document is `lang="ja"`, so the OS's Japanese
 faces render natively and instantly, with zero font-loading cost or layout shift. `fontFamily` is
-uniform across all roles and stays in prose rather than the per-role tokens.
+uniform across all roles, so it stays in prose rather than the per-role tokens — the generation
+pipeline emits no font-family, and the stack lives in the frontend's global stylesheet.
 
 Hierarchy comes from **weight and size, never letter-spacing** (there is no custom tracking).
 `leading-relaxed` is added for reading-flow paragraphs and `leading-tight` for compact headings
@@ -155,9 +163,10 @@ align in a column.
 The scale is deliberately small — six roles and a single body size — and the numbers live **only**
 in the frontmatter. Within a role, prominence comes from **text color** (the lightness ramp), not a
 smaller font: a field label and its value share one role and are told apart only by `text-tertiary`
-vs `text-primary`. Size says *what kind of text* this is — heading, control, reading body, or meta;
-color says *how prominent* it is within that kind. Because this is a reading instrument (Principle
-3), body text stays comfortable for sustained reading and never shrinks to signal "secondary".
+vs `text-primary`. Size and weight say *what kind of text* this is — heading, control, reading body,
+or meta; color says *how prominent* it is within that kind. Because this is a reading instrument
+(Principle 3), body text stays comfortable for sustained reading and never shrinks to signal
+"secondary".
 Hierarchy reads from the gaps *between* roles, so resist adding intermediate steps.
 
 | Token | Usage |
@@ -175,8 +184,10 @@ The layout is not a page grid — it is a **map canvas with corner-anchored over
 
 - **The map's center is sacred.** Controls anchor to the corners with a consistent edge inset;
   nothing covers the focal geography.
-- **Panels are bounded, never full-bleed.** A detail panel is a single readable column (never
-  full-width on desktop); the year strip is centered with a comfortable max width.
+- **Panels are bounded, never full-bleed.** A detail panel is a single column held to a comfortable
+  reading measure (never full-width on desktop) — roughly 35–45 Japanese characters per line, the
+  width at which sustained prose stays readable (Principle 3); the year strip is centered with a
+  comfortable max width.
 - **Stacking order is fixed so overlays stay predictable:** map at the base, then persistent
   controls, then detail panels, with the mobile bottom sheet above everything.
 - **Spacing follows the baseline rhythm of `spacing.unit`** — a consistent inset and internal
@@ -230,7 +241,8 @@ is demonstrated in the design showcase rather than re-specified here.
   states.
 - **`RemoteData` states (Principle 5).** *Loading* — a centered `role-loading` spinner ring in the
   body. *Error* — a plain-language message in the legible light-text ramp on a faint `role-error`
-  tint, with `role-error` carrying only the accent (icon, hairline), never the body copy. *Empty* —
+  tint, with `role-error` carrying only the accent (icon, hairline), never the body copy; it offers a
+  clear way back — a retry / reload action — so a failed fetch is a setback, not a dead end. *Empty* —
   a short plain-language line saying what's missing (e.g. "詳細情報は準備中です"), never a blank.
   *Loaded* — the real content. The header stays put across all four so the panel never jumps.
 - **Year selector — the temporal control.** A horizontally-scrolling strip of segmented buttons
@@ -239,6 +251,10 @@ is demonstrated in the design showcase rather than re-specified here.
   `surface-raised` fill and the `title` role (bold, tabular); inactive years use the `label` role in
   `text-secondary` with hover feedback. `aria-current` marks the active year, the strip auto-scrolls
   it to center on change, and it is fully keyboard-navigable.
+- **Icons.** Hand-drawn inline SVG on a 24-unit grid — no icon library — painted with `currentColor`
+  so a glyph inherits whatever text role surrounds it. Stroke weight is two-tiered by layer: 2 for
+  chrome glyphs, 1.5 for the lighter map-control glyphs; keep a glyph's weight matched to its layer
+  rather than mixing the two in one place.
 - **Icon button (control bar).** A frosted `rounded-lg` square; the icon rests at `text-dimmed` and
   brightens to `text-primary` on hover. Icon-only, always with an `sr-only` label, and sized to a
   comfortable touch target (≥44px) even when the glyph itself is small.
@@ -269,11 +285,17 @@ A scannable checklist of the principles above — use it to catch a screen that 
 - Give every floating surface the frosted treatment (near-opaque slate + backdrop blur + soft shadow);
   depth comes from blur and translucency, not drop shadows.
 - Keep the map's center clear and anchor controls to the corners.
-- Render explicit loading / empty / error / loaded states for any async surface (`RemoteData`).
-- Give every interactive control a comfortable touch target (≥44px), padding icon-only buttons out
-  even when the glyph is small.
+- Render explicit loading / empty / error / loaded states for any async surface (`RemoteData`), and
+  give the error state a retry / reload path so a failed fetch is never a dead end.
+- Give every interactive control a comfortable touch target (≥44px), padding out icon-only buttons
+  and small caption-size links alike, however small the glyph or label.
 - Carry hierarchy with text color, and reach for a typography role token (`text-panel-title`,
   `text-body`) rather than a raw size + weight pair.
+- Draw icons from the inline-SVG system (24-grid, `currentColor`), keeping stroke weight matched to
+  the layer — never an icon library or emoji.
+- Hold reading columns to a comfortable measure so historical prose stays readable, and verify the
+  dim-text floor against the brightest map showing through a frosted panel, not just the dark base.
+- Keep motion functional and quick (≈150–300ms, ease-out) so it expresses cause and effect.
 - On mobile, re-home controls (FAB + bottom sheet) instead of shrinking the desktop layout.
 - Size full-height surfaces with dynamic viewport units (`100dvh`) so mobile browser chrome doesn't
   clip them, and honor `prefers-reduced-motion` (it is enforced globally).

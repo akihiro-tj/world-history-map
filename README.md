@@ -16,11 +16,11 @@ packages/
   design-tokens/  # Design token build (theme.css / MapLibre role colors)
 ```
 
-pnpm workspaces, Node.js 24. pnpm is pinned via the `packageManager` field and resolved through corepack.
+pnpm workspaces on Node.js 26. The pnpm version is pinned via the `packageManager` field and enforced by the `engines` range; the Nix dev shell (below) provides both Node.js and pnpm directly.
 
 ### Development environment (Nix)
 
-System tools — notably `tippecanoe` / `tile-join` used by the data pipeline — and Node.js are provided by a Nix flake dev shell, so they don't need to be installed globally (e.g. via Homebrew).
+System tools — notably `tippecanoe` / `tile-join` for the data pipeline and the `specify` CLI for the spec-kit workflow — along with Node.js and pnpm are provided by a Nix flake dev shell, so they don't need to be installed globally (e.g. via Homebrew).
 
 Prerequisites:
 
@@ -39,7 +39,7 @@ Without direnv:
 nix develop
 ```
 
-Inside the shell, `pnpm` resolves to the version declared in `package.json` (`packageManager`) via corepack.
+Inside the shell, `node` and `pnpm` come from the flake (`nodejs_26` / `pnpm_11`), matching the versions pinned in `package.json`.
 
 > `op` (1Password CLI) is used by `pnpm territory-sync` to read Notion credentials and is intentionally **not** bundled in the flake — it relies on the 1Password desktop app integration. Install it on your system if you sync territory descriptions.
 
