@@ -74,7 +74,7 @@
 type City = {
   id: string;        // 英小文字の slug。一意
   name: string;      // 表示名
-  reading: string;   // ひらがなの読み（検索用）。複数あれば半角空白で区切る（例: "くちゃ きじ"）
+  reading: string;   // ひらがな（長音符を含む）の読み（検索用）。複数あれば半角空白で区切る（例: "くちゃ きじ"）
   type: "city";
   lon: number;       // WGS84 経度
   lat: number;       // WGS84 緯度
@@ -89,7 +89,7 @@ type City = {
 - 正確性を網羅性より優先する。不確かなものは載せない
 - 座標は遺跡や歴史的中心地を指す。現在の同名都市の中心とずれる場合は遺跡を優先する（例: カラコルム = ハルホリン近郊の遺跡、サライ = セリトレンノエ付近）
 - 出典は 1 件以上付ける（Wikipedia の座標表記、学術資料など）。精度は小数 2〜4 桁でよい
-- unit test で `public/data/cities.json` を検証する: スキーマに合っているか、id が重複していないか、経度 −180〜180・緯度 −90〜90 に収まるか、`reading` がひらがなと半角空白だけか、名前が空でないか
+- unit test で `public/data/cities.json` を検証する: スキーマに合っているか、id が重複していないか、経度 −180〜180・緯度 −90〜90 に収まるか、`reading` がひらがな・長音符（ー）・半角空白だけか、名前が空でないか
 
 ### ベースマップ
 
@@ -106,7 +106,7 @@ type City = {
 
   - 縮尺ごとに tippecanoe で `land`（ポリゴン）と `coastline`（ライン）の 2 レイヤーを作る
   - `tile-join` で `public/tiles/world.pmtiles` に結合する
-  - `pmtiles verify` で検証する
+  - `scripts/verify-tiles.ts`（pmtiles の JS ライブラリでヘッダーを読む）でズーム範囲・レイヤー・サイズを検証する
   - z7 以上は MapLibre のオーバーズームで表示する
 - 生成した `world.pmtiles` はハッシュなしのファイル名でコミットする。目標は 15 MB 未満。超えた場合は最大ズームを 5 に下げる
 
@@ -140,7 +140,7 @@ MVP は workers.dev で公開するので、Worker で中継する。Worker 経�
 | `assets/manifest.ts` | `/asset-manifest.json` を取得し、論理名から URL を返す |
 
 - 都市は GeoJSON ソースの circle レイヤーで描く。選択状態は `feature-state` で持つ。名前は DOM のパネルに出すので、MapLibre のラベルや CJK グリフは使わない
-- 選択の状態は App が一元管理する。地図のクリックと検索の決定は、どちらも同じ `selectCity(id)` を呼ぶ
+- 選択の状態は App が一元管理する。地図のクリックと検索の決定は、どちらも App の選択中の都市 id を更新する。検索で決定したときだけ flyTo もする
 
 ### アセットの解決
 
@@ -158,7 +158,7 @@ MVP は workers.dev で公開するので、Worker で中継する。Worker 経�
 
 - `/tiles/*` と `/data/*` の GET と HEAD だけを受け持つ（`assets.run_worker_first: ["/tiles/*", "/data/*"]`）。それ以外はすべて静的アセットが返す
 - `env.ASSETS_BUCKET.get(key, { range: request.headers, onlyIf: request.headers })` で取得する
-- 返すステータスとヘッダーは、純関数 `range.ts` で組み立てる
+- 処理は `serve.ts` にまとめ、Range の範囲計算は純関数 `resolveRange` に切り出す
 
   | 状況 | 応答 |
   |---|---|
@@ -170,12 +170,12 @@ MVP は workers.dev で公開するので、Worker で中継する。Worker 経�
   | キーが存在しない | 404 |
 
 - すべての応答に `Accept-Ranges: bytes` と強い ETag（`httpEtag`）を付ける。Content-Type と Cache-Control は、アップロード時に保存したものを `writeHttpMetadata` で付ける
-- `range.ts` は R2 のモックを使って unit test する
+- `serve.ts` は R2 のフェイクを使って unit test する
 
 ### デプロイ設定（`wrangler.jsonc`。ダッシュボードでは設定しない）
 
 - `main: src/worker/index.ts`
-- `assets: { directory: "./dist", binding: "ASSETS", run_worker_first: ["/tiles/*", "/data/*"], not_found_handling: "404-page" }`
+- `assets: { directory: "./dist", binding: "ASSETS", run_worker_first: ["/tiles/*", "/data/*"] }`（`not_found_handling` は指定しない。対象外のパスは Worker が 404 を返す）
 - `r2_buckets: [{ binding: "ASSETS_BUCKET", bucket_name: "whm-assets" }]`
 - `workers_dev: true`、`preview_urls: true`（どちらも明示的に書く）
 - `previews: { r2_buckets: [{ binding: "ASSETS_BUCKET", bucket_name: "whm-assets" }] }`
@@ -208,7 +208,8 @@ MVP は workers.dev で公開するので、Worker で中継する。Worker 経�
 
 ## 8. 開発環境・ツール
 
-- **nix flake の devShell**: nodejs_24、pnpm、tippecanoe、gdal、pmtiles、jq
+- **nix flake の devShell**: nodejs_24、pnpm、tippecanoe
+  - Natural Earth は GeoJSON を直接使うので gdal は不要。タイルの検証は JS で行うので pmtiles CLI も不要
   - 1Password CLI（`op`）は含めない。ローカルでデプロイするときだけ使うので、端末にグローバルインストールしたものを使う
 - **パッケージ**: 現時点の最新安定版を exact 指定で固定する（`.npmrc` に `save-exact=true`）
   - `package.json` の `packageManager` に `pnpm@12.5.1` を書く
@@ -216,7 +217,7 @@ MVP は workers.dev で公開するので、Worker で中継する。Worker 経�
   - TypeScript 7 で周辺ツールとの互換問題が出たら 6.x に固定し、この spec を更新する
 - **lint・format**: Biome（`biome ci`）
 - **テスト**: Vitest の unit test のみ
-  - 対象: `cities.json`、`city.ts` の検証、`match.ts`、`range.ts`、`manifest.ts`、Vite の dev プラグイン
+  - 対象: `cities.json`、`city.ts` の検証、`match.ts`、`serve.ts`、`manifest.ts`、Vite の dev プラグイン
   - UI は実ブラウザで確認する
 - **型検査**: `tsc --noEmit`（アプリ用と Worker 用の tsconfig を分ける）
 - **npm scripts**
@@ -244,7 +245,9 @@ MVP は workers.dev で公開するので、Worker で中継する。Worker 経�
 
 DESIGN.md の YAML front matter を、デザイントークンの唯一の定義元にする。Tailwind や MapLibre のスタイルに同じ値を直接書かない。
 
-1. `pnpm tokens` で `@google/design.md export --format css-tailwind DESIGN.md` を実行し、Tailwind v4 の `@theme { ... }` ブロックを `src/app/theme.css` に書き出す
+1. `pnpm tokens` で `@google/design.md export --format css-tailwind DESIGN.md` を実行し、Tailwind v4 の `@theme` ブロックを `src/app/theme.css` に書き出す。その際、次の 2 点を直す
+   - `@theme static` にする。Tailwind v4 は未使用のテーマ変数を出力しないので、地図の色を CSS 変数から読めなくなるため
+   - フォントの並び（例: `system-ui, sans-serif`）全体が 1 つの名前として引用符で囲まれるので、名前ごとに囲み直す
 2. `theme.css` は生成物としてコミットする。CI で `pnpm tokens` をもう一度実行し、差分が出たら失敗させる
 3. Tailwind のユーティリティは `theme.css` の変数（`--color-*` など）を使う
 4. MapLibre のスタイル（海・陸・海岸線・都市の点の色）も、`style.ts` が同じ CSS 変数を `getComputedStyle` で読んで組み立てる
@@ -254,13 +257,15 @@ DESIGN.md の YAML front matter を、デザイントークンの唯一の定義
 すべてのジョブで pnpm と Node をセットアップし、`pnpm install --frozen-lockfile` を明示的に実行する。actions のバージョンは SHA で固定する。
 
 - **`ci.yml`**（pull_request と main への push）
-  - `biome ci` → `typecheck` → `test` → `design.md lint` → `tokens` の差分確認 → `build`
+  - `biome ci` → `typecheck` → `test` → `design.md lint` → `tokens` の差分確認 → `build` → `publish:assets --dry-run` → `wrangler deploy --dry-run`（設定の検証）
 - **`preview.yml`**（pull_request の opened / synchronize / reopened / closed）
   - 実行条件: `github.actor != 'dependabot[bot]'` かつ fork からの PR ではないこと（Secrets が渡らないため）
-  - デプロイ: `build` → `publish:assets` → `wrangler preview --name pr-<番号> --json` → URL を取り出す → `/tiles/...` に Range リクエストを送り、206 が返ることを確認 → PR コメント（日本語）を 1 件作り、以降は同じコメントを更新する
+  - デプロイ: `build` → `publish:assets` → `wrangler preview --name pr-<番号> --json` → URL を取り出す → `scripts/smoke.sh` で確認 → PR コメント（日本語）を 1 件作り、以降は同じコメントを更新する
   - closed のとき: `wrangler preview delete` でプレビューを削除する
 - **`deploy.yml`**（main への push。`concurrency` で同時実行を防ぐ）
-  - `build` → `publish:assets` → `wrangler deploy` → スモークテスト（トップが 200、タイルが 206、都市データが 200）
+  - `build` → `publish:assets` → `wrangler deploy` → `scripts/smoke.sh`
+  - 本番 URL（`https://world-history-map.<サブドメイン>.workers.dev`）はワークフローのファイルに書く
+- **`scripts/smoke.sh`**（プレビューと本番で共通）: トップが 200、タイルの Range が 206 で強い ETag を持つ、範囲外の Range が 416、都市データが取得できる
 - **`dependabot.yml`**
   - npm: 週次、`cooldown`（default 7 日、major 14 日）、dev と prod でグループ化
   - github-actions: 週次、`cooldown`（7 日）
@@ -290,7 +295,7 @@ DESIGN.md の YAML front matter を、デザイントークンの唯一の定義
 |---|---|
 | Worker 経由の R2 の Range 応答（206 / 416、ETag が強いまま保たれるか）と、pmtiles + MapLibre での描画 | 原因を調べて Worker を直す。どうしても直らなければ、独自ドメインを用意して R2 から直接配信することをユーザーと相談する |
 | Worker Previews の作成 → PR コメント → 削除の流れ | `wrangler versions upload --preview-alias` を使う |
-| pnpm 12 のロックファイルで Dependabot が PR を作れるか | pnpm 10.34.5 に固定する |
+| pnpm 12 のロックファイルで Dependabot が PR を作れるか（main にマージした後でないと確認できない） | pnpm 10.34.5 に固定する |
 
 その他の注意点:
 
