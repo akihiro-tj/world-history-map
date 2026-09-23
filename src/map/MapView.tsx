@@ -1,5 +1,11 @@
 import "maplibre-gl/dist/maplibre-gl.css";
-import { addProtocol, type GeoJSONSource, Map as MapLibreMap, setWorkerUrl } from "maplibre-gl";
+import {
+  addProtocol,
+  type GeoJSONSource,
+  getVersion,
+  Map as MapLibreMap,
+  setWorkerUrl,
+} from "maplibre-gl";
 import { Protocol } from "pmtiles";
 import { useEffect, useRef } from "react";
 import type { City } from "../data/city";
@@ -35,8 +41,12 @@ function registerPmtilesProtocol() {
     addProtocol("pmtiles", new Protocol().tile);
     if (import.meta.env.PROD) {
       // 本番ビルドでは Vite がワーカーの動的 URL 組み立てを解析できないため、
-      // vite.config.ts (copyMaplibreWorker) が書き出した静的ファイルを直接指す
-      setWorkerUrl(new URL(/* @vite-ignore */ "./maplibre-gl-worker.mjs", import.meta.url).href);
+      // vite.config.ts (copyMaplibreWorker) が書き出した静的ファイルを直接指す。
+      // バージョン付きディレクトリのパスは getVersion() から組み立てる
+      // （copyMaplibreWorker.ts 側は package.json から読み、両者とも
+      // インストール済み maplibre-gl 自身を唯一の情報源にする）
+      const workerPath = `./maplibre-gl-${getVersion()}/maplibre-gl-worker.mjs`;
+      setWorkerUrl(new URL(/* @vite-ignore */ workerPath, import.meta.url).href);
     }
     pmtilesRegistered = true;
   }

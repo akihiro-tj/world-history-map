@@ -6,6 +6,7 @@ import { copyMaplibreWorker } from "./vite/plugins/copyMaplibreWorker";
 
 export default defineConfig({
   plugins: [react(), tailwindcss(), assetManifestDev(), copyMaplibreWorker()],
-  // maplibre-gl のワーカーは dep 最適化と相性が悪く、除外しないと dev で読み込みに失敗する
+  // 除外しないと dep 最適化が maplibre-gl-worker.mjs を見失い、
+  // dev でワーカーが "Worker failed to load" になる（実機で再現・確認済み）
   optimizeDeps: { exclude: ["maplibre-gl"] },
 });
