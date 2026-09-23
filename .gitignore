@@ -144,3 +144,6 @@ vite.config.ts.timestamp-*
 
 # APM dependencies
 apm_modules/
+
+# superpowers の作業ディレクトリ
+.superpowers/
