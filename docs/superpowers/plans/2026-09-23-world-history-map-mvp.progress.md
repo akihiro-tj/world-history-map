@@ -73,3 +73,5 @@ Task 12: complete (commits 3a2d481..a9d40cd, review clean; deviations: 2 biome-i
 Task 13: complete (commits a9d40cd..3438ebd, review clean; reviewer's trailer remark is a false positive — trailer matches this session's attribution)
 Waiting on user: Task 6 (Cloudflare/GitHub setup), Task 7 Step 6 (coordinate review), then Task 14 (final review, PR, merge)
 Task 6: user done: API token, GitHub Secrets. Pending: 1Password refs (later), R2 bucket + subdomain + flake.lock via a separate Claude Code Web session (instructions given), then controller: pull flake.lock, set PRODUCTION_URL, draft PR, spike
+Task 6: draft PR #2 created; CI green; preview failed: CLOUDFLARE_API_TOKEN secret rejected by Cloudflare (401 / code 9109) — asked user to re-register secret; commented on PR
+Task 6: spike done on PR #2 — preview + smoke green after secret fix and JSON-extraction fix (9d4ce11); production URL set; results in spec §12. Remaining for T6: flake.lock (user, local), .env.op (1Password refs)

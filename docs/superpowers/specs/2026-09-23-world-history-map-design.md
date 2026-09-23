@@ -296,6 +296,17 @@ DESIGN.md の YAML front matter を、デザイントークンの唯一の定義
 | Worker Previews の作成 → PR コメント → 削除の流れ | `wrangler versions upload --preview-alias` を使う |
 | pnpm 12 のロックファイルで Dependabot が PR を作れるか（main にマージした後でないと確認できない） | pnpm 10.34.5 に固定する |
 
+### スパイクの結果（2026-09-23、PR #2）
+
+| 確認したこと | 結果 | 対応 |
+|---|---|---|
+| Worker 経由の R2 の Range 応答 | プレビュー環境で `scripts/smoke.sh` が成功した（タイルの Range が 206 かつ強い ETag、範囲外が 416、都市データを取得できる） | 変更なし。R2 から直接配信する案は不要 |
+| Worker Previews の作成と PR コメント | `wrangler preview --name pr-2` でプレビューを作成でき、URL の PR コメントも付いた。本番の Worker がまだ無くても作成できた | `--json` を付けても、アセットのアップロード進捗が JSON より前に出力される。そのため、ワークフローで最初の `{` 以降だけを取り出してから jq に渡すように直した |
+| プレビュー URL の形式 | `https://pr-<番号>-world-history-map.akihiro-tj.workers.dev` | 本番 URL を `https://world-history-map.akihiro-tj.workers.dev` に確定させた |
+| pmtiles と MapLibre での描画（プレビュー上） | 未確認（作業環境から workers.dev に接続できない） | ユーザーがプレビュー URL を実機で開いて確認する（Task 14） |
+| pnpm 12 と Dependabot | 未確認 | main にマージした後に確認する（Task 14） |
+| GitHub Secrets の API トークン | 最初は Cloudflare に拒否された（401 / code 9109）。登録し直したら通った | なし |
+
 その他の注意点:
 
 - MapLibre 6 は WebGL2 が必須で、ESM のみの配布になっている。ビルド後にワーカーのチャンクが出力されているか確認する
