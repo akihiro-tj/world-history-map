@@ -34,9 +34,11 @@ jobs:
       - id: preview
         name: Worker Preview を作る
         run: |
-          pnpm exec wrangler preview --name "$PREVIEW_NAME" --json > preview.json
-          cat preview.json
-          url="$(jq -r '.preview_urls[0] // .preview.urls[0] // empty' preview.json)"
+          pnpm exec wrangler preview --name "$PREVIEW_NAME" --json > preview.log
+          cat preview.log
+          # --json でもアセットのアップロード進捗が先に出力されるので、JSON の部分だけを取り出す
+          sed -n '/^{/,$p' preview.log > preview.json
+          url="$(jq -r '.preview.urls[0] // empty' preview.json)"
           test -n "$url"
           echo "url=$url" >> "$GITHUB_OUTPUT"
       - name: スモークテスト

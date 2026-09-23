@@ -8,7 +8,7 @@ concurrency:
   group: production
   cancel-in-progress: false
 env:
-  PRODUCTION_URL: https://world-history-map.SUBDOMAIN_FROM_TASK_6.workers.dev
+  PRODUCTION_URL: https://world-history-map.akihiro-tj.workers.dev
 jobs:
   deploy:
     name: 本番にデプロイ
