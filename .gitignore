@@ -147,3 +147,10 @@ apm_modules/
 
 # superpowers の作業ディレクトリ
 .superpowers/
+
+# 世界史地図
+!.env.op
+.wrangler/
+.tiles-cache/
+.dev.vars
+CLAUDE.local.md
