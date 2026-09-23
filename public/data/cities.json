@@ -1,1 +1,92 @@
-[]
+[
+  {
+    "id": "samarkand",
+    "name": "サマルカンド",
+    "reading": "さまるかんど",
+    "type": "city",
+    "lon": 66.9597,
+    "lat": 39.6542,
+    "source": "https://ja.wikipedia.org/wiki/サマルカンド"
+  },
+  {
+    "id": "bukhara",
+    "name": "ブハラ",
+    "reading": "ぶはら",
+    "type": "city",
+    "lon": 64.4286,
+    "lat": 39.7747,
+    "source": "https://ja.wikipedia.org/wiki/ブハラ"
+  },
+  {
+    "id": "dunhuang",
+    "name": "敦煌",
+    "reading": "とんこう",
+    "type": "city",
+    "lon": 94.662,
+    "lat": 40.1421,
+    "source": "https://ja.wikipedia.org/wiki/敦煌市"
+  },
+  {
+    "id": "kucha",
+    "name": "クチャ（亀茲）",
+    "reading": "くちゃ きじ",
+    "type": "city",
+    "lon": 82.9333,
+    "lat": 41.7167,
+    "source": "https://ja.wikipedia.org/wiki/亀茲"
+  },
+  {
+    "id": "karakorum",
+    "name": "カラコルム（和林）",
+    "reading": "からこるむ わりん",
+    "type": "city",
+    "lon": 102.8481,
+    "lat": 47.2086,
+    "source": "https://ja.wikipedia.org/wiki/カラコルム"
+  },
+  {
+    "id": "dadu",
+    "name": "大都",
+    "reading": "だいと",
+    "type": "city",
+    "lon": 116.3833,
+    "lat": 39.9,
+    "source": "https://ja.wikipedia.org/wiki/大都"
+  },
+  {
+    "id": "emil",
+    "name": "エミール",
+    "reading": "えみーる",
+    "type": "city",
+    "lon": 83.642,
+    "lat": 46.527,
+    "source": "https://ja.wikipedia.org/wiki/エミル"
+  },
+  {
+    "id": "almaliq",
+    "name": "アルマリク",
+    "reading": "あるまりく",
+    "type": "city",
+    "lon": 80.8333,
+    "lat": 44.05,
+    "source": "https://ja.wikipedia.org/wiki/アルマリク"
+  },
+  {
+    "id": "sarai",
+    "name": "サライ",
+    "reading": "さらい",
+    "type": "city",
+    "lon": 47.43,
+    "lat": 47.17,
+    "source": "https://ja.wikipedia.org/wiki/サライ_(都市)"
+  },
+  {
+    "id": "tabriz",
+    "name": "タブリーズ",
+    "reading": "たぶりーず",
+    "type": "city",
+    "lon": 46.2919,
+    "lat": 38.08,
+    "source": "https://ja.wikipedia.org/wiki/タブリーズ"
+  }
+]
