@@ -12,6 +12,8 @@
     "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.worker.json",
     "test": "vitest run",
     "publish:assets": "tsx scripts/publish-assets.ts",
+    "tiles:build": "bash scripts/build-tiles.sh && pnpm tiles:verify",
+    "tiles:verify": "tsx scripts/verify-tiles.ts public/tiles/world.pmtiles",
     "deploy:cf": "pnpm build && pnpm publish:assets && wrangler deploy",
     "preview:cf": "pnpm build && pnpm publish:assets && wrangler preview",
     "dev:secrets": "op run --env-file=.env.op --"
