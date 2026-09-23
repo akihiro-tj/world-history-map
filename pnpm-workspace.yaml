@@ -2,7 +2,6 @@
 allowBuilds:
   esbuild: true
   workerd: true
-minimumReleaseAgeExclude:
-  - maplibre-gl@6.11.0
-  - '@cloudflare/workers-types@5.20260923.1'
-  - wrangler@4.136.3
+# 公開直後の版の取得制御は dependabot の cooldown で行うため、
+# pnpm の minimumReleaseAge（既定 1440 分）は無効化する（spec §10）
+minimumReleaseAge: 0
