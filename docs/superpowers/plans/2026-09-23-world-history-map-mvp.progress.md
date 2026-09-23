@@ -72,3 +72,4 @@ Task 12: Ruling: keep `md:max-w-[24rem]` (plan-mandated arbitrary value for sear
 Task 12: complete (commits 3a2d481..a9d40cd, review clean; deviations: 2 biome-ignore for ARIA roles, `!absolute` on map container)
 Task 13: complete (commits a9d40cd..3438ebd, review clean; reviewer's trailer remark is a false positive — trailer matches this session's attribution)
 Waiting on user: Task 6 (Cloudflare/GitHub setup), Task 7 Step 6 (coordinate review), then Task 14 (final review, PR, merge)
+Task 6: user done: API token, GitHub Secrets. Pending: 1Password refs (later), R2 bucket + subdomain + flake.lock via a separate Claude Code Web session (instructions given), then controller: pull flake.lock, set PRODUCTION_URL, draft PR, spike
