@@ -11,6 +11,7 @@
     "format": "biome check --write .",
     "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.worker.json",
     "test": "vitest run",
+    "tokens": "tsx scripts/tokens.ts",
     "publish:assets": "tsx scripts/publish-assets.ts",
     "tiles:build": "bash scripts/build-tiles.sh && pnpm tiles:verify",
     "tiles:verify": "tsx scripts/verify-tiles.ts public/tiles/world.pmtiles",

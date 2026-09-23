@@ -20,6 +20,11 @@ jobs:
       - run: pnpm exec biome ci .
       - run: pnpm typecheck
       - run: pnpm test
+      - run: pnpm exec design.md lint DESIGN.md
+      - name: 生成済みトークンが DESIGN.md と一致するか確認
+        run: |
+          pnpm tokens
+          git diff --exit-code src/app/theme.css
       - run: pnpm build
       - run: pnpm publish:assets --dry-run
       - run: pnpm exec wrangler deploy --dry-run --outdir .wrangler/dry-run
