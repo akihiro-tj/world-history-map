@@ -2867,8 +2867,6 @@ export const COPY = {
   tilesLoadError: "地図の読み込みに失敗しました",
   citiesLoadError: "地名データの読み込みに失敗しました",
   close: "閉じる",
-  zoomIn: "拡大",
-  zoomOut: "縮小",
 } as const;
 ```
 
@@ -3034,15 +3032,9 @@ Expected: PASS
 
 ```tsx
 import "maplibre-gl/dist/maplibre-gl.css";
-import {
-  addProtocol,
-  type GeoJSONSource,
-  Map as MapLibreMap,
-  NavigationControl,
-} from "maplibre-gl";
+import { addProtocol, type GeoJSONSource, Map as MapLibreMap } from "maplibre-gl";
 import { Protocol } from "pmtiles";
 import { useEffect, useRef } from "react";
-import { COPY } from "../app/copy";
 import type { City } from "../data/city";
 import type { Bounds } from "./bounds";
 import { citiesToGeoJSON } from "./citiesGeoJSON";
@@ -3114,14 +3106,9 @@ export function MapView({
       pitchWithRotate: false,
       touchPitch: false,
       maxPitch: 0,
-      locale: {
-        "NavigationControl.ZoomIn": COPY.zoomIn,
-        "NavigationControl.ZoomOut": COPY.zoomOut,
-      },
     });
     map.touchZoomRotate.disableRotation();
     map.keyboard.disableRotation();
-    map.addControl(new NavigationControl({ showCompass: false }), "bottom-right");
 
     map.on("error", (event) => {
       if ((event as { sourceId?: string }).sourceId === BASEMAP_SOURCE_ID) {
@@ -3231,7 +3218,7 @@ export function App() {
 2. 10 都市の点がすべて表示範囲に入っている
 3. 点をクリックすると色と大きさが変わる。別の点をクリックすると前の点が元に戻る。何もない所をクリックすると選択が外れる
 4. 点の少し外側（10px 程度）をクリックしても選択できる
-5. ドラッグ・ホイールでパン・ズームでき、回転しない。ズームボタンの aria-label が「拡大」「縮小」
+5. ドラッグ・ホイール・ダブルクリックでパン・ズームでき、回転しない。ズームボタンが表示されていない
 6. 帰属表示が出ていない。コンソールにエラーが無い
 7. `pnpm build && pnpm preview` でも同じように表示される（MapLibre 6 のワーカーのチャンクがビルドに含まれているか）
 
