@@ -1,0 +1,11 @@
+name: world-history-map
+version: 1.0.0
+targets:
+- claude
+dependencies:
+  apm:
+  - obra/superpowers#v6.4.1
+executables:
+  deny:
+    obra/superpowers#6.4.1:
+      hooks: true
