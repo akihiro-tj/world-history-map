@@ -60,3 +60,15 @@ Task 9: minor (deferred): parseManifest accepts protocol-relative "//host/x" (re
 Task 9: minor (deferred): implementer left `pnpm dev` running after Step 5 (controller killed it)
 Task 9: complete (commits 0ef31e8..5c66a11, review clean)
 Task 10: complete (commits 5c66a11..bd56d3a, review clean)
+Task 8: Step 1 approved by user (mock v3, zoom buttons removed at user's request); spec §3/§7 + plan Task 11 updated in commit (drop zoom buttons)
+Task 8: complete (commits 80095aa..7a8f8f8, review clean)
+Task 11: minor (deferred): cities setData after a selection relies on MapLibre keeping feature-state across setData (untested)
+Task 11: fix round 1/5 (2 addressed, 0 open — optimizeDeps exclusion documented with repro; worker assets versioned under assets/maplibre-gl-<ver>/; commits ff52f1f..3a2d481)
+Task 11: minor (deferred): vite native config loader warns about extensionless relative imports in vite.config.ts on every build (cosmetic)
+Task 11: minor (deferred): single JS bundle ~1.26MB (352KB gzip) — consider code-splitting later
+Task 11: complete (commits 7a8f8f8..3a2d481, review clean after 1 fix round; unplanned addition vite/plugins/copyMaplibreWorker.ts)
+Task 12: minor (deferred): aria-expanded stays true when the no-results status (not the listbox) is shown — borderline WAI-ARIA nuance
+Task 12: Ruling: keep `md:max-w-[24rem]` (plan-mandated arbitrary value for search width; DESIGN.md Layout prose defines it, and max-width is not a token category in the design.md spec) — cost if wrong: one literal to move into a token later
+Task 12: complete (commits 3a2d481..a9d40cd, review clean; deviations: 2 biome-ignore for ARIA roles, `!absolute` on map container)
+Task 13: complete (commits a9d40cd..3438ebd, review clean; reviewer's trailer remark is a false positive — trailer matches this session's attribution)
+Waiting on user: Task 6 (Cloudflare/GitHub setup), Task 7 Step 6 (coordinate review), then Task 14 (final review, PR, merge)
