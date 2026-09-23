@@ -47,3 +47,16 @@ Task 2: minor (deferred): Range request where R2 returns no `range` falls back t
 Task 2: minor (deferred, plan-mandated): 404/416 responses carry no Accept-Ranges/ETag
 Task 2: complete (commits a6c66a4..90a8687, review clean)
 Task 3: complete (commits 90a8687..8335f89, review clean)
+Task 4: minor (deferred): build-tiles.sh moves download into cache before checksum → a bad file stays cached and keeps failing (fails loudly, no false success)
+Task 4: complete (commits 3588a30..8d284e8, review clean; tippecanoe 2.49.0 via apt, world.pmtiles 3.44 MiB, maxzoom 6)
+Task 5: minor (deferred, plan-mandated): smoke.sh manifest fetch / jq lines lack Japanese `|| fail` messages
+Task 5: complete (commits 8d284e8..94c9e33, review clean)
+Ruling: run Task 7 (Steps 1-5) and prepare Task 8 Step 1 mock while Task 6 waits on the user's Cloudflare setup — T7/T8 do not depend on T6 — cost if wrong: none (order only)
+Task 7: Steps 1-5 complete (commits 94c9e33..0ef31e8, review clean); Step 6 (user coordinate review) pending — asked user
+Task 8: Step 1 mock published https://claude.ai/artifact/NPL5QFenzb6CpERrcXd5DL — awaiting user review
+Task 6: awaiting user Cloudflare/GitHub setup (asked)
+Ruling: commits 90a8687 and 0ef31e8 carry a "Claude Haiku 4.5" Co-Authored-By trailer (implementer substituted its own model); left as-is rather than rewriting pushed history — future dispatches state the trailer must be copied verbatim — cost if wrong: cosmetic attribution inconsistency in 2 commits
+Task 9: minor (deferred): parseManifest accepts protocol-relative "//host/x" (resolves cross-origin); manifest is self-authored so low risk — one-line fix `!path.startsWith("//")`
+Task 9: minor (deferred): implementer left `pnpm dev` running after Step 5 (controller killed it)
+Task 9: complete (commits 0ef31e8..5c66a11, review clean)
+Task 10: complete (commits 5c66a11..bd56d3a, review clean)
