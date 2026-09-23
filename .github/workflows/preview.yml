@@ -51,7 +51,7 @@ jobs:
         run: |
           gh pr comment "${{ github.event.pull_request.number }}" --repo "${{ github.repository }}" \
             --edit-last --create-if-none \
-            --body "プレビュー: $URL（コミット ${SHA:0:7}）"
+            --body "プレビュー: [$URL]($URL)（コミット ${SHA:0:7}）"
   cleanup:
     name: プレビューを削除
     if: >-
