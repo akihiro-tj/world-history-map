@@ -39,3 +39,11 @@ Ruling: ledger canonical copy lives in this workspace; controller mirrors it to 
 Ruling: added `.superpowers/` to .gitignore (controller bookkeeping commit) so SDD artifacts are not committed — cost if wrong: none.
 
 ## Progress
+Task 1: minor (deferred): brief interface says `App(): JSX.Element` but code block (and impl) has no return annotation — harmless, App replaced in T11/T12
+Task 1: minor (deferred): `pnpm typecheck` fails TS18003 until Task 2 adds src/worker (controller ruling)
+Task 1: fix round 1/5 (1 addressed, 0 open — minimumReleaseAge: 0 instead of per-package excludes; commits 658b760..a6c66a4)
+Task 1: complete (commits 9a31244..a6c66a4, review clean)
+Task 2: minor (deferred): Range request where R2 returns no `range` falls back to 200 (pmtiles would reject) — RFC-correct, unreachable for pmtiles' single ranges
+Task 2: minor (deferred, plan-mandated): 404/416 responses carry no Accept-Ranges/ETag
+Task 2: complete (commits a6c66a4..90a8687, review clean)
+Task 3: complete (commits 90a8687..8335f89, review clean)
