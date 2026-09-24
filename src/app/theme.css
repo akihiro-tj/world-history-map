@@ -1,0 +1,32 @@
+/* DESIGN.md から pnpm tokens で生成したファイル。直接編集しない */
+@theme static {
+  --color-primary: #1f3a5f;
+  --color-surface: #ffffff;
+  --color-on-surface: #1f2328;
+  --color-muted: #5b6570;
+  --color-border: #d5dbe1;
+  --color-highlight: #e8eef5;
+  --color-error-surface: #fdecea;
+  --color-on-error-surface: #8a1c12;
+  --color-ocean: #dce8f0;
+  --color-land: #f5f3ec;
+  --color-coastline: #8a9aa6;
+  --color-city: #b4462b;
+  --color-city-selected: #1f3a5f;
+  --font-body: system-ui, sans-serif;
+  --font-label: system-ui, sans-serif;
+  --font-title: system-ui, sans-serif;
+  --text-body: 16px;
+  --text-label: 14px;
+  --text-title: 20px;
+  --font-weight-body: 400;
+  --font-weight-label: 400;
+  --font-weight-title: 600;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+}
