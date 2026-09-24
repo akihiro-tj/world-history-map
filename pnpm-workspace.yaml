@@ -5,3 +5,5 @@ allowBuilds:
 # 公開直後の版の取得制御は dependabot の cooldown で行うため、
 # pnpm の minimumReleaseAge（既定 1440 分）は無効化する（spec §10）
 minimumReleaseAge: 0
+# 依存は exact 指定で追加する（pnpm 12 は .npmrc の save-exact を読まない）
+saveExact: true

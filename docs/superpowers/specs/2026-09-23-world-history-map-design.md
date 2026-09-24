@@ -210,7 +210,7 @@ MVP は workers.dev で公開するので、Worker で中継する。Worker 経�
 - **nix flake の devShell**: nodejs_24、pnpm、tippecanoe
   - Natural Earth は GeoJSON を直接使うので gdal は不要。タイルの検証は JS で行うので pmtiles CLI も不要
   - 1Password CLI（`op`）は含めない。ローカルでデプロイするときだけ使うので、端末にグローバルインストールしたものを使う
-- **パッケージ**: 現時点の最新安定版を exact 指定で固定する（`.npmrc` に `save-exact=true`）
+- **パッケージ**: 現時点の最新安定版を exact 指定で固定する（`pnpm-workspace.yaml` に `saveExact: true`）
   - `package.json` の `packageManager` に `pnpm@12.5.1` を書く
   - 主なもの: React 19 / Vite 8 / TypeScript 7 / Tailwind 4 / maplibre-gl 6 / pmtiles 4 / Biome 2 / Vitest 5 / wrangler 4 / @google/design.md
   - TypeScript 7 で周辺ツールとの互換問題が出たら 6.x に固定し、理由を PR の本文に書く

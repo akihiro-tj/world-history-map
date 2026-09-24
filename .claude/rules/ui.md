@@ -8,8 +8,8 @@ paths:
 
 # 画面
 
-- 文言は `src/app/copy.ts` の `COPY` だけを使う。足すときは実装する前にユーザーに内容を確認する
-- 色・余白・角丸は DESIGN.md のトークン（Tailwind の `bg-surface`・`p-md` など）を使う。値を直接書かない
+- 色・余白・角丸・文字は DESIGN.md の front matter だけで定義し、Tailwind のクラス（`bg-surface`・`p-md` など）や MapLibre のスタイルに値を直接書かない
+- DESIGN.md を変えたら `pnpm tokens` を実行し、生成された `src/app/theme.css` もコミットする
 - 地図にラベル（symbol レイヤー・glyphs）を追加しない。名前は選択パネルに出す
 - 地図にズームボタンなどのコントロールを置かない（デザインレビューで不要と決定）
-- ロジックは React から切り離した純関数にして Vitest で確かめる。見た目と操作は実ブラウザで確かめる
+- ロジックは React から切り離した純関数にして、Vitest で確かめられるようにする
