@@ -1,4 +1,4 @@
-// 画面に出す文言。spec §7 の一覧と一致させる（title と noscript は index.html）
+// 画面に出す文言（title と noscript は index.html）。足すときは実装する前にユーザーに確認する
 export const COPY = {
   searchPlaceholder: "地名を検索",
   searchLabel: "地名を検索",

@@ -213,7 +213,7 @@ MVP は workers.dev で公開するので、Worker で中継する。Worker 経�
 - **パッケージ**: 現時点の最新安定版を exact 指定で固定する（`.npmrc` に `save-exact=true`）
   - `package.json` の `packageManager` に `pnpm@12.5.1` を書く
   - 主なもの: React 19 / Vite 8 / TypeScript 7 / Tailwind 4 / maplibre-gl 6 / pmtiles 4 / Biome 2 / Vitest 5 / wrangler 4 / @google/design.md
-  - TypeScript 7 で周辺ツールとの互換問題が出たら 6.x に固定し、この spec を更新する
+  - TypeScript 7 で周辺ツールとの互換問題が出たら 6.x に固定し、理由を PR の本文に書く
 - **lint・format**: Biome（`biome ci`）
 - **テスト**: Vitest の unit test のみ
   - 対象: `cities.json`、`city.ts` の検証、`match.ts`、`serve.ts`、`manifest.ts`、Vite の dev プラグイン
@@ -281,7 +281,7 @@ DESIGN.md の YAML front matter を、デザイントークンの唯一の定義
   - YAML front matter に colors（primary は必須）、typography、rounded、spacing、components のトークンを書く
   - 本文の見出しは Overview → Colors → Typography → Layout → Elevation & Depth → Shapes → Components → Do's and Don'ts の順にする
   - CI で lint する
-- **設計変更の記録**: ADR は作らない。スパイクの結果や方針の変更は、この spec を更新してコミットする
+- **設計変更の記録**: ADR は作らない。この spec は MVP 設計の時点の記録で、マージ後は書き換えない。新しい機能や大きな変更は新しい spec を作り、変更の理由は PR の本文に書く
 - **言語**
   - コミットメッセージと GitHub Actions のワークフロー・ジョブ・ステップ名は英語
   - UI 文言・ドキュメント・コード内コメント・テスト名・PR・イシューは日本語

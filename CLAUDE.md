@@ -1,6 +1,6 @@
 # 世界史地図
 
-受験生・学習者向けに、世界史の地名を地図で確かめる Web アプリ。設計は `docs/superpowers/specs/2026-09-23-world-history-map-design.md`。
+受験生・学習者向けに、世界史の地名を地図で確かめる Web アプリ。
 
 ## コマンド
 
@@ -18,10 +18,10 @@
 
 ## 守ること
 
-- UI 文言は spec §7 の一覧にあるものだけを使う（`src/app/copy.ts` と `index.html`）。新しい文言が必要なら、実装する前にユーザーに内容を確認して spec を更新する
+- UI 文言は `src/app/copy.ts` と `index.html` にあるものだけを使う。新しい文言が必要なら、実装する前にユーザーに内容を確認する
 - SEO 用のメタ情報・OGP・favicon などを勝手に足さない
 - 色・角丸・余白・文字の値は DESIGN.md の front matter だけで管理する。Tailwind のクラスや MapLibre のスタイルに値を直接書かない
-- 設計を変えたら、実装と同じ PR で spec も更新する（ADR は作らない）
+- `docs/superpowers/specs/` の spec は作成時点の記録で、書き換えない。新しい機能や大きな変更は新しい spec を作り、変更の理由は PR の本文に書く（ADR は作らない）
 - 依存は exact 指定で追加する
 
 ## ゴッチャ
