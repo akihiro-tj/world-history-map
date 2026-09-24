@@ -3,7 +3,7 @@ import { loadAppData } from "./loadAppData";
 
 const ORIGIN = "https://example.com";
 const manifest = {
-  "tiles/world.pmtiles": "/tiles/world.abc.pmtiles",
+  "data/basemap.pmtiles": "/data/basemap.abc.pmtiles",
   "data/cities.json": "/data/cities.def.json",
 };
 const cities = [
@@ -29,7 +29,7 @@ function fakeFetch(routes: Record<string, () => Response>): typeof fetch {
 }
 
 describe("loadAppData", () => {
-  it("manifest と都市データを読めたらタイル URL と都市を返す", async () => {
+  it("manifest と都市データを読めたらベースマップの URL と都市を返す", async () => {
     const data = await loadAppData(
       fakeFetch({
         "/asset-manifest.json": () => Response.json(manifest),
@@ -38,16 +38,16 @@ describe("loadAppData", () => {
       ORIGIN,
     );
     expect(data).toEqual({
-      tilesUrl: "https://example.com/tiles/world.abc.pmtiles",
+      basemapUrl: "https://example.com/data/basemap.abc.pmtiles",
       cities,
-      tilesError: false,
+      basemapError: false,
       citiesError: false,
     });
   });
 
   it("manifest が読めなければ、両方をエラーにして例外は投げない", async () => {
     const data = await loadAppData(fakeFetch({}), ORIGIN);
-    expect(data).toEqual({ tilesUrl: null, cities: null, tilesError: true, citiesError: true });
+    expect(data).toEqual({ basemapUrl: null, cities: null, basemapError: true, citiesError: true });
   });
 
   it("都市データが 404 なら都市だけをエラーにする", async () => {
@@ -58,10 +58,10 @@ describe("loadAppData", () => {
       }),
       ORIGIN,
     );
-    expect(data.tilesUrl).toBe("https://example.com/tiles/world.abc.pmtiles");
+    expect(data.basemapUrl).toBe("https://example.com/data/basemap.abc.pmtiles");
     expect(data.cities).toBeNull();
     expect(data.citiesError).toBe(true);
-    expect(data.tilesError).toBe(false);
+    expect(data.basemapError).toBe(false);
   });
 
   it("都市データの形式が不正なら都市だけをエラーにする", async () => {

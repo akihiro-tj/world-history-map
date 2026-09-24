@@ -22,13 +22,13 @@ import {
 export type FocusRequest = { lon: number; lat: number; seq: number };
 
 type MapViewProps = {
-  tilesUrl: string;
+  basemapUrl: string;
   cities: readonly City[];
   initialBounds: Bounds;
   selectedId: string | null;
   focus: FocusRequest | null;
   onSelect: (id: string | null) => void;
-  onTilesError: () => void;
+  onBasemapError: () => void;
   className?: string;
 };
 
@@ -62,20 +62,20 @@ function whenStyleLoaded(map: MapLibreMap, action: () => void) {
 }
 
 export function MapView({
-  tilesUrl,
+  basemapUrl,
   cities,
   initialBounds,
   selectedId,
   focus,
   onSelect,
-  onTilesError,
+  onBasemapError,
   className,
 }: MapViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const selectedRef = useRef<string | null>(null);
-  const callbacksRef = useRef({ onSelect, onTilesError });
-  callbacksRef.current = { onSelect, onTilesError };
+  const callbacksRef = useRef({ onSelect, onBasemapError });
+  callbacksRef.current = { onSelect, onBasemapError };
   const initialBoundsRef = useRef(initialBounds);
 
   useEffect(() => {
@@ -86,7 +86,7 @@ export function MapView({
     registerPmtilesProtocol();
     const map = new MapLibreMap({
       container,
-      style: buildStyle(tilesUrl, readMapColors(getComputedStyle(document.documentElement))),
+      style: buildStyle(basemapUrl, readMapColors(getComputedStyle(document.documentElement))),
       bounds: initialBoundsRef.current,
       fitBoundsOptions: { padding: 48 },
       attributionControl: false,
@@ -100,7 +100,7 @@ export function MapView({
 
     map.on("error", (event) => {
       if ((event as { sourceId?: string }).sourceId === BASEMAP_SOURCE_ID) {
-        callbacksRef.current.onTilesError();
+        callbacksRef.current.onBasemapError();
       }
     });
     map.on("click", (event) => {
@@ -121,7 +121,7 @@ export function MapView({
       mapRef.current = null;
       selectedRef.current = null;
     };
-  }, [tilesUrl]);
+  }, [basemapUrl]);
 
   useEffect(() => {
     const map = mapRef.current;

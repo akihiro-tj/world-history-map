@@ -3,8 +3,8 @@ import { fetchManifest, parseManifest, resolveAssetUrl } from "./manifest";
 
 describe("parseManifest", () => {
   it("論理名から / で始まるパスへの対応を受け付ける", () => {
-    expect(parseManifest({ "tiles/world.pmtiles": "/tiles/world.abc.pmtiles" })).toEqual({
-      "tiles/world.pmtiles": "/tiles/world.abc.pmtiles",
+    expect(parseManifest({ "data/basemap.pmtiles": "/data/basemap.abc.pmtiles" })).toEqual({
+      "data/basemap.pmtiles": "/data/basemap.abc.pmtiles",
     });
   });
 
@@ -20,11 +20,11 @@ describe("parseManifest", () => {
 });
 
 describe("resolveAssetUrl", () => {
-  const manifest = { "tiles/world.pmtiles": "/tiles/world.abc.pmtiles" };
+  const manifest = { "data/basemap.pmtiles": "/data/basemap.abc.pmtiles" };
 
   it("同じオリジンの絶対 URL にする", () => {
-    expect(resolveAssetUrl(manifest, "tiles/world.pmtiles", "https://example.com")).toBe(
-      "https://example.com/tiles/world.abc.pmtiles",
+    expect(resolveAssetUrl(manifest, "data/basemap.pmtiles", "https://example.com")).toBe(
+      "https://example.com/data/basemap.abc.pmtiles",
     );
   });
 

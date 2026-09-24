@@ -10,7 +10,7 @@ import { SelectionPanel } from "./SelectionPanel";
 
 export function App() {
   const [data, setData] = useState<AppData | null>(null);
-  const [tilesFailed, setTilesFailed] = useState(false);
+  const [basemapFailed, setBasemapFailed] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [focus, setFocus] = useState<FocusRequest | null>(null);
 
@@ -23,7 +23,7 @@ export function App() {
     () => cities.find((city) => city.id === selectedId) ?? null,
     [cities, selectedId],
   );
-  const onTilesError = useCallback(() => setTilesFailed(true), []);
+  const onBasemapError = useCallback(() => setBasemapFailed(true), []);
   const onSearchSelect = useCallback((city: City) => {
     setSelectedId(city.id);
     setFocus((previous) => ({ lon: city.lon, lat: city.lat, seq: (previous?.seq ?? 0) + 1 }));
@@ -31,18 +31,18 @@ export function App() {
 
   return (
     <div className="relative h-dvh w-full overflow-hidden bg-ocean font-body text-body text-on-surface">
-      {data?.tilesUrl != null && (
+      {data?.basemapUrl != null && (
         <MapView
           // maplibre-gl.css の `.maplibregl-map { position: relative }` が読み込み順で
           // 後勝ちし absolute を打ち消すため、! で position だけ important にする
           className="!absolute inset-0"
-          tilesUrl={data.tilesUrl}
+          basemapUrl={data.basemapUrl}
           cities={cities}
           initialBounds={data.cities ? boundsOf(data.cities) : FALLBACK_BOUNDS}
           selectedId={selectedId}
           focus={focus}
           onSelect={setSelectedId}
-          onTilesError={onTilesError}
+          onBasemapError={onBasemapError}
         />
       )}
       {/* max-w-sm は余白トークンの sm と衝突しうるので、DESIGN.md の Layout にある 24rem を直接指定する */}
@@ -50,7 +50,7 @@ export function App() {
         <div className="pointer-events-auto">
           <SearchBox cities={cities} onSelect={onSearchSelect} />
         </div>
-        {(data?.tilesError || tilesFailed) && <ErrorBanner message={COPY.tilesLoadError} />}
+        {(data?.basemapError || basemapFailed) && <ErrorBanner message={COPY.basemapLoadError} />}
         {data?.citiesError && <ErrorBanner message={COPY.citiesLoadError} />}
       </div>
       {selectedCity && <SelectionPanel city={selectedCity} onClose={() => setSelectedId(null)} />}

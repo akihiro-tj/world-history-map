@@ -5,7 +5,7 @@ import { devManifest, handleManifestRequest } from "./assetManifestDev";
 describe("devManifest", () => {
   it("論理名をそのままローカルパスに対応させる", () => {
     expect(devManifest()).toEqual({
-      "tiles/world.pmtiles": "/tiles/world.pmtiles",
+      "data/basemap.pmtiles": "/data/basemap.pmtiles",
       "data/cities.json": "/data/cities.json",
     });
   });

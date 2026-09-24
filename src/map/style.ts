@@ -40,11 +40,11 @@ export function readMapColors(style: Pick<CSSStyleDeclaration, "getPropertyValue
   };
 }
 
-export function buildStyle(tilesUrl: string, colors: MapColors): StyleSpecification {
+export function buildStyle(basemapUrl: string, colors: MapColors): StyleSpecification {
   return {
     version: 8,
     sources: {
-      [BASEMAP_SOURCE_ID]: { type: "vector", url: `pmtiles://${tilesUrl}` },
+      [BASEMAP_SOURCE_ID]: { type: "vector", url: `pmtiles://${basemapUrl}` },
       [CITIES_SOURCE_ID]: {
         type: "geojson",
         data: { type: "FeatureCollection", features: [] },

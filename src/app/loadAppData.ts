@@ -1,12 +1,12 @@
 // 起動時に manifest と都市データを読み込む。失敗しても例外は投げず、エラーの種類を返す
-import { CITIES_ASSET, TILES_ASSET } from "../assets/logicalAssets";
+import { BASEMAP_ASSET, CITIES_ASSET } from "../assets/logicalAssets";
 import { type AssetManifest, fetchManifest, resolveAssetUrl } from "../assets/manifest";
 import { type City, parseCities } from "../data/city";
 
 export type AppData = {
-  tilesUrl: string | null;
+  basemapUrl: string | null;
   cities: City[] | null;
-  tilesError: boolean;
+  basemapError: boolean;
   citiesError: boolean;
 };
 
@@ -28,12 +28,12 @@ export async function loadAppData(fetchFn: typeof fetch, origin: string): Promis
     manifest = await fetchManifest(fetchFn);
   } catch (error) {
     console.error(error);
-    return { tilesUrl: null, cities: null, tilesError: true, citiesError: true };
+    return { basemapUrl: null, cities: null, basemapError: true, citiesError: true };
   }
 
-  let tilesUrl: string | null = null;
+  let basemapUrl: string | null = null;
   try {
-    tilesUrl = resolveAssetUrl(manifest, TILES_ASSET, origin);
+    basemapUrl = resolveAssetUrl(manifest, BASEMAP_ASSET, origin);
   } catch (error) {
     console.error(error);
   }
@@ -45,5 +45,5 @@ export async function loadAppData(fetchFn: typeof fetch, origin: string): Promis
     console.error(error);
   }
 
-  return { tilesUrl, cities, tilesError: tilesUrl === null, citiesError: cities === null };
+  return { basemapUrl, cities, basemapError: basemapUrl === null, citiesError: cities === null };
 }

@@ -8,7 +8,7 @@ describe("hashedKey", () => {
   const hash12 = createHash("sha256").update(content).digest("hex").slice(0, 12);
 
   it("拡張子の直前に sha256 の先頭 12 桁を挟む", () => {
-    expect(hashedKey("tiles/world.pmtiles", content)).toBe(`tiles/world.${hash12}.pmtiles`);
+    expect(hashedKey("data/basemap.pmtiles", content)).toBe(`data/basemap.${hash12}.pmtiles`);
     expect(hashedKey("data/cities.json", content)).toBe(`data/cities.${hash12}.json`);
   });
 
@@ -18,13 +18,13 @@ describe("hashedKey", () => {
   });
 
   it("拡張子の無いパスは例外にする", () => {
-    expect(() => hashedKey("tiles/world", content)).toThrow();
+    expect(() => hashedKey("data/basemap", content)).toThrow();
   });
 });
 
 describe("contentTypeFor", () => {
   it("拡張子から Content-Type を決める", () => {
-    expect(contentTypeFor("tiles/world.pmtiles")).toBe("application/vnd.pmtiles");
+    expect(contentTypeFor("data/basemap.pmtiles")).toBe("application/vnd.pmtiles");
     expect(contentTypeFor("data/cities.json")).toBe("application/json; charset=utf-8");
   });
 
