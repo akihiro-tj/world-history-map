@@ -10,7 +10,6 @@ function at(lon: number, lat: number): City {
     type: "city",
     lon,
     lat,
-    source: "https://example.com",
   };
 }
 

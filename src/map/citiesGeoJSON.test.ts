@@ -9,7 +9,6 @@ const bukhara: City = {
   type: "city",
   lon: 64.4286,
   lat: 39.7747,
-  source: "https://ja.wikipedia.org/wiki/ブハラ",
 };
 
 describe("citiesToGeoJSON", () => {

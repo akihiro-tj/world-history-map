@@ -5,8 +5,7 @@
     "reading": "さまるかんど",
     "type": "city",
     "lon": 66.9597,
-    "lat": 39.6542,
-    "source": "https://ja.wikipedia.org/wiki/サマルカンド"
+    "lat": 39.6542
   },
   {
     "id": "bukhara",
@@ -14,8 +13,7 @@
     "reading": "ぶはら",
     "type": "city",
     "lon": 64.4286,
-    "lat": 39.7747,
-    "source": "https://ja.wikipedia.org/wiki/ブハラ"
+    "lat": 39.7747
   },
   {
     "id": "dunhuang",
@@ -23,8 +21,7 @@
     "reading": "とんこう",
     "type": "city",
     "lon": 94.662,
-    "lat": 40.1421,
-    "source": "https://ja.wikipedia.org/wiki/敦煌市"
+    "lat": 40.1421
   },
   {
     "id": "kucha",
@@ -32,8 +29,7 @@
     "reading": "くちゃ きじ",
     "type": "city",
     "lon": 82.9333,
-    "lat": 41.7167,
-    "source": "https://ja.wikipedia.org/wiki/亀茲"
+    "lat": 41.7167
   },
   {
     "id": "karakorum",
@@ -41,8 +37,7 @@
     "reading": "からこるむ わりん",
     "type": "city",
     "lon": 102.8481,
-    "lat": 47.2086,
-    "source": "https://ja.wikipedia.org/wiki/カラコルム"
+    "lat": 47.2086
   },
   {
     "id": "dadu",
@@ -50,8 +45,7 @@
     "reading": "だいと",
     "type": "city",
     "lon": 116.3833,
-    "lat": 39.9,
-    "source": "https://ja.wikipedia.org/wiki/大都"
+    "lat": 39.9
   },
   {
     "id": "emil",
@@ -59,8 +53,7 @@
     "reading": "えみーる",
     "type": "city",
     "lon": 83.78,
-    "lat": 46.57,
-    "source": "https://plus.codes/8MR5HQ9H+2R6"
+    "lat": 46.57
   },
   {
     "id": "almaliq",
@@ -68,8 +61,7 @@
     "reading": "あるまりく",
     "type": "city",
     "lon": 80.5331,
-    "lat": 44.24,
-    "source": "https://en.wikipedia.org/wiki/Almaliq,_Xinjiang"
+    "lat": 44.24
   },
   {
     "id": "sarai",
@@ -77,8 +69,7 @@
     "reading": "さらい",
     "type": "city",
     "lon": 47.43,
-    "lat": 47.17,
-    "source": "https://ja.wikipedia.org/wiki/サライ_(都市)"
+    "lat": 47.17
   },
   {
     "id": "tabriz",
@@ -86,7 +77,6 @@
     "reading": "たぶりーず",
     "type": "city",
     "lon": 46.2919,
-    "lat": 38.08,
-    "source": "https://ja.wikipedia.org/wiki/タブリーズ"
+    "lat": 38.08
   }
 ]

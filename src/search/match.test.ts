@@ -3,7 +3,7 @@ import type { City } from "../data/city";
 import { MAX_SUGGESTIONS, normalizeForSearch, searchCities } from "./match";
 
 function city(id: string, name: string, reading: string): City {
-  return { id, name, reading, type: "city", lon: 0, lat: 0, source: "https://example.com" };
+  return { id, name, reading, type: "city", lon: 0, lat: 0 };
 }
 
 const cities = [

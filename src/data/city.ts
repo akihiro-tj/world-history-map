@@ -7,13 +7,12 @@ export type City = {
   type: "city";
   lon: number;
   lat: number;
-  source: string;
 };
 
 const ID_PATTERN = /^[a-z][a-z0-9-]*$/;
 // ひらがな・長音符。複数の読みは半角空白 1 つで区切る
 const READING_PATTERN = /^[ぁ-ゖー]+(?: [ぁ-ゖー]+)*$/;
-const KEYS = new Set(["id", "name", "reading", "type", "lon", "lat", "source"]);
+const KEYS = new Set(["id", "name", "reading", "type", "lon", "lat"]);
 
 function inRange(value: unknown, min: number, max: number): value is number {
   return typeof value === "number" && Number.isFinite(value) && value >= min && value <= max;
@@ -31,7 +30,7 @@ function parseCity(item: unknown, index: number): City {
       fail(`知らないキー ${key} があります`);
     }
   }
-  const { id, name, reading, type, lon, lat, source } = item as Record<string, unknown>;
+  const { id, name, reading, type, lon, lat } = item as Record<string, unknown>;
   if (typeof id !== "string" || !ID_PATTERN.test(id)) return fail("id が不正です");
   if (typeof name !== "string" || name.trim() === "") return fail("name が空です");
   if (typeof reading !== "string" || !READING_PATTERN.test(reading)) {
@@ -40,10 +39,7 @@ function parseCity(item: unknown, index: number): City {
   if (type !== "city") return fail("type は city だけです");
   if (!inRange(lon, -180, 180)) return fail("lon が範囲外です");
   if (!inRange(lat, -90, 90)) return fail("lat が範囲外です");
-  if (typeof source !== "string" || !source.startsWith("https://")) {
-    return fail("source には https の URL を書きます");
-  }
-  return { id, name, reading, type, lon, lat, source };
+  return { id, name, reading, type, lon, lat };
 }
 
 export function parseCities(value: unknown): City[] {
