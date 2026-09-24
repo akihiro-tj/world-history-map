@@ -9,7 +9,7 @@
 
 ## 守ること
 
-- 利用者や検索エンジンの目に触れるコンテンツは、自分で考えて作らない。UI 文言・title・meta description・OGP・favicon などの画像・robots.txt が対象。必要になったら、実装する前に内容の案を示してユーザーの承認を得る。いま承認済みなのは `src/app/copy.ts` と `index.html` にあるものだけ
+- 利用者や検索エンジンの目に触れるコンテンツ（UI 文言・title・meta description・OGP・favicon などの画像・robots.txt・都市データ）は、自分で考えて足したり変えたりしない。必要なら、実装する前に内容の案を示してユーザーの承認を得る
 - `docs/superpowers/specs/` の spec は作成時点の記録で、書き換えない。新しい機能や大きな変更は新しい spec を作り、変更の理由は PR の本文に書く（ADR は作らない）
 - npm script に `deploy` という名前を付けない（pnpm の組み込みコマンドに取られて何も起きない）
 
