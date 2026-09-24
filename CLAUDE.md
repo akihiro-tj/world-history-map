@@ -13,10 +13,6 @@
 - `docs/superpowers/specs/` の spec は作成時点の記録で、書き換えない。新しい機能や大きな変更は新しい spec を作り、変更の理由は PR の本文に書く（ADR は作らない）
 - npm script に `deploy` という名前を付けない（`pnpm deploy` は pnpm 組み込みのワークスペース用コマンドが動き、script は実行されない。`pnpm run deploy` なら動くが取り違えやすい）
 
-## 環境
-
-- タイル生成は tippecanoe が要るので `nix develop -c pnpm tiles:build` で実行する
-
 ## 検証
 
 - ロジックは Vitest（node 環境）で確かめる。E2E テストは作らない

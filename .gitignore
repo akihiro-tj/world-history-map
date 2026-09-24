@@ -151,6 +151,5 @@ apm_modules/
 # 世界史地図
 !.env.op
 .wrangler/
-.tiles-cache/
 .dev.vars
 CLAUDE.local.md
