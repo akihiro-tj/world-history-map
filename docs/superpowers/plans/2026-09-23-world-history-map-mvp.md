@@ -1537,7 +1537,7 @@ PR を作ったら、PR の CI・レビューを監視するかどうかをユ�
 
 - [ ] **Step 4: スパイクの確認項目を順に確かめる**
 
-1. `プレビュー` ワークフローが成功し、PR にプレビュー URL のコメントが付いているか（GitHub MCP の `actions_list` / `get_job_logs` で確認する）。`wrangler preview` の JSON から URL を取り出せなければ、ログの `cat preview.json` の中身に合わせて jq の式を直す
+1. `Preview` ワークフローが成功し、PR にプレビュー URL のコメントが付いているか（GitHub MCP の `actions_list` / `get_job_logs` で確認する）。`wrangler preview` の JSON から URL を取り出せなければ、ログの `cat preview.json` の中身に合わせて jq の式を直す
 2. スモークテストの 206・強い ETag・416・都市データの 200 が通っているか
 3. 失敗した場合の切り分け:
    - Worker が存在しないというエラー → ユーザーに手元で一度 `pnpm dev:secrets pnpm deploy:cf` を実行してもらう（本番に空に近いアプリが出ることを先に伝える）
@@ -3635,6 +3635,6 @@ PR をドラフトから外し、本文を最新の状態に更新する。ユ�
 
 - [ ] **Step 4: マージ後に本番と dependabot を確認する**
 
-1. `本番デプロイ` ワークフローが成功し、スモークテストが通っていること
+1. `Deploy` ワークフローが成功し、スモークテストが通っていること
 2. ユーザーに、GitHub の Insights → Dependency graph → Dependabot で npm のマニフェストがエラーなく読まれているか確認してもらう。pnpm 12 のロックファイルを扱えずエラーになっていたら、spec §12 のとおり pnpm 10.34.5 に固定する修正を新しいブランチで作る（`packageManager` を変え、`pnpm install` でロックファイルを作り直す）
 3. 結果を spec §12 のスパイク結果に追記する

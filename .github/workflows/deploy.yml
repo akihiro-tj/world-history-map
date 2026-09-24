@@ -1,4 +1,4 @@
-name: 本番デプロイ
+name: Deploy
 on:
   push:
     branches: [main]
@@ -11,7 +11,7 @@ env:
   PRODUCTION_URL: https://world-history-map.akihiro-tj.workers.dev
 jobs:
   deploy:
-    name: 本番にデプロイ
+    name: Deploy to production
     runs-on: ubuntu-24.04
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -27,5 +27,5 @@ jobs:
       - run: pnpm build
       - run: pnpm publish:assets
       - run: pnpm exec wrangler deploy
-      - name: スモークテスト
+      - name: Smoke test
         run: bash scripts/smoke.sh "$PRODUCTION_URL"

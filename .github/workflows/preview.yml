@@ -1,4 +1,4 @@
-name: プレビュー
+name: Preview
 on:
   pull_request:
     types: [opened, synchronize, reopened, closed]
@@ -12,7 +12,7 @@ env:
   PREVIEW_NAME: pr-${{ github.event.pull_request.number }}
 jobs:
   deploy:
-    name: プレビューをデプロイ
+    name: Deploy preview
     if: >-
       github.event.action != 'closed' &&
       github.actor != 'dependabot[bot]' &&
@@ -32,7 +32,7 @@ jobs:
       - run: pnpm build
       - run: pnpm publish:assets
       - id: preview
-        name: Worker Preview を作る
+        name: Create Worker Preview
         run: |
           pnpm exec wrangler preview --name "$PREVIEW_NAME" --json > preview.log
           cat preview.log
@@ -41,9 +41,9 @@ jobs:
           url="$(jq -r '.preview.urls[0] // empty' preview.json)"
           test -n "$url"
           echo "url=$url" >> "$GITHUB_OUTPUT"
-      - name: スモークテスト
+      - name: Smoke test
         run: bash scripts/smoke.sh "${{ steps.preview.outputs.url }}"
-      - name: PR にプレビュー URL をコメント
+      - name: Comment preview URL on PR
         env:
           GH_TOKEN: ${{ github.token }}
           URL: ${{ steps.preview.outputs.url }}
@@ -53,7 +53,7 @@ jobs:
             --edit-last --create-if-none \
             --body "プレビュー: [$URL]($URL)（コミット ${SHA:0:7}）"
   cleanup:
-    name: プレビューを削除
+    name: Delete preview
     if: >-
       github.event.action == 'closed' &&
       github.actor != 'dependabot[bot]' &&

@@ -7,7 +7,7 @@ permissions:
   contents: read
 jobs:
   check:
-    name: 検査とビルド
+    name: Check and build
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -21,7 +21,7 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm exec design.md lint DESIGN.md
-      - name: 生成済みトークンが DESIGN.md と一致するか確認
+      - name: Verify generated tokens match DESIGN.md
         run: |
           pnpm tokens
           git diff --exit-code src/app/theme.css
