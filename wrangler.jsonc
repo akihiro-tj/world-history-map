@@ -10,7 +10,7 @@
     "directory": "./dist",
     "binding": "ASSETS",
     // R2 に置いたアセットは静的アセットより先に Worker で処理する
-    "run_worker_first": ["/tiles/*", "/data/*"]
+    "run_worker_first": ["/data/*"]
   },
   "r2_buckets": [{ "binding": "ASSETS_BUCKET", "bucket_name": "whm-assets" }],
   // Worker Previews は本番の設定を引き継がないので、バインディングを書き直す

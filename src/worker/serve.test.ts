@@ -8,7 +8,7 @@ type FakeOptions = { range?: R2Range; withBody?: boolean };
 
 function fakeObject({ range, withBody = true }: FakeOptions = {}): R2Object | R2ObjectBody {
   const base = {
-    key: "tiles/world.abc123abc123.pmtiles",
+    key: "data/basemap.abc123abc123.pmtiles",
     size: SIZE,
     etag: "etag-1",
     httpEtag: '"etag-1"',
@@ -42,9 +42,9 @@ function request(path: string, init: RequestInit = {}) {
 }
 
 describe("keyFromPath", () => {
-  it("tiles/ と data/ 配下のファイル名だけをキーとして返す", () => {
-    expect(keyFromPath("/tiles/world.abc123abc123.pmtiles")).toBe(
-      "tiles/world.abc123abc123.pmtiles",
+  it("data/ 配下のファイル名だけをキーとして返す", () => {
+    expect(keyFromPath("/data/basemap.abc123abc123.pmtiles")).toBe(
+      "data/basemap.abc123abc123.pmtiles",
     );
     expect(keyFromPath("/data/cities.abc123abc123.json")).toBe("data/cities.abc123abc123.json");
   });
@@ -52,9 +52,10 @@ describe("keyFromPath", () => {
   it("それ以外のパスは null を返す", () => {
     expect(keyFromPath("/")).toBeNull();
     expect(keyFromPath("/index.html")).toBeNull();
-    expect(keyFromPath("/tiles/")).toBeNull();
-    expect(keyFromPath("/tiles/a/b.pmtiles")).toBeNull();
-    expect(keyFromPath("/tiles/..pmtiles")).toBeNull();
+    expect(keyFromPath("/data/")).toBeNull();
+    expect(keyFromPath("/data/a/b.pmtiles")).toBeNull();
+    expect(keyFromPath("/data/..pmtiles")).toBeNull();
+    expect(keyFromPath("/tiles/world.abc123abc123.pmtiles")).toBeNull();
   });
 });
 
@@ -85,7 +86,7 @@ describe("resolveRange", () => {
 describe("serveFromBucket", () => {
   it("GET と HEAD 以外は 405 を返す", async () => {
     const response = await serveFromBucket(
-      request("/tiles/world.abc123abc123.pmtiles", { method: "POST" }),
+      request("/data/basemap.abc123abc123.pmtiles", { method: "POST" }),
       fakeBucket(),
     );
     expect(response.status).toBe(405);
@@ -101,7 +102,7 @@ describe("serveFromBucket", () => {
 
   it("Range が無い GET は 200 で全体を返す", async () => {
     const bucket = fakeBucket();
-    const response = await serveFromBucket(request("/tiles/world.abc123abc123.pmtiles"), bucket);
+    const response = await serveFromBucket(request("/data/basemap.abc123abc123.pmtiles"), bucket);
     expect(response.status).toBe(200);
     expect(await response.text()).toBe(CONTENT);
     expect(response.headers.get("Content-Length")).toBe(String(SIZE));
@@ -113,9 +114,9 @@ describe("serveFromBucket", () => {
 
   it("リクエストヘッダーを range と onlyIf にそのまま渡す", async () => {
     const bucket = fakeBucket();
-    const req = request("/tiles/world.abc123abc123.pmtiles", { headers: { Range: "bytes=0-3" } });
+    const req = request("/data/basemap.abc123abc123.pmtiles", { headers: { Range: "bytes=0-3" } });
     await serveFromBucket(req, bucket);
-    expect(bucket.get).toHaveBeenCalledWith("tiles/world.abc123abc123.pmtiles", {
+    expect(bucket.get).toHaveBeenCalledWith("data/basemap.abc123abc123.pmtiles", {
       range: req.headers,
       onlyIf: req.headers,
     });
@@ -126,7 +127,7 @@ describe("serveFromBucket", () => {
       get: vi.fn(async () => fakeObject({ range: { offset: 0, length: 4 } })),
     });
     const response = await serveFromBucket(
-      request("/tiles/world.abc123abc123.pmtiles", { headers: { Range: "bytes=0-3" } }),
+      request("/data/basemap.abc123abc123.pmtiles", { headers: { Range: "bytes=0-3" } }),
       bucket,
     );
     expect(response.status).toBe(206);
@@ -138,7 +139,7 @@ describe("serveFromBucket", () => {
   it("suffix の Range も 206 で返す", async () => {
     const bucket = fakeBucket({ get: vi.fn(async () => fakeObject({ range: { suffix: 4 } })) });
     const response = await serveFromBucket(
-      request("/tiles/world.abc123abc123.pmtiles", { headers: { Range: "bytes=-4" } }),
+      request("/data/basemap.abc123abc123.pmtiles", { headers: { Range: "bytes=-4" } }),
       bucket,
     );
     expect(response.status).toBe(206);
@@ -152,7 +153,7 @@ describe("serveFromBucket", () => {
       }),
     });
     const response = await serveFromBucket(
-      request("/tiles/world.abc123abc123.pmtiles", { headers: { Range: "bytes=999-1000" } }),
+      request("/data/basemap.abc123abc123.pmtiles", { headers: { Range: "bytes=999-1000" } }),
       bucket,
     );
     expect(response.status).toBe(416);
@@ -166,7 +167,7 @@ describe("serveFromBucket", () => {
       }),
     });
     await expect(
-      serveFromBucket(request("/tiles/world.abc123abc123.pmtiles"), bucket),
+      serveFromBucket(request("/data/basemap.abc123abc123.pmtiles"), bucket),
     ).rejects.toThrow("R2 の障害");
   });
 
@@ -179,7 +180,7 @@ describe("serveFromBucket", () => {
   it("If-None-Match の条件で本文が無ければ 304 を返す", async () => {
     const bucket = fakeBucket({ get: vi.fn(async () => fakeObject({ withBody: false })) });
     const response = await serveFromBucket(
-      request("/tiles/world.abc123abc123.pmtiles", { headers: { "If-None-Match": '"etag-1"' } }),
+      request("/data/basemap.abc123abc123.pmtiles", { headers: { "If-None-Match": '"etag-1"' } }),
       bucket,
     );
     expect(response.status).toBe(304);
@@ -189,7 +190,7 @@ describe("serveFromBucket", () => {
   it("If-Match の条件を満たさなければ 412 を返す", async () => {
     const bucket = fakeBucket({ get: vi.fn(async () => fakeObject({ withBody: false })) });
     const response = await serveFromBucket(
-      request("/tiles/world.abc123abc123.pmtiles", { headers: { "If-Match": '"other"' } }),
+      request("/data/basemap.abc123abc123.pmtiles", { headers: { "If-Match": '"other"' } }),
       bucket,
     );
     expect(response.status).toBe(412);
@@ -198,7 +199,7 @@ describe("serveFromBucket", () => {
   it("HEAD は本文なしで 200 と Content-Length を返す", async () => {
     const bucket = fakeBucket();
     const response = await serveFromBucket(
-      request("/tiles/world.abc123abc123.pmtiles", { method: "HEAD" }),
+      request("/data/basemap.abc123abc123.pmtiles", { method: "HEAD" }),
       bucket,
     );
     expect(response.status).toBe(200);
@@ -210,7 +211,7 @@ describe("serveFromBucket", () => {
   it("HEAD でキーが無ければ 404 を返す", async () => {
     const bucket = fakeBucket({ head: vi.fn(async () => null) });
     const response = await serveFromBucket(
-      request("/tiles/world.abc123abc123.pmtiles", { method: "HEAD" }),
+      request("/data/basemap.abc123abc123.pmtiles", { method: "HEAD" }),
       bucket,
     );
     expect(response.status).toBe(404);

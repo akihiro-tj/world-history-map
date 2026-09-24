@@ -1,6 +1,6 @@
-// R2 に置いたハッシュ付きアセット（タイル・都市データ）を Range 対応で返す
+// R2 に置いたハッシュ付きアセット（ベースマップ・都市データ）を Range 対応で返す
 
-const KEY_PATTERN = /^(?:tiles|data)\/[A-Za-z0-9_-]+(?:\.[A-Za-z0-9_-]+)*$/;
+const KEY_PATTERN = /^data\/[A-Za-z0-9_-]+(?:\.[A-Za-z0-9_-]+)*$/;
 
 export type ByteRange = { start: number; end: number };
 

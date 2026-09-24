@@ -34,12 +34,12 @@ describe("readMapColors", () => {
 });
 
 describe("buildStyle", () => {
-  const style = buildStyle("https://example.com/tiles/world.abc.pmtiles", colors);
+  const style = buildStyle("https://example.com/data/basemap.abc.pmtiles", colors);
 
   it("ベースマップを pmtiles:// で参照する", () => {
     expect(style.sources.basemap).toEqual({
       type: "vector",
-      url: "pmtiles://https://example.com/tiles/world.abc.pmtiles",
+      url: "pmtiles://https://example.com/data/basemap.abc.pmtiles",
     });
   });
 
