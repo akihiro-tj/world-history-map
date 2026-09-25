@@ -6,7 +6,7 @@
 
 **Architecture:** データリポジトリ（`/home/user/world-history-map-data`）で、Natural Earth の国境線を日本の立場で絞り込み、`disputed` 属性だけを付けた GeoJSON を作ってから、tippecanoe で `boundary` レイヤーとしてベースマップに足す。アプリ（`/home/user/world-history-map`）は `disputed` で実線・破線の 2 レイヤーに分けて描き、React のコンポーネントで注記を出す。
 
-**Tech Stack:** Node 24 / pnpm 12.5.1 / TypeScript 7.0 / Vitest 5.0 / Biome 2.5 / tippecanoe（nix devShell、無ければ apt の 2.49）/ pmtiles 4.5 / React 19.3 / Tailwind CSS 4.3 / maplibre-gl 6.11 / @google/design.md 0.4
+**Tech Stack:** Node 24 / pnpm 12.5.1 / TypeScript 7.0 / Vitest 5.0 / Biome 2.5 / tippecanoe（nix devShell。一時ブランチの GitHub Actions で動かす）/ pmtiles 4.5 / React 19.3 / Tailwind CSS 4.3 / maplibre-gl 6.11 / @google/design.md 0.4
 
 **Spec:** `docs/superpowers/specs/2026-09-25-country-boundaries-design.md`（world-history-map。実装前に必ず読む）。モック: https://claude.ai/artifact/AEkexQJLJFENUKTXTU61q6
 
@@ -17,7 +17,7 @@
 - デザイントークンは `DESIGN.md` の front matter だけを編集し、`pnpm tokens` で `src/app/theme.css` を作り直す。色・角丸・余白・文字サイズの値を Tailwind のクラスや MapLibre のスタイルに直接書かない（`[2px]` のような任意値も使わない）
 - 国境線: 色 `#cfc8b8`、太さ 0.6、係争線は `line-dasharray: [3, 2]`
 - ベースマップのソースレイヤー名は `boundary`、属性は `disputed`（boolean）だけ。ズームは 110m → z0–1、50m → z2–3、10m → z4–6。サイズは 15 MiB 未満
-- 両リポジトリとも `claude/eurasia-borders-display-8syuzu` ブランチで作業し、`git push -u origin claude/eurasia-borders-display-8syuzu` で push する
+- 両リポジトリとも `claude/eurasia-borders-display-8syuzu` ブランチで作業し、`git push -u origin claude/eurasia-borders-display-8syuzu` で push する。例外はベースマップを作るための一時ブランチ `claude/eurasia-borders-display-8syuzu-basemap`（データリポジトリ。Task 2 で作り、Task 3 で消す）だけ
 - コミットメッセージの末尾に次の 2 行を付ける:
   ```
   Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
@@ -510,12 +510,20 @@ build_scale() {
 - アプリは受け取った JSON のキーを厳密に検証し、知らないキーがあると読み込まない。またベースマップのソースレイヤー名（`land`・`coastline`・`boundary`）、`boundary` の属性 `disputed`、ズーム範囲はアプリのスタイルが前提にしている。成果物の形を変えるときはアプリ側の変更と合わせる
 ```
 
-- [ ] **Step 9: ベースマップを作る**
+- [ ] **Step 9: 国境線の GeoJSON だけ手元で確かめる**
 
-tippecanoe を用意する。`nix` があれば `nix develop -c pnpm basemap:build`。無ければ `which tippecanoe || (sudo apt-get install -y tippecanoe || apt-get install -y tippecanoe)` で入れてから `pnpm basemap:build`。どちらもできなければ BLOCKED として報告する（ユーザーにローカルでの実行を頼む）。
+作業環境に tippecanoe は無い（ベースマップ全体は Step 12 で GitHub Actions が作る）。前処理だけ実行して本数を確かめる:
 
-Run: `pnpm basemap:build`
-Expected: 「国境線 110m / 50m / 10m」の本数が出て（10m は係争線を含めて約 500 本）、最後に `dist/basemap.pmtiles は条件を満たしています`。サイズが 15 MiB 未満
+```bash
+mkdir -p .basemap-cache /tmp/boundary-check
+for f in ne_110m_admin_0_boundary_lines_land ne_50m_admin_0_boundary_lines_land ne_10m_admin_0_boundary_lines_land ne_50m_admin_0_boundary_lines_disputed_areas ne_10m_admin_0_boundary_lines_disputed_areas; do
+  [ -f ".basemap-cache/$f.geojson" ] || curl -fsSL "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/$f.geojson" -o ".basemap-cache/$f.geojson"
+done
+sha256sum .basemap-cache/*boundary_lines*.geojson
+pnpm exec tsx scripts/build-boundaries.ts .basemap-cache /tmp/boundary-check
+```
+
+Expected: sha256 が Step 7 の値と一致する。「国境線 110m / 50m / 10m」の本数が出る（10m は約 500 本、うち係争線は約 90 本。50m には北方領土などの 4 本が含まれる）
 
 - [ ] **Step 10: 全体の確認**
 
@@ -533,6 +541,53 @@ Claude-Session: https://claude.ai/code/session_01Hmz7jqwHSLtnm79okgg6W6"
 git push -u origin claude/eurasia-borders-display-8syuzu
 ```
 
+- [ ] **Step 12: 一時ブランチの GitHub Actions でベースマップを作る**
+
+作業ブランチ（`claude/eurasia-borders-display-8syuzu`）には一時ワークフローを入れない。一時ブランチ `claude/eurasia-borders-display-8syuzu-basemap` を作り、そこにだけ `.github/workflows/build-basemap.yml` を置く:
+
+```bash
+git switch -c claude/eurasia-borders-display-8syuzu-basemap
+mkdir -p .github/workflows
+cat > .github/workflows/build-basemap.yml <<'YAML'
+# 一時ブランチ専用: nix devShell でベースマップを作り、dist/basemap.pmtiles をこのブランチにコミットする
+name: Build basemap
+on:
+  push:
+    branches: [claude/eurasia-borders-display-8syuzu-basemap]
+permissions:
+  contents: write
+jobs:
+  build:
+    name: Build basemap
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: cachix/install-nix-action@13d8dd58da0234aa297dedd986986ccb8e7f3e24 # v31.11.1
+      - name: Install dependencies
+        run: nix develop -c pnpm install --frozen-lockfile
+      - name: Build and verify basemap
+        run: nix develop -c pnpm basemap:build
+      - name: Commit basemap
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898099+github-actions[bot]@users.noreply.github.com"
+          git add -f dist/basemap.pmtiles
+          git commit -m "Build basemap"
+          git push
+YAML
+git add .github/workflows/build-basemap.yml
+git commit -m "Add temporary workflow to build the basemap
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01Hmz7jqwHSLtnm79okgg6W6"
+git push -u origin claude/eurasia-borders-display-8syuzu-basemap
+git switch claude/eurasia-borders-display-8syuzu
+```
+
+push がワークフローの権限不足で拒否されたら BLOCKED として報告する。実行の完了は GitHub MCP の `actions_list`（リポジトリ `akihiro-tj/world-history-map-data`、ブランチ `claude/eurasia-borders-display-8syuzu-basemap`）で確かめる。`sleep` で待たない。
+
+Expected: ワークフローが成功し、ログに「国境線 110m / 50m / 10m」の本数と `dist/basemap.pmtiles は条件を満たしています` が出る。一時ブランチに「Build basemap」のコミットが増える。失敗したらログ（`get_job_logs`）を読んで原因を報告する
+
 ---
 
 ### Task 3: 国境線のスタイルとベースマップの更新（アプリ）
@@ -548,14 +603,19 @@ git push -u origin claude/eurasia-borders-display-8syuzu
 - Consumes: Task 2 の `dist/basemap.pmtiles`（`boundary` レイヤー、属性 `disputed`）
 - Produces: `MapColors.boundary: string`、CSS 変数 `--color-boundary`・`--text-caption`（Tailwind の `text-caption`）、レイヤー `boundary`・`boundary-disputed`
 
-- [ ] **Step 1: 依存を入れ、ベースマップをコピーする**
+- [ ] **Step 1: 依存を入れ、GitHub Actions が作ったベースマップを取り込む**
 
 ```bash
 cd /home/user/world-history-map && pnpm install --frozen-lockfile
-cd /home/user/world-history-map-data && pnpm copy
+cd /home/user/world-history-map-data
+git fetch origin claude/eurasia-borders-display-8syuzu-basemap
+git show origin/claude/eurasia-borders-display-8syuzu-basemap:dist/basemap.pmtiles > /home/user/world-history-map/public/data/basemap.pmtiles
+pnpm exec tsx scripts/verify-basemap.ts /home/user/world-history-map/public/data/basemap.pmtiles
 ```
 
-Expected: `public/data/basemap.pmtiles` が更新される（`git -C /home/user/world-history-map status` に出る）
+Expected: `... は条件を満たしています`。`public/data/basemap.pmtiles` が更新される（`git -C /home/user/world-history-map status` に出る）
+
+取り込めたら一時ブランチを消す: `git push origin --delete claude/eurasia-borders-display-8syuzu-basemap`（このブランチは Task 2 で作った一時ブランチで、ほかに使っていない）
 
 - [ ] **Step 2: DESIGN.md のトークンを足す**
 
