@@ -81,7 +81,7 @@ describe("buildStyle", () => {
       source: "basemap",
       "source-layer": "boundary",
       filter: ["==", ["get", "disputed"], true],
-      paint: { "line-color": "#cfc8b8", "line-width": 0.6, "line-dasharray": [3, 2] },
+      paint: { "line-color": "#cfc8b8", "line-width": 0.6, "line-dasharray": [5, 10 / 3] },
     });
   });
 });

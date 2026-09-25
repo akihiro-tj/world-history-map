@@ -78,7 +78,12 @@ export function buildStyle(basemapUrl: string, colors: MapColors): StyleSpecific
         source: BASEMAP_SOURCE_ID,
         "source-layer": "boundary",
         filter: ["==", ["get", "disputed"], true],
-        paint: { "line-color": colors.boundary, "line-width": 0.6, "line-dasharray": [3, 2] },
+        // MapLibre の破線の長さは線幅の倍数。線幅 0.6 で 3px / 2px になるよう 5 と 10/3 にする
+        paint: {
+          "line-color": colors.boundary,
+          "line-width": 0.6,
+          "line-dasharray": [5, 10 / 3],
+        },
       },
       {
         id: "coastline",

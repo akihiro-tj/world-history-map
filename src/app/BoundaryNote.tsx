@@ -30,7 +30,7 @@ export function BoundaryNote({ className = "" }: BoundaryNoteProps) {
       className={`pointer-events-none absolute right-0 bottom-0 m-sm flex flex-col items-end gap-xs ${className}`}
     >
       {open && (
-        <div className="pointer-events-auto max-w-72 rounded-md border border-border bg-surface px-md py-sm font-label text-caption text-muted shadow-md">
+        <div className="pointer-events-auto max-w-72 rounded-md border border-border bg-surface px-md py-sm font-caption text-caption text-muted shadow-md">
           <p>
             {COPY.boundarySourceLead}
             <a
@@ -46,7 +46,7 @@ export function BoundaryNote({ className = "" }: BoundaryNoteProps) {
           <p className="mt-xs">{COPY.boundaryDisputed}</p>
         </div>
       )}
-      <div className="pointer-events-auto flex items-center gap-xs rounded-sm bg-surface/85 pl-sm font-label text-caption text-muted">
+      <div className="pointer-events-auto flex items-center gap-xs rounded-sm bg-surface/85 pl-sm font-caption text-caption text-muted">
         <span>{COPY.boundaryNote}</span>
         <button
           type="button"
