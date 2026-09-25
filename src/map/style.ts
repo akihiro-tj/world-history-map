@@ -11,6 +11,7 @@ export type MapColors = {
   ocean: string;
   land: string;
   coastline: string;
+  boundary: string;
   city: string;
   citySelected: string;
 };
@@ -19,6 +20,7 @@ const COLOR_VARIABLES: Record<keyof MapColors, string> = {
   ocean: "--color-ocean",
   land: "--color-land",
   coastline: "--color-coastline",
+  boundary: "--color-boundary",
   city: "--color-city",
   citySelected: "--color-city-selected",
 };
@@ -35,6 +37,7 @@ export function readMapColors(style: Pick<CSSStyleDeclaration, "getPropertyValue
     ocean: read(COLOR_VARIABLES.ocean),
     land: read(COLOR_VARIABLES.land),
     coastline: read(COLOR_VARIABLES.coastline),
+    boundary: read(COLOR_VARIABLES.boundary),
     city: read(COLOR_VARIABLES.city),
     citySelected: read(COLOR_VARIABLES.citySelected),
   };
@@ -59,6 +62,28 @@ export function buildStyle(basemapUrl: string, colors: MapColors): StyleSpecific
         source: BASEMAP_SOURCE_ID,
         "source-layer": "land",
         paint: { "fill-color": colors.land },
+      },
+      // 現在の国境線。係争線（disputed）は破線にする。disputed が無い線は実線で描く
+      {
+        id: "boundary",
+        type: "line",
+        source: BASEMAP_SOURCE_ID,
+        "source-layer": "boundary",
+        filter: ["!=", ["get", "disputed"], true],
+        paint: { "line-color": colors.boundary, "line-width": 0.6 },
+      },
+      {
+        id: "boundary-disputed",
+        type: "line",
+        source: BASEMAP_SOURCE_ID,
+        "source-layer": "boundary",
+        filter: ["==", ["get", "disputed"], true],
+        // MapLibre の破線の長さは線幅の倍数。線幅 0.6 で 3px / 2px になるよう 5 と 10/3 にする
+        paint: {
+          "line-color": colors.boundary,
+          "line-width": 0.6,
+          "line-dasharray": [5, 10 / 3],
+        },
       },
       {
         id: "coastline",

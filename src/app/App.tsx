@@ -3,6 +3,7 @@ import type { City } from "../data/city";
 import { boundsOf, FALLBACK_BOUNDS } from "../map/bounds";
 import { type FocusRequest, MapView } from "../map/MapView";
 import { SearchBox } from "../search/SearchBox";
+import { BoundaryNote } from "./BoundaryNote";
 import { COPY } from "./copy";
 import { ErrorBanner } from "./ErrorBanner";
 import { type AppData, loadAppData } from "./loadAppData";
@@ -53,6 +54,8 @@ export function App() {
         {(data?.basemapError || basemapFailed) && <ErrorBanner message={COPY.basemapLoadError} />}
         {data?.citiesError && <ErrorBanner message={COPY.citiesLoadError} />}
       </div>
+      {/* スマートフォンでは選択パネル（下部）とぶつかるので、選択中は隠す */}
+      <BoundaryNote hideOnMobile={selectedCity !== null} />
       {selectedCity && <SelectionPanel city={selectedCity} onClose={() => setSelectedId(null)} />}
     </div>
   );
