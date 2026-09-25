@@ -5,6 +5,7 @@ const colors: MapColors = {
   ocean: "#dce8f0",
   land: "#f5f3ec",
   coastline: "#8a9aa6",
+  boundary: "#cfc8b8",
   city: "#b4462b",
   citySelected: "#1f3a5f",
 };
@@ -21,6 +22,7 @@ describe("readMapColors", () => {
           "--color-ocean": " #dce8f0",
           "--color-land": "#f5f3ec",
           "--color-coastline": "#8a9aa6",
+          "--color-boundary": "#cfc8b8",
           "--color-city": "#b4462b",
           "--color-city-selected": "#1f3a5f",
         }),
@@ -52,13 +54,34 @@ describe("buildStyle", () => {
     expect(style.sources.cities).toMatchObject({ type: "geojson", promoteId: "id" });
   });
 
-  it("海・陸・海岸線・都市・当たり判定の順に重ねる", () => {
+  it("海・陸・国境線・係争線・海岸線・都市・当たり判定の順に重ねる", () => {
     expect(style.layers.map((layer) => layer.id)).toEqual([
       "ocean",
       "land",
+      "boundary",
+      "boundary-disputed",
       "coastline",
       "cities",
       CITY_HIT_LAYER_ID,
     ]);
+  });
+
+  it("国境線は disputed で実線と破線に分け、disputed が無い線は実線で描く", () => {
+    const layer = (id: string) => style.layers.find((candidate) => candidate.id === id);
+    expect(layer("boundary")).toMatchObject({
+      type: "line",
+      source: "basemap",
+      "source-layer": "boundary",
+      filter: ["!=", ["get", "disputed"], true],
+      paint: { "line-color": "#cfc8b8", "line-width": 0.6 },
+    });
+    expect(layer("boundary")).not.toHaveProperty("paint.line-dasharray");
+    expect(layer("boundary-disputed")).toMatchObject({
+      type: "line",
+      source: "basemap",
+      "source-layer": "boundary",
+      filter: ["==", ["get", "disputed"], true],
+      paint: { "line-color": "#cfc8b8", "line-width": 0.6, "line-dasharray": [3, 2] },
+    });
   });
 });
