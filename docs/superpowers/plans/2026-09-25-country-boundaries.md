@@ -523,7 +523,13 @@ sha256sum .basemap-cache/*boundary_lines*.geojson
 pnpm exec tsx scripts/build-boundaries.ts .basemap-cache /tmp/boundary-check
 ```
 
-Expected: sha256 が Step 7 の値と一致する。「国境線 110m / 50m / 10m」の本数が出る（10m は約 500 本、うち係争線は約 90 本。50m には北方領土などの 4 本が含まれる）
+Expected: sha256 が Step 7 の値と一致する。次の 3 行が出る（controller が Natural Earth v5.1.2 で同じ規則を実行して得た値）:
+
+```
+国境線 110m: 330 本（うち係争線 27 本）
+国境線 50m: 391 本（うち係争線 31 本）
+国境線 10m: 507 本（うち係争線 63 本）
+```
 
 - [ ] **Step 10: 全体の確認**
 
