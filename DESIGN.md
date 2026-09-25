@@ -157,7 +157,7 @@ components:
 - `error-banner`: 「地図の読み込みに失敗しました」などのエラー表示。背景は `error-surface`、文字は `on-error-surface`。
 - `map-ocean` / `map-land` / `map-coastline` / `map-boundary`: ベースマップの海・陸・海岸線・国境線の塗り。
 - `map-city` / `map-city-selected`: 都市の点の通常状態・選択状態の塗り。
-- `boundary-note`: 地図の右下の国境線の注記。背景は `surface`、文字は `muted`、書体は `caption`。
+- `boundary-note`: 地図の右下の国境線の注記。背景は半透明の `surface`、文字は `muted`、書体は `caption`。
 
 ## Do's and Don'ts
 

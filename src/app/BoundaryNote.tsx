@@ -2,15 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import { COPY, NATURAL_EARTH_URL } from "./copy";
 
 type BoundaryNoteProps = {
-  className?: string;
+  // スマートフォン幅で注記を隠す（選択パネルと重なるとき）
+  hideOnMobile: boolean;
 };
 
 // 地図の右下に出す国境線の注記。ⓘ で出典と係争地の扱いを開く
-export function BoundaryNote({ className = "" }: BoundaryNoteProps) {
+export function BoundaryNote({ hideOnMobile }: BoundaryNoteProps) {
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
 
-  // 開いている間は、注記の外（地図や検索窓）に触れたら閉じる
+  // 開いている間は、注記の外（地図や検索窓）に触れるか Escape を押したら閉じる
   useEffect(() => {
     if (!open) {
       return;
@@ -20,14 +21,30 @@ export function BoundaryNote({ className = "" }: BoundaryNoteProps) {
         setOpen(false);
       }
     };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    };
     document.addEventListener("pointerdown", onPointerDown);
-    return () => document.removeEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
   }, [open]);
+
+  // 隠している間に開いたまま残らないよう、隠すときに閉じる
+  useEffect(() => {
+    if (hideOnMobile) {
+      setOpen(false);
+    }
+  }, [hideOnMobile]);
 
   return (
     <div
       ref={rootRef}
-      className={`pointer-events-none absolute right-0 bottom-0 m-sm flex flex-col items-end gap-xs ${className}`}
+      className={`pointer-events-none absolute right-0 bottom-0 m-sm flex flex-col items-end gap-xs ${hideOnMobile ? "max-md:hidden" : ""}`}
     >
       {open && (
         <div className="pointer-events-auto max-w-72 rounded-md border border-border bg-surface px-md py-sm font-caption text-caption text-muted shadow-md">

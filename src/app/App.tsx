@@ -55,7 +55,7 @@ export function App() {
         {data?.citiesError && <ErrorBanner message={COPY.citiesLoadError} />}
       </div>
       {/* スマートフォンでは選択パネル（下部）とぶつかるので、選択中は隠す */}
-      <BoundaryNote className={selectedCity ? "max-md:hidden" : ""} />
+      <BoundaryNote hideOnMobile={selectedCity !== null} />
       {selectedCity && <SelectionPanel city={selectedCity} onClose={() => setSelectedId(null)} />}
     </div>
   );
