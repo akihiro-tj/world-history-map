@@ -51,7 +51,7 @@ Natural Earth は線ごとに既定の種別（`FEATURECLA`）と、国ごとの
 
 係争地の線のファイル:
 
-- `FCLASS_JP` が空でも `Unrecognized` でもない線だけを使う。日本の立場で明示的に描くとされている線で、v5.1.2 では 4 本（北方領土の択捉島とウルップ島の間の線、ゴラン高原、レバノンの主張線、西サハラ）
+- `FCLASS_JP` が空でも `Unrecognized` でもない線だけを使う。日本の立場で明示的に描くとされている線で、v5.1.2 の 10m では 4 本（北方領土の択捉島とウルップ島の間の線、ゴラン高原、レバノンの主張線、西サハラ）。50m にはレバノンの主張線が無く 3 本
 - `FCLASS_JP` が空の線は他国の主張線なので使わない
 
 残った線は、種別が `International boundary` で始まれば実線、それ以外（`Disputed`・`Line of control`・`Claim boundary`・`Indefinite`・`Indeterminant frontier` など）は係争線として破線にする。線ごとに個別の判断はしない。
@@ -67,10 +67,10 @@ Natural Earth は線ごとに既定の種別（`FEATURECLA`）と、国ごとの
 
 ### 成果物
 
-- 前処理のスクリプト（データリポジトリ、TypeScript）が、上の規則で絞り込んだ GeoJSON を縮尺ごとに出す。各線の属性は `disputed`（boolean）だけにする
+- 前処理のスクリプト（データリポジトリ、TypeScript）が、上の規則で絞り込んだ GeoJSON を縮尺ごとに出す。各線の属性は `disputed`（boolean）だけにする。読み込んだ GeoJSON に `features` 配列が無ければ、ファイル名を示して止める
 - `build-basemap.sh` が縮尺ごとの tippecanoe に `boundary` レイヤーを足す。ほかの属性は落とし、`disputed` だけ残す
 - ズームは既存と同じ（110m → z0–1、50m → z2–3、10m → z4–6）。110m には係争地の線のファイルが無いので、北方領土の線は z2 から出る
-- `verify-basemap.ts` が確かめるレイヤーに `boundary` を足す。サイズの目標（15 MB 未満）は変えない。追加するデータは 3 縮尺合わせて GeoJSON で約 3.5 MB
+- `verify-basemap.ts` が確かめるレイヤーに `boundary` を足し、`boundary` に `disputed` 属性があるかも確かめる（属性が落ちると係争線が実線で描かれ、見た目では気付けないため）。サイズの目標（15 MB 未満）は変えない。追加するデータは 3 縮尺合わせて GeoJSON で約 3.5 MB
 - データリポジトリの CLAUDE.md にあるソースレイヤー名の記述に `boundary` を足す
 
 ## 4. 画面
@@ -82,7 +82,9 @@ Natural Earth は線ごとに既定の種別（`FEATURECLA`）と、国ごとの
 | レイヤー | 対象 | 線 |
 |---|---|---|
 | `boundary` | `disputed` が false | 実線 |
-| `boundary-disputed` | `disputed` が true | 破線（`line-dasharray: [3, 2]`） |
+| `boundary-disputed` | `disputed` が true | 破線（`line-dasharray: [5, 10/3]`） |
+
+MapLibre の破線の長さは線幅の倍数なので、線幅 0.6 で 3px の線と 2px の間隔になるよう `[5, 10/3]` にする。`disputed` が無い線は実線で描く（`boundary` のフィルターは `disputed` が true でないもの）。
 
 色は `#cfc8b8`（陸 `#f5f3ec` の上でうっすら見える暖色の灰色）、太さは 0.6。海岸線（`#8a9aa6`・0.8）より弱くする。
 
@@ -91,11 +93,12 @@ Natural Earth は線ごとに既定の種別（`FEATURECLA`）と、国ごとの
 地図の右下に常に 1 行出し、横の ⓘ ボタンで詳しい説明を開く。MapLibre・Mapbox の帰属表示ボタンと同じ形にする。
 
 - 常に出す行: 「※薄い線は現在の国境」。12px・`muted` 色、半透明の `surface` 背景
-- ⓘ を押すと、行の上に説明が開く。もう一度押すか、地図に触れると閉じる
+- ⓘ を押すと、行の上に説明が開く。もう一度押すか、地図に触れるか、Escape を押すと閉じる
 - 説明の中の「Natural Earth」は https://www.naturalearthdata.com/ へのリンクにし、新しいタブで開く
 - ⓘ ボタンは `aria-label` と `aria-expanded` を持つ
 - PC 幅では右下に常に出す（選択パネルは右上なので重ならない）
 - 375px 幅では、選択パネル（下部）を開いている間は注記ごと隠す。出しておくとパネルの下からはみ出すため
+- 都市を選んだら説明は閉じる。隠している間に開いたまま残り、パネルを閉じたときに開いた状態で戻ることを防ぐ（PC 幅でも同じく閉じる）
 
 モック: https://claude.ai/artifact/AEkexQJLJFENUKTXTU61q6
 
@@ -121,14 +124,15 @@ DESIGN.md に次を足し、`pnpm tokens` で `theme.css` を作り直す。
 
 ## 5. テスト
 
-- データリポジトリ: 絞り込みと実線・破線の振り分けを Vitest で確かめる（`Overlay limit`・`Lease limit`・`Unrecognized` を除くこと、`FCLASS_JP` が空なら `FEATURECLA` に従うこと、係争地の線のファイルは `FCLASS_JP` が明示されたものだけ使うこと）。`basemapCheck` のテストを `boundary` に合わせる
+- データリポジトリ: 絞り込みと実線・破線の振り分けを Vitest で確かめる（`Overlay limit`・`Lease limit`・`Unrecognized` を除くこと、`FCLASS_JP` が空なら `FEATURECLA` に従うこと、係争地の線のファイルは `FCLASS_JP` が明示されたものだけ使うこと、`features` 配列が無い入力を拒むこと）。`basemapCheck` のテストを `boundary` に合わせ、`disputed` 属性が無いと指摘することを確かめる
 - アプリ: `style.test.ts` でレイヤー順（`ocean, land, boundary, boundary-disputed, coastline, cities, cities-hit`）、フィルター、破線の指定、色を確かめる
-- 実ブラウザで PC 幅と 375px 幅を確かめる。z0–1・z2–3・z4–6 で国境線が出ること、注記の開閉、375px 幅で選択パネルを開くと注記が隠れること
+- 実ブラウザで PC 幅と 375px 幅を確かめる。z0–1・z2–3・z4–6 で国境線が出ること、注記の開閉（ⓘ・地図に触れる・Escape）、375px 幅で選択パネルを開くと注記が隠れ、閉じると説明が閉じた状態で戻ること
 
 ## 6. 進め方
 
-1. データリポジトリで前処理とベースマップの生成を直し、`pnpm basemap:build` と `pnpm copy` でアプリの `public/data/basemap.pmtiles` を更新する
-2. アプリでスタイル・注記・トークン・文言を足す
-3. 両リポジトリとも `claude/eurasia-borders-display-8syuzu` ブランチで作業する
+1. データリポジトリで前処理とベースマップの生成を直す
+2. ベースマップを作り、アプリの `public/data/basemap.pmtiles` を更新する
+3. アプリでスタイル・注記・トークン・文言を足す
+4. 両リポジトリとも `claude/eurasia-borders-display-8syuzu` ブランチで作業する
 
-ベースマップの生成には tippecanoe が要る。作業環境に無く入れられない場合は、ユーザーにローカルでの `nix develop -c pnpm basemap:build` と `pnpm copy` をお願いする。
+ベースマップの生成には tippecanoe が要るが、作業環境には無い。そこで一時ブランチ `claude/eurasia-borders-display-8syuzu-basemap` に一時ワークフローを置き、GitHub Actions の nix devShell で `pnpm basemap:build`（検証込み）を実行して、できた `dist/basemap.pmtiles` をその一時ブランチにコミットさせる。アプリへはそのファイルを取り出して置き、`verify-basemap` でもう一度確かめる。一時ワークフローは作業ブランチに入れず、使い終わった一時ブランチは消す。

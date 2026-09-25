@@ -15,7 +15,7 @@
 - 言語: コミットメッセージは英語。UI 文言・ドキュメント・コード内コメント・テスト名は日本語
 - UI 文言は spec §4「追加する UI 文言」の 4 つだけ。一字一句そのまま使う（「※薄い線は現在の国境」は ※ の後ろに空白を入れない）。文言は `src/app/copy.ts` にしか書かない
 - デザイントークンは `DESIGN.md` の front matter だけを編集し、`pnpm tokens` で `src/app/theme.css` を作り直す。色・角丸・余白・文字サイズの値を Tailwind のクラスや MapLibre のスタイルに直接書かない（`[2px]` のような任意値も使わない）
-- 国境線: 色 `#cfc8b8`、太さ 0.6、係争線は `line-dasharray: [3, 2]`
+- 国境線: 色 `#cfc8b8`、太さ 0.6、係争線は `line-dasharray: [5, 10 / 3]`（MapLibre の破線の長さは線幅の倍数。線幅 0.6 で 3px / 2px になる）
 - ベースマップのソースレイヤー名は `boundary`、属性は `disputed`（boolean）だけ。ズームは 110m → z0–1、50m → z2–3、10m → z4–6。サイズは 15 MiB 未満
 - 両リポジトリとも `claude/eurasia-borders-display-8syuzu` ブランチで作業し、`git push -u origin claude/eurasia-borders-display-8syuzu` で push する。例外はベースマップを作るための一時ブランチ `claude/eurasia-borders-display-8syuzu-basemap`（データリポジトリ。Task 2 で作り、Task 3 で消す）だけ
 - コミットメッセージの末尾に次の 2 行を付ける:
@@ -706,7 +706,7 @@ Expected: lint が通り、`--color-boundary: #cfc8b8;` と `--text-caption: 12p
       source: "basemap",
       "source-layer": "boundary",
       filter: ["==", ["get", "disputed"], true],
-      paint: { "line-color": "#cfc8b8", "line-width": 0.6, "line-dasharray": [3, 2] },
+      paint: { "line-color": "#cfc8b8", "line-width": 0.6, "line-dasharray": [5, 10 / 3] },
     });
   });
 ```
@@ -741,7 +741,7 @@ Expected: FAIL（`boundary` が読まれない・レイヤーが無い）
         source: BASEMAP_SOURCE_ID,
         "source-layer": "boundary",
         filter: ["==", ["get", "disputed"], true],
-        paint: { "line-color": colors.boundary, "line-width": 0.6, "line-dasharray": [3, 2] },
+        paint: { "line-color": colors.boundary, "line-width": 0.6, "line-dasharray": [5, 10 / 3] },
       },
 ```
 
