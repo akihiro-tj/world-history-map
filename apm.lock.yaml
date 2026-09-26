@@ -1,12 +1,83 @@
 lockfile_version: '1'
-apm_version: 0.31.0
+apm_version: 0.32.0
 dependencies:
+- repo_url: akihiro-tj/house-rules
+  name: house-rules-cloudflare-workers
+  host: github.com
+  resolved_commit: 4dffd6da39d07054fc999b2de179ea3bb9f630d0
+  resolved_ref: main
+  version: 1.0.0
+  virtual_path: packages/cloudflare-workers
+  is_virtual: true
+  package_type: apm_package
+  deployed_files:
+  - .claude/rules/cloudflare-workers.md
+  deployed_file_hashes:
+    .claude/rules/cloudflare-workers.md: sha256:657871cd636c15bc07cf2d1f83044d9e9a406c8ef55d17411c4b6d0366df4d9a
+  content_hash: sha256:c7065bdbb7ea104f8bd477bbef6692cf2fdf17f5bfbe9c50f39ccc6c991ba895
+- repo_url: akihiro-tj/house-rules
+  name: house-rules-core
+  host: github.com
+  resolved_commit: 4dffd6da39d07054fc999b2de179ea3bb9f630d0
+  resolved_ref: main
+  version: 1.0.0
+  virtual_path: packages/core
+  is_virtual: true
+  package_type: apm_package
+  deployed_files:
+  - .claude/hooks/core/superpowers-session-start.sh
+  - .claude/rules/instructions.md
+  - .claude/rules/language.md
+  - .claude/rules/public-content.md
+  - .claude/rules/specs.md
+  deployed_file_hashes:
+    .claude/hooks/core/superpowers-session-start.sh: sha256:8fd278438ea8233062f01051abf60376051cee60438ff2f2eeb46f8081db8925
+    .claude/rules/instructions.md: sha256:fd8743c87b543fbd106b780d3c2297683727ecaf821966f69854f104c21a4597
+    .claude/rules/language.md: sha256:2b87789872dfba35169c427fa51a2b98065cc5b33698bf39600dfb05d75c962d
+    .claude/rules/public-content.md: sha256:60f5d31a479392caf9ba8e85ba92baac065807224917d645987e65fc22dfc30b
+    .claude/rules/specs.md: sha256:517762a9af85eb3aeec0968c4668d32101b619eccbfe018ef2e41c9478a51950
+  content_hash: sha256:55bf64f68f8f1f419efe8556fd909bfccec46318b810c18e7ca17a3c3e20fd38
+  exec_status: deployed
+- repo_url: akihiro-tj/house-rules
+  name: house-rules-github-actions
+  host: github.com
+  resolved_commit: 4dffd6da39d07054fc999b2de179ea3bb9f630d0
+  resolved_ref: main
+  version: 1.0.0
+  virtual_path: packages/github-actions
+  is_virtual: true
+  package_type: apm_package
+  deployed_files:
+  - .claude/rules/github-actions.md
+  deployed_file_hashes:
+    .claude/rules/github-actions.md: sha256:c2f8e48429268858610b2b91060c3cce7de80ceb032e6e0a07d23fea0811fdf7
+  content_hash: sha256:fe1b3262e229f4b98b4f0e5d4d16c539d63bc137683b62a0018573a70af60281
+- repo_url: akihiro-tj/house-rules
+  name: house-rules-web-react
+  host: github.com
+  resolved_commit: 4dffd6da39d07054fc999b2de179ea3bb9f630d0
+  resolved_ref: main
+  version: 1.0.0
+  virtual_path: packages/web-react
+  is_virtual: true
+  package_type: apm_package
+  deployed_files:
+  - .claude/rules/pnpm.md
+  - .claude/rules/react.md
+  - .claude/rules/testing.md
+  deployed_file_hashes:
+    .claude/rules/pnpm.md: sha256:9145f4cfe80a5d5366b39a80fc3e5c9f3addc8ba3603733a09c2e2e3672d2bcc
+    .claude/rules/react.md: sha256:49322c9702553b7c9e12214ab5650c69e92e60a280817aee5b77285f5c4030fd
+    .claude/rules/testing.md: sha256:d1417e4b259f10e8801f65eb9fa9687484df9ade48b7329945a53dd7a4b44268
+  content_hash: sha256:1fe28a8f0e456de67d9ece802948accc42977588fbdc19a5afbac06b70fa3ec8
 - repo_url: obra/superpowers
   name: superpowers
   host: github.com
   resolved_commit: 5bf4e78011075bcfc0dc295f0724994cd123ee71
   resolved_ref: v6.4.1
   version: 6.4.1
+  depth: 2
+  resolved_by: akihiro-tj/house-rules
   package_type: skill_bundle
   deployed_files:
   - .claude/skills/brainstorming
@@ -179,6 +250,96 @@ dependencies:
   declared_license: MIT
   exec_status: gated_pending_approval
 deployments:
+- kind: project-relative
+  target: claude
+  value: .claude/hooks/core/superpowers-session-start.sh
+  runtime: null
+  scope: project
+  owners:
+  - akihiro-tj/house-rules/packages/core
+  active_owner: akihiro-tj/house-rules/packages/core
+  content_hash: sha256:8fd278438ea8233062f01051abf60376051cee60438ff2f2eeb46f8081db8925
+- kind: project-relative
+  target: claude
+  value: .claude/rules/cloudflare-workers.md
+  runtime: null
+  scope: project
+  owners:
+  - akihiro-tj/house-rules/packages/cloudflare-workers
+  active_owner: akihiro-tj/house-rules/packages/cloudflare-workers
+  content_hash: sha256:657871cd636c15bc07cf2d1f83044d9e9a406c8ef55d17411c4b6d0366df4d9a
+- kind: project-relative
+  target: claude
+  value: .claude/rules/github-actions.md
+  runtime: null
+  scope: project
+  owners:
+  - akihiro-tj/house-rules/packages/github-actions
+  active_owner: akihiro-tj/house-rules/packages/github-actions
+  content_hash: sha256:c2f8e48429268858610b2b91060c3cce7de80ceb032e6e0a07d23fea0811fdf7
+- kind: project-relative
+  target: claude
+  value: .claude/rules/instructions.md
+  runtime: null
+  scope: project
+  owners:
+  - akihiro-tj/house-rules/packages/core
+  active_owner: akihiro-tj/house-rules/packages/core
+  content_hash: sha256:fd8743c87b543fbd106b780d3c2297683727ecaf821966f69854f104c21a4597
+- kind: project-relative
+  target: claude
+  value: .claude/rules/language.md
+  runtime: null
+  scope: project
+  owners:
+  - akihiro-tj/house-rules/packages/core
+  active_owner: akihiro-tj/house-rules/packages/core
+  content_hash: sha256:2b87789872dfba35169c427fa51a2b98065cc5b33698bf39600dfb05d75c962d
+- kind: project-relative
+  target: claude
+  value: .claude/rules/pnpm.md
+  runtime: null
+  scope: project
+  owners:
+  - akihiro-tj/house-rules/packages/web-react
+  active_owner: akihiro-tj/house-rules/packages/web-react
+  content_hash: sha256:9145f4cfe80a5d5366b39a80fc3e5c9f3addc8ba3603733a09c2e2e3672d2bcc
+- kind: project-relative
+  target: claude
+  value: .claude/rules/public-content.md
+  runtime: null
+  scope: project
+  owners:
+  - akihiro-tj/house-rules/packages/core
+  active_owner: akihiro-tj/house-rules/packages/core
+  content_hash: sha256:60f5d31a479392caf9ba8e85ba92baac065807224917d645987e65fc22dfc30b
+- kind: project-relative
+  target: claude
+  value: .claude/rules/react.md
+  runtime: null
+  scope: project
+  owners:
+  - akihiro-tj/house-rules/packages/web-react
+  active_owner: akihiro-tj/house-rules/packages/web-react
+  content_hash: sha256:49322c9702553b7c9e12214ab5650c69e92e60a280817aee5b77285f5c4030fd
+- kind: project-relative
+  target: claude
+  value: .claude/rules/specs.md
+  runtime: null
+  scope: project
+  owners:
+  - akihiro-tj/house-rules/packages/core
+  active_owner: akihiro-tj/house-rules/packages/core
+  content_hash: sha256:517762a9af85eb3aeec0968c4668d32101b619eccbfe018ef2e41c9478a51950
+- kind: project-relative
+  target: claude
+  value: .claude/rules/testing.md
+  runtime: null
+  scope: project
+  owners:
+  - akihiro-tj/house-rules/packages/web-react
+  active_owner: akihiro-tj/house-rules/packages/web-react
+  content_hash: sha256:d1417e4b259f10e8801f65eb9fa9687484df9ade48b7329945a53dd7a4b44268
 - kind: project-relative
   target: claude
   value: .claude/skills/brainstorming

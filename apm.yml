@@ -4,8 +4,14 @@ targets:
 - claude
 dependencies:
   apm:
-  - obra/superpowers#v6.4.1
+  - akihiro-tj/house-rules/packages/core#main
+  - akihiro-tj/house-rules/packages/web-react#main
+  - akihiro-tj/house-rules/packages/cloudflare-workers#main
+  - akihiro-tj/house-rules/packages/github-actions#main
 executables:
+  allow:
+    github.com/akihiro-tj/house-rules/packages/core:
+      hooks: true
   deny:
-    obra/superpowers#6.4.1:
+    obra/superpowers:
       hooks: true
