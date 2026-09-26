@@ -1,0 +1,14 @@
+{
+  "SessionStart": [
+    {
+      "matcher": "startup|clear|compact",
+      "hooks": [
+        {
+          "type": "command",
+          "command": "\"${CLAUDE_PROJECT_DIR}/.claude/hooks/core/superpowers-session-start.sh\""
+        }
+      ],
+      "_apm_source": "akihiro-tj/house-rules/packages/core"
+    }
+  ]
+}
