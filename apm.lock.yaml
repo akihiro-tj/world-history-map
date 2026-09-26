@@ -4,7 +4,7 @@ dependencies:
 - repo_url: akihiro-tj/house-rules
   name: house-rules-cloudflare-workers
   host: github.com
-  resolved_commit: 4dffd6da39d07054fc999b2de179ea3bb9f630d0
+  resolved_commit: b8358ac60a7b95e3e4eea9be71009d4796ab3945
   resolved_ref: main
   version: 1.0.0
   virtual_path: packages/cloudflare-workers
@@ -18,7 +18,7 @@ dependencies:
 - repo_url: akihiro-tj/house-rules
   name: house-rules-core
   host: github.com
-  resolved_commit: 4dffd6da39d07054fc999b2de179ea3bb9f630d0
+  resolved_commit: b8358ac60a7b95e3e4eea9be71009d4796ab3945
   resolved_ref: main
   version: 1.0.0
   virtual_path: packages/core
@@ -41,7 +41,7 @@ dependencies:
 - repo_url: akihiro-tj/house-rules
   name: house-rules-github-actions
   host: github.com
-  resolved_commit: 4dffd6da39d07054fc999b2de179ea3bb9f630d0
+  resolved_commit: b8358ac60a7b95e3e4eea9be71009d4796ab3945
   resolved_ref: main
   version: 1.0.0
   virtual_path: packages/github-actions
@@ -55,7 +55,7 @@ dependencies:
 - repo_url: akihiro-tj/house-rules
   name: house-rules-web-react
   host: github.com
-  resolved_commit: 4dffd6da39d07054fc999b2de179ea3bb9f630d0
+  resolved_commit: b8358ac60a7b95e3e4eea9be71009d4796ab3945
   resolved_ref: main
   version: 1.0.0
   virtual_path: packages/web-react
