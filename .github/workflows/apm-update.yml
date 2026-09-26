@@ -1,0 +1,9 @@
+name: APM update
+on:
+  schedule:
+    - cron: "0 0 * * 1" # 月曜 9:00（日本時間）
+  workflow_dispatch:
+jobs:
+  update:
+    uses: akihiro-tj/house-rules/.github/workflows/apm-update.yml@main
+    secrets: inherit
