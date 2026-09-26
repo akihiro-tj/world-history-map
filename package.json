@@ -14,8 +14,7 @@
     "tokens": "tsx scripts/tokens.ts",
     "publish:assets": "tsx scripts/publish-assets.ts",
     "deploy:cf": "pnpm build && pnpm publish:assets && wrangler deploy",
-    "preview:cf": "pnpm build && pnpm publish:assets && wrangler preview",
-    "dev:secrets": "op run --env-file=.env.op --"
+    "preview:cf": "pnpm build && pnpm publish:assets && wrangler preview"
   },
   "dependencies": {
     "maplibre-gl": "6.11.0",
