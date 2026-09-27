@@ -4,7 +4,7 @@ dependencies:
 - repo_url: akihiro-tj/house-rules
   name: house-rules-cloudflare-workers
   host: github.com
-  resolved_commit: cb8e4c7d0c83f6f624d9f685e48bb6e277e2416a
+  resolved_commit: 5d59b5c7c05010b41cb87addbd3585907e3bda32
   resolved_ref: main
   version: 1.0.0
   virtual_path: packages/cloudflare-workers
@@ -18,7 +18,7 @@ dependencies:
 - repo_url: akihiro-tj/house-rules
   name: house-rules-core
   host: github.com
-  resolved_commit: cb8e4c7d0c83f6f624d9f685e48bb6e277e2416a
+  resolved_commit: 5d59b5c7c05010b41cb87addbd3585907e3bda32
   resolved_ref: main
   version: 1.0.0
   virtual_path: packages/core
@@ -26,6 +26,7 @@ dependencies:
   package_type: apm_package
   deployed_files:
   - .claude/hooks/core/superpowers-session-start.sh
+  - .claude/rules/apm.md
   - .claude/rules/git.md
   - .claude/rules/instructions.md
   - .claude/rules/language.md
@@ -34,18 +35,19 @@ dependencies:
   - .claude/rules/subagents.md
   deployed_file_hashes:
     .claude/hooks/core/superpowers-session-start.sh: sha256:8fd278438ea8233062f01051abf60376051cee60438ff2f2eeb46f8081db8925
+    .claude/rules/apm.md: sha256:c910a2454a5f128821370fa62fcbe108f5be2123f7db779c46f0bf7e366538fc
     .claude/rules/git.md: sha256:20da6b50efadb8369a4528c19c4c6d866229c8ac07c18af81598a807ef6a0402
     .claude/rules/instructions.md: sha256:fd8743c87b543fbd106b780d3c2297683727ecaf821966f69854f104c21a4597
     .claude/rules/language.md: sha256:2b87789872dfba35169c427fa51a2b98065cc5b33698bf39600dfb05d75c962d
     .claude/rules/public-content.md: sha256:60f5d31a479392caf9ba8e85ba92baac065807224917d645987e65fc22dfc30b
     .claude/rules/specs.md: sha256:517762a9af85eb3aeec0968c4668d32101b619eccbfe018ef2e41c9478a51950
     .claude/rules/subagents.md: sha256:900c6652220e78a946311a8da26ac6341e760c8d213b4c57d9feb3e19b4db2e2
-  content_hash: sha256:e0e0ae3b58367fe5f8ea17fc438581eead5bc6c03ad93e319b25648dc3b14c2e
+  content_hash: sha256:f3453d9923aabcbdc12328b58bee2e15b446d6d43a9cd86cb2604cf8f8184a3f
   exec_status: deployed
 - repo_url: akihiro-tj/house-rules
   name: house-rules-github-actions
   host: github.com
-  resolved_commit: cb8e4c7d0c83f6f624d9f685e48bb6e277e2416a
+  resolved_commit: 5d59b5c7c05010b41cb87addbd3585907e3bda32
   resolved_ref: main
   version: 1.0.0
   virtual_path: packages/github-actions
@@ -59,7 +61,7 @@ dependencies:
 - repo_url: akihiro-tj/house-rules
   name: house-rules-web-react
   host: github.com
-  resolved_commit: cb8e4c7d0c83f6f624d9f685e48bb6e277e2416a
+  resolved_commit: 5d59b5c7c05010b41cb87addbd3585907e3bda32
   resolved_ref: main
   version: 1.0.0
   virtual_path: packages/web-react
@@ -263,6 +265,15 @@ deployments:
   - akihiro-tj/house-rules/packages/core
   active_owner: akihiro-tj/house-rules/packages/core
   content_hash: sha256:8fd278438ea8233062f01051abf60376051cee60438ff2f2eeb46f8081db8925
+- kind: project-relative
+  target: claude
+  value: .claude/rules/apm.md
+  runtime: null
+  scope: project
+  owners:
+  - akihiro-tj/house-rules/packages/core
+  active_owner: akihiro-tj/house-rules/packages/core
+  content_hash: sha256:c910a2454a5f128821370fa62fcbe108f5be2123f7db779c46f0bf7e366538fc
 - kind: project-relative
   target: claude
   value: .claude/rules/cloudflare-workers.md
