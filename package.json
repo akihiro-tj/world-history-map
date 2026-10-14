@@ -23,19 +23,19 @@
     "react-dom": "19.3.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.14",
-    "@cloudflare/workers-types": "5.20260923.1",
+    "@biomejs/biome": "2.5.15",
+    "@cloudflare/workers-types": "5.20261007.1",
     "@google/design.md": "0.4.0",
     "@tailwindcss/vite": "4.3.3",
-    "@types/node": "24.13.6",
+    "@types/node": "26.6.3",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
-    "@vitejs/plugin-react": "6.1.1",
+    "@vitejs/plugin-react": "6.1.2",
     "tailwindcss": "4.3.3",
     "tsx": "4.23.15",
     "typescript": "7.0.2",
-    "vite": "8.3.0",
-    "vitest": "5.0.1",
-    "wrangler": "4.136.3"
+    "vite": "8.3.3",
+    "vitest": "5.0.3",
+    "wrangler": "4.148.0"
   }
 }
